@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:my_doc_lab/ui/app_assets/app_image.dart';
+import 'package:my_doc_lab/ui/widget/button_widget.dart';
+import 'package:my_doc_lab/ui/widget/text_widget.dart';
+
+class SecondOnboardingScreen extends StatelessWidget {
+  const SecondOnboardingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColor.white,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(vertical: 70.w, horizontal: 10.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 20.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: SvgPicture.asset(AppImage.mydoc),
+            ),
+            SizedBox(height: 20.h),
+            Image.asset(
+              AppImage.onboard,
+              width: double.infinity.w,
+              height: 300.h,
+              fit: BoxFit.fitWidth,
+            ),
+            SizedBox(height: 30.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: TextView(
+                text: 'Welcome',
+                textStyle: GoogleFonts.gabarito(
+                  color: AppColor.primary1,
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: TextView(
+                text: 'Ready to Begin Your Health Journey?',
+                textStyle: GoogleFonts.gabarito(
+                  color: AppColor.primary1,
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: TextView(
+                text:
+                    'Sign up to book your first consultation or log in to continue.',
+                textStyle: GoogleFonts.gabarito(
+                  color: AppColor.black,
+                  fontSize: 16.4.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            SizedBox(height: 32.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: ButtonWidget(
+                buttonText: 'Sign Up',
+                buttonColor: AppColor.primary1,
+                buttonBorderColor: AppColor.transparent,
+                textStyle: GoogleFonts.dmSans(
+                  color: AppColor.white,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                onPressed: () {},
+              ),
+            ),
+            SizedBox(height: 12.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: ButtonWidget(
+                buttonText: 'Log In',
+                buttonColor: AppColor.white,
+                buttonBorderColor: AppColor.primary1,
+                textStyle: GoogleFonts.dmSans(
+                  color: AppColor.primary1,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                onPressed: () {},
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
