@@ -84,7 +84,7 @@ class TextFormWidget extends StatelessWidget {
     this.size,
     this.text,
     this.borderColor = AppColor.grey,
-    this.labelColor = AppColor.grey,
+    this.labelColor = AppColor.lightgrey,
     this.maxline = 1,
     this.border = 4,
     this.minline,
