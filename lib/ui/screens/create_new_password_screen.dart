@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
+import 'package:my_doc_lab/ui/screens/edit_profile_screen.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
@@ -97,10 +98,12 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w500,
               ),
-              // onPressed:
-              //     () => Navigator.of(context).push(
-              //       MaterialPageRoute(builder: (context) => SignUpScreen()),
-              //     ),
+              onPressed:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditProfileScreen(),
+                    ),
+                  ),
             ),
             SizedBox(height: 26.0.h),
             GestureDetector(

@@ -5,6 +5,7 @@ class AppImage {
   static const String phone = 'assets/svg/phone.svg';
   static const String google = 'assets/svg/devicon_google.svg';
   static const String apple = 'assets/svg/apple.svg';
+  static const String edit = 'assets/svg/edit.svg';
   // ignore: constant_identifier_names
   static const String close_eye = 'assets/svg/closed_eye.svg';
   static const String facebook = 'assets/svg/logos_facebook.svg';

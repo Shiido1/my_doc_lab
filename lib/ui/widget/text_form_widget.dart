@@ -102,8 +102,11 @@ class TextFormWidget extends StatelessWidget {
               child: TextView(
                 text: hint!,
                 fontSize: 16.2.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColor.grey,
+                textStyle: GoogleFonts.gabarito(
+                  color: AppColor.black,
+                  fontSize: 16.0.sp,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             )
             : const SizedBox.shrink(),
@@ -127,7 +130,7 @@ class TextFormWidget extends StatelessWidget {
                 ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
-              borderSide: BorderSide(width: 1.w, color: AppColor.grey),
+              borderSide: BorderSide(width: 1.w, color: borderColor!),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(border!.r)),
