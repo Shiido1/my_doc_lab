@@ -9,6 +9,7 @@ import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
 import '../widget/button_widget.dart';
+import 'dashboard/dashboard_screen.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatefulWidget {
@@ -104,10 +105,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w500,
               ),
-              // onPressed:
-              //     () => Navigator.of(context).push(
-              //       MaterialPageRoute(builder: (context) => SignUpScreen()),
-              //     ),
+              onPressed:
+                  () => Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => Dashboard())),
             ),
             SizedBox(height: 26.0.h),
             RichText(

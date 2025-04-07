@@ -4,10 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/screens/more_settings_screen.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
+
+import 'dashboard/dashboard_screen.dart';
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
@@ -128,11 +129,9 @@ class EditProfileScreen extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
               onPressed:
-                  () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MoreSettingsScreen(),
-                    ),
-                  ),
+                  () => Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => Dashboard())),
             ),
           ],
         ),
