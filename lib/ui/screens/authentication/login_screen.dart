@@ -4,12 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/screens/forgot_password.dart';
+import 'package:my_doc_lab/ui/screens/authentication/forgot_password.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
-import '../widget/button_widget.dart';
-import 'dashboard/dashboard_screen.dart';
+import '../../widget/button_widget.dart';
+import '../dashboard/dashboard_screen.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatefulWidget {

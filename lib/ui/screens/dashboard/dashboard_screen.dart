@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
-import '../more_settings_screen.dart';
+import 'settings/more_settings_screen.dart';
 import 'home/home_screen.dart';
 
 // ignore: must_be_immutable

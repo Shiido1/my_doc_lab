@@ -8,7 +8,7 @@ import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
-import 'dashboard/dashboard_screen.dart';
+import '../dashboard/dashboard_screen.dart';
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});

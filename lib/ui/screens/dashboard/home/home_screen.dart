@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 
 import '../../../app_assets/app_image.dart';
@@ -225,12 +227,20 @@ class HomeScreen extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                TextView(
-                  text: 'See all',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.primary,
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
+                GestureDetector(
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DoctorTestScreen(tap: true),
+                        ),
+                      ),
+                  child: TextView(
+                    text: 'See all',
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.primary,
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ],
@@ -248,106 +258,114 @@ class HomeScreen extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) {
                   // Build each grid item based on the index
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: AppColor.funnyLookingGrey.withOpacity(.3),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                          ),
-                          child: Image.asset(
-                            AppImage.finedoc,
-                            height: 120.h,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(8.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextView(
-                                text: 'Dr Bolu Adeleke',
-                                textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.black,
-                                  fontSize: 16.0.sp,
-                                  fontWeight: FontWeight.w500,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AppColor.funnyLookingGrey.withOpacity(.3),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                            child: Image.asset(
+                              AppImage.finedoc,
+                              height: 120.h,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextView(
+                                  text: 'Dr Bolu Adeleke',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.black,
+                                    fontSize: 16.0.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                              TextView(
-                                text: 'Cardiologist',
-                                textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.grey,
-                                  fontSize: 12.0.sp,
-                                  fontWeight: FontWeight.w400,
+                                TextView(
+                                  text: 'Cardiologist',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.grey,
+                                    fontSize: 12.0.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 14.0.h),
-                              Row(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 1.w,
-                                      horizontal: 4.w,
+                                SizedBox(height: 14.0.h),
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 1.w,
+                                        horizontal: 4.w,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: AppColor.primary,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: AppColor.white,
+                                            size: 15.0.sp,
+                                          ),
+                                          SizedBox(width: 2.w),
+                                          TextView(
+                                            text: '4.8',
+                                            textStyle: GoogleFonts.dmSans(
+                                              color: AppColor.white,
+                                              fontSize: 12.0.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
-                                      color: AppColor.primary,
-                                    ),
-                                    child: Row(
+                                    SizedBox(width: 20.h),
+                                    Row(
                                       children: [
-                                        Icon(
-                                          Icons.star,
-                                          color: AppColor.white,
-                                          size: 15.0.sp,
+                                        SvgPicture.asset(
+                                          AppImage.location,
+                                          height: 15.2.h,
+                                          width: 16.2.w,
                                         ),
                                         SizedBox(width: 2.w),
                                         TextView(
-                                          text: '4.8',
-                                          textStyle: GoogleFonts.dmSans(
-                                            color: AppColor.white,
+                                          text: '800m away',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.black,
                                             fontSize: 12.0.sp,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  SizedBox(width: 20.h),
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        AppImage.location,
-                                        height: 15.2.h,
-                                        width: 16.2.w,
-                                      ),
-                                      SizedBox(width: 2.w),
-                                      TextView(
-                                        text: '800m away',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.black,
-                                          fontSize: 12.0.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -366,12 +384,20 @@ class HomeScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                TextView(
-                  text: 'See all',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.primary,
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
+                GestureDetector(
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DoctorTestScreen(tap: false),
+                        ),
+                      ),
+                  child: TextView(
+                    text: 'See all',
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.primary,
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ],

@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/screens/create_new_password_screen.dart';
+import 'package:my_doc_lab/ui/app_assets/app_image.dart';
+import 'package:my_doc_lab/ui/screens/authentication/edit_profile_screen.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
+import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
-class VerificationScreenForgotPassword extends StatefulWidget {
-  const VerificationScreenForgotPassword({super.key});
+class CreateNewPasswordScreen extends StatefulWidget {
+  const CreateNewPasswordScreen({super.key});
 
   @override
-  State<VerificationScreenForgotPassword> createState() =>
-      _VerificationScreenForgotPasswordState();
+  State<CreateNewPasswordScreen> createState() =>
+      _CreateNewPasswordScreenState();
 }
 
-class _VerificationScreenForgotPasswordState
-    extends State<VerificationScreenForgotPassword> {
+class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
   // bool _onTap = false;
-  TextEditingController controller = TextEditingController();
+  TextEditingController newcontroller = TextEditingController();
+  TextEditingController confirmcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class _VerificationScreenForgotPasswordState
           children: [
             SizedBox(height: 40.h),
             TextView(
-              text: 'Enter Verification Code',
+              text: 'Create New Password',
               textStyle: GoogleFonts.gabarito(
                 color: AppColor.darkindgrey,
                 fontSize: 20.sp,
@@ -39,17 +42,55 @@ class _VerificationScreenForgotPasswordState
             ),
             SizedBox(height: 20.h),
             TextView(
-              text: 'Enter the Code we sent to 087681****',
+              text: 'Create your new password to Login',
               textStyle: GoogleFonts.gabarito(
                 color: AppColor.darkindgrey,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(height: 30.h),
+
+            SizedBox(height: 20.h),
+
+            TextFormWidget(
+              label: 'Enter new password',
+              // hint: 'Email Address',
+              border: 10,
+              isFilled: true,
+              fillColor: AppColor.white,
+              controller: newcontroller,
+              prefixWidget: Padding(
+                padding: EdgeInsets.all(9.2.w),
+                child: SvgPicture.asset(AppImage.lock),
+              ),
+              suffixWidget: Padding(
+                padding: EdgeInsets.all(9.2.w),
+                child: SvgPicture.asset(AppImage.close_eye),
+              ),
+              // validator: AppValidator.validateEmail(),
+            ),
+            SizedBox(height: 20.h),
+
+            TextFormWidget(
+              label: 'Confirm password',
+              // hint: 'Email Address',
+              border: 10,
+              isFilled: true,
+              fillColor: AppColor.white,
+              controller: confirmcontroller,
+              prefixWidget: Padding(
+                padding: EdgeInsets.all(9.2.w),
+                child: SvgPicture.asset(AppImage.lock),
+              ),
+              suffixWidget: Padding(
+                padding: EdgeInsets.all(9.2.w),
+                child: SvgPicture.asset(AppImage.close_eye),
+              ),
+              // validator: AppValidator.validateEmail(),
+            ),
             SizedBox(height: 80.h),
             ButtonWidget(
-              buttonText: 'Verify',
+              buttonText: 'Create Password',
               buttonColor: AppColor.primary1,
               buttonBorderColor: AppColor.transparent,
               textStyle: GoogleFonts.dmSans(
@@ -60,7 +101,7 @@ class _VerificationScreenForgotPasswordState
               onPressed:
                   () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => CreateNewPasswordScreen(),
+                      builder: (context) => EditProfileScreen(),
                     ),
                   ),
             ),

@@ -12,6 +12,8 @@ class AppImage {
   static const String chat = 'assets/svg/chat.svg';
   static const String more = 'assets/svg/more.svg';
   static const String notification = 'assets/svg/notification.svg';
+  static const String vaccine = 'assets/svg/vaccine.svg';
+  static const String ddoc = 'assets/svg/ddoc.svg';
   static const String cart = 'assets/svg/cart.svg';
   static const String wallet = 'assets/svg/wallet.svg';
   static const String search = 'assets/svg/search.svg';
@@ -20,6 +22,7 @@ class AppImage {
   static const String close_eye = 'assets/svg/closed_eye.svg';
   static const String facebook = 'assets/svg/logos_facebook.svg';
   static const String location = 'assets/svg/location.svg';
+  static const String gradcap = 'assets/svg/gradcap.svg';
   static const String message = 'assets/svg/message.svg';
   static const String person = 'assets/svg/person.svg';
   static const String onboard = 'assets/image/onboard.png';
@@ -27,6 +30,7 @@ class AppImage {
   static const String doctor = 'assets/image/doctor.png';
   static const String femdoc = 'assets/image/female_doc.png';
   static const String finedoc = 'assets/image/fine_doc.png';
+  static const String medicine = 'assets/image/medicine.png';
   // ignore: constant_identifier_names
   static const String lab_sci = 'assets/image/lab_sci.png';
   static const String first = 'assets/image/first_onboarding.png';

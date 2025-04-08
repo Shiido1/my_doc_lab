@@ -4,8 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/screens/login_screen.dart';
-import 'package:my_doc_lab/ui/screens/sign_up_screen.dart';
+import 'package:my_doc_lab/ui/screens/authentication/login_screen.dart';
+import 'package:my_doc_lab/ui/screens/authentication/sign_up_screen.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 

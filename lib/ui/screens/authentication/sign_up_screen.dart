@@ -7,7 +7,7 @@ import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
-import '../widget/button_widget.dart';
+import '../../widget/button_widget.dart';
 
 // ignore: must_be_immutable
 class SignUpScreen extends StatefulWidget {
