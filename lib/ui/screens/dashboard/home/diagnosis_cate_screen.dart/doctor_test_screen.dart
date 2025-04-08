@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/test_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 
 import '../../../../app_assets/app_image.dart';
@@ -320,50 +321,58 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                       ],
                     ),
                     SizedBox(height: 20.h),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(16.w),
-                          decoration: BoxDecoration(
-                            color: AppColor.primary1.withOpacity(.7),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: SvgPicture.asset(
-                            AppImage.blood,
-                            height: 40.h,
-                            width: 50.w,
-                          ),
-                        ),
-                        SizedBox(width: 20.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextView(
-                              text: 'Blood Test',
-                              textStyle: GoogleFonts.gabarito(
-                                color: AppColor.primary1,
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
+                    GestureDetector(
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => TestScreen(),
                             ),
-                            SizedBox(height: 10.w),
-                            SizedBox(
-                              width: 260.w,
-                              child: TextView(
-                                text:
-                                    'A blood test helps assess your overall health and detect a wide range of conditions, such as infections, anemia, and more. Common tests include Complete Blood Count (CBC) and Blood Sugar Analysis.',
+                          ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(16.w),
+                            decoration: BoxDecoration(
+                              color: AppColor.primary1.withOpacity(.7),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: SvgPicture.asset(
+                              AppImage.blood,
+                              height: 40.h,
+                              width: 50.w,
+                            ),
+                          ),
+                          SizedBox(width: 20.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextView(
+                                text: 'Blood Test',
                                 textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.black.withOpacity(.7),
-                                  fontSize: 13.0.sp,
+                                  color: AppColor.primary1,
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
-                                maxLines: 6,
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              SizedBox(height: 10.w),
+                              SizedBox(
+                                width: 260.w,
+                                child: TextView(
+                                  text:
+                                      'A blood test helps assess your overall health and detect a wide range of conditions, such as infections, anemia, and more. Common tests include Complete Blood Count (CBC) and Blood Sugar Analysis.',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.black.withOpacity(.7),
+                                    fontSize: 13.0.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  maxLines: 6,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
