@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
+import 'chat/chat_screen.dart';
 import 'settings/more_settings_screen.dart';
 import 'home/home_screen.dart';
 
@@ -25,7 +26,7 @@ class _DashboardState extends State<Dashboard> {
   final List<Widget> _body = [
     HomeScreen(),
     Container(),
-    Container(),
+    ChatScreen(),
     MoreSettingsScreen(),
   ];
 

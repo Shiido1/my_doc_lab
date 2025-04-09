@@ -25,6 +25,8 @@ class AppImage {
   static const String pharm = 'assets/svg/pharm.svg';
   static const String results = 'assets/svg/results.svg';
   static const String walleta = 'assets/svg/walleta.svg';
+  static const String moreVert = 'assets/svg/moore.svg';
+  static const String video = 'assets/svg/video.svg';
   // ignore: constant_identifier_names
   static const String close_eye = 'assets/svg/closed_eye.svg';
   static const String facebook = 'assets/svg/logos_facebook.svg';

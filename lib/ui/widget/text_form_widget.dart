@@ -47,6 +47,7 @@ class TextFormWidget extends StatelessWidget {
   final int? maxline;
   final int? minline;
   final double? border;
+  final ScrollController? scrollController;
 
   TextFormWidget({
     super.key,
@@ -89,6 +90,7 @@ class TextFormWidget extends StatelessWidget {
     this.border = 4,
     this.minline,
     this.focusNode,
+    this.scrollController,
   });
 
   @override
@@ -115,6 +117,8 @@ class TextFormWidget extends StatelessWidget {
           focusNode: focusNode,
           autofocus: autofocus,
           style: TextStyle(fontSize: 16.sp),
+          scrollController: scrollController,
+          scrollPhysics: BouncingScrollPhysics(),
           decoration: InputDecoration(
             alignLabelWithHint: alignLabelWithHint,
             filled: isFilled,
