@@ -316,7 +316,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 4.0.w),
             SizedBox(
-              height: 220.h,
+              height: 270.h,
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisSpacing: 10,

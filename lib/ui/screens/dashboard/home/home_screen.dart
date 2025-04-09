@@ -1,14 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
-
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_widget.dart';
 
@@ -59,10 +58,18 @@ class HomeScreen extends StatelessWidget {
                 Spacer(),
                 SvgPicture.asset(AppImage.cart, width: 24.w, height: 24.w),
                 SizedBox(width: 20.w),
-                SvgPicture.asset(
-                  AppImage.notification,
-                  width: 24.w,
-                  height: 24.w,
+                GestureDetector(
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => NotificationScreen(),
+                        ),
+                      ),
+                  child: SvgPicture.asset(
+                    AppImage.notification,
+                    width: 24.w,
+                    height: 24.w,
+                  ),
                 ),
               ],
             ),

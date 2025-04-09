@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
+import 'package:my_doc_lab/ui/screens/authentication/edit_profile_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/phamacy_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
 class MoreSettingsScreen extends StatelessWidget {
@@ -86,36 +88,85 @@ class MoreSettingsScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 30.h),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColor.lightgrey),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SvgPicture.asset(AppImage.person),
-                  SizedBox(width: 20.w),
-                  TextView(
-                    text: 'Edit Profile',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.black,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
+            moreContainerWidget(
+              image: AppImage.person,
+              text: 'Edit Profile',
+              onTap:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditProfileScreen(),
                     ),
                   ),
-                  Spacer(),
-                  Icon(
-                    Icons.keyboard_arrow_right_sharp,
-                    color: AppColor.darkindgrey,
-                  ),
-                ],
-              ),
             ),
+            SizedBox(height: 20.h),
+            moreContainerWidget(
+              image: AppImage.walleta,
+              text: 'Wallet',
+              onTap: () {},
+            ),
+            SizedBox(height: 20.h),
+            moreContainerWidget(
+              image: AppImage.results,
+              text: 'Results',
+              onTap: () {},
+            ),
+            SizedBox(height: 20.h),
+            moreContainerWidget(
+              image: AppImage.pharm,
+              text: 'Pharmacy',
+              onTap:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => PharmacyScreen()),
+                  ),
+            ),
+            SizedBox(height: 20.h),
+            moreContainerWidget(
+              image: AppImage.history,
+              text: 'Order History',
+              onTap: () {},
+            ),
+            SizedBox(height: 20.h),
+            moreContainerWidget(
+              image: AppImage.help,
+              text: 'Help & Support',
+              onTap: () {},
+            ),
+            SizedBox(height: 20.h),
           ],
         ),
       ),
     );
   }
+
+  moreContainerWidget({
+    required String image,
+    required String text,
+    required Function() onTap,
+  }) => GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColor.lightgrey),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SvgPicture.asset(image, color: AppColor.darkindgrey),
+          SizedBox(width: 20.w),
+          TextView(
+            text: text,
+            textStyle: GoogleFonts.gabarito(
+              color: AppColor.black,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Spacer(),
+          Icon(Icons.keyboard_arrow_right_sharp, color: AppColor.darkindgrey),
+        ],
+      ),
+    ),
+  );
 }

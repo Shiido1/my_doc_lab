@@ -12,12 +12,19 @@ class AppImage {
   static const String chat = 'assets/svg/chat.svg';
   static const String more = 'assets/svg/more.svg';
   static const String notification = 'assets/svg/notification.svg';
+  static const String not = 'assets/svg/not.svg';
+  static const String settings = 'assets/svg/setting.svg';
   static const String vaccine = 'assets/svg/vaccine.svg';
   static const String ddoc = 'assets/svg/ddoc.svg';
   static const String cart = 'assets/svg/cart.svg';
   static const String wallet = 'assets/svg/wallet.svg';
   static const String search = 'assets/svg/search.svg';
   static const String filter = 'assets/svg/filter.svg';
+  static const String help = 'assets/svg/help.svg';
+  static const String history = 'assets/svg/history.svg';
+  static const String pharm = 'assets/svg/pharm.svg';
+  static const String results = 'assets/svg/results.svg';
+  static const String walleta = 'assets/svg/walleta.svg';
   // ignore: constant_identifier_names
   static const String close_eye = 'assets/svg/closed_eye.svg';
   static const String facebook = 'assets/svg/logos_facebook.svg';

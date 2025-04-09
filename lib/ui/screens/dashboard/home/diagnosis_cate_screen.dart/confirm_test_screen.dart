@@ -121,6 +121,7 @@ class ConfirmTestScreen extends StatelessWidget {
                   ),
                   child: SvgPicture.asset(
                     AppImage.calendar,
+                    // ignore: deprecated_member_use
                     color: AppColor.primary1,
                   ),
                 ),
@@ -316,7 +317,7 @@ class ConfirmTestScreen extends StatelessWidget {
                                   textStyle: GoogleFonts.dmSans(
                                     color: AppColor.black,
                                     fontSize: 15.80.sp,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 SizedBox(height: 40.h),

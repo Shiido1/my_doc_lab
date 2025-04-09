@@ -49,10 +49,3 @@ class TextView extends StatelessWidget {
     );
   }
 }
-
-
-// GoogleFonts.dmSans(
-//               color: color,
-//               fontSize: fontSize,
-//               fontWeight: fontWeight,
-//               fontStyle: fontStyle)
