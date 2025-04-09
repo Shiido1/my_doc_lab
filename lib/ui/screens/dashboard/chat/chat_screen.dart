@@ -134,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               TextView(
                                 text: 'Hello, How can I help you?',
                                 textStyle: GoogleFonts.dmSans(
-                                  fontSize: 13.2.sp,
+                                  fontSize: 15.2.sp,
                                   fontWeight: FontWeight.w500,
                                   color: AppColor.darkindgrey,
                                 ),
@@ -143,7 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               TextView(
                                 text: '09:45PM',
                                 textStyle: GoogleFonts.dmSans(
-                                  fontSize: 11.2.sp,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w400,
                                   color: AppColor.darkindgrey,
                                 ),
@@ -175,7 +175,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 text:
                                     'I have been suffering from Tooth ache and stomach pain for 3 days now.',
                                 textStyle: GoogleFonts.dmSans(
-                                  fontSize: 13.2.sp,
+                                  fontSize: 15.2.sp,
                                   fontWeight: FontWeight.w500,
                                   color: AppColor.white,
                                 ),
@@ -184,7 +184,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               TextView(
                                 text: '09:45PM',
                                 textStyle: GoogleFonts.dmSans(
-                                  fontSize: 11.2.sp,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w400,
                                   color: AppColor.white,
                                 ),
@@ -229,7 +229,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               fillColor: AppColor.white,
                               suffixIcon: Padding(
                                 padding: EdgeInsets.only(
-                                  top: 12.w,
+                                  top: 13.w,
                                   right: 16.w,
                                 ),
                                 child:
