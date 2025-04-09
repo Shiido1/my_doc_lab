@@ -15,6 +15,8 @@ class AppImage {
   static const String not = 'assets/svg/not.svg';
   static const String settings = 'assets/svg/setting.svg';
   static const String vaccine = 'assets/svg/vaccine.svg';
+  static const String clipper = 'assets/svg/clipper.svg';
+  static const String mic = 'assets/svg/mic.svg';
   static const String ddoc = 'assets/svg/ddoc.svg';
   static const String cart = 'assets/svg/cart.svg';
   static const String wallet = 'assets/svg/wallet.svg';

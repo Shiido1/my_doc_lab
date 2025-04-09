@@ -7,10 +7,17 @@ import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
 // ignore: must_be_immutable
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   ChatScreen({super.key});
 
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
+
+  bool isContainedText = false;
 
   @override
   Widget build(BuildContext context) {
@@ -203,31 +210,69 @@ class ChatScreen extends StatelessWidget {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(minHeight: 50, maxHeight: 150),
                   child: Scrollbar(
-                    child: TextFormField(
-                      // controller: _textController,
-                      scrollController: _scrollController,
-                      keyboardType: TextInputType.multiline,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            // controller: _textController,
+                            scrollController: _scrollController,
+                            keyboardType: TextInputType.multiline,
 
-                      maxLines: null,
-                      minLines: 1,
-                      decoration: InputDecoration(
-                        hintText: 'Type a message...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                            maxLines: null,
+                            minLines: 1,
+                            decoration: InputDecoration(
+                              hintText: 'Type a message...',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              filled: true,
+                              fillColor: AppColor.white,
+                              suffixIcon: Padding(
+                                padding: EdgeInsets.only(
+                                  top: 12.w,
+                                  right: 16.w,
+                                ),
+                                child:
+                                    !isContainedText
+                                        ? Wrap(
+                                          children: [
+                                            SvgPicture.asset(AppImage.clipper),
+
+                                            SizedBox(width: 16.w),
+                                            SvgPicture.asset(AppImage.mic),
+                                          ],
+                                        )
+                                        : Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: 10.w,
+                                          ),
+                                          child: SvgPicture.asset(
+                                            AppImage.clipper,
+                                          ),
+                                        ),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                setState(() {
+                                  isContainedText = true;
+                                });
+                              } else {
+                                setState(() {
+                                  isContainedText = false;
+                                });
+                              }
+                            },
+                          ),
                         ),
-                        filled: true,
-                        fillColor: AppColor.white,
-                        contentPadding: EdgeInsets.all(12),
-                        suffixIcon: IconButton(
+                        SizedBox(width: 4.w),
+                        IconButton(
                           icon: Icon(Icons.send, color: AppColor.primary),
                           onPressed: () {
                             // send message
                           },
                         ),
-                      ),
-                      onChanged: (value) {
-                        print(_scrollController.position);
-                      },
+                      ],
                     ),
                   ),
                 ),
