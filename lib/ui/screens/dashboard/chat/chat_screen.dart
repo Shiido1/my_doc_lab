@@ -40,6 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        SizedBox(height: 10.h),
                         TextView(
                           text: 'Dr Uju Obah',
                           textStyle: GoogleFonts.dmSans(
@@ -72,27 +73,30 @@ class _ChatScreenState extends State<ChatScreen> {
                       ],
                     ),
                     Spacer(),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          AppImage.video,
-                          width: 18.w,
-                          height: 18.0.h,
-                        ),
-                        SizedBox(width: 20.w),
-                        SvgPicture.asset(
-                          AppImage.phone,
-                          width: 26.0.w,
-                          height: 26.0.h,
-                        ),
-                        SizedBox(width: 20.w),
-                        SvgPicture.asset(
-                          AppImage.moreVert,
-                          width: 20.w,
-                          height: 20.h,
-                        ),
-                        SizedBox(width: 20.w),
-                      ],
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.w),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            AppImage.video,
+                            width: 22.w,
+                            height: 22.0.h,
+                          ),
+                          SizedBox(width: 20.w),
+                          SvgPicture.asset(
+                            AppImage.phone,
+                            width: 28.0.w,
+                            height: 28.0.h,
+                          ),
+                          SizedBox(width: 20.w),
+                          SvgPicture.asset(
+                            AppImage.moreVert,
+                            width: 22.w,
+                            height: 22.h,
+                          ),
+                          SizedBox(width: 20.w),
+                        ],
+                      ),
                     ),
                   ],
                 ),
