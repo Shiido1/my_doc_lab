@@ -6,6 +6,7 @@ import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/edit_profile_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/phamacy_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
 class MoreSettingsScreen extends StatelessWidget {
@@ -108,7 +109,10 @@ class MoreSettingsScreen extends StatelessWidget {
             moreContainerWidget(
               image: AppImage.results,
               text: 'Results',
-              onTap: () {},
+              onTap:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ResultsScreen()),
+                  ),
             ),
             SizedBox(height: 20.h),
             moreContainerWidget(

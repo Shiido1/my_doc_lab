@@ -11,7 +11,7 @@ import '../../widget/button_widget.dart';
 
 // ignore: must_be_immutable
 class SignUpScreen extends StatefulWidget {
-  SignUpScreen({super.key});
+  const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();

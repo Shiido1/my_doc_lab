@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
+import 'appointment/appointment_screen.dart';
 import 'chat/chat_screen.dart';
 import 'settings/more_settings_screen.dart';
 import 'home/home_screen.dart';
@@ -25,7 +26,7 @@ class _DashboardState extends State<Dashboard> {
 
   final List<Widget> _body = [
     HomeScreen(),
-    Container(),
+    AppointmentScreen(),
     ChatScreen(),
     MoreSettingsScreen(),
   ];
@@ -101,64 +102,69 @@ class _DashboardState extends State<Dashboard> {
             splashColor: AppColor.transparent,
             highlightColor: AppColor.transparent,
           ),
-          child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (index) => setState(() => _currentIndex = index),
-            backgroundColor: AppColor.white,
-            selectedItemColor: AppColor.primary,
-            type: BottomNavigationBarType.fixed,
-            selectedFontSize: 14.8.sp,
-            unselectedFontSize: 14.6.sp,
-            items: [
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  AppImage.home,
-                  color:
-                      _currentIndex == 0
-                          ? AppColor.primary
-                          : AppColor.funnyLookingGrey,
-                  height: 30.h,
-                  width: 30.w,
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              canvasColor: AppColor.white,
+              splashColor: AppColor.transparent,
+            ),
+            child: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              onTap: (index) => setState(() => _currentIndex = index),
+              selectedItemColor: AppColor.darkindgrey,
+              type: BottomNavigationBarType.shifting,
+              selectedFontSize: 14.8.sp,
+              unselectedFontSize: 14.6.sp,
+              items: [
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    AppImage.home,
+                    color:
+                        _currentIndex == 0
+                            ? AppColor.darkindgrey
+                            : AppColor.funnyLookingGrey,
+                    height: 30.h,
+                    width: 30.w,
+                  ),
+                  label: 'Home',
                 ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  AppImage.calendar,
-                  color:
-                      _currentIndex == 1
-                          ? AppColor.primary
-                          : AppColor.funnyLookingGrey,
-                  height: 30.0.h,
-                  width: 30.w,
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    AppImage.calendar,
+                    color:
+                        _currentIndex == 1
+                            ? AppColor.darkindgrey
+                            : AppColor.funnyLookingGrey,
+                    height: 30.0.h,
+                    width: 30.w,
+                  ),
+                  label: 'Appointment',
                 ),
-                label: 'Appointment',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  AppImage.chat,
-                  color:
-                      _currentIndex == 2
-                          ? AppColor.primary
-                          : AppColor.funnyLookingGrey,
-                  height: 30.h,
-                  width: 30.w,
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    AppImage.chat,
+                    color:
+                        _currentIndex == 2
+                            ? AppColor.darkindgrey
+                            : AppColor.funnyLookingGrey,
+                    height: 30.h,
+                    width: 30.w,
+                  ),
+                  label: 'Message',
                 ),
-                label: 'Message',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  AppImage.more,
-                  color:
-                      _currentIndex == 3
-                          ? AppColor.primary
-                          : AppColor.funnyLookingGrey,
-                  height: 30.h,
-                  width: 30.w,
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    AppImage.more,
+                    color:
+                        _currentIndex == 3
+                            ? AppColor.darkindgrey
+                            : AppColor.funnyLookingGrey,
+                    height: 30.h,
+                    width: 30.w,
+                  ),
+                  label: 'More',
                 ),
-                label: 'More',
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

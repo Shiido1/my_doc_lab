@@ -21,6 +21,9 @@ class AppImage {
   static const String cart = 'assets/svg/cart.svg';
   static const String wallet = 'assets/svg/wallet.svg';
   static const String search = 'assets/svg/search.svg';
+  static const String time = 'assets/svg/time.svg';
+  // ignore: constant_identifier_names
+  static const String more_circle = 'assets/svg/more_circle.svg';
   static const String filter = 'assets/svg/filter.svg';
   static const String help = 'assets/svg/help.svg';
   static const String history = 'assets/svg/history.svg';

@@ -13,7 +13,7 @@ import '../dashboard/dashboard_screen.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
