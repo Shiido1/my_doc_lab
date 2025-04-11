@@ -9,6 +9,8 @@ import 'package:my_doc_lab/ui/screens/dashboard/phamacy_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
+import 'help_and_support_screen.dart';
+
 class MoreSettingsScreen extends StatelessWidget {
   const MoreSettingsScreen({super.key});
 
@@ -127,13 +129,23 @@ class MoreSettingsScreen extends StatelessWidget {
             moreContainerWidget(
               image: AppImage.history,
               text: 'Order History',
-              onTap: () {},
+              onTap:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => HelpAndSupportScreen(),
+                    ),
+                  ),
             ),
             SizedBox(height: 20.h),
             moreContainerWidget(
               image: AppImage.help,
               text: 'Help & Support',
-              onTap: () {},
+              onTap:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => HelpAndSupportScreen(),
+                    ),
+                  ),
             ),
             SizedBox(height: 20.h),
           ],
