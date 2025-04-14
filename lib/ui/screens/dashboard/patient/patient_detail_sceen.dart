@@ -688,14 +688,88 @@ class _PatientDetailSceenState extends State<PatientDetailSceen> {
                           SizedBox(height: 12.h),
                         ],
                       )
-                    // ...[1, 2, 3, 4].map(
-                    //   (o) => appointMentCard(appointmentStatus: 'Upcoming'),
-                    // )
                     else if (tab == 'Records')
-                      Container()
-                    // ...[1, 2, 3, 4].map(
-                    //   (o) => appointMentCard(appointmentStatus: 'Completed'),
-                    // )
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextView(
+                                text: 'Medical Records',
+                                textStyle: GoogleFonts.gabarito(
+                                  color: AppColor.darkindgrey,
+                                  fontSize: 16.20.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {},
+                                child: TextView(
+                                  text: 'View all',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.primary,
+                                    fontSize: 14.0.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20.h),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4.w,
+                              horizontal: 8.w,
+                            ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColor.grey),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextView(
+                                      text: 'Seasonal allergies',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    TextView(
+                                      text: '9/10/2021',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey.withOpacity(
+                                          .4,
+                                        ),
+                                        fontSize: 15.0.sp,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                SizedBox(height: 6.h),
+                                TextView(
+                                  text: 'Recommended OTC antihistamines',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.darkindgrey,
+                                    fontSize: 15.0.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 12.h),
+                        ],
+                      )
                     else
                       Container(),
                     // ...[1, 2, 3, 4].map(
