@@ -53,7 +53,11 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: emailTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(AppImage.message),
+                child: SvgPicture.asset(
+                  AppImage.message,
+                  height: 20.h,
+                  width: 20.w,
+                ),
               ),
               // validator: AppValidator.validateEmail(),
             ),
@@ -61,20 +65,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
             TextFormWidget(
               label: 'Enter your password',
-              // hint: 'Email Address',
               border: 10,
               isFilled: true,
               fillColor: AppColor.white,
               controller: fullnameTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(AppImage.lock),
+                child: SvgPicture.asset(
+                  AppImage.lock,
+                  height: 20.h,
+                  width: 20.w,
+                ),
               ),
               suffixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(AppImage.close_eye),
+                child: SvgPicture.asset(
+                  AppImage.close_eye,
+                  height: 20.h,
+                  width: 20.w,
+                ),
               ),
-              // validator: AppValidator.validateEmail(),
             ),
 
             SizedBox(height: 10.h),

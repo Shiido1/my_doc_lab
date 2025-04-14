@@ -21,6 +21,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Scaffold(
       backgroundColor: AppColor.white,
       body: SafeArea(
@@ -238,13 +239,26 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ),
                                 child:
                                     !isContainedText
-                                        ? Wrap(
-                                          children: [
-                                            SvgPicture.asset(AppImage.clipper),
+                                        ? Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: isTablet ? 10.w : 0.w,
+                                          ),
+                                          child: Wrap(
+                                            children: [
+                                              SvgPicture.asset(
+                                                AppImage.clipper,
+                                                height: 20.h,
+                                                width: 20.w,
+                                              ),
 
-                                            SizedBox(width: 16.w),
-                                            SvgPicture.asset(AppImage.mic),
-                                          ],
+                                              SizedBox(width: 16.w),
+                                              SvgPicture.asset(
+                                                AppImage.mic,
+                                                height: 20.h,
+                                                width: 20.w,
+                                              ),
+                                            ],
+                                          ),
                                         )
                                         : Padding(
                                           padding: EdgeInsets.only(
@@ -271,7 +285,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         SizedBox(width: 4.w),
                         IconButton(
-                          icon: Icon(Icons.send, color: AppColor.primary),
+                          icon: Icon(
+                            Icons.send,
+                            color: AppColor.primary,
+                            size: 20.sp,
+                          ),
                           onPressed: () {
                             // send message
                           },

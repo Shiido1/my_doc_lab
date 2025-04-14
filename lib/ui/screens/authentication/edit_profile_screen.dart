@@ -79,13 +79,17 @@ class EditProfileScreen extends StatelessWidget {
               // controller: emailTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(AppImage.person),
+                child: SvgPicture.asset(
+                  AppImage.person,
+                  width: 20.w,
+                  height: 20.h,
+                ),
               ),
               suffixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
                 child: IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.arrow_drop_down_outlined),
+                  icon: Icon(Icons.arrow_drop_down_outlined, size: 22.sp),
                 ),
                 // validator: AppValidator.validateEmail(),
               ),

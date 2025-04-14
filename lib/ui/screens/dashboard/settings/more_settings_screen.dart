@@ -37,7 +37,7 @@ class MoreSettingsScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Icon(Icons.notifications_none_outlined),
+                Icon(Icons.notifications_none_outlined, size: 20.sp),
               ],
             ),
             Divider(color: AppColor.grey.withOpacity(.3)),
@@ -65,7 +65,11 @@ class MoreSettingsScreen extends StatelessWidget {
                         bottom: 0,
                         right: 0,
                         left: 96.0,
-                        child: SvgPicture.asset(AppImage.edit),
+                        child: SvgPicture.asset(
+                          AppImage.edit,
+                          width: 20.w,
+                          height: 20.h,
+                        ),
                       ),
                     ],
                   ),
@@ -169,7 +173,12 @@ class MoreSettingsScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SvgPicture.asset(image, color: AppColor.darkindgrey),
+          SvgPicture.asset(
+            image,
+            color: AppColor.darkindgrey,
+            width: 20.w,
+            height: 20.h,
+          ),
           SizedBox(width: 20.w),
           TextView(
             text: text,
@@ -180,7 +189,11 @@ class MoreSettingsScreen extends StatelessWidget {
             ),
           ),
           Spacer(),
-          Icon(Icons.keyboard_arrow_right_sharp, color: AppColor.darkindgrey),
+          Icon(
+            Icons.keyboard_arrow_right_sharp,
+            color: AppColor.darkindgrey,
+            size: 22.sp,
+          ),
         ],
       ),
     ),

@@ -10,11 +10,14 @@ class AppImage {
   static const String home = 'assets/svg/home.svg';
   static const String calendar = 'assets/svg/calendar.svg';
   static const String chat = 'assets/svg/chat.svg';
+  static const String share = 'assets/svg/share.svg';
   static const String more = 'assets/svg/more.svg';
   static const String notification = 'assets/svg/notification.svg';
   static const String not = 'assets/svg/not.svg';
   static const String settings = 'assets/svg/setting.svg';
   static const String vaccine = 'assets/svg/vaccine.svg';
+  static const String pres = 'assets/svg/pres.svg';
+  static const String ste = 'assets/svg/ste.svg';
   static const String clipper = 'assets/svg/clipper.svg';
   static const String mic = 'assets/svg/mic.svg';
   static const String ddoc = 'assets/svg/ddoc.svg';
@@ -26,6 +29,10 @@ class AppImage {
   static const String pdf = 'assets/svg/pdf.svg';
   static const String exp = 'assets/svg/exp.svg';
   static const String aidbox = 'assets/svg/aidbox.svg';
+  static const String patient = 'assets/svg/patient.svg';
+  static const String docMsg = 'assets/svg/doc_msg.svg';
+  static const String task = 'assets/svg/task.svg';
+  static const String personPlus = 'assets/svg/personplus.svg';
   static const String document = 'assets/svg/document.svg';
   // ignore: constant_identifier_names
   static const String more_circle = 'assets/svg/more_circle.svg';

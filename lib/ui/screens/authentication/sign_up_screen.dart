@@ -51,7 +51,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               controller: fullnameTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(AppImage.person),
+                child: SvgPicture.asset(
+                  AppImage.person,
+                  width: 20.w,
+                  height: 20.h,
+                ),
               ),
               // validator: AppValidator.validateEmail(),
             ),
@@ -65,7 +69,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               controller: fullnameTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(AppImage.message),
+                child: SvgPicture.asset(
+                  AppImage.message,
+                  width: 20.w,
+                  height: 20.h,
+                ),
               ),
               // validator: AppValidator.validateEmail(),
             ),
@@ -79,7 +87,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               controller: fullnameTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(AppImage.lock),
+                child: SvgPicture.asset(
+                  AppImage.lock,
+                  width: 20.w,
+                  height: 20.h,
+                ),
               ),
               // validator: AppValidator.validateEmail(),
             ),
@@ -93,7 +105,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               controller: fullnameTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(AppImage.lock),
+                child: SvgPicture.asset(
+                  AppImage.lock,
+                  width: 20.w,
+                  height: 20.h,
+                ),
               ),
               // validator: AppValidator.validateEmail(),
             ),
@@ -107,7 +123,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               controller: fullnameTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(AppImage.location),
+                child: SvgPicture.asset(
+                  AppImage.location,
+                  width: 20.w,
+                  height: 20.h,
+                ),
               ),
               // validator: AppValidator.validateEmail(),
             ),

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,6 +17,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final double? mainAxisExtent = isTablet ? null : 220.h;
     return Scaffold(
       backgroundColor: AppColor.white,
       body: SingleChildScrollView(
@@ -125,11 +128,19 @@ class HomeScreen extends StatelessWidget {
               // controller: fullnameTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(14.w),
-                child: SvgPicture.asset(AppImage.search),
+                child: SvgPicture.asset(
+                  AppImage.search,
+                  height: 20.h,
+                  width: 20.w,
+                ),
               ),
               suffixWidget: Padding(
                 padding: EdgeInsets.all(14.w),
-                child: SvgPicture.asset(AppImage.filter),
+                child: SvgPicture.asset(
+                  AppImage.filter,
+                  height: 20.h,
+                  width: 20.w,
+                ),
               ),
               // validator: AppValidator.validateEmail(),
             ),
@@ -270,7 +281,9 @@ class HomeScreen extends StatelessWidget {
                   crossAxisSpacing: 10,
                   crossAxisCount: 2,
                   mainAxisExtent:
-                      Platform.isIOS ? 240 : 200, // Number of columns
+                      Platform.isIOS
+                          ? mainAxisExtent
+                          : 200, // Number of columns
                 ),
                 itemBuilder: (context, index) {
                   // Build each grid item based on the index
@@ -327,6 +340,8 @@ class HomeScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 14.0.h),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
                                       padding: EdgeInsets.symmetric(
@@ -356,7 +371,6 @@ class HomeScreen extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(width: 20.h),
                                     Row(
                                       children: [
                                         SvgPicture.asset(
@@ -448,7 +462,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 10.w),
                     SizedBox(
-                      width: 260.w,
+                      width: 240.w,
                       child: TextView(
                         text:
                             'A blood test helps assess your overall health and detect a wide range of conditions, such as infections, anemia, and more. Common tests include Complete Blood Count (CBC) and Blood Sugar Analysis.',
@@ -457,6 +471,7 @@ class HomeScreen extends StatelessWidget {
                           fontSize: 15.20.sp,
                           fontWeight: FontWeight.w500,
                         ),
+                        textOverflow: TextOverflow.ellipsis,
                         maxLines: 6,
                       ),
                     ),
