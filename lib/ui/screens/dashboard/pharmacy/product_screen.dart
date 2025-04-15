@@ -168,7 +168,7 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
 
             Container(
               width: double.infinity,
-              height: isTablet ? null : 440.h,
+              height: isTablet ? 310.h : 440.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: AppColor.greyIt.withOpacity(.05),
@@ -241,71 +241,74 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                             5,
                             5,
                           ].map(
-                            (o) => Row(
-                              children: [
-                                Checkbox(
-                                  value: selectedOptions.contains(
-                                    'Blood Sugar',
-                                  ),
-                                  onChanged: (isChecked) {
-                                    setState(() {
-                                      if (isChecked!) {
-                                        selectedOptions.add('Blood Sugar');
-                                      } else {
-                                        selectedOptions.remove('Blood Sugar');
-                                      }
-                                    });
-                                  },
-                                ),
-                                TextView(
-                                  text: 'Furosemide',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.grey2,
-                                    fontSize: 16.sp,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(width: 20.w),
-                                TextView(
-                                  text: 'N1000',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.grey2,
-                                    fontSize: 16.sp,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(width: 20.w),
-                                TextView(
-                                  text: '100',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.grey2,
-                                    fontSize: 16.sp,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(width: 30.w),
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      AppImage.edit,
-                                      width: 20.w,
-                                      height: 20.h,
-                                      color: AppColor.black,
+                            (o) => Padding(
+                              padding: EdgeInsets.only(bottom: 10.w),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    value: selectedOptions.contains(
+                                      'Blood Sugar',
                                     ),
-                                    SizedBox(width: 20.w),
-                                    Icon(
-                                      Icons.remove_circle_outline_outlined,
-                                      color: AppColor.fineRed,
-                                      size: 22.sp,
+                                    onChanged: (isChecked) {
+                                      setState(() {
+                                        if (isChecked!) {
+                                          selectedOptions.add('Blood Sugar');
+                                        } else {
+                                          selectedOptions.remove('Blood Sugar');
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  TextView(
+                                    text: 'Furosemide',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.grey2,
+                                      fontSize: 16.sp,
+                                      letterSpacing: 0,
+                                      fontWeight: FontWeight.w400,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(width: 20.w),
+                                  TextView(
+                                    text: 'N1000',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.grey2,
+                                      fontSize: 16.sp,
+                                      letterSpacing: 0,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(width: 20.w),
+                                  TextView(
+                                    text: '100',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.grey2,
+                                      fontSize: 16.sp,
+                                      letterSpacing: 0,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(width: 30.w),
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        AppImage.edit,
+                                        width: 20.w,
+                                        height: 20.h,
+                                        color: AppColor.black,
+                                      ),
+                                      SizedBox(width: 20.w),
+                                      Icon(
+                                        Icons.remove_circle_outline_outlined,
+                                        color: AppColor.fineRed,
+                                        size: 22.sp,
+                                      ),
+                                    ],
+                                  ),
 
-                                // SizedBox(width: 10.w),
-                              ],
+                                  // SizedBox(width: 10.w),
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(height: 20.h),

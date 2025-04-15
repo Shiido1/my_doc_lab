@@ -277,7 +277,7 @@ class PharmacyHomeScreen extends StatelessWidget {
                   color: AppColor.white,
                   fontSize: 16.6.sp,
                   fontWeight: FontWeight.w500,
-                  letterSpacing: -1,
+                  letterSpacing: -2,
                 ),
               ),
               SizedBox(height: 20.h),
