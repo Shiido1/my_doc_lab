@@ -225,7 +225,7 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                         children: [
                           ...[
                             1,
-                            23,
+                            2,
                             4,
                             5,
                             6,
@@ -237,7 +237,7 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                             2,
                             3,
                             4,
-                            45,
+                            4,
                             5,
                             5,
                           ].map(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/pharmacy_dashboard_screen.dart';
-import 'ui/screens/dashboard/dashboard_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

@@ -100,6 +100,7 @@ class PharmacyHomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 pharmContainer(
                   context,
@@ -110,42 +111,42 @@ class PharmacyHomeScreen extends StatelessWidget {
 
                   color: AppColor.primary1,
                 ),
-                SizedBox(width: 10.w),
 
-                Expanded(
-                  child: pharmContainer(
-                    context,
-                    image: AppImage.double_box,
-                    text1: 'N 8,55,875',
-                    text2: 'Revenue: Jan 2022',
-                    text3: 'View Detailed Report',
+                pharmContainer(
+                  context,
+                  image: AppImage.double_box,
+                  text1: 'N 8,55,875',
+                  text2: 'Revenue: Jan 2022',
+                  text3: 'View Detailed Report',
 
-                    color: AppColor.darkindgrey,
-                  ),
+                  color: AppColor.darkindgrey,
                 ),
               ],
             ),
             SizedBox(height: 10.h),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                pharmContainer(
-                  context,
-                  image: AppImage.aid_box,
-                  text1: '299',
-                  text2: 'Medicines Available',
-                  text3: 'Visit Inventory',
-
-                  color: AppColor.darkindgrey,
-                ),
-                SizedBox(width: 10.w),
                 Expanded(
-                  child: pharmContainer(
+                  child: pharmContainer2(
+                    context,
+                    image: AppImage.aid_box,
+                    text1: '299',
+                    text2: 'Medicines Available',
+                    text3: 'Visit Inventory',
+                    left: 0.w,
+                    color: AppColor.darkindgrey,
+                  ),
+                ),
+                Expanded(
+                  child: pharmContainer2(
                     context,
                     image: AppImage.traingle,
                     text1: '01',
                     text2: 'Medicine Shortage',
                     text3: 'Resolve Now',
                     color: AppColor.primary1,
+                    left: 9.w,
                   ),
                 ),
               ],
@@ -248,11 +249,10 @@ class PharmacyHomeScreen extends StatelessWidget {
         onTap: () {},
         child: Container(
           // alignment: Alignment.centerRight,
-          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 12.w),
+          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 13.0.w),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(10),
-            // border: Border.all(color: AppColor.white),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -275,9 +275,73 @@ class PharmacyHomeScreen extends StatelessWidget {
                 textAlign: TextAlign.end,
                 textStyle: GoogleFonts.poppins(
                   color: AppColor.white,
-                  fontSize: 16.6.sp,
+                  fontSize: 16.20.sp,
                   fontWeight: FontWeight.w500,
-                  letterSpacing: -2,
+                  letterSpacing: -1,
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextView(
+                    text: text3,
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.white,
+                      fontSize: 13.20.sp,
+                      letterSpacing: 0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  SizedBox(width: 6.h),
+                  SvgPicture.asset(
+                    AppImage.double_arrow,
+                    height: 8.h,
+                    width: 8.w,
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h),
+            ],
+          ),
+        ),
+      );
+
+  pharmContainer2(context, {image, text1, text2, text3, color, left}) =>
+      GestureDetector(
+        onTap: () {},
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 11.40.w),
+          margin: EdgeInsets.only(left: left),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 10.h),
+              SvgPicture.asset(image, height: 22.h, width: 22.w),
+              SizedBox(height: 10.h),
+              TextView(
+                text: text1,
+                textStyle: GoogleFonts.poppins(
+                  color: AppColor.white,
+                  fontSize: 20.30.sp,
+                  letterSpacing: -1,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(height: 10.h),
+              TextView(
+                text: text2,
+                textAlign: TextAlign.end,
+                textStyle: GoogleFonts.poppins(
+                  color: AppColor.white,
+                  fontSize: 16.0.sp,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: -1.2,
                 ),
               ),
               SizedBox(height: 20.h),
