@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/tasks/tasks_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_widget.dart';
@@ -135,6 +136,10 @@ class DocHomeScreen extends StatelessWidget {
                   firstText: 'Task',
                   secondText: 'Urgent:',
                   thirdText: '2',
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => TasksScreen()),
+                      ),
                 ),
               ],
             ),
@@ -276,65 +281,75 @@ class DocHomeScreen extends StatelessWidget {
     );
   }
 
-  dashContainer({flex, contColor, image, firstText, secondText, thirdText}) =>
-      Expanded(
-        flex: flex,
-        child: Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 12.w),
-          decoration: BoxDecoration(
-            color: contColor,
-            borderRadius: BorderRadius.circular(10),
-            // border: Border.all(color: AppColor.white),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 10.h),
-              Container(
-                padding: EdgeInsets.all(10.w),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor.white,
-                ),
-                child: SvgPicture.asset(
-                  image,
-                  color: contColor,
-                  height: 20.h,
-                  width: 20.w,
-                ),
-              ),
-              SizedBox(height: 10.h),
-              TextView(
-                text: firstText,
-                textStyle: GoogleFonts.dmSans(
-                  color: AppColor.white,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              SizedBox(height: 10.h),
-              TextView(
-                text: secondText,
-                textAlign: TextAlign.start,
-                textStyle: GoogleFonts.gabarito(
-                  color: AppColor.white,
-                  fontSize: 12.6.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              SizedBox(height: 10.h),
-              TextView(
-                text: thirdText,
-                textStyle: GoogleFonts.gabarito(
-                  color: AppColor.white,
-                  fontSize: 24.20.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              SizedBox(height: 10.h),
-            ],
-          ),
+  dashContainer({
+    flex,
+    contColor,
+    image,
+    firstText,
+    secondText,
+    thirdText,
+    Function()? onTap,
+  }) => Expanded(
+    flex: flex,
+    child: GestureDetector(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 12.w),
+        decoration: BoxDecoration(
+          color: contColor,
+          borderRadius: BorderRadius.circular(10),
+          // border: Border.all(color: AppColor.white),
         ),
-      );
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10.h),
+            Container(
+              padding: EdgeInsets.all(10.w),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColor.white,
+              ),
+              child: SvgPicture.asset(
+                image,
+                color: contColor,
+                height: 20.h,
+                width: 20.w,
+              ),
+            ),
+            SizedBox(height: 10.h),
+            TextView(
+              text: firstText,
+              textStyle: GoogleFonts.dmSans(
+                color: AppColor.white,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            SizedBox(height: 10.h),
+            TextView(
+              text: secondText,
+              textAlign: TextAlign.start,
+              textStyle: GoogleFonts.gabarito(
+                color: AppColor.white,
+                fontSize: 12.6.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 10.h),
+            TextView(
+              text: thirdText,
+              textStyle: GoogleFonts.gabarito(
+                color: AppColor.white,
+                fontSize: 24.20.sp,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            SizedBox(height: 10.h),
+          ],
+        ),
+      ),
+    ),
+  );
 }

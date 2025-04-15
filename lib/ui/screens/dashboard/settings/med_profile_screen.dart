@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/home/cart_screen.dart';
 
 import '../../../widget/text_widget.dart';
 
@@ -160,39 +161,48 @@ class _MedProfileScreenState extends State<MedProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.w,
-                    horizontal: 46.0.w,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColor.primary1,
-                  ),
-                  child: TextView(
-                    text: 'Buy Now',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.white,
-                      fontSize: 14.0.sp,
-                      fontWeight: FontWeight.w600,
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.w,
+                      horizontal: 46.0.w,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColor.primary1,
+                    ),
+                    child: TextView(
+                      text: 'Buy Now',
+                      textStyle: GoogleFonts.gabarito(
+                        color: AppColor.white,
+                        fontSize: 14.0.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.w,
-                    horizontal: 46.0.w,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColor.primary1,
-                  ),
-                  child: TextView(
-                    text: 'Add to Cart',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.white,
-                      fontSize: 14.0.sp,
-                      fontWeight: FontWeight.w600,
+                GestureDetector(
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => CartScreen()),
+                      ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.w,
+                      horizontal: 46.0.w,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColor.primary1,
+                    ),
+                    child: TextView(
+                      text: 'Add to Cart',
+                      textStyle: GoogleFonts.gabarito(
+                        color: AppColor.white,
+                        fontSize: 14.0.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

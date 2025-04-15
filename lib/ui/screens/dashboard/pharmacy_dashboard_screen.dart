@@ -7,28 +7,27 @@ import 'package:flutter_svg/svg.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
-import 'chat/message_list_screen.dart';
-import 'home/doc_home_screen.dart';
-import 'patient/patient_sceen.dart';
-import 'settings/more_settings_screen.dart';
+import 'home/pharmacy_home_screen.dart';
+import 'pharmacy/product_screen.dart';
+import 'pharmacy/order_screen.dart';
 
 // ignore: must_be_immutable
-class DocDashboard extends StatefulWidget {
-  const DocDashboard({super.key});
+class PharmacyDashboard extends StatefulWidget {
+  const PharmacyDashboard({super.key});
   // int? index;
 
   @override
-  State<DocDashboard> createState() => _DocDashboardState();
+  State<PharmacyDashboard> createState() => _PharmacyDashboardState();
 }
 
-class _DocDashboardState extends State<DocDashboard> {
+class _PharmacyDashboardState extends State<PharmacyDashboard> {
   int _currentIndex = 0;
 
   final List<Widget> _body = [
-    DocHomeScreen(),
-    PatientSceen(),
-    MessageListScreen(),
-    MoreSettingsScreen(),
+    PharmacyHomeScreen(),
+    PharmacyOrderScreen(),
+    PharmacyProductScreen(),
+    Container(),
   ];
 
   @override
@@ -129,7 +128,7 @@ class _DocDashboardState extends State<DocDashboard> {
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    AppImage.patient,
+                    AppImage.task,
                     color:
                         _currentIndex == 1
                             ? AppColor.darkindgrey
@@ -137,11 +136,11 @@ class _DocDashboardState extends State<DocDashboard> {
                     height: 30.0.h,
                     width: 30.w,
                   ),
-                  label: 'Patients',
+                  label: 'Order',
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    AppImage.chat,
+                    AppImage.product,
                     color:
                         _currentIndex == 2
                             ? AppColor.darkindgrey
@@ -149,11 +148,11 @@ class _DocDashboardState extends State<DocDashboard> {
                     height: 30.h,
                     width: 30.w,
                   ),
-                  label: 'Message',
+                  label: 'Product',
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    AppImage.more,
+                    AppImage.settings,
                     color:
                         _currentIndex == 3
                             ? AppColor.darkindgrey
@@ -161,7 +160,7 @@ class _DocDashboardState extends State<DocDashboard> {
                     height: 30.h,
                     width: 30.w,
                   ),
-                  label: 'More',
+                  label: 'Settings',
                 ),
               ],
             ),

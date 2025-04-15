@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/doctor_dashboard_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/pharmacy_dashboard_screen.dart';
+import 'ui/screens/dashboard/dashboard_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
             ),
             debugShowCheckedModeBanner: false,
-            home: DocDashboard(),
+            home: PharmacyDashboard(),
           ),
     );
   }

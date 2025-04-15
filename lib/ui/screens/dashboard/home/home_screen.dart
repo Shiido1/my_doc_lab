@@ -6,11 +6,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/medicine_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_widget.dart';
+import '../laboratory/lab_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -147,90 +149,18 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 20.h),
             Row(
               children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerRight,
-                        padding: EdgeInsets.symmetric(
-                          vertical: 10.w,
-                          horizontal: 12.w,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColor.blue,
-                          borderRadius: BorderRadius.circular(10),
-                          // border: Border.all(color: AppColor.white),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            SizedBox(height: 10.h),
-                            TextView(
-                              text: 'Book Appointment',
-                              textStyle: GoogleFonts.dmSans(
-                                color: AppColor.white,
-                                fontSize: 13.30.sp,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                            TextView(
-                              text:
-                                  'Connect with top doctors and get expert care at your convenience.',
-                              textAlign: TextAlign.end,
-                              textStyle: GoogleFonts.dmSans(
-                                color: AppColor.white,
-                                fontSize: 11.6.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 4.8.w,
-                                horizontal: 10.0.w,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColor.white,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: TextView(
-                                text: 'Book Now',
-                                textStyle: GoogleFonts.dmSans(
-                                  color: AppColor.blue,
-                                  fontSize: 12.20.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                          ],
-                        ),
-                      ),
-
-                      Positioned(
-                        bottom: 1.7,
-                        left: -1.2,
-                        child: Image.asset(
-                          AppImage.doc,
-                          height: 80.h,
-                          width: 100.w,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                fourthContainer(context),
                 SizedBox(width: 10.w),
 
-                secondContainer(),
+                secondContainer(context),
               ],
             ),
             SizedBox(height: 10.h),
             Row(
               children: [
-                firstContainer(),
+                firstContainer(context),
                 SizedBox(width: 10.w),
-                thirdContainer(),
+                thirdContainer(context),
               ],
             ),
             SizedBox(height: 20.h),
@@ -485,64 +415,70 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  firstContainer() => Expanded(
+  firstContainer(context) => Expanded(
     child: Stack(
       clipBehavior: Clip.none,
       children: [
-        Container(
-          alignment: Alignment.centerRight,
-          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 10.w),
-          margin: EdgeInsets.only(top: 4.w),
-          decoration: BoxDecoration(
-            color: AppColor.white,
+        GestureDetector(
+          onTap:
+              () => Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => MedicineScreen())),
+          child: Container(
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 10.w),
+            margin: EdgeInsets.only(top: 4.w),
+            decoration: BoxDecoration(
+              color: AppColor.white,
 
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColor.darkindgrey.withOpacity(.2)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // SizedBox(height: 6.0.h),
-              TextView(
-                text: 'Medicine',
-                textStyle: GoogleFonts.dmSans(
-                  color: AppColor.darkindgrey,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              SizedBox(height: 10.h),
-              TextView(
-                text:
-                    'Get in touch with top pharmacists, order Drugs, have them delivered right to your doorstep.',
-                textAlign: TextAlign.end,
-                textStyle: GoogleFonts.dmSans(
-                  color: AppColor.darkindgrey,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 10.h),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 4.8.w,
-                  horizontal: 10.w,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColor.darkindgrey,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextView(
-                  text: 'Book Now',
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColor.darkindgrey.withOpacity(.2)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                // SizedBox(height: 6.0.h),
+                TextView(
+                  text: 'Medicine',
                   textStyle: GoogleFonts.dmSans(
-                    color: AppColor.white,
-                    fontSize: 12.20.sp,
-                    fontWeight: FontWeight.w600,
+                    color: AppColor.darkindgrey,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
-              ),
-              SizedBox(height: 10.h),
-            ],
+                SizedBox(height: 10.h),
+                TextView(
+                  text:
+                      'Get in touch with top pharmacists, order Drugs, have them delivered right to your doorstep.',
+                  textAlign: TextAlign.end,
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.darkindgrey,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 4.8.w,
+                    horizontal: 10.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.darkindgrey,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: TextView(
+                    text: 'Book Now',
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.white,
+                      fontSize: 12.20.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+              ],
+            ),
           ),
         ),
 
@@ -555,59 +491,70 @@ class HomeScreen extends StatelessWidget {
     ),
   );
 
-  secondContainer() => Expanded(
+  secondContainer(context) => Expanded(
     child: Stack(
       fit: StackFit.passthrough,
       children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.w),
-          decoration: BoxDecoration(
-            color: AppColor.darkindgrey,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColor.white),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // SizedBox(height: 10.h),
-              TextView(
-                text: 'Schedule Home Test',
-                textStyle: GoogleFonts.dmSans(
-                  color: AppColor.white,
-                  fontSize: 13.60.sp,
-                  fontWeight: FontWeight.w900,
+        GestureDetector(
+          onTap:
+              () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DoctorTestScreen(tap: false),
                 ),
               ),
-              SizedBox(height: 10.h),
-              TextView(
-                text:
-                    'Book diagnostic tests, have them don at the comfort of your\nhome.',
-                textAlign: TextAlign.start,
-                textStyle: GoogleFonts.dmSans(
-                  color: AppColor.white,
-                  fontSize: 11.60.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 10.h),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 4.8.w, horizontal: 4.w),
-                decoration: BoxDecoration(
-                  color: AppColor.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextView(
-                  text: 'Schedule Test',
+          child: Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.w),
+            decoration: BoxDecoration(
+              color: AppColor.darkindgrey,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColor.white),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // SizedBox(height: 10.h),
+                TextView(
+                  text: 'Schedule Home Test',
                   textStyle: GoogleFonts.dmSans(
-                    color: AppColor.darkindgrey,
-                    fontSize: 11.80.sp,
-                    fontWeight: FontWeight.w700,
+                    color: AppColor.white,
+                    fontSize: 13.60.sp,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
-              ),
-              SizedBox(height: 18.h),
-            ],
+                SizedBox(height: 10.h),
+                TextView(
+                  text:
+                      'Book diagnostic tests, have them don at the comfort of your\nhome.',
+                  textAlign: TextAlign.start,
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.white,
+                    fontSize: 11.60.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 4.8.w,
+                    horizontal: 4.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: TextView(
+                    text: 'Schedule Test',
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.darkindgrey,
+                      fontSize: 11.80.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 18.h),
+              ],
+            ),
           ),
         ),
 
@@ -620,60 +567,66 @@ class HomeScreen extends StatelessWidget {
     ),
   );
 
-  thirdContainer() => Expanded(
+  thirdContainer(context) => Expanded(
     child: Stack(
       children: [
-        Container(
-          alignment: Alignment.centerRight,
-          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 10.w),
-          decoration: BoxDecoration(
-            color: AppColor.primary1,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              SizedBox(height: 5.0.h),
-              TextView(
-                text: 'Laboratories',
-                textStyle: GoogleFonts.dmSans(
-                  color: AppColor.white,
-                  fontSize: 13.60.sp,
-                  fontWeight: FontWeight.w700,
-                ),
+        GestureDetector(
+          onTap:
+              () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => LaboratoryScreen()),
               ),
-              SizedBox(height: 10.h),
-              TextView(
-                text:
-                    'Connect with tops labs, schedule your tests, and have your results delivered with ease.',
-                textAlign: TextAlign.end,
-                textStyle: GoogleFonts.dmSans(
-                  color: AppColor.white,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 13.20.h),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 4.8.w,
-                  horizontal: 10.0.w,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColor.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextView(
-                  text: 'Book Now',
+          child: Container(
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 10.w),
+            decoration: BoxDecoration(
+              color: AppColor.primary1,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SizedBox(height: 5.0.h),
+                TextView(
+                  text: 'Laboratories',
                   textStyle: GoogleFonts.dmSans(
-                    color: AppColor.primary1,
-                    fontSize: 12.0.sp,
+                    color: AppColor.white,
+                    fontSize: 13.60.sp,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-              ),
-              SizedBox(height: 10.h),
-            ],
+                SizedBox(height: 10.h),
+                TextView(
+                  text:
+                      'Connect with tops labs, schedule your tests, and have your results delivered with ease.',
+                  textAlign: TextAlign.end,
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.white,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 13.20.h),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 4.8.w,
+                    horizontal: 10.0.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: TextView(
+                    text: 'Book Now',
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.primary1,
+                      fontSize: 12.0.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+              ],
+            ),
           ),
         ),
 
@@ -681,6 +634,81 @@ class HomeScreen extends StatelessWidget {
           bottom: -14,
           left: -24.0,
           child: Image.asset(AppImage.lab_sci, height: 100.h, width: 100.w),
+        ),
+      ],
+    ),
+  );
+
+  fourthContainer(context) => Expanded(
+    child: Stack(
+      children: [
+        GestureDetector(
+          onTap:
+              () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DoctorTestScreen(tap: true),
+                ),
+              ),
+          child: Container(
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 12.w),
+            decoration: BoxDecoration(
+              color: AppColor.blue,
+              borderRadius: BorderRadius.circular(10),
+              // border: Border.all(color: AppColor.white),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SizedBox(height: 10.h),
+                TextView(
+                  text: 'Book Appointment',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.white,
+                    fontSize: 13.30.sp,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                TextView(
+                  text:
+                      'Connect with top doctors and get expert care at your convenience.',
+                  textAlign: TextAlign.end,
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.white,
+                    fontSize: 11.6.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 4.8.w,
+                    horizontal: 10.0.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: TextView(
+                    text: 'Book Now',
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.blue,
+                      fontSize: 12.20.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+              ],
+            ),
+          ),
+        ),
+
+        Positioned(
+          bottom: 1.7,
+          left: -1.2,
+          child: Image.asset(AppImage.doc, height: 80.h, width: 100.w),
         ),
       ],
     ),

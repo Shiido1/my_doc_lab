@@ -1,24 +1,47 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_widget.dart';
 import '../appointment/consultation_screen.dart';
-import 'med_profile_screen.dart';
 
-class ProfileScreen1 extends StatefulWidget {
-  const ProfileScreen1({super.key});
+class LaboratoryDetailScreen extends StatefulWidget {
+  const LaboratoryDetailScreen({super.key});
 
   @override
-  State<ProfileScreen1> createState() => _ProfileScreen1State();
+  State<LaboratoryDetailScreen> createState() => _LaboratoryDetailScreenState();
 }
 
-class _ProfileScreen1State extends State<ProfileScreen1> {
+class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
+  List valueList = [
+    {'day': 'Mon', 'date': '21'},
+    {'day': 'Tue', 'date': '22'},
+    {'day': 'Wed', 'date': '23'},
+    {'day': 'Thu', 'date': '24'},
+    {'day': 'Fri', 'date': '25'},
+    {'day': 'Sat', 'date': '26'},
+    {'day': 'Sun', 'date': '27'},
+  ];
+
+  List timeList = [
+    '9:00 AM',
+    '10:00 AM',
+    '11:00 AM',
+    '1:00 PM',
+    '2:00 PM',
+    '3:00 PM',
+    '4:00 PM',
+    '5:00 PM',
+    '6:00 PM',
+  ];
+
+  var v;
+  var t;
+
   bool isTapped = false;
+  List<String> selectedOptions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +279,7 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
             ),
             SizedBox(height: 20.w),
             TextView(
-              text: 'Location',
+              text: 'Experience',
               textStyle: GoogleFonts.gabarito(
                 color: AppColor.black,
                 fontSize: 16.0.sp,
@@ -267,129 +290,270 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SvgPicture.asset(AppImage.location, height: 22.h, width: 22.w),
-                SizedBox(width: 16.20.w),
-                TextView(
-                  text: 'Federal Housing Lugbe, FCT, Abuja.',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.black,
-                    fontSize: 14.60.sp,
-                    fontWeight: FontWeight.w400,
+                SvgPicture.asset(AppImage.exp, height: 20.h, width: 20.w),
+                SizedBox(width: 18.20.w),
+                SizedBox(
+                  width: 300.w,
+                  child: TextView(
+                    text: 'Bio-royal hospital & Maternity(Medicine Center)',
+                    maxLines: 4,
+                    textOverflow: TextOverflow.ellipsis,
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.black,
+                      fontSize: 14.60.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 4.0.w),
-            Divider(color: AppColor.grey, thickness: .3),
+            SizedBox(height: 20.w),
             TextView(
-              text: 'Medicine',
-              textStyle: GoogleFonts.gabarito(
+              text: 'Available Dates',
+              textStyle: GoogleFonts.dmSans(
                 color: AppColor.black,
-                fontSize: 16.0.sp,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(height: 4.0.w),
-            TextFormWidget(
-              label: 'Search for Medicine',
-              // hint: 'Email Address',
-              border: 10,
-              isFilled: true,
-              fillColor: AppColor.transparent,
-              // controller: fullnameTextController,
-              prefixWidget: Padding(
-                padding: EdgeInsets.all(14.w),
-                child: SvgPicture.asset(AppImage.search),
-              ),
-              suffixWidget: Padding(
-                padding: EdgeInsets.all(14.w),
-                child: SvgPicture.asset(AppImage.filter),
-              ),
-              // validator: AppValidator.validateEmail(),
-            ),
-            SizedBox(height: 10.w),
-            TextView(
-              text: 'Service',
-              textStyle: GoogleFonts.gabarito(
-                color: AppColor.black,
-                fontSize: 16.0.sp,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(height: 4.0.w),
-            SizedBox(
-              height: 270.h,
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  mainAxisExtent:
-                      Platform.isIOS ? 250 : 210, // Number of columns
-                ),
-                itemBuilder: (context, index) {
-                  // Build each grid item based on the index
-                  return GestureDetector(
-                    onTap:
-                        () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => MedProfileScreen(),
-                          ),
+            Divider(color: AppColor.grey, thickness: .5),
+            SizedBox(height: 10.h),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...valueList.map(
+                    (o) => GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          v = o;
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 20.w),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 6.w,
+                          horizontal: 6.w,
                         ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: AppColor.funnyLookingGrey.withOpacity(.3),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color:
+                              v == o ? AppColor.primary1 : AppColor.transparent,
+                          border: Border.all(color: AppColor.funnyLookingGrey),
                         ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
+                        child: Column(
+                          children: [
+                            TextView(
+                              text: o['day'],
+                              textStyle: GoogleFonts.dmSans(
+                                color: v == o ? AppColor.white : AppColor.grey,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                            child: Image.asset(
-                              AppImage.medicine,
-                              height: 150.h,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
+                            TextView(
+                              text: o['date'],
+                              textStyle: GoogleFonts.dmSans(
+                                color: v == o ? AppColor.white : AppColor.black,
+                                fontSize: 24.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextView(
-                                  text: 'MOKO Hydrogen Peroxide 100ml',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.darkindgrey,
-                                    fontSize: 12.0.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                TextView(
-                                  text: 'N 300.00',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.darkindgrey,
-                                    fontSize: 12.0.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
             ),
+            SizedBox(height: 20.h),
+            Divider(color: AppColor.grey, thickness: .2),
+            SizedBox(height: 10.h),
+            Wrap(
+              children: [
+                ...timeList.map(
+                  (o) => GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        t = o;
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(right: 20.w, bottom: 10.w),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5.4.w,
+                        horizontal: 14.w,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color:
+                            t == o ? AppColor.primary1 : AppColor.transparent,
+                        border: Border.all(color: AppColor.funnyLookingGrey),
+                      ),
+                      child: TextView(
+                        text: o,
+                        textStyle: GoogleFonts.dmSans(
+                          color: t == o ? AppColor.white : AppColor.black,
+                          fontSize: 15.6.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20.w),
+            TextView(
+              text: 'Available Services',
+              textStyle: GoogleFonts.gabarito(
+                color: AppColor.black,
+                fontSize: 16.sp,
+                letterSpacing: 0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            Divider(color: AppColor.grey, thickness: .5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextView(
+                  text: 'Blood Sugar',
+                  textStyle: GoogleFonts.gabarito(
+                    color: AppColor.black,
+                    fontSize: 16.sp,
+                    letterSpacing: 0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Checkbox(
+                  value: selectedOptions.contains('Blood Sugar'),
+                  onChanged: (isChecked) {
+                    setState(() {
+                      if (isChecked!) {
+                        selectedOptions.add('Blood Sugar');
+                      } else {
+                        selectedOptions.remove('Blood Sugar');
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
+            Divider(color: AppColor.grey, thickness: .5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextView(
+                  text: 'Malaria and Typhoid Test',
+                  textStyle: GoogleFonts.gabarito(
+                    color: AppColor.black,
+                    fontSize: 16.sp,
+                    letterSpacing: 0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Checkbox(
+                  value: selectedOptions.contains('Malaria and Typhoid Test'),
+                  onChanged: (isChecked) {
+                    setState(() {
+                      if (isChecked!) {
+                        selectedOptions.add('Malaria and Typhoid Test');
+                      } else {
+                        selectedOptions.remove('Malaria and Typhoid Test');
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
+            Divider(color: AppColor.grey, thickness: .5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextView(
+                  text: 'Ultrasound',
+                  textStyle: GoogleFonts.gabarito(
+                    color: AppColor.black,
+                    fontSize: 16.sp,
+                    letterSpacing: 0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Checkbox(
+                  value: selectedOptions.contains('Ultrasound'),
+                  onChanged: (isChecked) {
+                    setState(() {
+                      if (isChecked!) {
+                        selectedOptions.add('Ultrasound');
+                      } else {
+                        selectedOptions.remove('Ultrasound');
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
+            Divider(color: AppColor.grey, thickness: .5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextView(
+                  text: 'Skull X-ray',
+                  textStyle: GoogleFonts.gabarito(
+                    color: AppColor.black,
+                    fontSize: 16.sp,
+                    letterSpacing: 0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Checkbox(
+                  value: selectedOptions.contains('Skull X-ray'),
+                  onChanged: (isChecked) {
+                    setState(() {
+                      if (isChecked!) {
+                        selectedOptions.add('Skull X-ray');
+                      } else {
+                        selectedOptions.remove('Skull X-ray');
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
+            Divider(color: AppColor.grey, thickness: .5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextView(
+                  text: 'Hand X-ray All view and Reports',
+                  textStyle: GoogleFonts.gabarito(
+                    color: AppColor.black,
+                    fontSize: 16.sp,
+                    letterSpacing: 0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Checkbox(
+                  value: selectedOptions.contains(
+                    'Hand X-ray All view and Reports',
+                  ),
+                  onChanged: (isChecked) {
+                    setState(() {
+                      if (isChecked!) {
+                        selectedOptions.add('Hand X-ray All view and Reports');
+                      } else {
+                        selectedOptions.remove(
+                          'Hand X-ray All view and Reports',
+                        );
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
+            Divider(color: AppColor.grey, thickness: .5),
             SizedBox(height: 40.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

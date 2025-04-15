@@ -43,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       children: [
                         SizedBox(height: 10.h),
                         TextView(
-                          text: 'Dr Uju Obah',
+                          text: 'Sarah Johnson',
                           textStyle: GoogleFonts.dmSans(
                             color: AppColor.black,
                             fontSize: 20.0.sp,

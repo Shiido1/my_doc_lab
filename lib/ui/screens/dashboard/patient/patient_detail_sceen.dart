@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 
+import '../../../widget/text_form_widget.dart';
 import '../../../widget/text_widget.dart';
 
 class PatientDetailSceen extends StatefulWidget {
@@ -705,17 +706,91 @@ class _PatientDetailSceenState extends State<PatientDetailSceen> {
                               ),
                               GestureDetector(
                                 onTap: () {},
-                                child: TextView(
-                                  text: 'View all',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.primary,
-                                    fontSize: 14.0.sp,
-                                    fontWeight: FontWeight.w400,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 4.w,
+                                    horizontal: 14.w,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    // ignore: deprecated_member_use
+                                    color: AppColor.primary1,
+
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.add_circle_outline_sharp,
+                                        color: AppColor.white,
+                                        size: 20.sp,
+                                      ),
+                                      SizedBox(width: 6.w),
+                                      TextView(
+                                        text: 'Add Record',
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.white,
+                                          fontSize: 12.80.sp,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
                             ],
                           ),
+                          SizedBox(height: 10.h),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4.w,
+                              horizontal: 8.w,
+                            ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColor.grey),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextView(
+                                      text: 'Hypertension',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    TextView(
+                                      text: '9/10/2021',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey.withOpacity(
+                                          .4,
+                                        ),
+                                        fontSize: 15.0.sp,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                SizedBox(height: 6.h),
+                                TextView(
+                                  text: 'Prescribed lisinopril 10mg daily',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.darkindgrey,
+                                    fontSize: 15.0.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
                           SizedBox(height: 20.h),
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -767,14 +842,134 @@ class _PatientDetailSceenState extends State<PatientDetailSceen> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 12.h),
+                          SizedBox(height: 20.h),
+                          TextView(
+                            text: 'Appointment History',
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.darkindgrey,
+                              fontSize: 16.20.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4.w,
+                              horizontal: 8.w,
+                            ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColor.grey),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextView(
+                                      text: 'Follow-up',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    TextView(
+                                      text: 'Scheduled',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey.withOpacity(
+                                          .4,
+                                        ),
+                                        fontSize: 15.0.sp,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                TextView(
+                                  text: '4/18/2025 - 10:30 AM',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.darkindgrey,
+                                    fontSize: 15.0.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+                                TextView(
+                                  text: 'Blood pressure check',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.darkindgrey,
+                                    fontSize: 15.0.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       )
                     else
-                      Container(),
-                    // ...[1, 2, 3, 4].map(
-                    //   (o) => appointMentCard(appointmentStatus: 'Canceled'),
-                    // ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormWidget(
+                            label: '',
+                            border: 10,
+                            isFilled: true,
+                            fillColor: AppColor.oneKindgrey,
+                            borderColor: AppColor.transparent,
+                            maxline: 7,
+                            alignLabelWithHint: true,
+                            // controller: emailTextController,
+                            // prefixWidget: Padding(
+                            //   padding: EdgeInsets.all(9.2.w),
+                            //   child: SvgPicture.asset(AppImage.message),
+                            // ),
+                            // validator: AppValidator.validateEmail(),
+                          ),
+                          SizedBox(height: 20.h),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Center(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 8.w,
+                                  horizontal: 14.w,
+                                ),
+                                width: 240.w,
+                                decoration: BoxDecoration(
+                                  // ignore: deprecated_member_use
+                                  color: AppColor.primary1,
+
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.add_circle_outline_sharp,
+                                      color: AppColor.white,
+                                      size: 20.sp,
+                                    ),
+                                    SizedBox(width: 6.w),
+                                    TextView(
+                                      text: 'Add Record',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.white,
+                                        fontSize: 12.80.sp,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),

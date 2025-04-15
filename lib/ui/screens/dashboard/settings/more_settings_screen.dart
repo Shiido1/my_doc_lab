@@ -6,7 +6,9 @@ import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/edit_profile_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/phamacy_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
 import 'help_and_support_screen.dart';
@@ -109,7 +111,10 @@ class MoreSettingsScreen extends StatelessWidget {
             moreContainerWidget(
               image: AppImage.walleta,
               text: 'Wallet',
-              onTap: () {},
+              onTap:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => WalletScreen()),
+                  ),
             ),
             SizedBox(height: 20.h),
             moreContainerWidget(
@@ -136,7 +141,7 @@ class MoreSettingsScreen extends StatelessWidget {
               onTap:
                   () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => HelpAndSupportScreen(),
+                      builder: (context) => OrderHistoryScreen(),
                     ),
                   ),
             ),
