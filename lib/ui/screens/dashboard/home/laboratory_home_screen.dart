@@ -18,6 +18,7 @@ class LaboratoryHomeScreen extends StatefulWidget {
 class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Scaffold(
       backgroundColor: AppColor.white,
       body: SingleChildScrollView(
@@ -349,7 +350,7 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
               margin: EdgeInsets.only(right: 10.w),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: AppColor.primary1.withOpacity(.24),
+                color: AppColor.primary1.withOpacity(.15),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -398,9 +399,10 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                   ...[1, 2, 3, 4, 5].map(
                     (o) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(
-                          width: 100,
+                          width: isTablet ? 200 : 100,
                           child: TextView(
                             text: 'Daniel Woods',
                             textAlign: TextAlign.start,
