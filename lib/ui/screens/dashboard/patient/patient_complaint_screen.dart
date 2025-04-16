@@ -6,7 +6,7 @@ import 'package:my_doc_lab/ui/screens/dashboard/home/cart_screen.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 
-import '../../widget/text_widget.dart';
+import '../../../widget/text_widget.dart';
 
 class PatientDetailComplaintScreen extends StatelessWidget {
   const PatientDetailComplaintScreen({super.key});

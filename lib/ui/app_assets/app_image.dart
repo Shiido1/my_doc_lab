@@ -2,6 +2,12 @@
 
 class AppImage {
   static const String mydoc = 'assets/svg/mydoc.svg';
+  static const String appoint = 'assets/svg/appoint.svg';
+  static const String thick_appoint = 'assets/svg/thick_appoint.svg';
+  static const String carty = 'assets/svg/carty.svg';
+  static const String lab_message = 'assets/svg/lab_message.svg';
+  static const String consultancy = 'assets/svg/consultancy.svg';
+  static const String order = 'assets/svg/order.svg';
   static const String aid_box = 'assets/svg/aid_box.svg';
   static const String aid_symb = 'assets/svg/aid_symb.svg';
   static const String double_box = 'assets/svg/double_box.svg';

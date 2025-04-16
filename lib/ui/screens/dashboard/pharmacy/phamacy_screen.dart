@@ -4,10 +4,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
-import '../../app_assets/app_color.dart';
-import '../../app_assets/app_image.dart';
-import '../../widget/text_form_widget.dart';
-import 'home/cart_screen.dart';
+import '../../../app_assets/app_color.dart';
+import '../../../app_assets/app_image.dart';
+import '../../../widget/text_form_widget.dart';
+import '../home/cart_screen.dart';
 
 class PharmacyScreen extends StatelessWidget {
   const PharmacyScreen({super.key});

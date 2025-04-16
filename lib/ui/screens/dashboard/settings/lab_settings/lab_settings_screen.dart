@@ -5,16 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/edit_profile_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/pharmacy/phamacy_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/laboratory/lab_appointment_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
+import '../help_and_support_screen.dart';
 
-import 'help_and_support_screen.dart';
-
-class MoreSettingsScreen extends StatelessWidget {
-  const MoreSettingsScreen({super.key});
+class LabSettingsScreen extends StatelessWidget {
+  const LabSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,7 @@ class MoreSettingsScreen extends StatelessWidget {
                   icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
                 ),
                 TextView(
-                  text: 'More',
+                  text: 'Settings',
                   textStyle: GoogleFonts.gabarito(
                     color: AppColor.black,
                     fontSize: 20.sp,
@@ -109,16 +107,18 @@ class MoreSettingsScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             moreContainerWidget(
-              image: AppImage.walleta,
-              text: 'Wallet',
+              image: AppImage.person,
+              text: 'My Appointments',
               onTap:
                   () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => WalletScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => LaboratoryAppointmentScreen(),
+                    ),
                   ),
             ),
             SizedBox(height: 20.h),
             moreContainerWidget(
-              image: AppImage.results,
+              image: AppImage.person,
               text: 'Results',
               onTap:
                   () => Navigator.of(context).push(
@@ -127,24 +127,16 @@ class MoreSettingsScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             moreContainerWidget(
-              image: AppImage.pharm,
-              text: 'Pharmacy',
-              onTap:
-                  () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => PharmacyScreen()),
-                  ),
-            ),
-            SizedBox(height: 20.h),
-            moreContainerWidget(
-              image: AppImage.history,
-              text: 'Order History',
+              image: AppImage.walleta,
+              text: 'Notification',
               onTap:
                   () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => OrderHistoryScreen(),
+                      builder: (context) => NotificationScreen(),
                     ),
                   ),
             ),
+
             SizedBox(height: 20.h),
             moreContainerWidget(
               image: AppImage.help,

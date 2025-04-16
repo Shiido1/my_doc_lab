@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/medicine_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/patient/medicine_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';

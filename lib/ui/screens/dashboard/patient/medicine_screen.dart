@@ -7,8 +7,8 @@ import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen_one.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 
-import '../../app_assets/app_image.dart';
-import '../../widget/text_widget.dart';
+import '../../../app_assets/app_image.dart';
+import '../../../widget/text_widget.dart';
 
 // ignore: must_be_immutable
 class MedicineScreen extends StatefulWidget {
