@@ -21,6 +21,12 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController fullnameTextController = TextEditingController();
+  TextEditingController profTextController = TextEditingController();
+  TextEditingController specTextController = TextEditingController();
+  TextEditingController emailTextController = TextEditingController();
+  TextEditingController passwordTextController = TextEditingController();
+  TextEditingController confirmPasswordTextController = TextEditingController();
+  TextEditingController addressTextController = TextEditingController();
 
   bool _onTap = false;
 
@@ -72,7 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       isFilled: true,
                       readOnly: true,
                       fillColor: AppColor.white,
-                      controller: fullnameTextController,
+                      controller: profTextController,
                       prefixWidget: Padding(
                         padding: EdgeInsets.all(9.2.w),
                         child: SvgPicture.asset(
@@ -94,7 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       border: 10,
                       isFilled: true,
                       fillColor: AppColor.white,
-                      controller: fullnameTextController,
+                      controller: specTextController,
                       prefixWidget: Padding(
                         padding: EdgeInsets.all(9.2.w),
                         child: SvgPicture.asset(
@@ -115,7 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               border: 10,
               isFilled: true,
               fillColor: AppColor.white,
-              controller: fullnameTextController,
+              controller: emailTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
                 child: SvgPicture.asset(
@@ -133,7 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               border: 10,
               isFilled: true,
               fillColor: AppColor.white,
-              controller: fullnameTextController,
+              controller: passwordTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
                 child: SvgPicture.asset(
@@ -159,7 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               border: 10,
               isFilled: true,
               fillColor: AppColor.white,
-              controller: fullnameTextController,
+              controller: confirmPasswordTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
                 child: SvgPicture.asset(
@@ -185,7 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               border: 10,
               isFilled: true,
               fillColor: AppColor.white,
-              controller: fullnameTextController,
+              controller: addressTextController,
               prefixWidget: Padding(
                 padding: EdgeInsets.all(9.2.w),
                 child: SvgPicture.asset(

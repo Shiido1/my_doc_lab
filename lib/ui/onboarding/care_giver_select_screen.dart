@@ -55,15 +55,15 @@ class _CareGiverSelectScreenState extends State<CareGiverSelectScreen> {
                   children: [
                     SvgPicture.asset(
                       AppImage.doctor_svg,
-                      height: 20.h,
-                      width: 20.w,
+                      height: 36.h,
+                      width: 36.w,
                     ),
                     SizedBox(width: 22.w),
                     TextView(
                       text: 'Doctor',
                       textStyle: GoogleFonts.gabarito(
                         color: AppColor.darkindgrey,
-                        fontSize: 16.4.sp,
+                        fontSize: 18.4.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -91,8 +91,8 @@ class _CareGiverSelectScreenState extends State<CareGiverSelectScreen> {
                   children: [
                     SvgPicture.asset(
                       AppImage.pharmacist,
-                      height: 20.h,
-                      width: 20.w,
+                      height: 36.0.h,
+                      width: 36.0.w,
                     ),
 
                     SizedBox(width: 22.w),
@@ -100,7 +100,7 @@ class _CareGiverSelectScreenState extends State<CareGiverSelectScreen> {
                       text: 'Pharmacist',
                       textStyle: GoogleFonts.gabarito(
                         color: AppColor.darkindgrey,
-                        fontSize: 16.4.sp,
+                        fontSize: 18.4.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -128,8 +128,8 @@ class _CareGiverSelectScreenState extends State<CareGiverSelectScreen> {
                   children: [
                     SvgPicture.asset(
                       AppImage.lab_sci_svg,
-                      height: 20.h,
-                      width: 20.w,
+                      height: 36.h,
+                      width: 36.w,
                     ),
 
                     SizedBox(width: 22.w),
@@ -137,7 +137,7 @@ class _CareGiverSelectScreenState extends State<CareGiverSelectScreen> {
                       text: 'Laboratory Attendant',
                       textStyle: GoogleFonts.gabarito(
                         color: AppColor.darkindgrey,
-                        fontSize: 16.4.sp,
+                        fontSize: 18.4.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
