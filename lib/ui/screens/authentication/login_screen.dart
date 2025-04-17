@@ -8,12 +8,14 @@ import 'package:my_doc_lab/ui/screens/authentication/forgot_password.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
+import '../../onboarding/care_giver_select_screen.dart';
 import '../../widget/button_widget.dart';
 import '../dashboard/dashboard_screen.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key, required this.userType});
+  String? userType;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -116,9 +118,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 fontWeight: FontWeight.w500,
               ),
               onPressed:
-                  () => Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (context) => Dashboard())),
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder:
+                          (context) =>
+                              widget.userType == 'care-giver'
+                                  ? CareGiverSelectScreen()
+                                  : Dashboard(),
+                    ),
+                  ),
             ),
             SizedBox(height: 26.0.h),
             RichText(

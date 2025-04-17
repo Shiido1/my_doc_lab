@@ -9,8 +9,11 @@ import 'package:my_doc_lab/ui/screens/authentication/sign_up_screen.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
+// ignore: must_be_immutable
 class SecondOnboardingScreen extends StatelessWidget {
-  const SecondOnboardingScreen({super.key});
+  SecondOnboardingScreen({super.key, required this.userType});
+
+  String? userType;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +85,9 @@ class SecondOnboardingScreen extends StatelessWidget {
                 ),
                 onPressed:
                     () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => SignUpScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => SignUpScreen(userType: userType),
+                      ),
                     ),
               ),
             ),
@@ -101,7 +106,9 @@ class SecondOnboardingScreen extends StatelessWidget {
 
                 onPressed:
                     () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => LoginScreen(userType: userType),
+                      ),
                     ),
               ),
             ),

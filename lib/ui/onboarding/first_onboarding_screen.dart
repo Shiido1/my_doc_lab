@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/onboarding/second_onboarding_screen.dart';
+import 'package:my_doc_lab/ui/onboarding/third_onboarding_screen.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
@@ -117,7 +117,7 @@ class _FirstOnboardingScreenState extends State<FirstOnboardingScreen> {
                     if (index > 1) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => SecondOnboardingScreen(),
+                          builder: (context) => ThirdOnboardingScreen(),
                         ),
                       );
                     } else {

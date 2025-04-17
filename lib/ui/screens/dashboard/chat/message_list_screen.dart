@@ -21,23 +21,14 @@ class MessageListScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
-                ),
-                TextView(
-                  text: 'Message',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.black,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 20.h, width: 20.w),
-              ],
+            SizedBox(height: 10.h),
+            TextView(
+              text: 'Message',
+              textStyle: GoogleFonts.gabarito(
+                color: AppColor.black,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w600,
+              ),
             ),
 
             Divider(color: AppColor.greylight),

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
+import 'package:my_doc_lab/ui/screens/authentication/login_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
@@ -11,7 +12,8 @@ import '../../widget/button_widget.dart';
 
 // ignore: must_be_immutable
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  SignUpScreen({super.key, required this.userType});
+  String? userType;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -60,6 +62,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // validator: AppValidator.validateEmail(),
             ),
             SizedBox(height: 20.h),
+            widget.userType == 'care-giver'
+                ? Column(
+                  children: [
+                    TextFormWidget(
+                      label: 'Select Profession',
+                      // hint: 'Email Address',
+                      border: 10,
+                      isFilled: true,
+                      readOnly: true,
+                      fillColor: AppColor.white,
+                      controller: fullnameTextController,
+                      prefixWidget: Padding(
+                        padding: EdgeInsets.all(9.2.w),
+                        child: SvgPicture.asset(
+                          AppImage.prof,
+                          width: 20.w,
+                          height: 20.h,
+                        ),
+                      ),
+                      suffixWidget: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.keyboard_arrow_down, size: 20.sp),
+                      ),
+                      // validator: AppValidator.validateEmail(),
+                    ),
+                    SizedBox(height: 20.h),
+                    TextFormWidget(
+                      label: 'Select your Specialization',
+                      // hint: 'Email Address',
+                      border: 10,
+                      isFilled: true,
+                      fillColor: AppColor.white,
+                      controller: fullnameTextController,
+                      prefixWidget: Padding(
+                        padding: EdgeInsets.all(9.2.w),
+                        child: SvgPicture.asset(
+                          AppImage.spec,
+                          width: 20.w,
+                          height: 20.h,
+                        ),
+                      ),
+                      // validator: AppValidator.validateEmail(),
+                    ),
+                    SizedBox(height: 20.h),
+                  ],
+                )
+                : SizedBox.shrink(),
             TextFormWidget(
               label: 'Email Address',
               // hint: 'Email Address',
@@ -93,6 +142,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 20.h,
                 ),
               ),
+              suffixWidget: Padding(
+                padding: EdgeInsets.all(9.2.w),
+                child: SvgPicture.asset(
+                  AppImage.close_eye,
+                  width: 20.w,
+                  height: 20.h,
+                ),
+              ),
               // validator: AppValidator.validateEmail(),
             ),
             SizedBox(height: 20.h),
@@ -107,6 +164,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: EdgeInsets.all(9.2.w),
                 child: SvgPicture.asset(
                   AppImage.lock,
+                  width: 20.w,
+                  height: 20.h,
+                ),
+              ),
+              suffixWidget: Padding(
+                padding: EdgeInsets.all(9.2.w),
+                child: SvgPicture.asset(
+                  AppImage.close_eye,
                   width: 20.w,
                   height: 20.h,
                 ),
@@ -223,7 +288,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               onPressed:
                   () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                    MaterialPageRoute(
+                      builder:
+                          (context) => LoginScreen(userType: widget.userType),
+                    ),
                   ),
             ),
           ],

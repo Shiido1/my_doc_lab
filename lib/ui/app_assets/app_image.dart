@@ -15,6 +15,11 @@ class AppImage {
   static const String traingle = 'assets/svg/traingle.svg';
   static const String hands = 'assets/svg/hands.svg';
   static const String lock = 'assets/svg/lock.svg';
+  static const String lab_sci_svg = 'assets/svg/lab-sci.svg';
+  static const String doctor_svg = 'assets/svg/doctor.svg';
+  static const String pharmacist = 'assets/svg/pharmacist.svg';
+  static const String spec = 'assets/svg/spec.svg';
+  static const String prof = 'assets/svg/prof.svg';
   static const String phone = 'assets/svg/phone.svg';
   static const String google = 'assets/svg/devicon_google.svg';
   static const String apple = 'assets/svg/apple.svg';

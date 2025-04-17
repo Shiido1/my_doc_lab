@@ -24,23 +24,16 @@ class MoreSettingsScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 50.w),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
+            SizedBox(height: 10.h),
+            Center(
+              child: TextView(
+                text: 'More',
+                textStyle: GoogleFonts.gabarito(
+                  color: AppColor.black,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w600,
                 ),
-                TextView(
-                  text: 'More',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.black,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Icon(Icons.notifications_none_outlined, size: 20.sp),
-              ],
+              ),
             ),
             Divider(color: AppColor.grey.withOpacity(.3)),
             SizedBox(height: 30.h),

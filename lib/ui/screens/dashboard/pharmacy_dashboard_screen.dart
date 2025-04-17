@@ -10,6 +10,7 @@ import '../../widget/text_widget.dart';
 import 'home/pharmacy_home_screen.dart';
 import 'pharmacy/product_screen.dart';
 import 'pharmacy/order_screen.dart';
+import 'settings/pharm_settings/more_settings_screen.dart';
 
 // ignore: must_be_immutable
 class PharmacyDashboard extends StatefulWidget {
@@ -27,7 +28,7 @@ class _PharmacyDashboardState extends State<PharmacyDashboard> {
     PharmacyHomeScreen(),
     PharmacyOrderScreen(),
     PharmacyProductScreen(),
-    Container(),
+    PharmSettingsScreen(),
   ];
 
   @override

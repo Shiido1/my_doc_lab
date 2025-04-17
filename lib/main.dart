@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/lab_dashboard_screen.dart';
+
+import 'ui/onboarding/first_onboarding_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
             ),
             debugShowCheckedModeBanner: false,
-            home: LaboratoryDashboard(),
+            home: FirstOnboardingScreen(),
           ),
     );
   }
