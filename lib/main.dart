@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_doc_lab/core/routes_class.dart';
+import 'package:stacked_services/stacked_services.dart';
 
-import 'ui/onboarding/first_onboarding_screen.dart';
+import 'core/core_folder/app/app.router.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +25,9 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
             ),
             debugShowCheckedModeBanner: false,
-            home: FirstOnboardingScreen(),
+            initialRoute: AppRoutes().returnAppRoutes('doctor'),
+            navigatorKey: StackedService.navigatorKey,
+            onGenerateRoute: StackedRouter().onGenerateRoute,
           ),
     );
   }
