@@ -4,8 +4,14 @@ class AppRoutes {
   AppRoutes();
 
   String returnAppRoutes(type) {
-    if (type == 'doc') {
+    if (type == 'user') {
+      return Routes.dashboard;
+    } else if (type == 'doctor') {
       return Routes.docDashboard;
+    } else if (type == 'pharmacist') {
+      return Routes.pharmacyDashboard;
+    } else if (type == 'med_lab_scientist') {
+      return Routes.laboratoryDashboard;
     }
     return Routes.firstOnboardingScreen;
   }
