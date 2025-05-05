@@ -1,7 +1,6 @@
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
-import '../../../ui/onboarding/first_onboarding_screen.dart'
-    show FirstOnboardingScreen;
+import '../../../ui/onboarding/first_onboarding_screen.dart';
 import '../../../ui/screens/authentication/login_screen.dart';
 import '../../../ui/screens/dashboard/dashboard_screen.dart';
 import '../../../ui/screens/dashboard/doctor_dashboard_screen.dart';
@@ -12,7 +11,6 @@ import '../../connect_end/contract/contract_impl.dart';
 import '../../connect_end/repo/repo_impl.dart';
 import '../../connect_end/view_model/auth_view_model.dart';
 import '../manager/shared_preference.dart';
-import '../network/cloudinary_network_service.dart';
 import '../network/network_service.dart';
 
 @StackedApp(
@@ -30,7 +28,6 @@ import '../network/network_service.dart';
     LazySingleton(classType: SnackbarService),
     LazySingleton(classType: SharedPreferencesService),
     LazySingleton(classType: NetworkService),
-    LazySingleton(classType: CloudinaryNetworkService),
     LazySingleton(classType: AuthApi),
     LazySingleton(classType: AuthContractsImpl),
     LazySingleton(classType: AuthRepoImpl),
