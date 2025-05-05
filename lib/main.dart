@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
             ),
             debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes().returnAppRoutes('doctor'),
+            initialRoute: AppRoutes().returnAppRoutes(''),
             navigatorKey: StackedService.navigatorKey,
             onGenerateRoute: StackedRouter().onGenerateRoute,
           ),
