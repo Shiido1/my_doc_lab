@@ -14,9 +14,16 @@ import '../../../app_assets/app_image.dart';
 import '../../../widget/text_widget.dart';
 import '../laboratory/lab_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+double _value = 350;
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
@@ -138,10 +145,13 @@ class HomeScreen extends StatelessWidget {
               ),
               suffixWidget: Padding(
                 padding: EdgeInsets.all(14.w),
-                child: SvgPicture.asset(
-                  AppImage.filter,
-                  height: 20.h,
-                  width: 20.w,
+                child: GestureDetector(
+                  onTap: () => modalBottomSheetFilter(context),
+                  child: SvgPicture.asset(
+                    AppImage.filter,
+                    height: 20.h,
+                    width: 20.w,
+                  ),
                 ),
               ),
               // validator: AppValidator.validateEmail(),
@@ -713,4 +723,563 @@ class HomeScreen extends StatelessWidget {
       ],
     ),
   );
+
+  void modalBottomSheetFilter(contxt) {
+    String selectPreferredCare = '';
+    String selectPreferredCenter = '';
+    String selectPreferredDoctor = '';
+    showModalBottomSheet(
+      context: contxt,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(contxt).viewInsets.bottom,
+              ),
+              child: DraggableScrollableSheet(
+                expand: false,
+                initialChildSize: 0.7, // 50% of screen height
+                minChildSize: 0.5, // Can be dragged to 30% of screen height
+                maxChildSize: 0.9, // Can be dragged to 90% of screen height
+                builder: (context, scrollController) {
+                  return SingleChildScrollView(
+                    padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                    controller: scrollController,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 6.0.h),
+                        Center(
+                          child: Container(
+                            width: 30.w,
+                            height: 3.5.h,
+                            margin: EdgeInsets.only(top: 10.w),
+                            decoration: BoxDecoration(
+                              color: AppColor.grey2.withOpacity(.4),
+                              borderRadius: BorderRadius.circular(22),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16.0.h),
+                        TextView(
+                          text: 'Filter by:',
+                          textStyle: TextStyle(
+                            color: AppColor.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+
+                        SizedBox(height: 26.0.h),
+                        TextView(
+                          text: 'Search by distance',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.primary1,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: 14.0.h),
+                        CustomSlider(),
+                        SizedBox(height: 10.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Near me',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            TextView(
+                              text: '${_value.toStringAsFixed(2)}km',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.h),
+                        TextView(
+                          text: 'Preferred care?',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.primary1,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: 6.0.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Doctor',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                              child: Radio<String>(
+                                value: 'doctor',
+                                groupValue: selectPreferredCare,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredCare = value!;
+                                    print(selectPreferredCare);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Nurse',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                              child: Radio<String>(
+                                value: 'nurse',
+                                groupValue: selectPreferredCare,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredCare = value!;
+                                    print(selectPreferredCare);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 10.h),
+                        TextView(
+                          text: 'Where do you want care?',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.primary1,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: 6.0.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Physical Consultation',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                              child: Radio<String>(
+                                value: 'physical',
+                                groupValue: selectPreferredCenter,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredCenter = value!;
+                                    print(selectPreferredCenter);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Virtual Consultation',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                              child: Radio<String>(
+                                value: 'virtual',
+                                groupValue: selectPreferredCenter,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredCenter = value!;
+                                    print(selectPreferredCenter);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 10.h),
+                        TextView(
+                          text: 'What doctor would you like to see?',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.primary1,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: 6.0.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Any',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                              child: Radio<String>(
+                                value: 'any',
+                                groupValue: selectPreferredDoctor,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredDoctor = value!;
+                                    print(selectPreferredDoctor);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(color: AppColor.greyIt.withOpacity(.2)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'General Practice &\nGeneral medical care',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                              child: Radio<String>(
+                                value: 'gpgmc',
+                                groupValue: selectPreferredDoctor,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredDoctor = value!;
+                                    print(selectPreferredDoctor);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(color: AppColor.greyIt.withOpacity(.2)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Dermatology: skin care',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                              child: Radio<String>(
+                                value: 'skincare',
+                                groupValue: selectPreferredDoctor,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredDoctor = value!;
+                                    print(selectPreferredDoctor);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(color: AppColor.greyIt.withOpacity(.2)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Plastic surgery',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                              child: Radio<String>(
+                                value: 'plastic-surgery',
+                                groupValue: selectPreferredDoctor,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredDoctor = value!;
+                                    print(selectPreferredDoctor);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(color: AppColor.greyIt.withOpacity(.2)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Haematology: Blood\ndisease',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                              child: Radio<String>(
+                                value: 'blood-disease',
+                                groupValue: selectPreferredDoctor,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredDoctor = value!;
+                                    print(selectPreferredDoctor);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(color: AppColor.greyIt.withOpacity(.2)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Cardilogy: Child health',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                              child: Radio<String>(
+                                value: 'child-health',
+                                groupValue: selectPreferredDoctor,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredDoctor = value!;
+                                    print(selectPreferredDoctor);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(color: AppColor.greyIt.withOpacity(.2)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Opthalomolgy: Eye care',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.primary1,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                              child: Radio<String>(
+                                value: 'eye-care',
+                                groupValue: selectPreferredDoctor,
+                                fillColor: WidgetStateProperty.all(
+                                  AppColor.primary1,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectPreferredDoctor = value!;
+                                    print(selectPreferredDoctor);
+                                  });
+                                }, // Autofocus is optional, depending on the app's needs.
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        Divider(color: AppColor.greyIt.withOpacity(.2)),
+
+                        SizedBox(height: 10.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              // onTap:
+                              //     () => Navigator.of(context).push(
+                              //       MaterialPageRoute(
+                              //         builder: (context) => ConsultationScreen(),
+                              //       ),
+                              //     ),
+                              child: Container(
+                                padding:
+                                    isTablet
+                                        ? EdgeInsets.all(12.0.w)
+                                        : EdgeInsets.all(20.0.w),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+
+                                  color: const Color.fromARGB(
+                                    255,
+                                    208,
+                                    234,
+                                    222,
+                                  ),
+                                ),
+                                child: TextView(
+                                  text: 'Reset All',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.primary1,
+                                    fontSize: 16.0.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              // onTap:
+                              //     () => Navigator.of(context).push(
+                              //       MaterialPageRoute(
+                              //         builder: (context) => ConsultationScreen(),
+                              //       ),
+                              //     ),
+                              child: Container(
+                                padding:
+                                    isTablet
+                                        ? EdgeInsets.all(10.w)
+                                        : EdgeInsets.all(20.w),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColor.primary1,
+                                ),
+                                child: TextView(
+                                  text: 'Apply Filters',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.white,
+                                    fontSize: 16.0.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 60.h),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class CustomSlider extends StatefulWidget {
+  const CustomSlider({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _CustomSliderState createState() => _CustomSliderState();
+}
+
+class _CustomSliderState extends State<CustomSlider> {
+  @override
+  Widget build(BuildContext context) {
+    return SliderTheme(
+      data: SliderTheme.of(context).copyWith(
+        padding: EdgeInsets.zero,
+        activeTrackColor: AppColor.primary1,
+        inactiveTrackColor: Colors.green.shade100,
+        trackHeight: 4.0,
+        thumbColor: AppColor.primary1,
+        overlayColor: AppColor.primary1.withAlpha(32),
+        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
+        trackShape: RoundedRectSliderTrackShape(),
+      ),
+      child: Slider(
+        min: 0,
+        max: 500,
+        value: _value,
+        onChanged: (newValue) {
+          setState(() {
+            _value = newValue;
+          });
+          print('1:$_value');
+        },
+      ),
+    );
+  }
 }
