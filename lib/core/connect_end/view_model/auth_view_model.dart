@@ -4,6 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/login_entity.dart';
 import 'package:my_doc_lab/core/connect_end/model/login_response_model/login_response_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
@@ -16,6 +18,7 @@ import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
+import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../repo/repo_impl.dart';
 
 class AuthViewModel extends BaseViewModel {
@@ -30,9 +33,18 @@ class AuthViewModel extends BaseViewModel {
   LoginResponseModel? get loginResponseModel => _loginResponseModel;
   CareGiverResponseModel? _careGiverResponseModel;
   CareGiverResponseModel? get careGiverResponseModel => _careGiverResponseModel;
+  GetUserResponseModel? _getUserResponseModel;
+  GetUserResponseModel? get getUserResponseModel => _getUserResponseModel;
 
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
+
+  GetAllDoctorsResponseModelList? _getAllDoctorsResponseModelList;
+  GetAllDoctorsResponseModelList? get getAllDoctorsResponseModelList =>
+      _getAllDoctorsResponseModelList;
+  GetDocDetailResponseModel? _getDocDetailResponseModel;
+  GetDocDetailResponseModel? get getDocDetailResponseModel =>
+      _getDocDetailResponseModel;
 
   String selectedRole = '';
 
@@ -96,6 +108,54 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = false;
       logger.d(e);
       Navigator.pop(context);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getPatientDetail(context) async {
+    try {
+      _isLoading = true;
+      _getUserResponseModel = await runBusyFuture(
+        repositoryImply.getUserDetails(),
+        throwException: true,
+      );
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getAllDoctors(context) async {
+    try {
+      _isLoading = true;
+      _getAllDoctorsResponseModelList = await runBusyFuture(
+        repositoryImply.getAllDoctorDetail(),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getSpecificDoctor(context, id) async {
+    try {
+      _isLoading = true;
+      _getDocDetailResponseModel = await runBusyFuture(
+        repositoryImply.getSpecificDoctorDetail(id),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();

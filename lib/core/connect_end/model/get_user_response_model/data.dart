@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'wallets.dart';
+
 part 'data.g.dart';
 
 @JsonSerializable()
@@ -21,6 +23,7 @@ class Data {
   DateTime? updatedAt;
   dynamic deletedAt;
   String? classtype;
+  Wallets? wallets;
 
   Data({
     this.id,
@@ -40,6 +43,7 @@ class Data {
     this.updatedAt,
     this.deletedAt,
     this.classtype,
+    this.wallets,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);

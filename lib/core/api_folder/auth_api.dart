@@ -1,6 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
+import '../connect_end/model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../connect_end/model/login_entity.dart';
 import '../connect_end/model/login_response_model/login_response_model.dart';
 import '../core_folder/app/app.locator.dart';
@@ -39,6 +42,45 @@ class AuthApi {
       );
       logger.d(response.data);
       return CareGiverResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetUserResponseModel> getUserDetail() async {
+    try {
+      final response = await _service.call(UrlConfig.user, RequestMethod.get);
+      logger.d(response.data);
+      return GetUserResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetAllDoctorsResponseModelList> getAllDoctors() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.all_doctor,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetAllDoctorsResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetDocDetailResponseModel> getSpecificDoctors(id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.all_doctor}/$id',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetDocDetailResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

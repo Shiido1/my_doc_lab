@@ -64,7 +64,7 @@ class SharedPreferencesService {
   Future<bool> logOut(role) async {
     try {
       await sharedPreferences!.clear();
-      navigate.navigateTo(
+      navigate.clearStackAndShow(
         Routes.loginScreen,
         arguments: LoginScreenArguments(userType: role),
       );
