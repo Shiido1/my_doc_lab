@@ -43,7 +43,8 @@ class ApiError {
           errorType = dioError.response?.statusCode;
           if (dioError.response?.statusCode == 401) {
             apiErrorModel = ApiErrorModel.fromJson(dioError.response?.data);
-            errorDescription = apiErrorModel?.msg ??
+            errorDescription =
+                apiErrorModel?.msg ??
                 extractDescriptionFromResponse(error.response);
           } else if (dioError.response?.statusCode == 400 ||
               dioError.response?.statusCode == 422 ||
@@ -74,7 +75,8 @@ class ApiError {
                 errorDescription = apiErrorModel?.error['data'];
               }
             } else {
-              errorDescription = apiErrorModel?.msg ??
+              errorDescription =
+                  apiErrorModel?.msg ??
                   apiErrorModel?.data ??
                   extractDescriptionFromResponse(error.response);
             }
@@ -128,14 +130,21 @@ class ApiErrorModel {
   String? details;
   dynamic error;
 
-  ApiErrorModel(
-      {this.code, this.msg, this.success, this.details, this.error, this.data});
+  ApiErrorModel({
+    this.code,
+    this.msg,
+    this.success,
+    this.details,
+    this.error,
+    this.data,
+  });
 
   factory ApiErrorModel.fromJson(Map<String, dynamic> json) => ApiErrorModel(
-      code: json["code"],
-      msg: json["msg"] ?? json["message"],
-      success: json["success"],
-      details: json["details"],
-      error: json["errors"],
-      data: json["data"]);
+    code: json["code"],
+    msg: json["msg"] ?? json["message"],
+    success: json["success"],
+    details: json["details"],
+    error: json["errors"],
+    data: json["data"],
+  );
 }

@@ -14,8 +14,8 @@ import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
 import 'help_and_support_screen.dart';
 
-class MoreSettingsScreen extends StatelessWidget {
-  const MoreSettingsScreen({super.key});
+class DocMoreSettingsScreen extends StatelessWidget {
+  const DocMoreSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +169,7 @@ class MoreSettingsScreen extends StatelessWidget {
               color: AppColor.red,
               text: 'Logout',
               onTap: () {
-                SharedPreferencesService.instance.logOut('patients');
+                SharedPreferencesService.instance.logOut('care-giver');
               },
             ),
             SizedBox(height: 20.h),

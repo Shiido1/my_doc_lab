@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/login_entity.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/forgot_password.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
-
-import '../../onboarding/care_giver_select_screen.dart';
+import 'package:stacked/stacked.dart';
+import '../../../core/connect_end/view_model/auth_view_model.dart';
+import '../../../core/core_folder/app/app.locator.dart';
+import '../../app_assets/app_validatiion.dart';
 import '../../widget/button_widget.dart';
-import '../dashboard/dashboard_screen.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatefulWidget {
@@ -22,205 +25,269 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController fullnameTextController = TextEditingController();
+  TextEditingController passwordTextController = TextEditingController();
+  TextEditingController roleTextController = TextEditingController();
   TextEditingController emailTextController = TextEditingController();
-
-  // bool _onTap = false;
+  GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 60.w),
-        child: Column(
-          children: [
-            SvgPicture.asset(AppImage.hands, height: 40.h, width: 40.w),
-
-            SizedBox(height: 10.h),
-            TextView(
-              text: 'Log in',
-              textStyle: GoogleFonts.gabarito(
-                color: AppColor.black,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            SizedBox(height: 30.h),
-            TextFormWidget(
-              label: 'Email Address',
-              border: 10,
-              isFilled: true,
-              fillColor: AppColor.white,
-              controller: emailTextController,
-              prefixWidget: Padding(
-                padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(
-                  AppImage.message,
-                  height: 20.h,
-                  width: 20.w,
-                ),
-              ),
-              // validator: AppValidator.validateEmail(),
-            ),
-            SizedBox(height: 20.h),
-
-            TextFormWidget(
-              label: 'Enter your password',
-              border: 10,
-              isFilled: true,
-              fillColor: AppColor.white,
-              controller: fullnameTextController,
-              prefixWidget: Padding(
-                padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(
-                  AppImage.lock,
-                  height: 20.h,
-                  width: 20.w,
-                ),
-              ),
-              suffixWidget: Padding(
-                padding: EdgeInsets.all(9.2.w),
-                child: SvgPicture.asset(
-                  AppImage.close_eye,
-                  height: 20.h,
-                  width: 20.w,
-                ),
-              ),
-            ),
-
-            SizedBox(height: 10.h),
-            Align(
-              alignment: Alignment.topRight,
-              child: GestureDetector(
-                onTap:
-                    () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ForgotPassword()),
-                    ),
-                child: TextView(
-                  text: 'Forgot Password?',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.primary1,
-                    fontSize: 15.4.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 60.h),
-            ButtonWidget(
-              buttonText: 'Login',
-              buttonColor: AppColor.primary1,
-              buttonBorderColor: AppColor.transparent,
-              textStyle: GoogleFonts.dmSans(
-                color: AppColor.white,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w500,
-              ),
-              onPressed:
-                  () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder:
-                          (context) =>
-                              widget.userType == 'care-giver'
-                                  ? CareGiverSelectScreen()
-                                  : Dashboard(),
-                    ),
-                  ),
-            ),
-            SizedBox(height: 26.0.h),
-            RichText(
-              text: TextSpan(
-                text: 'Don\'t have an account? ',
-                style: GoogleFonts.gabarito(
-                  color: AppColor.black,
-                  fontSize: 16.4.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'Sign Up',
-                    style: GoogleFonts.gabarito(
-                      color: AppColor.primary1,
-                      fontSize: 16.4.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 30.h),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                border: Border.all(color: AppColor.lightgrey),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ViewModelBuilder<AuthViewModel>.reactive(
+      viewModelBuilder: () => locator<AuthViewModel>(),
+      onViewModelReady: (model) {},
+      disposeViewModel: false,
+      builder: (_, AuthViewModel model, __) {
+        return Scaffold(
+          backgroundColor: AppColor.white,
+          body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 60.w),
+            child: Form(
+              key: formKeyLogin,
+              child: Column(
                 children: [
-                  SvgPicture.asset(AppImage.google),
+                  SvgPicture.asset(AppImage.hands, height: 40.h, width: 40.w),
+
+                  SizedBox(height: 10.h),
                   TextView(
-                    text: 'Sign in with Google',
+                    text: 'Log in',
                     textStyle: GoogleFonts.gabarito(
-                      color: AppColor.darkindgrey,
-                      fontSize: 16.4.sp,
-                      fontWeight: FontWeight.w500,
+                      color: AppColor.black,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 20.h, width: 20.w),
+                  SizedBox(height: 30.h),
+                  TextFormWidget(
+                    label: 'Email Address',
+                    border: 10,
+                    isFilled: true,
+                    fillColor: AppColor.white,
+                    controller: emailTextController,
+                    prefixWidget: Padding(
+                      padding: EdgeInsets.all(9.2.w),
+                      child: SvgPicture.asset(
+                        AppImage.message,
+                        height: 20.h,
+                        width: 20.w,
+                      ),
+                    ),
+                    validator: AppValidator.validateEmail(),
+                  ),
+                  SizedBox(height: 20.h),
+
+                  TextFormWidget(
+                    label: 'Enter your password',
+                    border: 10,
+                    isFilled: true,
+                    fillColor: AppColor.white,
+                    controller: passwordTextController,
+                    prefixWidget: Padding(
+                      padding: EdgeInsets.all(9.2.w),
+                      child: SvgPicture.asset(
+                        AppImage.lock,
+                        height: 20.h,
+                        width: 20.w,
+                      ),
+                    ),
+                    suffixWidget: Padding(
+                      padding: EdgeInsets.all(9.2.w),
+                      child: GestureDetector(
+                        onTap: model.isOnTogglePassword,
+                        child: SvgPicture.asset(
+                          !model.isTogglePassword
+                              ? AppImage.close_eye
+                              : AppImage.opened_eye,
+                          color: AppColor.grey,
+                          height: !model.isTogglePassword ? 20.h : 14.h,
+                          width: !model.isTogglePassword ? 20.w : 14.h,
+                        ),
+                      ),
+                    ),
+                    obscureText: !model.isTogglePassword,
+                    validator: AppValidator.validateString(),
+                  ),
+                  SizedBox(height: 20.h),
+
+                  widget.userType == 'care-giver'
+                      ? TextFormWidget(
+                        label: 'Select your role',
+                        border: 10,
+                        isFilled: true,
+                        readOnly: true,
+                        fillColor: AppColor.white,
+                        controller: TextEditingController(
+                          text: model.selectedRole,
+                        ),
+                        prefixWidget: Padding(
+                          padding: EdgeInsets.all(9.2.w),
+                          child: SvgPicture.asset(
+                            AppImage.spec,
+                            height: 20.h,
+                            width: 20.w,
+                          ),
+                        ),
+                        suffixIcon: Icons.arrow_drop_down,
+                        onPasswordToggle: () => model.selectSpecDialog(context),
+                        validator: AppValidator.validateString(),
+                      )
+                      : SizedBox.shrink(),
+
+                  SizedBox(height: 10.h),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPassword(),
+                            ),
+                          ),
+                      child: TextView(
+                        text: 'Forgot Password?',
+                        textStyle: GoogleFonts.gabarito(
+                          color: AppColor.primary1,
+                          fontSize: 15.4.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 60.h),
+                  ButtonWidget(
+                    buttonText: 'Login',
+                    buttonColor: AppColor.primary1,
+                    buttonBorderColor: AppColor.transparent,
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.white,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    onPressed: () {
+                      if (formKeyLogin.currentState!.validate()) {
+                        widget.userType == 'care-giver'
+                            ? model.loginCareGiver(
+                              context,
+                              careGiverEntity: CareGiverEntityModel(
+                                email: emailTextController.text.trim(),
+                                password: passwordTextController.text.trim(),
+                                role: model.selectedRole,
+                              ),
+                            )
+                            : model.loginUser(
+                              context,
+                              loginEntity: LoginEntityModel(
+                                email: emailTextController.text.trim(),
+                                password: passwordTextController.text.trim(),
+                              ),
+                            );
+                      }
+                    },
+                  ),
+                  SizedBox(height: 26.0.h),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Don\'t have an account? ',
+                      style: GoogleFonts.gabarito(
+                        color: AppColor.black,
+                        fontSize: 16.4.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Sign Up',
+                          style: GoogleFonts.gabarito(
+                            color: AppColor.primary1,
+                            fontSize: 16.4.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 30.h),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 12.w,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                      border: Border.all(color: AppColor.lightgrey),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SvgPicture.asset(AppImage.google),
+                        TextView(
+                          text: 'Sign in with Google',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 16.4.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 20.h, width: 20.w),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 12.w,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                      border: Border.all(color: AppColor.lightgrey),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SvgPicture.asset(AppImage.apple),
+                        TextView(
+                          text: 'Sign in with Apple',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 16.4.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 20.h, width: 20.w),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 30.h),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 12.w,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                      border: Border.all(color: AppColor.lightgrey),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SvgPicture.asset(AppImage.facebook),
+                        TextView(
+                          text: 'Sign in with Facebook',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 16.4.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 20.h, width: 20.w),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 20.h),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                border: Border.all(color: AppColor.lightgrey),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SvgPicture.asset(AppImage.apple),
-                  TextView(
-                    text: 'Sign in with Apple',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.darkindgrey,
-                      fontSize: 16.4.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 20.h, width: 20.w),
-                ],
-              ),
-            ),
-            SizedBox(height: 30.h),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                border: Border.all(color: AppColor.lightgrey),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SvgPicture.asset(AppImage.facebook),
-                  TextView(
-                    text: 'Sign in with Facebook',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.darkindgrey,
-                      fontSize: 16.4.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 20.h, width: 20.w),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

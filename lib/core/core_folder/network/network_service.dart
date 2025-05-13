@@ -41,11 +41,13 @@ class NetworkService {
 
   // Initialize essential class properties
   void _initialiseDio() {
-    dio = Dio(BaseOptions(
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      baseUrl: baseUrl ?? AppConfig.apiUrl,
-    ));
+    dio = Dio(
+      BaseOptions(
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        baseUrl: baseUrl ?? AppConfig.apiUrl,
+      ),
+    );
     // authToken ??= session.authToken;
     dio!.interceptors
       ..add(AppInterceptor(authToken ?? ''))
@@ -74,47 +76,65 @@ class NetworkService {
     try {
       switch (method) {
         case RequestMethod.post:
-          response = await dio!.post(path,
-              queryParameters: params,
-              data: data,
-              options: options ?? await _getOption());
+          response = await dio!.post(
+            path,
+            queryParameters: params,
+            data: data,
+            options: options ?? await _getOption(),
+          );
           break;
         case RequestMethod.get:
-          response = await dio!.get(path,
-              queryParameters: data, options: options ?? await _getOption());
+          response = await dio!.get(
+            path,
+            queryParameters: data,
+            options: options ?? await _getOption(),
+          );
           break;
         case RequestMethod.getParams:
-          response = await dio!.get(path,
-              queryParameters: params, options: options ?? await _getOption());
+          response = await dio!.get(
+            path,
+            queryParameters: params,
+            options: options ?? await _getOption(),
+          );
 
           break;
         case RequestMethod.put:
-          response = await dio!.put(path,
-              queryParameters: params,
-              data: data,
-              options: options ?? await _getOption());
+          response = await dio!.put(
+            path,
+            queryParameters: params,
+            data: data,
+            options: options ?? await _getOption(),
+          );
           break;
         case RequestMethod.delete:
-          response = await dio!.delete(path,
-              queryParameters: params,
-              data: data,
-              options: options ?? await _getOption());
+          response = await dio!.delete(
+            path,
+            queryParameters: params,
+            data: data,
+            options: options ?? await _getOption(),
+          );
           break;
         case RequestMethod.upload:
-          response = await dio!.post(path,
-              data: data,
-              queryParameters: params,
-              options: options ??
-                  Options(headers: {
+          response = await dio!.post(
+            path,
+            data: data,
+            queryParameters: params,
+            options:
+                options ??
+                Options(
+                  headers: {
                     "Authorization": "Bearer ${session.authToken}",
                     "Content-Disposition": "form-data",
                     "Content-Type": "multipart/form-data",
-                    'Accept': 'application/json'
-                  }), onSendProgress: (sent, total) {
-            // eventBus
-            //     .fire(
-            //     FileUploadProgressEvent(FileUploadProgress(sent, total, tag: classTag)));
-          });
+                    'Accept': 'application/json',
+                  },
+                ),
+            onSendProgress: (sent, total) {
+              // eventBus
+              //     .fire(
+              //     FileUploadProgressEvent(FileUploadProgress(sent, total, tag: classTag)));
+            },
+          );
           break;
       }
       return response;
@@ -129,10 +149,12 @@ class NetworkService {
   }
 
   Future<Options> _getOption() async {
-    return Options(headers: {
-      "Authorization": "Bearer ${session.authToken}",
-      'Accept': 'application/json',
-    });
+    return Options(
+      headers: {
+        "Authorization": "Bearer ${session.authToken}",
+        'Accept': 'application/json',
+      },
+    );
   }
 }
 

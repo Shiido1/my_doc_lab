@@ -8,9 +8,9 @@ class AppRoutes {
       return Routes.dashboard;
     } else if (type == 'doctor') {
       return Routes.docDashboard;
-    } else if (type == 'pharmacist') {
+    } else if (type == 'pharmacy') {
       return Routes.pharmacyDashboard;
-    } else if (type == 'med_lab_scientist') {
+    } else if (type == 'lab_technician') {
       return Routes.laboratoryDashboard;
     }
     return Routes.firstOnboardingScreen;

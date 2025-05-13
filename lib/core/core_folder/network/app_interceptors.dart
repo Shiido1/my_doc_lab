@@ -12,7 +12,9 @@ class AppInterceptor extends Interceptor {
   /// Apptoken is an identify for each app
   @override
   void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     if (authToken.isNotEmpty) {
       options.headers.addAll({
         // "Authorization": "Bearer ${session.authToken}",

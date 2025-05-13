@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../app/app.logger.dart';
+import '../../../main.dart';
+import '../app/app.router.dart';
 
 @lazySingleton
 class SharedPreferencesService {
@@ -38,7 +39,7 @@ class SharedPreferencesService {
   bool get isVerified => sharedPreferences?.getBool(verified) ?? false;
   bool get isKycVerified => sharedPreferences?.getBool(kycVerified) ?? false;
   Map<String, dynamic> get usersData {
-    final userDataString = sharedPreferences!.getString(userData);
+    final userDataString = sharedPreferences?.getString(userData);
     if (userDataString != null && userDataString.isNotEmpty) {
       return json.decode(userDataString);
     }
@@ -60,13 +61,16 @@ class SharedPreferencesService {
   set usersData(Map<String, dynamic>? map) =>
       sharedPreferences?.setString(userData, json.encode(map));
 
-  Future<bool> logOut() async {
+  Future<bool> logOut(role) async {
     try {
       await sharedPreferences!.clear();
-      // navigate.navigateTo(Routes.loginScreen);
+      navigate.navigateTo(
+        Routes.loginScreen,
+        arguments: LoginScreenArguments(userType: role),
+      );
       // await locator<HiveManager>().clearAllBox();
 
-      getLogger('logout').d(sharedPreferences.toString());
+      // getLogger('logout').d(sharedPreferences.toString());
       return true;
     } catch (e) {
       // getLogger("error clearing cache").d('logout');

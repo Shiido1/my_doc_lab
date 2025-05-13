@@ -32,14 +32,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
           ? null
           : DateTime.parse(json['updatedAt'] as String),
   deletedAt: json['deletedAt'],
-  token: json['token'] as String?,
-  userType: json['userType'] as String?,
   classtype: json['classtype'] as String?,
-  wallets:
-      json['wallets'] == null
-          ? null
-          : Wallets.fromJson(json['wallets'] as Map<String, dynamic>),
-  transactions: json['transactions'] as List<dynamic>?,
 );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
@@ -59,9 +52,5 @@ Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
   'createdAt': instance.createdAt?.toIso8601String(),
   'updatedAt': instance.updatedAt?.toIso8601String(),
   'deletedAt': instance.deletedAt,
-  'token': instance.token,
-  'userType': instance.userType,
   'classtype': instance.classtype,
-  'wallets': instance.wallets,
-  'transactions': instance.transactions,
 };

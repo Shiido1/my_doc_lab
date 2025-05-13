@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,6 +23,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _isTapped = false;
+
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
@@ -94,35 +95,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: AppColor.white),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextView(
-                    text: 'Available Balance',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.white,
-                      fontSize: 13.20.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SvgPicture.asset(
-                        AppImage.wallet,
-                        width: 20.w,
-                        height: 20.w,
-                        color: AppColor.white,
-                      ),
-                      SizedBox(width: 10.w),
                       TextView(
-                        text: '20,000.00',
+                        text: 'Available Balance',
                         textStyle: GoogleFonts.gabarito(
                           color: AppColor.white,
-                          fontSize: 20.0.sp,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 13.20.sp,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            AppImage.wallet,
+                            width: 20.w,
+                            height: 20.w,
+                            color: AppColor.white,
+                          ),
+                          SizedBox(width: 10.w),
+                          TextView(
+                            text: !_isTapped ? '*******' : '20,000.00',
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.white,
+                              fontSize: _isTapped ? 21.2.sp : 24.0.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
+                  ),
+                  GestureDetector(
+                    onTap: () => setState(() => _isTapped = !_isTapped),
+                    child: SvgPicture.asset(
+                      !_isTapped ? AppImage.close_eye : AppImage.opened_eye,
+                      width: !_isTapped ? 22.w : 15.0.w,
+                      height: !_isTapped ? 22.w : 15.0.h,
+                      color: AppColor.white,
+                    ),
                   ),
                 ],
               ),
@@ -130,7 +145,6 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 20.h),
             TextFormWidget(
               label: 'Search for doctors, specialties, or tests...',
-              // hint: 'Email Address',
               border: 10,
               isFilled: true,
               fillColor: AppColor.transparent,

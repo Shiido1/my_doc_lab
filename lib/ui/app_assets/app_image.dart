@@ -63,6 +63,7 @@ class AppImage {
   static const String moreVert = 'assets/svg/moore.svg';
   static const String video = 'assets/svg/video.svg';
   static const String close_eye = 'assets/svg/closed_eye.svg';
+  static const String opened_eye = 'assets/svg/opened_eye.svg';
   static const String facebook = 'assets/svg/logos_facebook.svg';
   static const String location = 'assets/svg/location.svg';
   static const String gradcap = 'assets/svg/gradcap.svg';

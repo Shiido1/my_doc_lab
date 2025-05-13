@@ -9,6 +9,7 @@ import 'package:my_doc_lab/ui/screens/dashboard/laboratory/lab_appointment_scree
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
+import '../../../../../core/core_folder/manager/shared_preference.dart';
 import '../help_and_support_screen.dart';
 
 class LabSettingsScreen extends StatelessWidget {
@@ -90,6 +91,8 @@ class LabSettingsScreen extends StatelessWidget {
             SizedBox(height: 30.h),
             moreContainerWidget(
               image: AppImage.person,
+              borderColor: AppColor.lightgrey,
+              color: AppColor.black,
               text: 'Edit Profile',
               onTap:
                   () => Navigator.of(context).push(
@@ -101,6 +104,8 @@ class LabSettingsScreen extends StatelessWidget {
             SizedBox(height: 20.h),
             moreContainerWidget(
               image: AppImage.person,
+              borderColor: AppColor.lightgrey,
+              color: AppColor.black,
               text: 'My Appointments',
               onTap:
                   () => Navigator.of(context).push(
@@ -112,6 +117,8 @@ class LabSettingsScreen extends StatelessWidget {
             SizedBox(height: 20.h),
             moreContainerWidget(
               image: AppImage.person,
+              borderColor: AppColor.lightgrey,
+              color: AppColor.black,
               text: 'Results',
               onTap:
                   () => Navigator.of(context).push(
@@ -121,6 +128,8 @@ class LabSettingsScreen extends StatelessWidget {
             SizedBox(height: 20.h),
             moreContainerWidget(
               image: AppImage.walleta,
+              borderColor: AppColor.lightgrey,
+              color: AppColor.black,
               text: 'Notification',
               onTap:
                   () => Navigator.of(context).push(
@@ -133,6 +142,8 @@ class LabSettingsScreen extends StatelessWidget {
             SizedBox(height: 20.h),
             moreContainerWidget(
               image: AppImage.help,
+              borderColor: AppColor.lightgrey,
+              color: AppColor.black,
               text: 'Help & Support',
               onTap:
                   () => Navigator.of(context).push(
@@ -140,6 +151,16 @@ class LabSettingsScreen extends StatelessWidget {
                       builder: (context) => HelpAndSupportScreen(),
                     ),
                   ),
+            ),
+            SizedBox(height: 40.h),
+            moreContainerWidget(
+              image: AppImage.help,
+              borderColor: AppColor.red,
+              color: AppColor.red,
+              text: 'Logout',
+              onTap: () {
+                SharedPreferencesService.instance.logOut('care-giver');
+              },
             ),
             SizedBox(height: 20.h),
           ],
@@ -152,38 +173,44 @@ class LabSettingsScreen extends StatelessWidget {
     required String image,
     required String text,
     required Function() onTap,
+    required Color borderColor,
+    required Color color,
   }) => GestureDetector(
     onTap: onTap,
     child: Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColor.lightgrey),
+        border: Border.all(color: borderColor),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SvgPicture.asset(
-            image,
-            color: AppColor.darkindgrey,
-            width: 20.w,
-            height: 20.h,
-          ),
+          text == 'Logout'
+              ? Icon(Icons.logout, color: AppColor.red, size: 22.sp)
+              : SvgPicture.asset(
+                image,
+                color: AppColor.darkindgrey,
+                width: 20.w,
+                height: 20.h,
+              ),
           SizedBox(width: 20.w),
           TextView(
             text: text,
             textStyle: GoogleFonts.gabarito(
-              color: AppColor.black,
+              color: color,
               fontSize: 16.sp,
               fontWeight: FontWeight.w500,
             ),
           ),
           Spacer(),
-          Icon(
-            Icons.keyboard_arrow_right_sharp,
-            color: AppColor.darkindgrey,
-            size: 22.sp,
-          ),
+          text == 'Logout'
+              ? SizedBox.shrink()
+              : Icon(
+                Icons.keyboard_arrow_right_sharp,
+                color: AppColor.darkindgrey,
+                size: 22.sp,
+              ),
         ],
       ),
     ),

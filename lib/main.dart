@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_doc_lab/core/core_folder/manager/shared_preference.dart';
 import 'package:my_doc_lab/core/routes_class.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import 'core/core_folder/app/app.locator.dart';
 import 'core/core_folder/app/app.router.dart';
 
-void main() {
+final navigate = locator<NavigationService>();
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
+  await locator<SharedPreferencesService>().initilize();
   runApp(const MyApp());
 }
 
@@ -25,7 +31,9 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
             ),
             debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes().returnAppRoutes(''),
+            initialRoute: AppRoutes().returnAppRoutes(
+              SharedPreferencesService.instance.usersData['userType'],
+            ),
             navigatorKey: StackedService.navigatorKey,
             onGenerateRoute: StackedRouter().onGenerateRoute,
           ),

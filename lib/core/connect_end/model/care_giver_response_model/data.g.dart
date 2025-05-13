@@ -1,24 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-User _$UserFromJson(Map<String, dynamic> json) => User(
-      id: json['id'] as String?,
+Data _$DataFromJson(Map<String, dynamic> json) => Data(
+      id: json['id'] as num?,
       uuid: json['uuid'] as String?,
       firstName: json['firstName'] as String?,
       lastName: json['lastName'] as String?,
       gender: json['gender'] as String?,
       email: json['email'] as String?,
       phone: json['phone'] as String?,
+      about: json['about'] as String?,
       status: json['status'] as String?,
-      kycStatus: json['kycStatus'] as String?,
       emailVerifiedAt: json['emailVerifiedAt'] == null
           ? null
           : DateTime.parse(json['emailVerifiedAt'] as String),
+      certifications: json['certifications'] as String?,
+      experience: json['experience'] as String?,
+      profileImage: json['profileImage'] as String?,
+      city: json['city'] as String?,
+      state: json['state'] as String?,
+      address: json['address'] as String?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -26,15 +32,11 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       deletedAt: json['deletedAt'],
-      wallets: (json['wallets'] as List<dynamic>?)
-          ?.map((e) => Wallet.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      transactions: (json['transactions'] as List<dynamic>?)
-          ?.map((e) => Transaction.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      token: json['token'] as String?,
+      userType: json['userType'] as String?,
     );
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
       'id': instance.id,
       'uuid': instance.uuid,
       'firstName': instance.firstName,
@@ -42,12 +44,18 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'gender': instance.gender,
       'email': instance.email,
       'phone': instance.phone,
+      'about': instance.about,
       'status': instance.status,
-      'kycStatus': instance.kycStatus,
       'emailVerifiedAt': instance.emailVerifiedAt?.toIso8601String(),
+      'certifications': instance.certifications,
+      'experience': instance.experience,
+      'profileImage': instance.profileImage,
+      'city': instance.city,
+      'state': instance.state,
+      'address': instance.address,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'deletedAt': instance.deletedAt,
-      'wallets': instance.wallets,
-      'transactions': instance.transactions,
+      'token': instance.token,
+      'userType': instance.userType,
     };

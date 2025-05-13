@@ -1,4 +1,6 @@
 import 'package:injectable/injectable.dart';
+import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
 
 import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/manager/shared_preference.dart';
@@ -13,8 +15,14 @@ class AuthRepoImpl {
 
   Future<LoginResponseModel> login(LoginEntityModel loginEntity) async {
     final response = await _contract.login(loginEntity);
-    _session.isLoggedIn = true;
-    // getLogger('className').d(_session.isLoggedIn);
+    _chache(response.data);
+    return response;
+  }
+
+  Future<CareGiverResponseModel> loginCareGiver(
+    CareGiverEntityModel loginCareGiverEntity,
+  ) async {
+    final response = await _contract.loginCareGiver(loginCareGiverEntity);
     _chache(response.data);
     return response;
   }

@@ -10,7 +10,7 @@ import '../../widget/text_widget.dart';
 import 'chat/message_list_screen.dart';
 import 'home/doc_home_screen.dart';
 import 'patient/patient_sceen.dart';
-import 'settings/more_settings_screen.dart';
+import 'settings/doc_more_settings_screen.dart';
 
 // ignore: must_be_immutable
 class DocDashboard extends StatefulWidget {
@@ -28,7 +28,7 @@ class _DocDashboardState extends State<DocDashboard> {
     DocHomeScreen(),
     PatientSceen(),
     MessageListScreen(),
-    MoreSettingsScreen(),
+    DocMoreSettingsScreen(),
   ];
 
   @override

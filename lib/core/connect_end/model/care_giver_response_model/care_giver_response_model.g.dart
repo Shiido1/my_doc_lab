@@ -1,22 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_response_model.dart';
+part of 'care_giver_response_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-LoginResponseModel _$LoginResponseModelFromJson(Map<String, dynamic> json) =>
-    LoginResponseModel(
+CareGiverResponseModel _$CareGiverResponseModelFromJson(
+        Map<String, dynamic> json) =>
+    CareGiverResponseModel(
       status: json['status'] as String?,
-      data:
-          json['data'] == null
-              ? null
-              : Data.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] == null
+          ? null
+          : Data.fromJson(json['data'] as Map<String, dynamic>),
       message: json['message'] as String?,
     );
 
-Map<String, dynamic> _$LoginResponseModelToJson(LoginResponseModel instance) =>
+Map<String, dynamic> _$CareGiverResponseModelToJson(
+        CareGiverResponseModel instance) =>
     <String, dynamic>{
       'status': instance.status,
       'data': instance.data,
