@@ -271,7 +271,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 10.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [],
+                  children: [
+                    ...model
+                        .getDocDetailResponseModel!
+                        .original!
+                        .availabilities!
+                        .map(
+                          (e) => Padding(
+                            padding: EdgeInsets.only(bottom: 4.4.w),
+                            child: TextView(
+                              text: 'Mon - Sat :  10:00 am - 5: 00 pm',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.black,
+                                fontSize: 15.20.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                  ],
                 ),
                 SizedBox(height: 20.w),
                 TextView(
