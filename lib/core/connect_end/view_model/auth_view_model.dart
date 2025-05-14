@@ -23,6 +23,7 @@ import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
+import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../repo/repo_impl.dart';
 
 class AuthViewModel extends BaseViewModel {
@@ -58,6 +59,9 @@ class AuthViewModel extends BaseViewModel {
   GetDocDetailResponseModel? _getDocDetailResponseModel;
   GetDocDetailResponseModel? get getDocDetailResponseModel =>
       _getDocDetailResponseModel;
+  GetPharmacyDetailResponseModel? get getPharmacyDetailResponseModel =>
+      _getPharmacyDetailResponseModel;
+  GetPharmacyDetailResponseModel? _getPharmacyDetailResponseModel;
 
   String selectedRole = '';
 
@@ -247,6 +251,22 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = true;
       _getDocDetailResponseModel = await runBusyFuture(
         repositoryImply.getSpecificDoctorDetail(id),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getSpecificPharmacist(context, id) async {
+    try {
+      _isLoading = true;
+      _getPharmacyDetailResponseModel = await runBusyFuture(
+        repositoryImply.getSpecificPharmacyDetail(id),
         throwException: true,
       );
       _isLoading = false;

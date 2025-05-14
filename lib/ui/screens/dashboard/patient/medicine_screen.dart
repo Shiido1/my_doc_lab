@@ -133,7 +133,14 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                         () => Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder:
-                                                (context) => ProfileScreen1(),
+                                                (context) => ProfileScreen1(
+                                                  id:
+                                                      model
+                                                          .getAllPharmaciesResponseModelList!
+                                                          .getAllPharmaciesResponseModelList![index]
+                                                          .id
+                                                          .toString(),
+                                                ),
                                           ),
                                         ),
                                     child: Container(

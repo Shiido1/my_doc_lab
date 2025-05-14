@@ -13,6 +13,7 @@ import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
+import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../model/login_entity.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../model/request_otp_entity_model.dart';
@@ -72,6 +73,11 @@ class AuthRepoImpl {
 
   Future<GetDocDetailResponseModel> getSpecificDoctorDetail(id) async {
     final response = await _contract.getSpecificDoctorDetail(id);
+    return response;
+  }
+
+  Future<GetPharmacyDetailResponseModel> getSpecificPharmacyDetail(id) async {
+    final response = await _contract.getSpecificPharmacyDetail(id);
     return response;
   }
 
