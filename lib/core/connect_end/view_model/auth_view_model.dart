@@ -11,6 +11,7 @@ import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_us
 import 'package:my_doc_lab/core/connect_end/model/login_entity.dart';
 import 'package:my_doc_lab/core/connect_end/model/login_response_model/login_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/searched_doctor_response_model/searched_doctor_response_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
@@ -21,9 +22,11 @@ import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
+import '../model/add_booking_entity_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import '../model/search_doctor_entity_model.dart';
 import '../repo/repo_impl.dart';
 
 class AuthViewModel extends BaseViewModel {
@@ -62,6 +65,9 @@ class AuthViewModel extends BaseViewModel {
   GetPharmacyDetailResponseModel? get getPharmacyDetailResponseModel =>
       _getPharmacyDetailResponseModel;
   GetPharmacyDetailResponseModel? _getPharmacyDetailResponseModel;
+  SearchedDoctorResponseModelList? _searchedDoctorResponseModelList;
+  SearchedDoctorResponseModelList? get searchedDoctorResponseModelList =>
+      _searchedDoctorResponseModelList;
 
   String selectedRole = '';
 
@@ -223,6 +229,43 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = false;
     } catch (e) {
       _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getSearchedDoctor(
+    context, {
+    SearchDoctorEntityModel? searchEntity,
+  }) async {
+    try {
+      _isLoading = true;
+      _searchedDoctorResponseModelList = await runBusyFuture(
+        repositoryImply.getSearchDoctor(searchEntity!),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void addBooking(context, {AddBookingEntityModel? addBooking}) async {
+    try {
+      loadingDialog(context);
+      var v = await runBusyFuture(
+        repositoryImply.addBooking(addBooking!),
+        throwException: true,
+      );
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: v['message']);
+    } catch (e) {
+      Navigator.pop(context);
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }
