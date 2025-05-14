@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_resiter_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/login_entity.dart';
@@ -51,6 +52,9 @@ class AuthViewModel extends BaseViewModel {
   GetAllPharmaciesResponseModelList? _getAllPharmaciesResponseModelList;
   GetAllPharmaciesResponseModelList? get getAllPharmaciesResponseModelList =>
       _getAllPharmaciesResponseModelList;
+  GetAllConsultantResponseModelList? _getAllConsultantResponseModelList;
+  GetAllConsultantResponseModelList? get getAllConsultantResponseModelList =>
+      _getAllConsultantResponseModelList;
   GetDocDetailResponseModel? _getDocDetailResponseModel;
   GetDocDetailResponseModel? get getDocDetailResponseModel =>
       _getDocDetailResponseModel;
@@ -209,6 +213,23 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = true;
       _getAllPharmaciesResponseModelList = await runBusyFuture(
         repositoryImply.getAllPharmacistsDetail(),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getAllConsultants(context) async {
+    try {
+      _isLoading = true;
+      _getAllConsultantResponseModelList = await runBusyFuture(
+        repositoryImply.getAllConsultants(),
         throwException: true,
       );
 

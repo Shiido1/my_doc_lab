@@ -249,6 +249,12 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                                   height: 120.h,
                                                   width: double.infinity,
                                                   fit: BoxFit.cover,
+                                                  errorBuilder:
+                                                      (
+                                                        context,
+                                                        error,
+                                                        stackTrace,
+                                                      ) => shimmerViewDoc(),
                                                 ),
                                               ),
                                               Padding(
@@ -259,17 +265,26 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.end,
                                                   children: [
-                                                    TextView(
-                                                      text:
-                                                          'Dr ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].firstName ?? ''} ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].lastName ?? ''}',
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color:
-                                                                AppColor.black,
-                                                            fontSize: 16.0.sp,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
+                                                    SizedBox(
+                                                      width: 120.w,
+                                                      child: TextView(
+                                                        text:
+                                                            'Dr ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].firstName ?? ''} ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].lastName ?? ''}',
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor
+                                                                      .black,
+                                                              fontSize: 16.0.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                        maxLines: 1,
+                                                        textOverflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                      ),
                                                     ),
                                                     TextView(
                                                       text:

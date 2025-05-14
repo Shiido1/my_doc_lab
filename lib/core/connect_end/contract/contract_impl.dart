@@ -8,6 +8,7 @@ import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart
 import '../../api_folder/auth_api.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/forgot_password_entity_model.dart';
+import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/login_entity.dart';
@@ -42,6 +43,9 @@ class AuthContractsImpl {
 
   Future<GetAllPharmaciesResponseModelList> getAllPharmacistsDetail() async =>
       await _api.getAllPharmacies();
+
+  Future<GetAllConsultantResponseModelList> getAllConsultant() async =>
+      await _api.getAllConsultant();
 
   Future<GetDocDetailResponseModel> getSpecificDoctorDetail(id) async =>
       await _api.getSpecificDoctors(id);

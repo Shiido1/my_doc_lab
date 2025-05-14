@@ -10,6 +10,7 @@ import '../../core_folder/manager/shared_preference.dart';
 import '../contract/contract_impl.dart';
 import '../model/care_giver_resiter_entity_model.dart';
 import '../model/forgot_password_entity_model.dart';
+import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/login_entity.dart';
@@ -61,6 +62,11 @@ class AuthRepoImpl {
 
   Future<GetAllPharmaciesResponseModelList> getAllPharmacistsDetail() async {
     final response = await _contract.getAllPharmacistsDetail();
+    return response;
+  }
+
+  Future<GetAllConsultantResponseModelList> getAllConsultants() async {
+    final response = await _contract.getAllConsultant();
     return response;
   }
 

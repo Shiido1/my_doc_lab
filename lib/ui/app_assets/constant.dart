@@ -23,8 +23,8 @@ String getCurrency() {
 }
 
 shimmerView() => SizedBox(
-  width: 200.0,
-  height: 100.0,
+  width: 200.w,
+  height: 100.h,
   child: Shimmer.fromColors(
     baseColor: AppColor.friendlyPrimary,
     highlightColor: AppColor.primary1,
@@ -42,6 +42,23 @@ shimmerView() => SizedBox(
 shimmerViewDoc() => SizedBox(
   width: 200.0,
   height: 160.0,
+  child: Shimmer.fromColors(
+    baseColor: AppColor.friendlyPrimary,
+    highlightColor: AppColor.primary1,
+    child: Container(
+      height: 180.h,
+      width: 80.w,
+      decoration: BoxDecoration(
+        color: AppColor.white,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+    ),
+  ),
+);
+
+shimmerViewPharm() => SizedBox(
+  width: 200.0,
+  height: 140.0,
   child: Shimmer.fromColors(
     baseColor: AppColor.friendlyPrimary,
     highlightColor: AppColor.primary1,

@@ -49,13 +49,34 @@ class Routes {
 
 class StackedRouter extends _i1.RouterBase {
   final _routes = <_i1.RouteDef>[
-    _i1.RouteDef(Routes.firstOnboardingScreen, page: _i2.FirstOnboardingScreen),
-    _i1.RouteDef(Routes.dashboard, page: _i3.Dashboard),
-    _i1.RouteDef(Routes.docDashboard, page: _i4.DocDashboard),
-    _i1.RouteDef(Routes.laboratoryDashboard, page: _i5.LaboratoryDashboard),
-    _i1.RouteDef(Routes.pharmacyDashboard, page: _i6.PharmacyDashboard),
-    _i1.RouteDef(Routes.loginScreen, page: _i7.LoginScreen),
-    _i1.RouteDef(Routes.profileScreen, page: _i8.ProfileScreen),
+    _i1.RouteDef(
+      Routes.firstOnboardingScreen,
+      page: _i2.FirstOnboardingScreen,
+    ),
+    _i1.RouteDef(
+      Routes.dashboard,
+      page: _i3.Dashboard,
+    ),
+    _i1.RouteDef(
+      Routes.docDashboard,
+      page: _i4.DocDashboard,
+    ),
+    _i1.RouteDef(
+      Routes.laboratoryDashboard,
+      page: _i5.LaboratoryDashboard,
+    ),
+    _i1.RouteDef(
+      Routes.pharmacyDashboard,
+      page: _i6.PharmacyDashboard,
+    ),
+    _i1.RouteDef(
+      Routes.loginScreen,
+      page: _i7.LoginScreen,
+    ),
+    _i1.RouteDef(
+      Routes.profileScreen,
+      page: _i8.ProfileScreen,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
@@ -92,9 +113,8 @@ class StackedRouter extends _i1.RouterBase {
     _i7.LoginScreen: (data) {
       final args = data.getArgs<LoginScreenArguments>(nullOk: false);
       return _i9.MaterialPageRoute<dynamic>(
-        builder:
-            (context) =>
-                _i7.LoginScreen(key: args.key, userType: args.userType),
+        builder: (context) =>
+            _i7.LoginScreen(key: args.key, userType: args.userType),
         settings: data,
       );
     },
@@ -115,7 +135,10 @@ class StackedRouter extends _i1.RouterBase {
 }
 
 class LoginScreenArguments {
-  const LoginScreenArguments({this.key, required this.userType});
+  const LoginScreenArguments({
+    this.key,
+    required this.userType,
+  });
 
   final _i9.Key? key;
 
@@ -139,7 +162,10 @@ class LoginScreenArguments {
 }
 
 class ProfileScreenArguments {
-  const ProfileScreenArguments({this.key, required this.id});
+  const ProfileScreenArguments({
+    this.key,
+    required this.id,
+  });
 
   final _i9.Key? key;
 
@@ -168,15 +194,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.firstOnboardingScreen,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.firstOnboardingScreen,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToDashboard([
@@ -184,15 +208,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.dashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.dashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToDocDashboard([
@@ -200,15 +222,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.docDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.docDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToLaboratoryDashboard([
@@ -216,15 +236,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.laboratoryDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.laboratoryDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToPharmacyDashboard([
@@ -232,15 +250,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.pharmacyDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.pharmacyDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToLoginScreen({
@@ -250,16 +266,14 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.loginScreen,
-      arguments: LoginScreenArguments(key: key, userType: userType),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.loginScreen,
+        arguments: LoginScreenArguments(key: key, userType: userType),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToProfileScreen({
@@ -269,16 +283,14 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.profileScreen,
-      arguments: ProfileScreenArguments(key: key, id: id),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.profileScreen,
+        arguments: ProfileScreenArguments(key: key, id: id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithFirstOnboardingScreen([
@@ -286,15 +298,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.firstOnboardingScreen,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.firstOnboardingScreen,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithDashboard([
@@ -302,15 +312,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.dashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.dashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithDocDashboard([
@@ -318,15 +326,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.docDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.docDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithLaboratoryDashboard([
@@ -334,15 +340,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.laboratoryDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.laboratoryDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithPharmacyDashboard([
@@ -350,15 +354,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.pharmacyDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.pharmacyDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithLoginScreen({
@@ -368,16 +370,14 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.loginScreen,
-      arguments: LoginScreenArguments(key: key, userType: userType),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.loginScreen,
+        arguments: LoginScreenArguments(key: key, userType: userType),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithProfileScreen({
@@ -387,15 +387,13 @@ extension NavigatorStateExtension on _i10.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.profileScreen,
-      arguments: ProfileScreenArguments(key: key, id: id),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.profileScreen,
+        arguments: ProfileScreenArguments(key: key, id: id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 }

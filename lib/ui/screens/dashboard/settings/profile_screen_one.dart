@@ -398,7 +398,8 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                   onTap:
                       () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ConsultationScreen(),
+                          builder:
+                              (context) => ConsultationScreen(bookTyoe: 'book'),
                         ),
                       ),
                   child: Container(
@@ -424,7 +425,9 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                   onTap:
                       () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ConsultationScreen(),
+                          builder:
+                              (context) =>
+                                  ConsultationScreen(bookTyoe: 'book-friend'),
                         ),
                       ),
                   child: Container(

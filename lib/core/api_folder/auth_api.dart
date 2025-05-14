@@ -9,6 +9,7 @@ import 'package:my_doc_lab/core/connect_end/model/request_otp_entity_model.dart'
 import 'package:my_doc_lab/core/connect_end/model/reset_password_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/verify_otp_entity_model.dart';
 import '../connect_end/model/care_giver_resiter_entity_model.dart';
+import '../connect_end/model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../connect_end/model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../connect_end/model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../connect_end/model/login_entity.dart';
@@ -120,6 +121,20 @@ class AuthApi {
       );
       logger.d(response.data);
       return GetAllPharmaciesResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetAllConsultantResponseModelList> getAllConsultant() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.all_consultation,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetAllConsultantResponseModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/patient/patient_complaint_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -35,12 +34,12 @@ class NotificationScreen extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap:
-                      () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => PatientDetailComplaintScreen(),
-                        ),
-                      ),
+                  // onTap:
+                  //     () => Navigator.of(context).push(
+                  //       MaterialPageRoute(
+                  //         builder: (context) => PatientDetailComplaintScreen(),
+                  //       ),
+                  //     ),
                   child: SvgPicture.asset(
                     AppImage.settings,
                     width: 24.w,

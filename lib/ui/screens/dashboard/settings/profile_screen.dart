@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:stacked/stacked.dart';
+import '../../../../core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
@@ -378,12 +379,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             .availableSlots!
                             .map(
                               (o) => GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    v = o;
-                                    print(o);
-                                  });
-                                },
+                                onTap:
+                                    o.isBooked == true
+                                        ? () {}
+                                        : () {
+                                          setState(() {
+                                            v = o;
+                                            print(o);
+                                          });
+                                        },
                                 child: Container(
                                   margin: EdgeInsets.only(right: 20.w),
                                   padding: EdgeInsets.symmetric(
@@ -397,7 +401,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ? AppColor.primary1
                                             : AppColor.transparent,
                                     border: Border.all(
-                                      color: AppColor.funnyLookingGrey,
+                                      color: selectFadeContainer(o),
                                     ),
                                   ),
                                   child: Column(
@@ -407,10 +411,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           o.availableDate ?? '',
                                         ),
                                         textStyle: GoogleFonts.dmSans(
-                                          color:
-                                              v == o
-                                                  ? AppColor.white
-                                                  : AppColor.grey,
+                                          color: selectFadeDayText(o),
                                           fontSize: 14.sp,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -420,10 +421,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           o.availableDate ?? '',
                                         ),
                                         textStyle: GoogleFonts.dmSans(
-                                          color:
-                                              v == o
-                                                  ? AppColor.white
-                                                  : AppColor.black,
+                                          color: selectFadeDateText(o),
                                           fontSize: 24.sp,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -453,11 +451,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           .availableSlots!
                           .map(
                             (o) => GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  t = o;
-                                });
-                              },
+                              onTap:
+                                  o.isBooked == true
+                                      ? () {}
+                                      : () {
+                                        setState(() {
+                                          t = o;
+                                        });
+                                      },
                               child: Container(
                                 margin: EdgeInsets.only(
                                   right: 20.w,
@@ -474,16 +475,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ? AppColor.primary1
                                           : AppColor.transparent,
                                   border: Border.all(
-                                    color: AppColor.funnyLookingGrey,
+                                    color: selectFadeTimeContainer(o),
                                   ),
                                 ),
                                 child: TextView(
                                   text: o.availableTime ?? '',
                                   textStyle: GoogleFonts.dmSans(
-                                    color:
-                                        t == o
-                                            ? AppColor.white
-                                            : AppColor.black,
+                                    color: selectFadeTimeText(o),
                                     fontSize: 16.6.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -501,7 +499,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap:
                           () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => ConsultationScreen(),
+                              builder:
+                                  (context) =>
+                                      ConsultationScreen(bookTyoe: 'book'),
                             ),
                           ),
                       child: Container(
@@ -527,7 +527,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap:
                           () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => ConsultationScreen(),
+                              builder:
+                                  (context) => ConsultationScreen(
+                                    bookTyoe: 'book-friend',
+                                  ),
                             ),
                           ),
                       child: Container(
@@ -558,5 +561,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       },
     );
+  }
+
+  Color selectFadeContainer(AvailableSlots? isBooked) {
+    if (isBooked!.isBooked == true) {
+      return AppColor.funnyLookingGrey.withOpacity(.4);
+    }
+    return AppColor.funnyLookingGrey;
+  }
+
+  Color selectFadeDayText(AvailableSlots? isBooked) {
+    if (isBooked!.isBooked == true) {
+      return AppColor.funnyLookingGrey.withOpacity(.4);
+    } else if (v == isBooked) {
+      return AppColor.white;
+    }
+    return AppColor.grey;
+  }
+
+  Color selectFadeDateText(AvailableSlots? isBooked) {
+    if (isBooked!.isBooked == true) {
+      return AppColor.funnyLookingGrey.withOpacity(.4);
+    } else if (v == isBooked) {
+      return AppColor.white;
+    }
+    return AppColor.black;
+  }
+
+  Color selectFadeTimeContainer(AvailableSlots? isBooked) {
+    if (isBooked!.isBooked == true) {
+      return AppColor.funnyLookingGrey.withOpacity(.4);
+    }
+    return AppColor.funnyLookingGrey;
+  }
+
+  Color selectFadeTimeText(AvailableSlots? isBooked) {
+    if (isBooked!.isBooked == true) {
+      return AppColor.funnyLookingGrey.withOpacity(.4);
+    } else if (t == isBooked) {
+      return AppColor.white;
+    }
+    return AppColor.black;
   }
 }

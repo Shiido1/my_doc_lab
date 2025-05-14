@@ -562,7 +562,8 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
                   onTap:
                       () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ConsultationScreen(),
+                          builder:
+                              (context) => ConsultationScreen(bookTyoe: 'book'),
                         ),
                       ),
                   child: Container(
@@ -588,7 +589,9 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
                   onTap:
                       () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ConsultationScreen(),
+                          builder:
+                              (context) =>
+                                  ConsultationScreen(bookTyoe: 'book-friend'),
                         ),
                       ),
                   child: Container(

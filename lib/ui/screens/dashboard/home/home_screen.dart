@@ -210,7 +210,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  // validator: AppValidator.validateEmail(),
                 ),
                 SizedBox(height: 20.h),
                 Row(
@@ -455,7 +454,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     : 0, // Number of items in the grid
                           ),
                 ),
-                // SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
