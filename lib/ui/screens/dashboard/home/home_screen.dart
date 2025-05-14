@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     !_isTapped
                                         ? '*******'
                                         : '${getCurrency()}${oCcy.format(double.parse('${model.getUserResponseModel?.data?.wallets?.balance}'))}',
-                                textStyle: GoogleFonts.gabarito(
+                                textStyle: TextStyle(
                                   color: AppColor.white,
                                   fontSize: _isTapped ? 21.2.sp : 24.0.sp,
                                   fontWeight: FontWeight.w600,

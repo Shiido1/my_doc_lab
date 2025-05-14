@@ -135,7 +135,7 @@ class ConsultationScreen extends StatelessWidget {
                                   TextView(
                                     text:
                                         '${getCurrency()}${oCcy.format(double.parse('${o.price}'))}',
-                                    textStyle: GoogleFonts.gabarito(
+                                    textStyle: TextStyle(
                                       color: AppColor.darkindgrey,
                                       fontSize: 20.sp,
                                       fontWeight: FontWeight.w600,

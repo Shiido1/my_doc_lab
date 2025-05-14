@@ -2,6 +2,21 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'searched_doctor_response_model.g.dart';
 
+class SearchedDoctorResponseModelList {
+  final List<SearchedDoctorResponseModel>? searchedDoctorResponseModelList;
+
+  SearchedDoctorResponseModelList({this.searchedDoctorResponseModelList});
+
+  factory SearchedDoctorResponseModelList.fromJson(List<dynamic> parsedJson) {
+    List<SearchedDoctorResponseModel> searchedDoctorResponseModel =
+        parsedJson.map((i) => SearchedDoctorResponseModel.fromJson(i)).toList();
+
+    return SearchedDoctorResponseModelList(
+      searchedDoctorResponseModelList: searchedDoctorResponseModel,
+    );
+  }
+}
+
 @JsonSerializable()
 class SearchedDoctorResponseModel {
   num? id;

@@ -8,6 +8,7 @@ import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart
 import 'package:my_doc_lab/core/connect_end/model/request_otp_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/reset_password_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/verify_otp_entity_model.dart';
+import '../connect_end/model/add_booking_entity_model.dart';
 import '../connect_end/model/care_giver_resiter_entity_model.dart';
 import '../connect_end/model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../connect_end/model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
@@ -15,6 +16,8 @@ import '../connect_end/model/get_all_pharmacies_response_model/get_all_pharmacie
 import '../connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../connect_end/model/login_entity.dart';
 import '../connect_end/model/login_response_model/login_response_model.dart';
+import '../connect_end/model/search_doctor_entity_model.dart';
+import '../connect_end/model/searched_doctor_response_model/searched_doctor_response_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
 import '../core_folder/network/network_service.dart';
@@ -122,6 +125,38 @@ class AuthApi {
       );
       logger.d(response.data);
       return GetAllPharmaciesResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<SearchedDoctorResponseModelList> getSearchedDoctors(
+    SearchDoctorEntityModel searchDoctor,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctor_search,
+        RequestMethod.post,
+        data: searchDoctor.toJson(),
+      );
+      logger.d(response.data);
+      return SearchedDoctorResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> addBooking(AddBookingEntityModel addBooking) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.add_booking,
+        RequestMethod.post,
+        data: addBooking.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;

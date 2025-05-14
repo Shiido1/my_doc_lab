@@ -8,6 +8,7 @@ import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart
 import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../contract/contract_impl.dart';
+import '../model/add_booking_entity_model.dart';
 import '../model/care_giver_resiter_entity_model.dart';
 import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
@@ -18,6 +19,8 @@ import '../model/login_entity.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../model/request_otp_entity_model.dart';
 import '../model/reset_password_entity_model.dart';
+import '../model/search_doctor_entity_model.dart';
+import '../model/searched_doctor_response_model/searched_doctor_response_model.dart';
 import '../model/verify_otp_entity_model.dart';
 
 @lazySingleton
@@ -68,6 +71,18 @@ class AuthRepoImpl {
 
   Future<GetAllConsultantResponseModelList> getAllConsultants() async {
     final response = await _contract.getAllConsultant();
+    return response;
+  }
+
+  Future<SearchedDoctorResponseModelList> getSearchDoctor(
+    SearchDoctorEntityModel searchEntity,
+  ) async {
+    final response = await _contract.getSearchedDoctors(searchEntity);
+    return response;
+  }
+
+  Future<dynamic> addBooking(AddBookingEntityModel addBooking) async {
+    final response = await _contract.addBooking(addBooking);
     return response;
   }
 

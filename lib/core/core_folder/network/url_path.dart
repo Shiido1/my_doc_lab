@@ -4,6 +4,8 @@ class UrlConfig {
   static const String register = 'register';
   static const String doctor = 'doctor';
   static const String all_doctor = 'user/doctors';
+  static const String doctor_search = 'user/doctors/search';
+
   static const String all_pharmacies = 'user/pharmacies';
   static const String spec_pharmacist = 'user/pharmacies/';
   static const String all_meds = 'user/pharmacies/medicine/list';
@@ -19,4 +21,6 @@ class UrlConfig {
   static const String resentCareGiverOtp = 'caregiver/request-otp';
   static const String loginCareGiver = 'caregiver/login';
   static const String registerCareGiver = 'caregiver/register';
+
+  static const String add_booking = 'user/booking/add';
 }
