@@ -124,7 +124,7 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                       mainAxisExtent:
                                           Platform.isIOS
                                               ? mainAxisExtent
-                                              : 200, // Number of columns
+                                              : 230, // Number of columns
                                     ),
                                 itemBuilder: (context, index) {
                                   // Build each grid item based on the index

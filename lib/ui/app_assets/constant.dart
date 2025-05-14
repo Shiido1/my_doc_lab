@@ -40,7 +40,7 @@ shimmerView() => SizedBox(
 );
 
 shimmerViewDoc() => SizedBox(
-  width: 200.0,
+  width: 160.0,
   height: 160.0,
   child: Shimmer.fromColors(
     baseColor: AppColor.friendlyPrimary,
