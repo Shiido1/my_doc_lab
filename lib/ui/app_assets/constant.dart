@@ -38,3 +38,44 @@ shimmerView() => SizedBox(
     ),
   ),
 );
+
+shimmerViewDoc() => SizedBox(
+  width: 200.0,
+  height: 160.0,
+  child: Shimmer.fromColors(
+    baseColor: AppColor.friendlyPrimary,
+    highlightColor: AppColor.primary1,
+    child: Container(
+      height: 180.h,
+      width: 80.w,
+      decoration: BoxDecoration(
+        color: AppColor.white,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+    ),
+  ),
+);
+
+String formTime(time) {
+  DateTime parsedTime = DateFormat("HH:mm:ss").parse(time);
+
+  // Format to 12-hour time with AM/PM
+  String formattedTime = DateFormat("h:mm a").format(parsedTime);
+  return formattedTime;
+}
+
+availDayForm(time) {
+  DateTime parsedDate = DateTime.parse(time);
+
+  // Format as "Thu 8"
+  String formattedDate = DateFormat('EEE').format(parsedDate.toLocal());
+  return formattedDate;
+}
+
+availDateForm(time) {
+  DateTime parsedDate = DateTime.parse(time);
+
+  // Format as "08"
+  String formattedDate = DateFormat('dd').format(parsedDate.toLocal());
+  return formattedDate;
+}

@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               // Build each grid item based on the index
                               return shimmerView();
                             },
-                            itemCount: 20, // Number of items in the grid
+                            itemCount: 10, // Number of items in the grid
                           )
                           : GridView.builder(
                             gridDelegate:

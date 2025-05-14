@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +10,7 @@ import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
+import '../../../app_assets/constant.dart';
 import '../../../widget/text_widget.dart';
 import '../appointment/consultation_screen.dart';
 
@@ -21,32 +23,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  List valueList = [
-    {'day': 'Mon', 'date': '21'},
-    {'day': 'Tue', 'date': '22'},
-    {'day': 'Wed', 'date': '23'},
-    {'day': 'Thu', 'date': '24'},
-    {'day': 'Fri', 'date': '25'},
-    {'day': 'Sat', 'date': '26'},
-    {'day': 'Sun', 'date': '27'},
-  ];
-
-  List timeList = [
-    '9:00 AM',
-    '10:00 AM',
-    '11:00 AM',
-    '1:00 PM',
-    '2:00 PM',
-    '3:00 PM',
-    '4:00 PM',
-    '5:00 PM',
-    '6:00 PM',
-  ];
-
   var v;
   var t;
 
   bool isTapped = false;
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AuthViewModel>.reactive(
@@ -73,17 +54,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10.r),
-                      child: Image.network(
-                        model
-                                .getDocDetailResponseModel
-                                ?.original
-                                ?.profileImage ??
-                            '',
-                        height: 136.h,
-                        width: 130.w,
-                        fit: BoxFit.cover,
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.r),
+                        child: Image.network(
+                          model
+                                  .getDocDetailResponseModel
+                                  ?.original
+                                  ?.profileImage ??
+                              '',
+                          height: 156.h,
+                          width: 120.w,
+                          fit: BoxFit.cover,
+                          errorBuilder:
+                              (context, error, stackTrace) => shimmerViewDoc(),
+                        ),
                       ),
                     ),
                     SizedBox(width: 15.w),
@@ -272,23 +257,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ...model
-                        .getDocDetailResponseModel!
-                        .original!
-                        .availabilities!
-                        .map(
-                          (e) => Padding(
-                            padding: EdgeInsets.only(bottom: 4.4.w),
-                            child: TextView(
-                              text: 'Mon - Sat :  10:00 am - 5: 00 pm',
-                              textStyle: GoogleFonts.gabarito(
-                                color: AppColor.black,
-                                fontSize: 15.20.sp,
-                                fontWeight: FontWeight.w400,
+                    if (model.getDocDetailResponseModel != null &&
+                        model
+                            .getDocDetailResponseModel!
+                            .original!
+                            .availabilities!
+                            .isNotEmpty)
+                      ...model
+                          .getDocDetailResponseModel!
+                          .original!
+                          .availabilities!
+                          .map(
+                            (e) => Padding(
+                              padding: EdgeInsets.only(bottom: 4.4.w),
+                              child: TextView(
+                                text:
+                                    '${e.dayOfWeek?.capitalize()} :  ${formTime(e.startTime)} - ${formTime(e.endTime)}',
+                                textStyle: GoogleFonts.gabarito(
+                                  color: AppColor.black,
+                                  fontSize: 15.20.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
-                        ),
                   ],
                 ),
                 SizedBox(height: 20.w),
@@ -310,27 +302,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       width: 20.w,
                     ),
                     SizedBox(width: 18.20.w),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextView(
-                          text: 'University of Jos',
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.black,
-                            fontSize: 14.60.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(height: 2.4.h),
-                        TextView(
-                          text: 'Doctor of Medicine',
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.green,
-                            fontSize: 14.60.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      width: 290.w,
+                      child: Html(
+                        data:
+                            model
+                                .getDocDetailResponseModel
+                                ?.original
+                                ?.certifications ??
+                            '',
+                        shrinkWrap: true,
+                      ),
                     ),
                   ],
                 ),
@@ -352,7 +334,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       width: 300.w,
                       child: TextView(
-                        text: 'Bio-royal hospital & Maternity(Medicine Center)',
+                        text:
+                            model
+                                .getDocDetailResponseModel
+                                ?.original
+                                ?.experience ??
+                            '',
                         maxLines: 4,
                         textOverflow: TextOverflow.ellipsis,
                         textStyle: GoogleFonts.gabarito(
@@ -379,56 +366,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      ...valueList.map(
-                        (o) => GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              v = o;
-                            });
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(right: 20.w),
-                            padding: EdgeInsets.symmetric(
-                              vertical: 6.w,
-                              horizontal: 6.w,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color:
-                                  v == o
-                                      ? AppColor.primary1
-                                      : AppColor.transparent,
-                              border: Border.all(
-                                color: AppColor.funnyLookingGrey,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                TextView(
-                                  text: o['day'],
-                                  textStyle: GoogleFonts.dmSans(
-                                    color:
-                                        v == o ? AppColor.white : AppColor.grey,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500,
+                      if (model.getDocDetailResponseModel != null &&
+                          model
+                              .getDocDetailResponseModel!
+                              .original!
+                              .availableSlots!
+                              .isNotEmpty)
+                        ...model
+                            .getDocDetailResponseModel!
+                            .original!
+                            .availableSlots!
+                            .map(
+                              (o) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    v = o;
+                                    print(o);
+                                  });
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 20.w),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 6.w,
+                                    horizontal: 6.w,
                                   ),
-                                ),
-                                TextView(
-                                  text: o['date'],
-                                  textStyle: GoogleFonts.dmSans(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
                                     color:
                                         v == o
-                                            ? AppColor.white
-                                            : AppColor.black,
-                                    fontSize: 24.sp,
-                                    fontWeight: FontWeight.w500,
+                                            ? AppColor.primary1
+                                            : AppColor.transparent,
+                                    border: Border.all(
+                                      color: AppColor.funnyLookingGrey,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      TextView(
+                                        text: availDayForm(
+                                          o.availableDate ?? '',
+                                        ),
+                                        textStyle: GoogleFonts.dmSans(
+                                          color:
+                                              v == o
+                                                  ? AppColor.white
+                                                  : AppColor.grey,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      TextView(
+                                        text: availDateForm(
+                                          o.availableDate ?? '',
+                                        ),
+                                        textStyle: GoogleFonts.dmSans(
+                                          color:
+                                              v == o
+                                                  ? AppColor.white
+                                                  : AppColor.black,
+                                          fontSize: 24.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -437,40 +441,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 10.h),
                 Wrap(
                   children: [
-                    ...timeList.map(
-                      (o) => GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            t = o;
-                          });
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(right: 20.w, bottom: 10.w),
-                          padding: EdgeInsets.symmetric(
-                            vertical: 5.4.w,
-                            horizontal: 14.w,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(22),
-                            color:
-                                t == o
-                                    ? AppColor.primary1
-                                    : AppColor.transparent,
-                            border: Border.all(
-                              color: AppColor.funnyLookingGrey,
+                    if (model.getDocDetailResponseModel != null &&
+                        model
+                            .getDocDetailResponseModel!
+                            .original!
+                            .availableSlots!
+                            .isNotEmpty)
+                      ...model
+                          .getDocDetailResponseModel!
+                          .original!
+                          .availableSlots!
+                          .map(
+                            (o) => GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  t = o;
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                  right: 20.w,
+                                  bottom: 10.w,
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 5.4.w,
+                                  horizontal: 18.w,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(22),
+                                  color:
+                                      t == o
+                                          ? AppColor.primary1
+                                          : AppColor.transparent,
+                                  border: Border.all(
+                                    color: AppColor.funnyLookingGrey,
+                                  ),
+                                ),
+                                child: TextView(
+                                  text: o.availableTime ?? '',
+                                  textStyle: GoogleFonts.dmSans(
+                                    color:
+                                        t == o
+                                            ? AppColor.white
+                                            : AppColor.black,
+                                    fontSize: 16.6.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          child: TextView(
-                            text: o,
-                            textStyle: GoogleFonts.dmSans(
-                              color: t == o ? AppColor.white : AppColor.black,
-                              fontSize: 15.6.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
                 SizedBox(height: 40.h),
