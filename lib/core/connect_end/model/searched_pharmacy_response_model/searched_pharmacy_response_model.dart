@@ -1,6 +1,22 @@
 import 'package:json_annotation/json_annotation.dart';
-
 part 'searched_pharmacy_response_model.g.dart';
+
+class SearchedPharmacyResponseModelList {
+  final List<SearchedPharmacyResponseModel>? searchedPharmacyResponseModelList;
+
+  SearchedPharmacyResponseModelList({this.searchedPharmacyResponseModelList});
+
+  factory SearchedPharmacyResponseModelList.fromJson(List<dynamic> parsedJson) {
+    List<SearchedPharmacyResponseModel> searchedPharmacyResponseModel =
+        parsedJson
+            .map((i) => SearchedPharmacyResponseModel.fromJson(i))
+            .toList();
+
+    return SearchedPharmacyResponseModelList(
+      searchedPharmacyResponseModelList: searchedPharmacyResponseModel,
+    );
+  }
+}
 
 @JsonSerializable()
 class SearchedPharmacyResponseModel {

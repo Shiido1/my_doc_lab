@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -22,11 +24,15 @@ import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
+import '../../debouncer.dart';
 import '../model/add_booking_entity_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
+import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../model/search_doctor_entity_model.dart';
+import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
+import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../repo/repo_impl.dart';
 
 class AuthViewModel extends BaseViewModel {
@@ -65,9 +71,23 @@ class AuthViewModel extends BaseViewModel {
   GetPharmacyDetailResponseModel? get getPharmacyDetailResponseModel =>
       _getPharmacyDetailResponseModel;
   GetPharmacyDetailResponseModel? _getPharmacyDetailResponseModel;
+  GetMedicineDetailResponseModel? get getMedDetailResponseModel =>
+      _getMedDetailResponseModel;
+  GetMedicineDetailResponseModel? _getMedDetailResponseModel;
+
   SearchedDoctorResponseModelList? _searchedDoctorResponseModelList;
   SearchedDoctorResponseModelList? get searchedDoctorResponseModelList =>
       _searchedDoctorResponseModelList;
+
+  SearchedPharmacyResponseModelList? _searchedPharmResponseModelList;
+  SearchedPharmacyResponseModelList? get searchedPharmResponseModelList =>
+      _searchedPharmResponseModelList;
+
+  SearchedMedicineResponseModelList? _searchedMedResponseModelList;
+  SearchedMedicineResponseModelList? get searchedMedResponseModelList =>
+      _searchedMedResponseModelList;
+
+  final debouncer = Debouncer();
 
   String selectedRole = '';
 
@@ -250,6 +270,43 @@ class AuthViewModel extends BaseViewModel {
     } catch (e) {
       _isLoading = false;
       logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getSearchedPharm(
+    context, {
+    SearchDoctorEntityModel? searchEntity,
+  }) async {
+    try {
+      _isLoading = true;
+      _searchedPharmResponseModelList = await runBusyFuture(
+        repositoryImply.getSearchedPharmacists(searchEntity!),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getSearchedMed(context, {SearchDoctorEntityModel? searchEntity}) async {
+    try {
+      _isLoading = true;
+      _searchedMedResponseModelList = await runBusyFuture(
+        repositoryImply.getSearchedMedicine(searchEntity!),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
@@ -310,6 +367,22 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = true;
       _getPharmacyDetailResponseModel = await runBusyFuture(
         repositoryImply.getSpecificPharmacyDetail(id),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getSpecificMeds(context, id) async {
+    try {
+      _isLoading = true;
+      _getMedDetailResponseModel = await runBusyFuture(
+        repositoryImply.getSpecificMedicineDetail(id),
         throwException: true,
       );
       _isLoading = false;
@@ -441,4 +514,19 @@ class AuthViewModel extends BaseViewModel {
       );
     },
   );
+
+  getDoctorsGridCount(List<GetAllDoctorsResponseModel>? length1) {
+    if (_searchedDoctorResponseModelList == null) {
+      return length1!.length;
+    } else if (_searchedDoctorResponseModelList != null &&
+        _searchedDoctorResponseModelList!
+            .searchedDoctorResponseModelList
+            .isNotEmpty) {
+      return _searchedDoctorResponseModelList
+          ?.searchedDoctorResponseModelList
+          .length;
+    }
+    notifyListeners();
+    return 0;
+  }
 }

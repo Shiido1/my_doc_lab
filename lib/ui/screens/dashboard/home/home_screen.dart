@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_doc_lab/core/connect_end/model/search_doctor_entity_model.dart';
 import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
 import 'package:my_doc_lab/main.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
@@ -29,6 +30,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _isTapped = false;
+
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   border: 10,
                   isFilled: true,
                   fillColor: AppColor.transparent,
-                  // controller: fullnameTextController,
+                  controller: searchController,
                   prefixWidget: Padding(
                     padding: EdgeInsets.all(14.w),
                     child: SvgPicture.asset(
@@ -199,6 +202,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 20.w,
                     ),
                   ),
+                  onChange: (p0) {
+                    if (p0.length > 1) {
+                      model.debouncer.run(() {
+                        model.getSearchedDoctor(
+                          context,
+                          searchEntity: SearchDoctorEntityModel(query: p0),
+                        );
+                      });
+                      model.notifyListeners();
+                    }
+                    // else {
+                    //   searchController.text = '';
+                    //   setState(() {});
+                    // }
+                  },
                   suffixWidget: Padding(
                     padding: EdgeInsets.all(14.w),
                     child: GestureDetector(
@@ -307,11 +325,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Routes.profileScreen,
                                       arguments: ProfileScreenArguments(
                                         id:
-                                            model
-                                                .getAllDoctorsResponseModelList!
-                                                .getAllDoctorsResponseModelList![index]
-                                                .id
-                                                .toString(),
+                                            model.searchedDoctorResponseModelList !=
+                                                        null &&
+                                                    model
+                                                        .searchedDoctorResponseModelList!
+                                                        .searchedDoctorResponseModelList
+                                                        .isNotEmpty
+                                                ? model
+                                                    .searchedDoctorResponseModelList!
+                                                    .searchedDoctorResponseModelList[index]
+                                                    .id
+                                                    .toString()
+                                                : model
+                                                    .getAllDoctorsResponseModelList!
+                                                    .getAllDoctorsResponseModelList![index]
+                                                    .id
+                                                    .toString(),
                                       ),
                                     ),
                                 child: Container(
@@ -332,14 +361,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                           topRight: Radius.circular(10),
                                         ),
                                         child: Image.network(
-                                          model
-                                                  .getAllDoctorsResponseModelList!
-                                                  .getAllDoctorsResponseModelList![index]
-                                                  .profileImage ??
-                                              '',
+                                          model.searchedDoctorResponseModelList !=
+                                                      null &&
+                                                  model
+                                                      .searchedDoctorResponseModelList!
+                                                      .searchedDoctorResponseModelList
+                                                      .isNotEmpty
+                                              ? model
+                                                      .searchedDoctorResponseModelList!
+                                                      .searchedDoctorResponseModelList[index]
+                                                      .profileImage ??
+                                                  ''
+                                              : model.getAllDoctorsResponseModelList !=
+                                                  null
+                                              ? model
+                                                      .getAllDoctorsResponseModelList!
+                                                      .getAllDoctorsResponseModelList![index]
+                                                      .profileImage ??
+                                                  ''
+                                              : '',
                                           height: 120.h,
                                           width: double.infinity,
                                           fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (context, error, stackTrace) =>
+                                                  shimmerViewPharm(),
                                         ),
                                       ),
                                       Padding(
@@ -352,7 +398,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                           children: [
                                             TextView(
                                               text:
-                                                  'Dr ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].firstName ?? ''} ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].lastName ?? ''}',
+                                                  model.searchedDoctorResponseModelList !=
+                                                              null &&
+                                                          model
+                                                              .searchedDoctorResponseModelList!
+                                                              .searchedDoctorResponseModelList
+                                                              .isNotEmpty
+                                                      ? 'Dr ${model.searchedDoctorResponseModelList!.searchedDoctorResponseModelList[index].firstName ?? ''} ${model.searchedDoctorResponseModelList!.searchedDoctorResponseModelList[index].lastName ?? ''}'
+                                                      : model.getAllDoctorsResponseModelList !=
+                                                          null
+                                                      ? 'Dr ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].firstName ?? ''} ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].lastName ?? ''}'
+                                                      : '',
                                               textStyle: GoogleFonts.gabarito(
                                                 color: AppColor.black,
                                                 fontSize: 16.0.sp,
@@ -361,11 +417,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             TextView(
                                               text:
-                                                  model
-                                                      .getAllDoctorsResponseModelList!
-                                                      .getAllDoctorsResponseModelList![index]
-                                                      .speciality ??
-                                                  '',
+                                                  model.searchedDoctorResponseModelList !=
+                                                              null &&
+                                                          model
+                                                              .searchedDoctorResponseModelList!
+                                                              .searchedDoctorResponseModelList
+                                                              .isNotEmpty
+                                                      ? model
+                                                              .searchedDoctorResponseModelList!
+                                                              .searchedDoctorResponseModelList[index]
+                                                              .speciality ??
+                                                          ''
+                                                      : model.getAllDoctorsResponseModelList !=
+                                                          null
+                                                      ? model
+                                                              .getAllDoctorsResponseModelList!
+                                                              .getAllDoctorsResponseModelList![index]
+                                                              .speciality ??
+                                                          ''
+                                                      : '',
                                               textStyle: GoogleFonts.gabarito(
                                                 color: AppColor.grey,
                                                 fontSize: 12.0.sp,
@@ -446,12 +516,30 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                             itemCount:
-                                model.getAllDoctorsResponseModelList != null
+                                searchController.text == ''
                                     ? model
-                                        .getAllDoctorsResponseModelList!
-                                        .getAllDoctorsResponseModelList!
-                                        .length
-                                    : 0, // Number of items in the grid
+                                        .getAllDoctorsResponseModelList
+                                        ?.getAllDoctorsResponseModelList
+                                        ?.length
+                                    : (model.searchedDoctorResponseModelList ==
+                                                null ||
+                                            model
+                                                .searchedDoctorResponseModelList!
+                                                .searchedDoctorResponseModelList
+                                                .isNotEmpty
+                                        ? model
+                                            .searchedDoctorResponseModelList!
+                                            .searchedDoctorResponseModelList
+                                            .length
+                                        : model.getAllDoctorsResponseModelList !=
+                                            null
+                                        ? model.getDoctorsGridCount(
+                                          model
+                                              .getAllDoctorsResponseModelList!
+                                              .getAllDoctorsResponseModelList!,
+                                        )
+                                        : 0),
+                            // Number of items in the grid
                           ),
                 ),
                 Row(

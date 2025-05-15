@@ -2,6 +2,21 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'get_all_medicine_response_model.g.dart';
 
+class GetAllMedicineResponseModelList {
+  final List<GetAllMedicineResponseModel>? getAllMedicineResponseModelList;
+
+  GetAllMedicineResponseModelList({this.getAllMedicineResponseModelList});
+
+  factory GetAllMedicineResponseModelList.fromJson(List<dynamic> parsedJson) {
+    List<GetAllMedicineResponseModel> getAllMedicineResponseModel =
+        parsedJson.map((i) => GetAllMedicineResponseModel.fromJson(i)).toList();
+
+    return GetAllMedicineResponseModelList(
+      getAllMedicineResponseModelList: getAllMedicineResponseModel,
+    );
+  }
+}
+
 @JsonSerializable()
 class GetAllMedicineResponseModel {
   num? id;

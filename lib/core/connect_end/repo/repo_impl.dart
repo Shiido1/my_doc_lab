@@ -14,6 +14,7 @@ import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
+import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../model/login_entity.dart';
 import '../model/login_response_model/login_response_model.dart';
@@ -21,6 +22,8 @@ import '../model/request_otp_entity_model.dart';
 import '../model/reset_password_entity_model.dart';
 import '../model/search_doctor_entity_model.dart';
 import '../model/searched_doctor_response_model/searched_doctor_response_model.dart';
+import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
+import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../model/verify_otp_entity_model.dart';
 
 @lazySingleton
@@ -81,6 +84,20 @@ class AuthRepoImpl {
     return response;
   }
 
+  Future<SearchedPharmacyResponseModelList> getSearchedPharmacists(
+    SearchDoctorEntityModel searchEntity,
+  ) async {
+    final response = await _contract.getSearchedPharmacists(searchEntity);
+    return response;
+  }
+
+  Future<SearchedMedicineResponseModelList> getSearchedMedicine(
+    SearchDoctorEntityModel searchEntity,
+  ) async {
+    final response = await _contract.getSearchedMedicine(searchEntity);
+    return response;
+  }
+
   Future<dynamic> addBooking(AddBookingEntityModel addBooking) async {
     final response = await _contract.addBooking(addBooking);
     return response;
@@ -93,6 +110,11 @@ class AuthRepoImpl {
 
   Future<GetPharmacyDetailResponseModel> getSpecificPharmacyDetail(id) async {
     final response = await _contract.getSpecificPharmacyDetail(id);
+    return response;
+  }
+
+  Future<GetMedicineDetailResponseModel> getSpecificMedicineDetail(id) async {
+    final response = await _contract.getSpecificMedicineDetail(id);
     return response;
   }
 

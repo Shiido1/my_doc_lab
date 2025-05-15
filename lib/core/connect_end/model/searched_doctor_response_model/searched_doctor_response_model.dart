@@ -3,9 +3,11 @@ import 'package:json_annotation/json_annotation.dart';
 part 'searched_doctor_response_model.g.dart';
 
 class SearchedDoctorResponseModelList {
-  final List<SearchedDoctorResponseModel>? searchedDoctorResponseModelList;
+  List<SearchedDoctorResponseModel> searchedDoctorResponseModelList = [];
 
-  SearchedDoctorResponseModelList({this.searchedDoctorResponseModelList});
+  SearchedDoctorResponseModelList({
+    required this.searchedDoctorResponseModelList,
+  });
 
   factory SearchedDoctorResponseModelList.fromJson(List<dynamic> parsedJson) {
     List<SearchedDoctorResponseModel> searchedDoctorResponseModel =
