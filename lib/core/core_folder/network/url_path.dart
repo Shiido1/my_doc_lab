@@ -5,9 +5,12 @@ class UrlConfig {
   static const String doctor = 'doctor';
   static const String all_doctor = 'user/doctors';
   static const String doctor_search = 'user/doctors/search';
+  static const String pharmacy_search = 'user/pharmacies/medicine/search';
+  static const String meds_search = 'user/pharmacies/search';
 
   static const String all_pharmacies = 'user/pharmacies';
   static const String spec_pharmacist = 'user/pharmacies/';
+  static const String get_meds = 'user/pharmacies/medicine/';
   static const String all_meds = 'user/pharmacies/medicine/list';
   static const String all_consultation = 'user/consultations';
   static const String forgot_password = 'forgot-password';
