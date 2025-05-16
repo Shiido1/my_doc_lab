@@ -13,6 +13,7 @@ import '../model/care_giver_resiter_entity_model.dart';
 import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
+import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -69,6 +70,11 @@ class AuthRepoImpl {
 
   Future<GetAllPharmaciesResponseModelList> getAllPharmacistsDetail() async {
     final response = await _contract.getAllPharmacistsDetail();
+    return response;
+  }
+
+  Future<GetAllMedicineResponseModelList> getAllMedicineDetail() async {
+    final response = await _contract.getAllMedicineDetail();
     return response;
   }
 

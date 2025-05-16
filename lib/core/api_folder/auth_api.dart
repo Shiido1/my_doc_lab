@@ -12,6 +12,7 @@ import '../connect_end/model/add_booking_entity_model.dart';
 import '../connect_end/model/care_giver_resiter_entity_model.dart';
 import '../connect_end/model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../connect_end/model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
+import '../connect_end/model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../connect_end/model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../connect_end/model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -128,6 +129,20 @@ class AuthApi {
       );
       logger.d(response.data);
       return GetAllPharmaciesResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetAllMedicineResponseModelList> getAllMedicine() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.all_meds,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetAllMedicineResponseModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

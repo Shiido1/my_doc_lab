@@ -12,6 +12,7 @@ import '../model/add_booking_entity_model.dart';
 import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
+import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -50,6 +51,9 @@ class AuthContractsImpl {
 
   Future<GetAllPharmaciesResponseModelList> getAllPharmacistsDetail() async =>
       await _api.getAllPharmacies();
+
+  Future<GetAllMedicineResponseModelList> getAllMedicineDetail() async =>
+      await _api.getAllMedicine();
 
   Future<GetAllConsultantResponseModelList> getAllConsultant() async =>
       await _api.getAllConsultant();

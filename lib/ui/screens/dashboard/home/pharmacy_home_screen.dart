@@ -96,7 +96,6 @@ class PharmacyHomeScreen extends StatelessWidget {
                   width: 20.w,
                 ),
               ),
-              // validator: AppValidator.validateEmail(),
             ),
             SizedBox(height: 20.h),
             Row(

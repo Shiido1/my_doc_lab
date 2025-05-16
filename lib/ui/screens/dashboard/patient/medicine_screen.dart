@@ -8,6 +8,7 @@ import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen_one.dart
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/connect_end/model/search_doctor_entity_model.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
@@ -78,7 +79,18 @@ class _MedicineScreenState extends State<MedicineScreen> {
                         padding: EdgeInsets.all(14.w),
                         child: SvgPicture.asset(AppImage.filter),
                       ),
-                      // validator: AppValidator.validateEmail(),
+                      onChange: (p0) {
+                        if (p0.length > 1) {
+                          model.debouncer.run(() {
+                            model.getSearchedPharm(
+                              context,
+                              searchEntity: SearchDoctorEntityModel(query: p0),
+                            );
+                          });
+                        }
+                        model.queryPharm = p0;
+                        model.notifyListeners();
+                      },
                     ),
                     SizedBox(height: 20.h),
 
@@ -135,11 +147,23 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                             builder:
                                                 (context) => ProfileScreen1(
                                                   id:
-                                                      model
-                                                          .getAllPharmaciesResponseModelList!
-                                                          .getAllPharmaciesResponseModelList![index]
-                                                          .id
-                                                          .toString(),
+                                                      model.queryPharm != '' &&
+                                                              model.searchedPharmResponseModelList !=
+                                                                  null &&
+                                                              model
+                                                                  .searchedPharmResponseModelList!
+                                                                  .searchedPharmacyResponseModelList!
+                                                                  .isNotEmpty
+                                                          ? model
+                                                              .searchedPharmResponseModelList!
+                                                              .searchedPharmacyResponseModelList![index]
+                                                              .id
+                                                              .toString()
+                                                          : model
+                                                              .getAllPharmaciesResponseModelList!
+                                                              .getAllPharmaciesResponseModelList![index]
+                                                              .id
+                                                              .toString(),
                                                 ),
                                           ),
                                         ),
@@ -161,11 +185,26 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                               topRight: Radius.circular(10),
                                             ),
                                             child: Image.network(
-                                              model
-                                                      .getAllPharmaciesResponseModelList!
-                                                      .getAllPharmaciesResponseModelList![index]
-                                                      .profileImage ??
-                                                  '',
+                                              model.queryPharm != '' &&
+                                                      model.searchedPharmResponseModelList !=
+                                                          null &&
+                                                      model
+                                                          .searchedPharmResponseModelList!
+                                                          .searchedPharmacyResponseModelList!
+                                                          .isNotEmpty
+                                                  ? model
+                                                          .searchedPharmResponseModelList!
+                                                          .searchedPharmacyResponseModelList![index]
+                                                          .profileImage ??
+                                                      ''
+                                                  : model.getAllPharmaciesResponseModelList !=
+                                                      null
+                                                  ? model
+                                                          .getAllPharmaciesResponseModelList!
+                                                          .getAllPharmaciesResponseModelList![index]
+                                                          .profileImage ??
+                                                      ''
+                                                  : '',
                                               height: 120.h,
                                               width: double.infinity,
                                               fit: BoxFit.cover,
@@ -189,7 +228,19 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                                   width: 120.w,
                                                   child: TextView(
                                                     text:
-                                                        'Dr ${model.getAllPharmaciesResponseModelList!.getAllPharmaciesResponseModelList![index].firstName ?? ''}',
+                                                        model.queryPharm !=
+                                                                    '' &&
+                                                                model.searchedPharmResponseModelList !=
+                                                                    null &&
+                                                                model
+                                                                    .searchedPharmResponseModelList!
+                                                                    .searchedPharmacyResponseModelList!
+                                                                    .isNotEmpty
+                                                            ? 'Dr ${model.searchedPharmResponseModelList!.searchedPharmacyResponseModelList![index].firstName ?? ''} ${model.searchedPharmResponseModelList!.searchedPharmacyResponseModelList![index].lastName ?? ''}'
+                                                            : model.getAllPharmaciesResponseModelList !=
+                                                                null
+                                                            ? 'Dr ${model.getAllPharmaciesResponseModelList!.getAllPharmaciesResponseModelList![index].firstName ?? ''}'
+                                                            : '',
                                                     textStyle:
                                                         GoogleFonts.gabarito(
                                                           color:
@@ -293,11 +344,18 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                   );
                                 },
                                 itemCount:
-                                    model.getAllPharmaciesResponseModelList !=
-                                            null
+                                    model.queryPharm == '' &&
+                                            model.getAllPharmaciesResponseModelList !=
+                                                null
                                         ? model
                                             .getAllPharmaciesResponseModelList!
                                             .getAllPharmaciesResponseModelList!
+                                            .length
+                                        : model.searchedPharmResponseModelList !=
+                                            null
+                                        ? model
+                                            .searchedPharmResponseModelList!
+                                            .searchedPharmacyResponseModelList!
                                             .length
                                         : 0, // Number of items in the grid
                               ),

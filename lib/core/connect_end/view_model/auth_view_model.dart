@@ -27,6 +27,7 @@ import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
 import '../model/add_booking_entity_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
+import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -74,6 +75,9 @@ class AuthViewModel extends BaseViewModel {
   GetMedicineDetailResponseModel? get getMedDetailResponseModel =>
       _getMedDetailResponseModel;
   GetMedicineDetailResponseModel? _getMedDetailResponseModel;
+  GetAllMedicineResponseModelList? _getAllMedicineResponseModelList;
+  GetAllMedicineResponseModelList? get getAllMedicineResponseModelList =>
+      _getAllMedicineResponseModelList;
 
   SearchedDoctorResponseModelList? _searchedDoctorResponseModelList;
   SearchedDoctorResponseModelList? get searchedDoctorResponseModelList =>
@@ -92,6 +96,10 @@ class AuthViewModel extends BaseViewModel {
   String selectedRole = '';
 
   AuthViewModel({this.context});
+
+  String query = '';
+  String queryPharm = '';
+  String queryMed = '';
 
   bool isOnTogglePassword() {
     _isTogglePassword = !_isTogglePassword;
@@ -255,12 +263,29 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void getAllMedicine(context) async {
+    try {
+      _isLoading = true;
+      _getAllMedicineResponseModelList = await runBusyFuture(
+        repositoryImply.getAllMedicineDetail(),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
   void getSearchedDoctor(
     context, {
     SearchDoctorEntityModel? searchEntity,
   }) async {
     try {
-      _isLoading = true;
+      // _isLoading = true;
       _searchedDoctorResponseModelList = await runBusyFuture(
         repositoryImply.getSearchDoctor(searchEntity!),
         throwException: true,
@@ -280,7 +305,7 @@ class AuthViewModel extends BaseViewModel {
     SearchDoctorEntityModel? searchEntity,
   }) async {
     try {
-      _isLoading = true;
+      // _isLoading = true;
       _searchedPharmResponseModelList = await runBusyFuture(
         repositoryImply.getSearchedPharmacists(searchEntity!),
         throwException: true,
@@ -290,7 +315,7 @@ class AuthViewModel extends BaseViewModel {
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      AppUtils.snackbar(context, message: e.toString(), error: true);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -307,7 +332,7 @@ class AuthViewModel extends BaseViewModel {
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      AppUtils.snackbar(context, message: e.toString(), error: true);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }

@@ -9,6 +9,7 @@ import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../../core/connect_end/model/search_doctor_entity_model.dart';
 import '../../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../../core/core_folder/app/app.locator.dart';
 import '../../../../../core/core_folder/app/app.router.dart';
@@ -171,7 +172,20 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                             padding: EdgeInsets.all(14.w),
                             child: SvgPicture.asset(AppImage.filter),
                           ),
-                          // validator: AppValidator.validateEmail(),
+                          onChange: (p0) {
+                            if (p0.length > 1) {
+                              model.debouncer.run(() {
+                                model.getSearchedDoctor(
+                                  context,
+                                  searchEntity: SearchDoctorEntityModel(
+                                    query: p0,
+                                  ),
+                                );
+                              });
+                            }
+                            model.query = p0;
+                            model.notifyListeners();
+                          },
                         ),
                         SizedBox(
                           height: 500.h,
@@ -214,11 +228,23 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                               Routes.profileScreen,
                                               arguments: ProfileScreenArguments(
                                                 id:
-                                                    model
-                                                        .getAllDoctorsResponseModelList!
-                                                        .getAllDoctorsResponseModelList![index]
-                                                        .id
-                                                        .toString(),
+                                                    model.query != '' &&
+                                                            model.searchedDoctorResponseModelList !=
+                                                                null &&
+                                                            model
+                                                                .searchedDoctorResponseModelList!
+                                                                .searchedDoctorResponseModelList
+                                                                .isNotEmpty
+                                                        ? model
+                                                            .searchedDoctorResponseModelList!
+                                                            .searchedDoctorResponseModelList[index]
+                                                            .id
+                                                            .toString()
+                                                        : model
+                                                            .getAllDoctorsResponseModelList!
+                                                            .getAllDoctorsResponseModelList![index]
+                                                            .id
+                                                            .toString(),
                                               ),
                                             ),
                                         child: Container(
@@ -241,11 +267,26 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                                   topRight: Radius.circular(10),
                                                 ),
                                                 child: Image.network(
-                                                  model
-                                                          .getAllDoctorsResponseModelList!
-                                                          .getAllDoctorsResponseModelList![index]
-                                                          .profileImage ??
-                                                      '',
+                                                  model.query != '' &&
+                                                          model.searchedDoctorResponseModelList !=
+                                                              null &&
+                                                          model
+                                                              .searchedDoctorResponseModelList!
+                                                              .searchedDoctorResponseModelList
+                                                              .isNotEmpty
+                                                      ? model
+                                                              .searchedDoctorResponseModelList!
+                                                              .searchedDoctorResponseModelList[index]
+                                                              .profileImage ??
+                                                          ''
+                                                      : model.getAllDoctorsResponseModelList !=
+                                                          null
+                                                      ? model
+                                                              .getAllDoctorsResponseModelList!
+                                                              .getAllDoctorsResponseModelList![index]
+                                                              .profileImage ??
+                                                          ''
+                                                      : '',
                                                   height: 120.h,
                                                   width: double.infinity,
                                                   fit: BoxFit.cover,
@@ -254,7 +295,7 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                                         context,
                                                         error,
                                                         stackTrace,
-                                                      ) => shimmerViewDoc(),
+                                                      ) => shimmerViewPharm(),
                                                 ),
                                               ),
                                               Padding(
@@ -269,7 +310,18 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                                       width: 120.w,
                                                       child: TextView(
                                                         text:
-                                                            'Dr ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].firstName ?? ''} ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].lastName ?? ''}',
+                                                            model.query != '' &&
+                                                                    model.searchedDoctorResponseModelList !=
+                                                                        null &&
+                                                                    model
+                                                                        .searchedDoctorResponseModelList!
+                                                                        .searchedDoctorResponseModelList
+                                                                        .isNotEmpty
+                                                                ? 'Dr ${model.searchedDoctorResponseModelList!.searchedDoctorResponseModelList[index].firstName ?? ''} ${model.searchedDoctorResponseModelList!.searchedDoctorResponseModelList[index].lastName ?? ''}'
+                                                                : model.getAllDoctorsResponseModelList !=
+                                                                    null
+                                                                ? 'Dr ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].firstName ?? ''} ${model.getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].lastName ?? ''}'
+                                                                : '',
                                                         textStyle:
                                                             GoogleFonts.gabarito(
                                                               color:
@@ -288,11 +340,26 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                                     ),
                                                     TextView(
                                                       text:
-                                                          model
-                                                              .getAllDoctorsResponseModelList!
-                                                              .getAllDoctorsResponseModelList![index]
-                                                              .speciality ??
-                                                          '',
+                                                          model.query != '' &&
+                                                                  model.searchedDoctorResponseModelList !=
+                                                                      null &&
+                                                                  model
+                                                                      .searchedDoctorResponseModelList!
+                                                                      .searchedDoctorResponseModelList
+                                                                      .isNotEmpty
+                                                              ? model
+                                                                      .searchedDoctorResponseModelList!
+                                                                      .searchedDoctorResponseModelList[index]
+                                                                      .speciality ??
+                                                                  ''
+                                                              : model.getAllDoctorsResponseModelList !=
+                                                                  null
+                                                              ? model
+                                                                      .getAllDoctorsResponseModelList!
+                                                                      .getAllDoctorsResponseModelList![index]
+                                                                      .speciality ??
+                                                                  ''
+                                                              : '',
                                                       textStyle:
                                                           GoogleFonts.gabarito(
                                                             color:
@@ -387,11 +454,18 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                       );
                                     },
                                     itemCount:
-                                        model.getAllDoctorsResponseModelList !=
-                                                null
+                                        model.query == '' &&
+                                                model.getAllDoctorsResponseModelList !=
+                                                    null
                                             ? model
                                                 .getAllDoctorsResponseModelList!
                                                 .getAllDoctorsResponseModelList!
+                                                .length
+                                            : model.searchedDoctorResponseModelList !=
+                                                null
+                                            ? model
+                                                .searchedDoctorResponseModelList!
+                                                .searchedDoctorResponseModelList
                                                 .length
                                             : 0, // Number of items in the grid
                                   ),

@@ -210,12 +210,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           searchEntity: SearchDoctorEntityModel(query: p0),
                         );
                       });
-                      model.notifyListeners();
                     }
-                    // else {
-                    //   searchController.text = '';
-                    //   setState(() {});
-                    // }
+                    model.query = p0;
+                    model.notifyListeners();
                   },
                   suffixWidget: Padding(
                     padding: EdgeInsets.all(14.w),
@@ -325,7 +322,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Routes.profileScreen,
                                       arguments: ProfileScreenArguments(
                                         id:
-                                            model.searchedDoctorResponseModelList !=
+                                            model.query != '' &&
+                                                    model.searchedDoctorResponseModelList !=
                                                         null &&
                                                     model
                                                         .searchedDoctorResponseModelList!
@@ -361,7 +359,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           topRight: Radius.circular(10),
                                         ),
                                         child: Image.network(
-                                          model.searchedDoctorResponseModelList !=
+                                          model.query != '' &&
+                                                  model.searchedDoctorResponseModelList !=
                                                       null &&
                                                   model
                                                       .searchedDoctorResponseModelList!
@@ -398,7 +397,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           children: [
                                             TextView(
                                               text:
-                                                  model.searchedDoctorResponseModelList !=
+                                                  model.query != '' &&
+                                                          model.searchedDoctorResponseModelList !=
                                                               null &&
                                                           model
                                                               .searchedDoctorResponseModelList!
@@ -417,7 +417,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             TextView(
                                               text:
-                                                  model.searchedDoctorResponseModelList !=
+                                                  model.query != '' &&
+                                                          model.searchedDoctorResponseModelList !=
                                                               null &&
                                                           model
                                                               .searchedDoctorResponseModelList!
@@ -516,29 +517,21 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                             itemCount:
-                                searchController.text == ''
-                                    ? model
-                                        .getAllDoctorsResponseModelList
-                                        ?.getAllDoctorsResponseModelList
-                                        ?.length
-                                    : (model.searchedDoctorResponseModelList ==
-                                                null ||
-                                            model
-                                                .searchedDoctorResponseModelList!
-                                                .searchedDoctorResponseModelList
-                                                .isNotEmpty
-                                        ? model
-                                            .searchedDoctorResponseModelList!
-                                            .searchedDoctorResponseModelList
-                                            .length
-                                        : model.getAllDoctorsResponseModelList !=
+                                model.query == '' &&
+                                        model.getAllDoctorsResponseModelList !=
                                             null
-                                        ? model.getDoctorsGridCount(
-                                          model
-                                              .getAllDoctorsResponseModelList!
-                                              .getAllDoctorsResponseModelList!,
-                                        )
-                                        : 0),
+                                    ? model
+                                        .getAllDoctorsResponseModelList!
+                                        .getAllDoctorsResponseModelList!
+                                        .length
+                                    : model.searchedDoctorResponseModelList !=
+                                        null
+                                    ? model
+                                        .searchedDoctorResponseModelList!
+                                        .searchedDoctorResponseModelList
+                                        .length
+                                    : 0,
+
                             // Number of items in the grid
                           ),
                 ),
