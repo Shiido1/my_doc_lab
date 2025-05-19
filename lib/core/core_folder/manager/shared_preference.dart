@@ -68,7 +68,7 @@ class SharedPreferencesService {
         Routes.loginScreen,
         arguments: LoginScreenArguments(userType: role),
       );
-      // await locator<HiveManager>().clearAllBox();
+      await box.clear();
 
       // getLogger('logout').d(sharedPreferences.toString());
       return true;

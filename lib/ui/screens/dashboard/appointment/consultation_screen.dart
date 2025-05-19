@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:stacked/stacked.dart';
+import '../../../../core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/constant.dart';
@@ -15,8 +16,17 @@ import '../../../widget/text_widget.dart';
 import '../patient/patient_complaint_screen.dart';
 
 class ConsultationScreen extends StatelessWidget {
-  ConsultationScreen({super.key, required this.bookTyoe});
+  ConsultationScreen({
+    super.key,
+    required this.bookTyoe,
+    required this.docId,
+    required this.slotId,
+    required this.doctor,
+  });
   String? bookTyoe;
+  String? docId;
+  String? doctor;
+  AvailableSlots? slotId;
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +159,11 @@ class ConsultationScreen extends StatelessWidget {
                                                 (context) =>
                                                     PatientDetailComplaintScreen(
                                                       bookType: bookTyoe,
+                                                      docId: docId,
+                                                      serviceId: o.id,
+                                                      slotId: slotId!,
+                                                      doctor: doctor,
+                                                      price: o.price.toString(),
                                                     ),
                                           ),
                                         ),

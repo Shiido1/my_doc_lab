@@ -6,6 +6,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
@@ -585,8 +586,13 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                           () => Navigator.of(context).push(
                             MaterialPageRoute(
                               builder:
-                                  (context) =>
-                                      ConsultationScreen(bookTyoe: 'book'),
+                                  (context) => ConsultationScreen(
+                                    bookTyoe: 'book',
+                                    slotId: AvailableSlots(),
+                                    docId: widget.id,
+                                    doctor:
+                                        '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
+                                  ),
                             ),
                           ),
                       child: Container(
@@ -615,6 +621,11 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                               builder:
                                   (context) => ConsultationScreen(
                                     bookTyoe: 'book-friend',
+
+                                    slotId: AvailableSlots(),
+                                    docId: widget.id,
+                                    doctor:
+                                        '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
                                   ),
                             ),
                           ),

@@ -3,7 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_doc_lab/core/connect_end/model/checkoutentitymodel.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:my_doc_lab/main.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:my_doc_lab/ui/app_assets/app_utils.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/home/cart_screen.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
@@ -15,15 +19,41 @@ import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_validatiion.dart';
 import '../../../widget/text_widget.dart';
 
-class PatientDetailComplaintScreen extends StatelessWidget {
-  PatientDetailComplaintScreen({super.key, required this.bookType});
+class PatientDetailComplaintScreen extends StatefulWidget {
+  PatientDetailComplaintScreen({
+    super.key,
+    required this.bookType,
+    required this.docId,
+    required this.serviceId,
+    required this.slotId,
+    required this.doctor,
+    required this.price,
+  });
   String? bookType;
+  String? price;
+  String? doctor;
+  String? docId;
+  num? serviceId;
+  AvailableSlots? slotId;
 
+  @override
+  State<PatientDetailComplaintScreen> createState() =>
+      _PatientDetailComplaintScreenState();
+}
+
+class _PatientDetailComplaintScreenState
+    extends State<PatientDetailComplaintScreen> {
   TextEditingController fullname = TextEditingController();
+
   TextEditingController age = TextEditingController();
+
   TextEditingController gender = TextEditingController();
+
   TextEditingController complaint = TextEditingController();
+
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  bool onTap = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +62,7 @@ class PatientDetailComplaintScreen extends StatelessWidget {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           model.getPatientDetail(context);
-          if (bookType == 'book') {
+          if (widget.bookType == 'book') {
             fullname.text =
                 '${model.getUserResponseModel?.data?.firstName?.capitalize()} ${model.getUserResponseModel?.data?.lastName?.capitalize()}';
           }
@@ -71,7 +101,7 @@ class PatientDetailComplaintScreen extends StatelessWidget {
                     hint: 'Full name',
                     border: 10,
                     isFilled: true,
-                    readOnly: bookType == 'book' ? true : false,
+                    readOnly: widget.bookType == 'book' ? true : false,
                     fillColor: AppColor.oneKindgrey,
                     borderColor: AppColor.transparent,
                     controller: fullname,
@@ -112,7 +142,10 @@ class PatientDetailComplaintScreen extends StatelessWidget {
                   SizedBox(height: 140.h),
                   ButtonWidget(
                     buttonText: 'Add to Cart',
-                    buttonColor: AppColor.primary1,
+                    buttonColor:
+                        !onTap
+                            ? AppColor.primary1
+                            : AppColor.primary1.withOpacity(.5),
                     buttonBorderColor: AppColor.transparent,
                     textStyle: GoogleFonts.dmSans(
                       color: AppColor.white,
@@ -120,9 +153,34 @@ class PatientDetailComplaintScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                     onPressed:
-                        () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => CartScreen()),
-                        ),
+                        !onTap
+                            ? () async {
+                              if (formKey.currentState!.validate()) {
+                                onTap = true;
+                                setState(() {});
+                                await box.add(
+                                  CheckoutEntityModel(
+                                    serviceType: 'consult',
+                                    serviceId: widget.serviceId!,
+                                    doctorId: int.parse(widget.docId!),
+                                    slotId:
+                                        widget.slotId == null
+                                            ? 0
+                                            : widget.slotId!.id!,
+                                    complaint: complaint.text.trim(),
+                                    amount: widget.price!,
+                                    date: widget.slotId!.availableDate!,
+                                    time: widget.slotId!.availableTime!,
+                                    doctor: widget.doctor!,
+                                  ),
+                                );
+                                AppUtils.snackbar(
+                                  context,
+                                  message: 'Consultancy added to Cart..!',
+                                );
+                              }
+                            }
+                            : () {},
                   ),
                   SizedBox(height: 20.h),
                   ButtonWidget(
@@ -134,7 +192,11 @@ class PatientDetailComplaintScreen extends StatelessWidget {
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w500,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => CartScreen()),
+                      );
+                    },
                   ),
 
                   SizedBox(height: 50.h),

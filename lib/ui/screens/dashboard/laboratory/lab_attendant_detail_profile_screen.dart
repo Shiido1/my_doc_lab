@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_widget.dart';
-import '../appointment/consultation_screen.dart';
 
 class LaboratoryDetailScreen extends StatefulWidget {
   const LaboratoryDetailScreen({super.key});
@@ -559,13 +558,13 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap:
-                      () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder:
-                              (context) => ConsultationScreen(bookTyoe: 'book'),
-                        ),
-                      ),
+                  onTap: () {},
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder:
+                  //         (context) => ConsultationScreen(bookTyoe: 'book'),
+                  //   ),
+                  // ),
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       vertical: 7.2.w,
@@ -586,14 +585,14 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap:
-                      () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder:
-                              (context) =>
-                                  ConsultationScreen(bookTyoe: 'book-friend'),
-                        ),
-                      ),
+                  onTap: () {},
+                  //  Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder:
+                  //         (context) =>
+                  //             ConsultationScreen(bookTyoe: 'book-friend'),
+                  //   ),
+                  // ),
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       vertical: 7.2.w,

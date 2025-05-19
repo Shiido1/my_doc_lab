@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:my_doc_lab/ui/app_assets/app_utils.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
@@ -24,8 +25,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  var v;
-  var t;
+  AvailableSlots? v;
+  AvailableSlots? t;
 
   bool isTapped = false;
 
@@ -438,6 +439,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Divider(color: AppColor.grey, thickness: .2),
                 SizedBox(height: 10.h),
                 Wrap(
+                  spacing: 13.20,
+                  runSpacing: 10,
+                  alignment: WrapAlignment.start,
                   children: [
                     if (model.getDocDetailResponseModel != null &&
                         model
@@ -460,14 +464,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         });
                                       },
                               child: Container(
-                                margin: EdgeInsets.only(
-                                  right: 20.w,
-                                  bottom: 10.w,
-                                ),
                                 padding: EdgeInsets.symmetric(
                                   vertical: 5.4.w,
-                                  horizontal: 18.w,
+                                  // horizontal: 14.w,
                                 ),
+                                width: 60.w,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(22),
                                   color:
@@ -478,12 +479,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     color: selectFadeTimeContainer(o),
                                   ),
                                 ),
-                                child: TextView(
-                                  text: o.availableTime ?? '',
-                                  textStyle: GoogleFonts.dmSans(
-                                    color: selectFadeTimeText(o),
-                                    fontSize: 16.6.sp,
-                                    fontWeight: FontWeight.w500,
+                                child: Center(
+                                  child: TextView(
+                                    text: o.availableTime ?? '',
+                                    textStyle: GoogleFonts.dmSans(
+                                      color: selectFadeTimeText(o),
+                                      fontSize: 16.6.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -496,14 +499,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap:
-                          () => Navigator.of(context).push(
+                      onTap: () {
+                        if (v != null) {
+                          Navigator.of(context).push(
                             MaterialPageRoute(
                               builder:
-                                  (context) =>
-                                      ConsultationScreen(bookTyoe: 'book'),
+                                  (context) => ConsultationScreen(
+                                    bookTyoe: 'book',
+                                    docId: widget.id,
+                                    slotId: v,
+                                    doctor:
+                                        '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
+                                  ),
                             ),
-                          ),
+                          );
+                        } else {
+                          AppUtils.snackbar(
+                            context,
+                            message: 'Kindly select a date and time',
+                            error: true,
+                          );
+                        }
+                      },
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           vertical: 7.2.w,
@@ -524,15 +541,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap:
-                          () => Navigator.of(context).push(
+                      onTap: () {
+                        if (v != null) {
+                          Navigator.of(context).push(
                             MaterialPageRoute(
                               builder:
                                   (context) => ConsultationScreen(
                                     bookTyoe: 'book-friend',
+                                    slotId: v,
+                                    docId: widget.id,
+                                    doctor:
+                                        '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
                                   ),
                             ),
-                          ),
+                          );
+                        } else {
+                          AppUtils.snackbar(
+                            context,
+                            message: 'Kindly select a date and time',
+                            error: true,
+                          );
+                        }
+                      },
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           vertical: 7.2.w,

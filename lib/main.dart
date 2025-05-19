@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_doc_lab/core/connect_end/model/checkoutentitymodel.dart';
 import 'package:my_doc_lab/core/core_folder/manager/shared_preference.dart';
 import 'package:my_doc_lab/core/routes_class.dart';
 import 'package:stacked_services/stacked_services.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
 import 'core/core_folder/app/app.locator.dart';
 import 'core/core_folder/app/app.router.dart';
 
 final navigate = locator<NavigationService>();
+late Box box;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   setupLocator();
   await locator<SharedPreferencesService>().initilize();
+  await Hive.initFlutter();
+  Hive.registerAdapter(CheckoutEntityModelAdapter());
+  box = await Hive.openBox<CheckoutEntityModel>('checkout');
   runApp(const MyApp());
 }
 
