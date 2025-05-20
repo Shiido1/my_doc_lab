@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_resiter_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
@@ -27,6 +28,7 @@ import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
 import '../model/add_booking_entity_model.dart';
+import '../model/checkoutentitymodel.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
@@ -101,6 +103,39 @@ class AuthViewModel extends BaseViewModel {
   String query = '';
   String queryPharm = '';
   String queryMed = '';
+
+  double _total = 0.0;
+  double get total => _total;
+  Box<CheckoutEntityModel>? _box;
+
+  Box<CheckoutEntityModel> getModelBox(box) {
+    _box = box;
+    notifyListeners();
+    return _box!;
+  }
+
+  // void calculateTotal(Box<CheckoutEntityModel> box) {
+  //   _total = 0.0;
+  //   for (var i = 0; i < box.length; i++) {
+  //     _total += double.tryParse(box.getAt(i)!.amount) ?? 0.0;
+  //   }
+  //   print('calculate::$_total');
+  //   notifyListeners();
+  // }
+
+  void deleteCartItem(Box<CheckoutEntityModel> box, int index) {
+    box.deleteAt(index);
+    getCartTotal();
+    // calculateTotal(box);
+  }
+
+  double getCartTotal() {
+    double sum = 0.0;
+    for (var i = 0; i < box.length; i++) {
+      sum += double.tryParse(box.getAt(i).amount) ?? 0.0;
+    }
+    return sum;
+  }
 
   bool isOnTogglePassword() {
     _isTogglePassword = !_isTogglePassword;

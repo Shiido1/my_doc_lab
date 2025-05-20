@@ -179,6 +179,15 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     );
   }
 
+  Color getAppColor(String app) {
+    if (app == 'Upcoming') {
+      return AppColor.grey;
+    } else if (app == 'Canceled') {
+      return AppColor.red;
+    }
+    return AppColor.darkindgrey;
+  }
+
   appointMentCard({String? appointmentStatus}) => Container(
     padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 12.w),
     margin: EdgeInsets.only(bottom: 20.w),
@@ -268,15 +277,15 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   margin: EdgeInsets.only(left: 2.w),
                   padding: EdgeInsets.all(4.w),
                   decoration: BoxDecoration(
-                    color: AppColor.darkindgrey,
+                    color: getAppColor(appointmentStatus!),
                     shape: BoxShape.circle,
                   ),
                 ),
                 SizedBox(width: 8.w),
                 TextView(
-                  text: appointmentStatus ?? '',
+                  text: appointmentStatus,
                   textStyle: GoogleFonts.gabarito(
-                    color: AppColor.darkindgrey,
+                    color: getAppColor(appointmentStatus),
                     fontSize: 14.0.sp,
                     fontWeight: FontWeight.w400,
                   ),
@@ -286,49 +295,49 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           ],
         ),
         SizedBox(height: 12.0.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8.w,
-                  horizontal: 46.0.w,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColor.primary1.withOpacity(.7),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextView(
-                  text: 'Cancel',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.darkindgrey,
-                    fontSize: 13.20.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 20.w),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 36.w),
-                decoration: BoxDecoration(
-                  color: AppColor.primary1,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextView(
-                  text: 'Reschedule',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.white,
-                    fontSize: 13.20.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Expanded(
+        //       child: Container(
+        //         padding: EdgeInsets.symmetric(
+        //           vertical: 8.w,
+        //           horizontal: 46.0.w,
+        //         ),
+        //         decoration: BoxDecoration(
+        //           color: AppColor.primary1.withOpacity(.7),
+        //           borderRadius: BorderRadius.circular(8),
+        //         ),
+        //         child: TextView(
+        //           text: 'Cancel',
+        //           textStyle: GoogleFonts.gabarito(
+        //             color: AppColor.darkindgrey,
+        //             fontSize: 13.20.sp,
+        //             fontWeight: FontWeight.w500,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //     SizedBox(width: 20.w),
+        //     Expanded(
+        //       child: Container(
+        //         padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 36.w),
+        //         decoration: BoxDecoration(
+        //           color: AppColor.primary1,
+        //           borderRadius: BorderRadius.circular(8),
+        //         ),
+        //         child: TextView(
+        //           text: 'Reschedule',
+        //           textStyle: GoogleFonts.gabarito(
+        //             color: AppColor.white,
+        //             fontSize: 13.20.sp,
+        //             fontWeight: FontWeight.w500,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     ),
   );

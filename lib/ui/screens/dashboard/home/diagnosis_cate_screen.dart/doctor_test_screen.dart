@@ -11,7 +11,6 @@ import 'package:stacked/stacked.dart';
 
 import '../../../../../core/connect_end/model/search_doctor_entity_model.dart';
 import '../../../../../core/connect_end/view_model/auth_view_model.dart';
-import '../../../../../core/core_folder/app/app.locator.dart';
 import '../../../../../core/core_folder/app/app.router.dart';
 import '../../../../../main.dart';
 import '../../../../app_assets/app_image.dart';
@@ -34,7 +33,7 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final double? mainAxisExtent = isTablet ? null : 220.h;
     return ViewModelBuilder<AuthViewModel>.reactive(
-      viewModelBuilder: () => locator<AuthViewModel>(),
+      viewModelBuilder: () => AuthViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           model.getAllDoctors(context);
