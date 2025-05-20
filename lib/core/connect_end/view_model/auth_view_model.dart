@@ -15,6 +15,7 @@ import 'package:my_doc_lab/core/connect_end/model/login_response_model/login_res
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/searched_doctor_response_model/searched_doctor_response_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 
@@ -361,6 +362,10 @@ class AuthViewModel extends BaseViewModel {
         repositoryImply.getAllConsultants(),
         throwException: true,
       );
+      logger.d(
+        _getAllConsultantResponseModelList!.getAllConsultantResponseModelList,
+      );
+      logger.d(AppImage.aid_box);
 
       _isLoading = false;
     } catch (e) {
@@ -553,5 +558,12 @@ class AuthViewModel extends BaseViewModel {
     }
     notifyListeners();
     return 0;
+  }
+
+  doubleTapDeleteCartSnack(context) {
+    AppUtils.snackbarTop(
+      context,
+      message: 'Kindly double tap item to delete items from cart',
+    );
   }
 }

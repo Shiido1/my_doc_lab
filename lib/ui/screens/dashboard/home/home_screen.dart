@@ -18,6 +18,7 @@ import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_widget.dart';
 import '../laboratory/lab_screen.dart';
+import 'cart_screen.dart';
 
 double _value = 350;
 
@@ -108,7 +109,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     Spacer(),
-                    SvgPicture.asset(AppImage.cart, width: 24.w, height: 24.w),
+                    GestureDetector(
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CartScreen(),
+                            ),
+                          ),
+                      child: SvgPicture.asset(
+                        AppImage.cart,
+                        width: 24.w,
+                        height: 24.w,
+                      ),
+                    ),
                     SizedBox(width: 20.w),
                     GestureDetector(
                       onTap:
