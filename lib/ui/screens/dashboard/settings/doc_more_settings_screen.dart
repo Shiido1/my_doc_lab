@@ -6,12 +6,11 @@ import 'package:my_doc_lab/core/core_folder/manager/shared_preference.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/edit_profile_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/pharmacy/phamacy_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
+import '../appointment/doctors_appointment/doctors_availabilty_screen.dart';
 import 'help_and_support_screen.dart';
 
 class DocMoreSettingsScreen extends StatelessWidget {
@@ -117,23 +116,22 @@ class DocMoreSettingsScreen extends StatelessWidget {
             SizedBox(height: 20.h),
             moreContainerWidget(
               image: AppImage.results,
-              text: 'Results',
+              text: 'My Appointments',
               borderColor: AppColor.lightgrey,
               color: AppColor.black,
-              onTap:
-                  () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ResultsScreen()),
-                  ),
+              onTap: () {},
             ),
             SizedBox(height: 20.h),
             moreContainerWidget(
               image: AppImage.pharm,
-              text: 'Pharmacy',
+              text: 'Availabilty',
               borderColor: AppColor.lightgrey,
               color: AppColor.black,
               onTap:
                   () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => PharmacyScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => DoctorAvailabilityScreen(),
+                    ),
                   ),
             ),
             SizedBox(height: 20.h),

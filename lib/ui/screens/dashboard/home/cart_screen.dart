@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/main.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/dashboard_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
@@ -26,8 +27,6 @@ class _CartScreenState extends State<CartScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.doubleTapDeleteCartSnack(context);
-
-          print('total :${model.getCartTotal()}');
         });
       },
       disposeViewModel: false,
@@ -63,7 +62,6 @@ class _CartScreenState extends State<CartScreen> {
                     index: index,
                     onItemDeleted: () {
                       setState(() {});
-                      print('total delete:${model.getCartTotal()}');
                     },
                   );
                 }),
@@ -166,7 +164,11 @@ class _CartScreenState extends State<CartScreen> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                       onPressed: () {
-                                        Navigator.pop(context);
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => Dashboard(),
+                                          ),
+                                        );
                                       },
                                     ),
                                   ],

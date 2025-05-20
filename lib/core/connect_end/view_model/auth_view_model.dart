@@ -104,8 +104,6 @@ class AuthViewModel extends BaseViewModel {
   String queryPharm = '';
   String queryMed = '';
 
-  double _total = 0.0;
-  double get total => _total;
   Box<CheckoutEntityModel>? _box;
 
   Box<CheckoutEntityModel> getModelBox(box) {
@@ -114,19 +112,9 @@ class AuthViewModel extends BaseViewModel {
     return _box!;
   }
 
-  // void calculateTotal(Box<CheckoutEntityModel> box) {
-  //   _total = 0.0;
-  //   for (var i = 0; i < box.length; i++) {
-  //     _total += double.tryParse(box.getAt(i)!.amount) ?? 0.0;
-  //   }
-  //   print('calculate::$_total');
-  //   notifyListeners();
-  // }
-
   void deleteCartItem(Box<CheckoutEntityModel> box, int index) {
     box.deleteAt(index);
     getCartTotal();
-    // calculateTotal(box);
   }
 
   double getCartTotal() {
