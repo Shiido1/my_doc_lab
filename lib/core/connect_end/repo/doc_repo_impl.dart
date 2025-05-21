@@ -4,6 +4,8 @@ import 'package:my_doc_lab/core/connect_end/model/doctor_availability_entity_mod
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import '../../core_folder/app/app.locator.dart';
+import '../model/post_user_cloud_entity_model.dart';
+import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 
 @lazySingleton
 class DocRepoImpl {
@@ -34,6 +36,13 @@ class DocRepoImpl {
       id,
       availability: availability,
     );
+    return response;
+  }
+
+  Future<PostUserVerificationCloudResponse> postCloudinary(
+    PostUserCloudEntityModel postCloudinary,
+  ) async {
+    final response = await _contract.postCloudinary(postCloudinary);
     return response;
   }
 }

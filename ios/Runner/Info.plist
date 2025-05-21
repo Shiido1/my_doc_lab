@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>My Doc Lab</string>
+		<string>Doclabpharm</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -45,6 +45,11 @@
 		<true/>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
+		<key>NSCameraUsageDescription</key>
+		<string>Doclabpharm needs camera to capture and share photos, we need access to your device's camera to enable you upload image profile and products.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Doclabpharm allows you to select and upload photos, we need access to your photo library to enable you upload image profile and products.</string>
+		
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>

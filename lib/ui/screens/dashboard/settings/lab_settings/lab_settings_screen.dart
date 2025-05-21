@@ -4,12 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/screens/authentication/edit_profile_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/laboratory/lab_appointment_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import '../../../../../core/core_folder/manager/shared_preference.dart';
+import '../../../authentication/lab_edit_profile_screen.dart';
 import '../help_and_support_screen.dart';
 
 class LabSettingsScreen extends StatelessWidget {
@@ -97,7 +97,7 @@ class LabSettingsScreen extends StatelessWidget {
               onTap:
                   () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => EditProfileScreen(),
+                      builder: (context) => LabEditProfileScreen(),
                     ),
                   ),
             ),

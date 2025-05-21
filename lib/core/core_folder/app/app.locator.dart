@@ -20,6 +20,7 @@ import '../../connect_end/repo/repo_impl.dart';
 import '../../connect_end/view_model/auth_view_model.dart';
 import '../../connect_end/view_model/doc_view_model.dart';
 import '../manager/shared_preference.dart';
+import '../network/cloudinary_network_service.dart';
 import '../network/network_service.dart';
 
 final locator = StackedLocator.instance;
@@ -38,6 +39,7 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => SharedPreferencesService());
   locator.registerLazySingleton(() => NetworkService());
+  locator.registerLazySingleton(() => CloudinaryNetworkService());
   locator.registerLazySingleton(() => AuthApi());
   locator.registerLazySingleton(() => DocAuthApi());
   locator.registerLazySingleton(() => AuthContractsImpl());

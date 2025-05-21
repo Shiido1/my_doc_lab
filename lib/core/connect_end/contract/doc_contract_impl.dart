@@ -5,6 +5,8 @@ import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 
 import '../../core_folder/app/app.locator.dart';
+import '../model/post_user_cloud_entity_model.dart';
+import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 
 @lazySingleton
 class DocContractsImpl {
@@ -21,4 +23,7 @@ class DocContractsImpl {
     DoctorAvailabilityEntityModel? availability,
   }) async =>
       await _api.doctorsAvailabilty(id, doctorAvailability: availability);
+  Future<PostUserVerificationCloudResponse> postCloudinary(
+    PostUserCloudEntityModel postCloudinary,
+  ) async => await _api.postTocloudinary(postCloudinary);
 }

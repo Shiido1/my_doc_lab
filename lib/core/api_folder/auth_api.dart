@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
@@ -18,18 +19,22 @@ import '../connect_end/model/get_medicine_detail_response_model/get_medicine_det
 import '../connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../connect_end/model/login_entity.dart';
 import '../connect_end/model/login_response_model/login_response_model.dart';
+import '../connect_end/model/post_user_cloud_entity_model.dart';
+import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../connect_end/model/search_doctor_entity_model.dart';
 import '../connect_end/model/searched_doctor_response_model/searched_doctor_response_model.dart';
 import '../connect_end/model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../connect_end/model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
+import '../core_folder/network/cloudinary_network_service.dart';
 import '../core_folder/network/network_service.dart';
 import '../core_folder/network/url_path.dart';
 
 @lazySingleton
 class AuthApi {
   final _service = locator<NetworkService>();
+  final _serviceCloud = locator<CloudinaryNetworkService>();
   final logger = getLogger('AuthViewModel');
 
   Future<LoginResponseModel> login(LoginEntityModel loginEntity) async {
@@ -325,6 +330,23 @@ class AuthApi {
       );
       logger.d(response.data);
       return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<PostUserVerificationCloudResponse> postTocloudinary(
+    PostUserCloudEntityModel post,
+  ) async {
+    try {
+      final response = await _serviceCloud.call(
+        'upload',
+        CloudRequestMethod.upload,
+        data: FormData.fromMap(post.toJson()),
+      );
+      logger.d(response.data);
+      return PostUserVerificationCloudResponse.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

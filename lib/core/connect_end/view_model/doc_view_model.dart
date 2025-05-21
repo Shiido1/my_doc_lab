@@ -1,16 +1,29 @@
+// ignore_for_file: avoid_print
+
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/repo/doc_repo_impl.dart';
 import 'package:stacked/stacked.dart';
 
 // import '../../../ui/app_assets/app_utils.dart';
+import '../../../main.dart';
 import '../../../ui/app_assets/app_color.dart';
+import '../../../ui/app_assets/app_utils.dart';
+import '../../../ui/app_assets/image_picker.dart';
 import '../../../ui/widget/text_widget.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
+import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
+import '../model/post_user_cloud_entity_model.dart';
+import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 
 class DocViewModel extends BaseViewModel {
   final BuildContext? context;
@@ -21,14 +34,59 @@ class DocViewModel extends BaseViewModel {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  GetAllDoctorsResponseModelList? _getAllDoctorsResponseModelList;
-  GetAllDoctorsResponseModelList? get getAllDoctorsResponseModelList =>
-      _getAllDoctorsResponseModelList;
+  GetDocDetailResponseModel? _getDocDetailResponseModel;
+  GetDocDetailResponseModel? get getDocDetailResponseModel =>
+      _getDocDetailResponseModel;
+
+  PostUserVerificationCloudResponse? _postUserVerificationCloudResponse;
+  PostUserVerificationCloudResponse? get postUserVerificationCloudResponse =>
+      _postUserVerificationCloudResponse;
+  final _pickImage = ImagePickerHandler();
+  File? image;
+  String? filename;
 
   DocViewModel({this.context});
 
   TimeOfDay _timeStart = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay _timeEnd = TimeOfDay(hour: 00, minute: 00);
+
+  loadingDialog(context) => showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: TextView(
+          text: 'Please wait..',
+          textAlign: TextAlign.center,
+          textStyle: GoogleFonts.gabarito(
+            color: AppColor.primary1,
+
+            fontSize: 20.2.sp,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 20.h),
+              SpinKitPouringHourGlassRefined(
+                color: AppColor.primary1,
+                size: 50.sp,
+              ),
+              SizedBox(height: 40.h),
+              TextView(
+                text: 'Loading...!',
+                textStyle: GoogleFonts.gabarito(
+                  color: AppColor.primary1,
+                  fontSize: 17.2.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 
   void _selectTimeStart(context) async {
     TimeOfDay? newTime = await showTimePicker(
@@ -49,7 +107,6 @@ class DocViewModel extends BaseViewModel {
     if (newTime != null) {
       _timeEnd = newTime;
     }
-    print('time1:::$_timeEnd');
     notifyListeners();
   }
 
@@ -225,20 +282,103 @@ class DocViewModel extends BaseViewModel {
     );
   }
 
-  // void getAllDoctors(context) async {
-  //   try {
-  //     _isLoading = true;
-  //     _getAllDoctorsResponseModelList = await runBusyFuture(
-  //       repositoryImply.getAllDoctorDetail(),
-  //       throwException: true,
-  //     );
+  Future<void> getDoctorsDetail(context) async {
+    try {
+      _isLoading = true;
+      _getDocDetailResponseModel = await runBusyFuture(
+        repositoryImply.getDoctorDetail(),
+        throwException: true,
+      );
 
-  //     _isLoading = false;
-  //   } catch (e) {
-  //     _isLoading = false;
-  //     logger.d(e);
-  //     AppUtils.snackbar(context, message: e.toString(), error: true);
-  //   }
-  //   notifyListeners();
-  // }
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void updateDoctorsDetail(
+    context, {
+    UpdateDoctorEntityModel? update,
+    String? id,
+  }) async {
+    try {
+      loadingDialog(context);
+      var v = await runBusyFuture(
+        repositoryImply.updateDoctor(id!, updateDoctor: update),
+        throwException: true,
+      );
+      if (v['message'] == 'Account updated successfully!') {
+        Navigator.pop(context);
+        AppUtils.snackbar(context, message: v['message']);
+        navigate.navigateTo(Routes.docDashboard);
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  formartFileImage(File? imageFile) {
+    if (imageFile == null) return;
+    return File(imageFile.path.replaceAll('\'', '').replaceAll('File: ', ''));
+  }
+
+  void pickImage(BuildContext context) {
+    try {
+      _pickImage.pickImage(
+        context: context,
+        file: (file) {
+          image = file;
+          filename = image!.path.split("/").last;
+          postToCloudinary(
+            context,
+            postCloudinary: PostUserCloudEntityModel(
+              file: MultipartFile.fromBytes(
+                formartFileImage(image).readAsBytesSync(),
+                filename: image!.path.split("/").last,
+              ),
+              uploadPreset: 'profilePicture',
+              apiKey: '229558523244366',
+            ),
+          );
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  Future<void> postToCloudinary(
+    context, {
+    PostUserCloudEntityModel? postCloudinary,
+  }) async {
+    try {
+      loadingDialog(context);
+      _postUserVerificationCloudResponse = await runBusyFuture(
+        repositoryImply.postCloudinary(postCloudinary!),
+        throwException: true,
+      );
+      if (_postUserVerificationCloudResponse != null) {
+        Navigator.pop(context);
+        AppUtils.snackbar(
+          context,
+          message: 'Image uploaded to cloudinary Sucessfully.!',
+        );
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      AppUtils.snackbar(
+        context,
+        message: 'Please try again later.',
+        error: true,
+      );
+    }
+    notifyListeners();
+  }
 }
