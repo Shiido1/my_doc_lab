@@ -10,54 +10,64 @@ import '../widget/text_widget.dart';
 import 'app_color.dart';
 // import 'package:path_provider/path_provider.dart';
 
-enum ProfileOptionAction {
-  viewImage,
-  profileCamera,
-  library,
-  remove,
-}
+enum ProfileOptionAction { viewImage, profileCamera, library, remove }
 
 class ImagePickerHandler {
   File? file;
 
-  Future<void> pickImage(
-      {@required BuildContext? context, Function(File file)? file}) async {
+  Future<void> pickImage({
+    @required BuildContext? context,
+    Function(File file)? file,
+  }) async {
     ProfileOptionAction? action;
 
     action = await showModalBottomSheet(
-        context: context!,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
-        ),
-        builder: (context) => BottomSheet(
+      context: context!,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder:
+          (context) => BottomSheet(
             backgroundColor: AppColor.white,
             onClosing: () {},
-            builder: (context) => Wrap(
+            builder:
+                (context) => Wrap(
                   children: <Widget>[
                     ListTile(
-                        title: Center(
-                          child: TextView(
-                            text: 'Pick from library',
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      title: Center(
+                        child: TextView(
+                          text: 'Pick from library',
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
                         ),
-                        onTap: () => Navigator.pop(
-                            context, ProfileOptionAction.library)),
+                      ),
+                      onTap:
+                          () => Navigator.pop(
+                            context,
+                            ProfileOptionAction.library,
+                          ),
+                    ),
                     const Divider(),
                     ListTile(
-                        title: Center(
-                          child: TextView(
-                            text: 'Take a photo',
-                            fontSize: 17.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      title: Center(
+                        child: TextView(
+                          text: 'Take a photo',
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w600,
                         ),
-                        onTap: () => Navigator.pop(
-                            context, ProfileOptionAction.profileCamera)),
+                      ),
+                      onTap:
+                          () => Navigator.pop(
+                            context,
+                            ProfileOptionAction.profileCamera,
+                          ),
+                    ),
                     InkWell(
-                      onTap: () =>
-                          Navigator.pop(context, ProfileOptionAction.remove),
+                      onTap:
+                          () => Navigator.pop(
+                            context,
+                            ProfileOptionAction.remove,
+                          ),
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.all(12.0),
@@ -71,11 +81,11 @@ class ImagePickerHandler {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 40.h,
-                    )
+                    SizedBox(height: 40.h),
                   ],
-                )));
+                ),
+          ),
+    );
     // if (Platform.isAndroid) {
     //   action = await showModalBottomSheet(
     //       context: context!,
@@ -162,8 +172,10 @@ class ImagePickerHandler {
     file!(getFile!);
   }
 
-  Future<File?>? handleProfileAction(BuildContext context,
-      {@required ProfileOptionAction? action}) {
+  Future<File?>? handleProfileAction(
+    BuildContext context, {
+    @required ProfileOptionAction? action,
+  }) {
     switch (action!) {
       case ProfileOptionAction.viewImage:
       case ProfileOptionAction.library:
@@ -189,18 +201,19 @@ class ImagePickerHandler {
   }
 
   Future<File?> _cropImage(BuildContext context, PickedFile imageFile) async {
-    final croppedFile =
-        await ImageCropper().cropImage(sourcePath: imageFile.path, uiSettings: [
-      AndroidUiSettings(
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: imageFile.path,
+      uiSettings: [
+        AndroidUiSettings(
           toolbarTitle: 'Daalupay',
           toolbarColor: AppColor.primary,
           toolbarWidgetColor: Colors.white,
           initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
-      IOSUiSettings(
-        title: 'Daalupay',
-      )
-    ]);
+          lockAspectRatio: false,
+        ),
+        IOSUiSettings(title: 'Daalupay'),
+      ],
+    );
 
     return File(croppedFile!.path);
   }

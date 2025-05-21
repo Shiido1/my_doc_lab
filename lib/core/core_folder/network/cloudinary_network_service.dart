@@ -39,11 +39,13 @@ class CloudinaryNetworkService {
 
   // Initialize essential class properties
   void _initialiseDio() {
-    dio = Dio(BaseOptions(
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      baseUrl: baseUrl ?? AppConfig.cloudinaryUrl,
-    ));
+    dio = Dio(
+      BaseOptions(
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        baseUrl: baseUrl ?? AppConfig.cloudinaryUrl,
+      ),
+    );
     // authToken ??= session.authToken;
     dio!.interceptors
       ..add(AppInterceptor(authToken ?? ''))
@@ -109,20 +111,26 @@ class CloudinaryNetworkService {
           );
           break;
         case CloudRequestMethod.upload:
-          response = await dio!.post(path,
-              data: data,
-              queryParameters: params,
-              options: options ??
-                  Options(headers: {
+          response = await dio!.post(
+            path,
+            data: data,
+            queryParameters: params,
+            options:
+                options ??
+                Options(
+                  headers: {
                     // "Authorization": "Bearer ${session.authToken}",
                     "Content-Disposition": "form-data",
                     "Content-Type": "multipart/form-data",
-                    'Accept': 'application/json'
-                  }), onSendProgress: (sent, total) {
-            // eventBus
-            //     .fire(
-            //     FileUploadProgressEvent(FileUploadProgress(sent, total, tag: classTag)));
-          });
+                    'Accept': 'application/json',
+                  },
+                ),
+            onSendProgress: (sent, total) {
+              // eventBus
+              //     .fire(
+              //     FileUploadProgressEvent(FileUploadProgress(sent, total, tag: classTag)));
+            },
+          );
           break;
       }
       return response;

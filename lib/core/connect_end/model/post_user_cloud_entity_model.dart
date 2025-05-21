@@ -16,8 +16,8 @@ class PostUserCloudEntityModel {
   }
 
   Map<String, dynamic> toJson() => {
-        if (file != null) 'file': file,
-        if (uploadPreset != null) 'upload_preset': uploadPreset,
-        if (apiKey != null) 'api_key': apiKey,
-      };
+    if (file != null) 'file': file,
+    if (uploadPreset != null) 'upload_preset': uploadPreset,
+    if (apiKey != null) 'api_key': apiKey,
+  };
 }

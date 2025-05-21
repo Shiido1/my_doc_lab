@@ -1,14 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'searched_pharmacy_response_model.dart';
+part of 'sender.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-SearchedPharmacyResponseModel _$SearchedPharmacyResponseModelFromJson(
-  Map<String, dynamic> json,
-) => SearchedPharmacyResponseModel(
+Sender _$SenderFromJson(Map<String, dynamic> json) => Sender(
   id: json['id'] as num?,
   uuid: json['uuid'] as String?,
   firstName: json['first_name'] as String?,
@@ -16,15 +14,16 @@ SearchedPharmacyResponseModel _$SearchedPharmacyResponseModelFromJson(
   gender: json['gender'] as String?,
   email: json['email'] as String?,
   phone: json['phone'] as String?,
-  about: json['about'],
+  about: json['about'] as String?,
+  speciality: json['speciality'] as String?,
   status: json['status'] as String?,
   emailVerifiedAt:
       json['email_verified_at'] == null
           ? null
           : DateTime.parse(json['email_verified_at'] as String),
-  certifications: json['certifications'],
-  experience: json['experience'],
-  profileImage: json['profile_image'],
+  certifications: json['certifications'] as String?,
+  experience: json['experience'] as String?,
+  profileImage: json['profile_image'] as String?,
   city: json['city'] as String?,
   state: json['state'] as String?,
   address: json['address'] as String?,
@@ -39,9 +38,7 @@ SearchedPharmacyResponseModel _$SearchedPharmacyResponseModelFromJson(
   deletedAt: json['deleted_at'],
 );
 
-Map<String, dynamic> _$SearchedPharmacyResponseModelToJson(
-  SearchedPharmacyResponseModel instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$SenderToJson(Sender instance) => <String, dynamic>{
   'id': instance.id,
   'uuid': instance.uuid,
   'first_name': instance.firstName,
@@ -50,6 +47,7 @@ Map<String, dynamic> _$SearchedPharmacyResponseModelToJson(
   'email': instance.email,
   'phone': instance.phone,
   'about': instance.about,
+  'speciality': instance.speciality,
   'status': instance.status,
   'email_verified_at': instance.emailVerifiedAt?.toIso8601String(),
   'certifications': instance.certifications,

@@ -31,12 +31,6 @@ class _DocDashboardState extends State<DocDashboard> {
     DocMoreSettingsScreen(),
   ];
 
-  @override
-  void initState() {
-    // _currentIndex = widget.index!;
-    super.initState();
-  }
-
   Future<bool> willPopControl() async {
     return (await showDialog(
           context: context,

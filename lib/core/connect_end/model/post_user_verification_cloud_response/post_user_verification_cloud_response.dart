@@ -58,7 +58,8 @@ class PostUserVerificationCloudResponse {
   });
 
   factory PostUserVerificationCloudResponse.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     return _$PostUserVerificationCloudResponseFromJson(json);
   }
 
