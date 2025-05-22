@@ -27,7 +27,7 @@ class GetMessageIndexResponseModel {
   @JsonKey(name: 'contact_type')
   String? contactType;
   @JsonKey(name: 'contact_id')
-  num? contactId;
+  dynamic contactId;
   @JsonKey(name: 'last_message')
   String? lastMessage;
   @JsonKey(name: 'last_message_time')

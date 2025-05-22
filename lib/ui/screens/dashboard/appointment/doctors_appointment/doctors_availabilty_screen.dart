@@ -158,7 +158,6 @@ class DoctorAvailabilityScreen extends StatelessWidget {
                 model.availabilities.isNotEmpty
                     ? GestureDetector(
                       onTap: () {
-                        print('object:::${model.availabilities}');
                         model.setDoctorsAvailabilty(
                           context,
                           id:

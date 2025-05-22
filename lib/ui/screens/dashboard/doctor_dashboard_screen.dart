@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
-import 'chat/message_list_screen.dart';
+import 'chat/doc_message_list_screen.dart';
 import 'home/doc_home_screen.dart';
 import 'patient/patient_sceen.dart';
 import 'settings/doc_more_settings_screen.dart';
@@ -27,7 +27,7 @@ class _DocDashboardState extends State<DocDashboard> {
   final List<Widget> _body = [
     DocHomeScreen(),
     PatientSceen(),
-    MessageListScreen(),
+    DoctorMessageListScreen(),
     DocMoreSettingsScreen(),
   ];
 

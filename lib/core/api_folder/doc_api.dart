@@ -2,6 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/received_message_response_model/received_message_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -75,6 +78,48 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return PostUserVerificationCloudResponse.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetMessageIndexResponseModelList> chatIndex() async {
+    try {
+      final response = await _service.call(UrlConfig.chat, RequestMethod.get);
+      logger.d(response.data);
+      return GetMessageIndexResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<ReceivedMessageResponseModelList> receiveConversation(
+    String id,
+  ) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.chat}/$id/messages',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return ReceivedMessageResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> sendMessage(SendMessageEntityModel send) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.send_chat,
+        RequestMethod.post,
+        data: send.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;

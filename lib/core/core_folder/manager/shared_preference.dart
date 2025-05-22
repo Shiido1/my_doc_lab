@@ -30,6 +30,7 @@ class SharedPreferencesService {
   static const String is_first_login = 'is_first_login';
   static const String notifiedKey = 'notify';
   static const String userData = 'user';
+  static const String chatData = 'chat';
 
   String get authToken => sharedPreferences?.getString(keyAuthToken) ?? '';
 
@@ -42,6 +43,14 @@ class SharedPreferencesService {
     final userDataString = sharedPreferences?.getString(userData);
     if (userDataString != null && userDataString.isNotEmpty) {
       return json.decode(userDataString);
+    }
+    return {};
+  }
+
+  Map<String, dynamic> get chatsData {
+    final chatDataString = sharedPreferences?.getString(chatData);
+    if (chatDataString != null && chatDataString.isNotEmpty) {
+      return json.decode(chatDataString);
     }
     return {};
   }
@@ -60,6 +69,9 @@ class SharedPreferencesService {
 
   set usersData(Map<String, dynamic>? map) =>
       sharedPreferences?.setString(userData, json.encode(map));
+
+  set chatsData(Map<String, dynamic>? map) =>
+      sharedPreferences?.setString(chatData, json.encode(map));
 
   Future<bool> logOut(role) async {
     try {

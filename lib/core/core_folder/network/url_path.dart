@@ -27,4 +27,10 @@ class UrlConfig {
   static const String registerCareGiver = 'caregiver/register';
 
   static const String add_booking = 'user/booking/add';
+  static const String send_chat = 'chat/send';
+  static const String call_generate_token = 'chat/generate';
+  static const String accept_call = 'chat/accept';
+  static const String reject_call = 'chat/reject';
+  static const String end_call = 'chat/end';
+  static const String chat = 'chat';
 }

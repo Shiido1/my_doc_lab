@@ -4,7 +4,7 @@ part 'sender.g.dart';
 
 @JsonSerializable()
 class Sender {
-  num? id;
+  dynamic id;
   String? uuid;
   @JsonKey(name: 'first_name')
   String? firstName;

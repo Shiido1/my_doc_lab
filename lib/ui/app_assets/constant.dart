@@ -39,6 +39,24 @@ shimmerView() => SizedBox(
   ),
 );
 
+shimmerChatView() => SizedBox(
+  width: double.infinity.w,
+  height: 70.h,
+  child: Shimmer.fromColors(
+    baseColor: AppColor.friendlyPrimary.withOpacity(.9),
+    highlightColor: AppColor.white,
+    child: Container(
+      width: double.infinity.w,
+      height: 80.h,
+      margin: EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        color: AppColor.white,
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+    ),
+  ),
+);
+
 shimmerViewDoc() => SizedBox(
   width: 160.0,
   height: 160.0,
@@ -95,4 +113,12 @@ availDateForm(time) {
   // Format as "08"
   String formattedDate = DateFormat('dd').format(parsedDate.toLocal());
   return formattedDate;
+}
+
+String getWeekdayAbbreviation(String dateStr) {
+  // Parse the string to DateTime
+  final dateTime = DateTime.parse(dateStr);
+
+  // Format it to abbreviated weekday (e.g., Mon, Tue, Wed...)
+  return DateFormat.E().format(dateTime);
 }

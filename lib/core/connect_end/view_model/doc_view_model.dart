@@ -9,6 +9,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/received_message_response_model/received_message_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/repo/doc_repo_impl.dart';
 import 'package:stacked/stacked.dart';
@@ -23,6 +25,7 @@ import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
+import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 
@@ -47,6 +50,13 @@ class DocViewModel extends BaseViewModel {
   String? filename;
   List<Availability> availabilities = [];
 
+  GetMessageIndexResponseModelList? _getMessageIndexResponseModelList;
+  GetMessageIndexResponseModelList? get getMessageIndexResponseModelList =>
+      _getMessageIndexResponseModelList;
+  ReceivedMessageResponseModelList? _receivedMessageResponseModelList;
+  ReceivedMessageResponseModelList? get receivedMessageResponseModelList =>
+      _receivedMessageResponseModelList;
+
   DocViewModel({this.context});
 
   String? availabilityDate;
@@ -57,6 +67,11 @@ class DocViewModel extends BaseViewModel {
   TimeOfDay get timeEnd => _timeEnd;
 
   TimeOfDay? selectedTime;
+  TextEditingController sendtextController = TextEditingController(text: '');
+
+  bool hasLoadedConversation = false;
+
+  DateTime now = DateTime.now();
 
   loadingDialog(context) => showDialog(
     context: context,
@@ -456,5 +471,187 @@ class DocViewModel extends BaseViewModel {
       );
     }
     notifyListeners();
+  }
+
+  Future<void> getChatIndex() async {
+    try {
+      _isLoading = true;
+      _getMessageIndexResponseModelList = await runBusyFuture(
+        repositoryImply.chatIndex(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getChatIndexReload() async {
+    try {
+      _getMessageIndexResponseModelList = await runBusyFuture(
+        repositoryImply.chatIndex(),
+        throwException: true,
+      );
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> receiveConversation(String id) async {
+    try {
+      _receivedMessageResponseModelList = await runBusyFuture(
+        repositoryImply.receiveMessage(id),
+        throwException: true,
+      );
+      _isLoading = false;
+      Future.delayed(Duration(seconds: 2), () {
+        if (hasLoadedConversation) receiveConversation(id);
+      });
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  void receiveConversationOnce(String id) {
+    if (hasLoadedConversation == false) {
+      return;
+    } else {
+      hasLoadedConversation = true;
+      receiveConversation(id); // existing method
+    }
+    notifyListeners();
+  }
+
+  List<SendMessageEntityModel> sendList = [];
+
+  ScrollController scrollController1 = ScrollController();
+
+  Future<void> sendMessage(SendMessageEntityModel send) async {
+    try {
+      sendList.add(send);
+      session.chatsData = {'chat': sendList};
+      if (session.chatsData.isEmpty) {
+        return;
+      } else {
+        for (var element in session.chatsData['chat']) {
+          SendMessageEntityModel sendMessageEntityModel =
+              SendMessageEntityModel.fromJson(element);
+          await runBusyFuture(
+            repositoryImply.sendMessage(sendMessageEntityModel),
+            throwException: true,
+          );
+        }
+        Future.delayed(Duration(seconds: 1), () {
+          session.chatsData = {'chat': []};
+          sendList.clear();
+        });
+      }
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  boxMessage(ReceivedMessageResponseModel message) => Column(
+    children: [
+      message.senderType == "MydocLab\\Models\\User"
+          ? Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              margin: EdgeInsets.only(left: 20.w, right: 100.w, bottom: 20.w),
+              padding: EdgeInsets.all(8.0.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(0),
+                  bottomRight: Radius.circular(10),
+                ),
+                color: AppColor.primary1.withOpacity(.1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextView(
+                    text: message.message ?? '',
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 15.2.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.darkindgrey,
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  TextView(
+                    text: DateFormat('hh:mma').format(
+                      DateTime.parse(message.updatedAt.toString()).toLocal(),
+                    ),
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.darkindgrey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+          : Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              margin: EdgeInsets.only(right: 20.w, left: 100.w, bottom: 20.w),
+              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(0),
+                ),
+                color: AppColor.primary1,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextView(
+                    text: message.message ?? '',
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 15.2.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.white,
+                    ),
+                  ),
+
+                  TextView(
+                    text: DateFormat('hh:mma').format(
+                      DateTime.parse(message.updatedAt.toString()).toLocal(),
+                    ),
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+    ],
+  );
+
+  void scrollToBottom() {
+    if (scrollController1.hasClients) {
+      scrollController1.animateTo(
+        scrollController1.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 }
