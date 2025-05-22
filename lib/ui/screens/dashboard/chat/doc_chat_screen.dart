@@ -34,12 +34,11 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return ViewModelBuilder<DocViewModel>.reactive(
-      viewModelBuilder: () => locator<DocViewModel>(),
+      viewModelBuilder: () => DocViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
           model.receiveConversationOnce(widget.id!);
-          model.scrollToBottom();
         });
       },
       onDispose: (viewModel) {

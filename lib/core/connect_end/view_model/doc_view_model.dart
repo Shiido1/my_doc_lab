@@ -523,7 +523,8 @@ class DocViewModel extends BaseViewModel {
       return;
     } else {
       hasLoadedConversation = true;
-      receiveConversation(id); // existing method
+      receiveConversation(id);
+      scrollToBottom(); // existing method
     }
     notifyListeners();
   }
@@ -566,7 +567,8 @@ class DocViewModel extends BaseViewModel {
             alignment: Alignment.topLeft,
             child: Container(
               margin: EdgeInsets.only(left: 20.w, right: 100.w, bottom: 20.w),
-              padding: EdgeInsets.all(8.0.w),
+
+              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
@@ -587,7 +589,6 @@ class DocViewModel extends BaseViewModel {
                       color: AppColor.darkindgrey,
                     ),
                   ),
-                  SizedBox(height: 6.h),
                   TextView(
                     text: DateFormat('hh:mma').format(
                       DateTime.parse(message.updatedAt.toString()).toLocal(),
@@ -648,7 +649,7 @@ class DocViewModel extends BaseViewModel {
   void scrollToBottom() {
     if (scrollController1.hasClients) {
       scrollController1.animateTo(
-        scrollController1.position.maxScrollExtent,
+        scrollController1.position.minScrollExtent,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
