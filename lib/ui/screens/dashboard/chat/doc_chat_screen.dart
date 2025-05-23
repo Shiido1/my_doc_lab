@@ -12,7 +12,6 @@ import 'package:stacked/stacked.dart';
 
 import '../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
-import '../../../../core/core_folder/app/app.locator.dart';
 
 // ignore: must_be_immutable
 class DoctorChatScreen extends StatefulWidget {

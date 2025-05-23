@@ -43,7 +43,13 @@ class DocHomeScreen extends StatelessWidget {
                           child: SizedBox.fromSize(
                             size: const Size.fromRadius(24),
                             child: Image.network(
-                              'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.getDocDetailResponseModel?.original?.profileImage}',
+                              model
+                                      .getDocDetailResponseModel!
+                                      .original!
+                                      .profileImage!
+                                      .contains('https')
+                                  ? '${model.getDocDetailResponseModel?.original?.profileImage}'
+                                  : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.getDocDetailResponseModel?.original?.profileImage}',
                               fit: BoxFit.cover,
                               errorBuilder:
                                   (context, error, stackTrace) =>

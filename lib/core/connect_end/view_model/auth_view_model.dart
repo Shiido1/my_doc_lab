@@ -1,8 +1,11 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
@@ -22,6 +25,7 @@ import 'package:stacked/stacked.dart';
 
 import '../../../main.dart';
 import '../../../ui/app_assets/app_utils.dart';
+import '../../../ui/app_assets/constant.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
@@ -588,5 +592,171 @@ class AuthViewModel extends BaseViewModel {
       context,
       message: 'Kindly double tap item to delete items from cart',
     );
+  }
+
+  homeGridView({double? mainAxisExtent}) {
+    final isSearching =
+        query.isNotEmpty && _searchedDoctorResponseModelList != null;
+    final doctorsList =
+        isSearching
+            ? _searchedDoctorResponseModelList!.searchedDoctorResponseModelList
+            : _getAllDoctorsResponseModelList?.getAllDoctorsResponseModelList ??
+                [];
+
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        mainAxisExtent: Platform.isIOS ? mainAxisExtent : 200,
+      ),
+      itemCount: doctorsList.length,
+      itemBuilder: (context, index) {
+        dynamic doctor = doctorsList[index];
+        final doctorName =
+            'Dr ${doctor.firstName ?? ''} ${doctor.lastName ?? ''}';
+        final speciality = doctor.speciality ?? '';
+
+        return GestureDetector(
+          onTap: () {
+            navigate.navigateTo(
+              Routes.profileScreen,
+              arguments: ProfileScreenArguments(id: doctor.id.toString()),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: AppColor.funnyLookingGrey.withOpacity(0.3),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(10),
+                  ),
+                  child: Image.network(
+                    imageString(index),
+                    height: 120.h,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder:
+                        (context, error, stackTrace) => shimmerViewPharm(),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextView(
+                        text: doctorName,
+                        textStyle: GoogleFonts.gabarito(
+                          color: AppColor.black,
+                          fontSize: 16.0.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      TextView(
+                        text: speciality,
+                        textStyle: GoogleFonts.gabarito(
+                          color: AppColor.grey,
+                          fontSize: 12.0.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(height: 14.0.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 1.w,
+                              horizontal: 4.w,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: AppColor.primary,
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: AppColor.white,
+                                  size: 15.0.sp,
+                                ),
+                                SizedBox(width: 2.w),
+                                TextView(
+                                  text: '4.8',
+                                  textStyle: GoogleFonts.dmSans(
+                                    color: AppColor.white,
+                                    fontSize: 12.0.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                AppImage.location,
+                                height: 15.2.h,
+                                width: 16.2.w,
+                              ),
+                              SizedBox(width: 2.w),
+                              TextView(
+                                text: '800m away',
+                                textStyle: GoogleFonts.gabarito(
+                                  color: AppColor.black,
+                                  fontSize: 12.0.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String imageString(int index) {
+    if (query != '' &&
+        _searchedDoctorResponseModelList != null &&
+        _searchedDoctorResponseModelList!
+            .searchedDoctorResponseModelList
+            .isNotEmpty) {
+      return _searchedDoctorResponseModelList!
+              .searchedDoctorResponseModelList[index]
+              .profileImage!
+              .contains('https')
+          ? _searchedDoctorResponseModelList!
+                  .searchedDoctorResponseModelList[index]
+                  .profileImage ??
+              ''
+          : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${_searchedDoctorResponseModelList!.searchedDoctorResponseModelList[index].profileImage ?? ''}';
+    } else if (_getAllDoctorsResponseModelList != null) {
+      return _getAllDoctorsResponseModelList!
+              .getAllDoctorsResponseModelList![index]
+              .profileImage!
+              .contains('https')
+          ? _getAllDoctorsResponseModelList!
+                  .getAllDoctorsResponseModelList![index]
+                  .profileImage ??
+              ''
+          : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${_getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].profileImage ?? ''}';
+    }
+    return '';
   }
 }

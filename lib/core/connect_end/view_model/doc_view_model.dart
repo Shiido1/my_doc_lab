@@ -23,6 +23,7 @@ import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
+import '../../debouncer.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
@@ -56,6 +57,10 @@ class DocViewModel extends BaseViewModel {
   ReceivedMessageResponseModelList? _receivedMessageResponseModelList;
   ReceivedMessageResponseModelList? get receivedMessageResponseModelList =>
       _receivedMessageResponseModelList;
+
+  final debouncer = Debouncer();
+
+  String query = '';
 
   DocViewModel({this.context});
 
@@ -548,7 +553,7 @@ class DocViewModel extends BaseViewModel {
             throwException: true,
           );
         }
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(Duration(seconds: 2), () {
           session.chatsData = {'chat': []};
           sendList.clear();
         });
@@ -576,6 +581,7 @@ class DocViewModel extends BaseViewModel {
                   bottomLeft: Radius.circular(0),
                   bottomRight: Radius.circular(10),
                 ),
+                // ignore: deprecated_member_use
                 color: AppColor.primary1.withOpacity(.1),
               ),
               child: Column(
