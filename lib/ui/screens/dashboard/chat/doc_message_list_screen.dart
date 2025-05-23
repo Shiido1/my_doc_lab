@@ -102,6 +102,11 @@ class DoctorMessageListScreen extends StatelessWidget {
                             ...model
                                 .getMessageIndexResponseModelList!
                                 .getMessageIndexResponseModelList!
+                                .where(
+                                  (e) => e.contactName!.toLowerCase().contains(
+                                    model.query.toLowerCase(),
+                                  ),
+                                )
                                 .map(
                                   (o) => GestureDetector(
                                     onTap:
@@ -184,7 +189,92 @@ class DoctorMessageListScreen extends StatelessWidget {
                                   ),
                                 )
                           else
-                            SizedBox(),
+                            ...model
+                                .getMessageIndexResponseModelList!
+                                .getMessageIndexResponseModelList!
+                                .map(
+                                  (o) => GestureDetector(
+                                    onTap:
+                                        () => navigate.navigateTo(
+                                          Routes.doctorChatScreen,
+                                          arguments: DoctorChatScreenArguments(
+                                            id: o.conversationId.toString(),
+                                            messageModel: o,
+                                          ),
+                                        ),
+                                    child: Container(
+                                      margin: EdgeInsets.only(bottom: 20.w),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 12.w,
+                                        horizontal: 6.w,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: AppColor.greylight,
+                                        ),
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.all(24.80.w),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: AppColor.friendlyPrimary,
+                                            ),
+                                          ),
+                                          SizedBox(width: 20.w),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextView(
+                                                text:
+                                                    o.contactName
+                                                        ?.capitalize() ??
+                                                    '',
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.darkindgrey,
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 230.w,
+                                                child: TextView(
+                                                  text: o.lastMessage ?? '',
+                                                  maxLines: 1,
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis,
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color:
+                                                            AppColor.lightgrey,
+                                                        fontSize: 12.20.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          TextView(
+                                            text: getWeekdayAbbreviation(
+                                              o.lastMessageTime ?? '',
+                                            ),
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.lightgrey,
+                                              fontSize: 12.20.sp,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                        else
+                          SizedBox(),
                       ],
                     ),
                   ),

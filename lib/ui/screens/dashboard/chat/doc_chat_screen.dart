@@ -147,7 +147,8 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                   .receivedMessageResponseModelList!
                                   .receivedMessageResponseModelList!
                                   .map((o) => model.boxMessage(o)),
-                            if (model.session.chatsData['chat'].isEmpty)
+                            if (model.session.chatsData['chat'] == null ||
+                                model.session.chatsData['chat'].isEmpty)
                               SizedBox.shrink()
                             else
                               ...model.session.chatsData['chat']!.map(
