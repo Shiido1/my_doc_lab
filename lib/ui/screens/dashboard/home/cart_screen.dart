@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_doc_lab/core/connect_end/model/checkout_entity_model/item.dart';
+import 'package:my_doc_lab/core/connect_end/model/checkoutentitymodel.dart';
 import 'package:my_doc_lab/main.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/dashboard_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
@@ -20,6 +21,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  List<Item> items = [];
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AuthViewModel>.reactive(
@@ -164,11 +167,51 @@ class _CartScreenState extends State<CartScreen> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                       onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => Dashboard(),
-                                          ),
+                                        List<CheckoutEntityModel> c = [];
+                                        for (int i = 0; i < box.length; i++) {
+                                          c.add(box.getAt(i));
+                                        }
+                                        print('oooo::::$c');
+
+                                        for (var element in c) {
+                                          print('CCCCCC:::::$element');
+                                          if (element.serviceType ==
+                                              'consult') {
+                                            items.add(
+                                              Item(
+                                                serviceType: 'consult',
+                                                serviceId: element.serviceId,
+                                                doctorId: element.doctorId,
+                                                slotId: element.slotId,
+                                                complaint: element.complaint,
+                                              ),
+                                            );
+                                          } else if (element.serviceType ==
+                                              'med') {
+                                            items.add(
+                                              Item(
+                                                serviceType: 'med',
+                                                productId: element.serviceId,
+                                              ),
+                                            );
+                                          } else {
+                                            items.add(
+                                              Item(
+                                                serviceType:
+                                                    element.serviceType,
+                                                serviceId: element.serviceId,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                        print(
+                                          'print iitems::::${items[1].serviceId}',
                                         );
+                                        // Navigator.of(context).push(
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => Dashboard(),
+                                        //   ),
+                                        // );
                                       },
                                     ),
                                   ],

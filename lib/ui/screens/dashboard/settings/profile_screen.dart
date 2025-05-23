@@ -56,23 +56,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.r),
-                        child: Image.network(
-                          model
-                                  .getDocDetailResponseModel
-                                  ?.original
-                                  ?.profileImage ??
-                              '',
-                          height: 156.h,
-                          width: 120.w,
-                          fit: BoxFit.cover,
-                          errorBuilder:
-                              (context, error, stackTrace) => shimmerViewDoc(),
-                        ),
-                      ),
-                    ),
+                    model.getDocDetailResponseModel?.original?.profileImage !=
+                            null
+                        ? Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.r),
+                            child: Image.network(
+                              model
+                                      .getDocDetailResponseModel!
+                                      .original!
+                                      .profileImage!
+                                      .contains('https')
+                                  ? '${model.getDocDetailResponseModel?.original?.profileImage}'
+                                  : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.getDocDetailResponseModel?.original?.profileImage}',
+
+                              height: 156.h,
+                              width: 120.w,
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) =>
+                                      shimmerViewDoc(),
+                            ),
+                          ),
+                        )
+                        : shimmerViewDoc(),
                     SizedBox(width: 15.w),
                     Expanded(
                       child: Column(

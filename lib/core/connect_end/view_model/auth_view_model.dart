@@ -25,7 +25,7 @@ import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
-
+import '../model/checkout_entity_model/checkout_entity_model.dart' as ch;
 import '../../../main.dart';
 import '../../../ui/app_assets/app_utils.dart';
 import '../../../ui/app_assets/constant.dart';
@@ -224,6 +224,27 @@ class AuthViewModel extends BaseViewModel {
       loadingDialog(context);
       _loginResponseModel = await runBusyFuture(
         repositoryImply.login(loginEntity!),
+        throwException: true,
+      );
+      if (_loginResponseModel?.status == 'success') {
+        Navigator.pop(context);
+        AppUtils.snackbar(context, message: _loginResponseModel?.message!);
+        navigate.navigateTo(Routes.dashboard);
+      }
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void checkOut(context, {ch.CheckoutEntityModel? checkout}) async {
+    try {
+      loadingDialog(context);
+      await runBusyFuture(
+        repositoryImply.checkout(checkout!),
         throwException: true,
       );
       if (_loginResponseModel?.status == 'success') {

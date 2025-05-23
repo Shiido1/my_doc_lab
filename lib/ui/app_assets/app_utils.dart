@@ -41,7 +41,7 @@ class AppUtils {
       duration: const Duration(seconds: 3),
       reverseAnimationCurve: Curves.decelerate,
       forwardAnimationCurve: Curves.elasticOut,
-      backgroundColor: error ? AppColor.red : AppColor.primary1,
+      backgroundColor: error ? AppColor.red : AppColor.green,
     ).show(context!);
   }
 }

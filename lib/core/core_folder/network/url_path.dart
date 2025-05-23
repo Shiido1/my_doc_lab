@@ -34,4 +34,5 @@ class UrlConfig {
   static const String reject_call = 'chat/reject';
   static const String end_call = 'chat/end';
   static const String chat = 'chat';
+  static const String checkout = 'user/checkout';
 }

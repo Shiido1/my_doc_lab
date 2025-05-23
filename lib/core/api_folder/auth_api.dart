@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/checkout_entity_model/checkout_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/forgot_password_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
@@ -65,6 +66,21 @@ class AuthApi {
         UrlConfig.userUpdate,
         RequestMethod.post,
         data: update.toJson(),
+      );
+      logger.d(response.data);
+      return UpdateUserResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> checkout(CheckoutEntityModel checkout) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.checkout,
+        RequestMethod.post,
+        data: checkout.toJson(),
       );
       logger.d(response.data);
       return UpdateUserResponseModel.fromJson(response.data);

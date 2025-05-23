@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_resiter_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/checkout_entity_model/checkout_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
@@ -45,6 +46,9 @@ class AuthContractsImpl {
 
   Future<LoginResponseModel> login(LoginEntityModel loginEntity) async =>
       await _api.login(loginEntity);
+
+  Future<dynamic> checkout(CheckoutEntityModel checkout) async =>
+      await _api.checkout(checkout);
 
   Future<UpdateUserResponseModel> updateUser(
     UpdateUserEntityModel update,
