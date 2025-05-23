@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/chat/message_list_screen.dart';
 
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
 import 'appointment/appointment_screen.dart';
-import 'chat/chat_screen.dart';
 import 'settings/more_settings_screen.dart';
 import 'home/home_screen.dart';
 
@@ -27,7 +27,7 @@ class _DashboardState extends State<Dashboard> {
   final List<Widget> _body = [
     HomeScreen(),
     AppointmentScreen(),
-    ChatScreen(),
+    MessageListScreen(),
     MoreSettingsScreen(),
   ];
 

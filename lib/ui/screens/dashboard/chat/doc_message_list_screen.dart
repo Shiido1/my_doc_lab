@@ -31,6 +31,7 @@ class DoctorMessageListScreen extends StatelessWidget {
       builder: (_, DocViewModel model, __) {
         return Scaffold(
           backgroundColor: AppColor.white,
+          resizeToAvoidBottomInset: true,
           body: Column(
             children: [
               Padding(
@@ -74,208 +75,36 @@ class DoctorMessageListScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              RefreshIndicator(
-                onRefresh: () async {
-                  await model.getChatIndexReload(); // Trigger refresh
-                },
-                child: SizedBox(
-                  height: isTablet ? 640.h : 530.h,
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20.w,
-                      horizontal: 22.w,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 2.h),
-                        if (model.isLoading)
-                          ...List.generate(10, (i) => shimmerChatView())
-                        else if (model.getMessageIndexResponseModelList !=
-                                null &&
-                            model
-                                .getMessageIndexResponseModelList!
-                                .getMessageIndexResponseModelList!
-                                .isNotEmpty)
-                          if (model.query != '')
-                            ...model
-                                .getMessageIndexResponseModelList!
-                                .getMessageIndexResponseModelList!
-                                .where(
-                                  (e) => e.contactName!.toLowerCase().contains(
-                                    model.query.toLowerCase(),
-                                  ),
-                                )
-                                .map(
-                                  (o) => GestureDetector(
-                                    onTap:
-                                        () => navigate.navigateTo(
-                                          Routes.doctorChatScreen,
-                                          arguments: DoctorChatScreenArguments(
-                                            id: o.conversationId.toString(),
-                                            messageModel: o,
-                                          ),
-                                        ),
-                                    child: Container(
-                                      margin: EdgeInsets.only(bottom: 20.w),
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 12.w,
-                                        horizontal: 6.w,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: AppColor.greylight,
-                                        ),
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.all(24.80.w),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: AppColor.friendlyPrimary,
-                                            ),
-                                          ),
-                                          SizedBox(width: 20.w),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              TextView(
-                                                text:
-                                                    o.contactName
-                                                        ?.capitalize() ??
-                                                    '',
-                                                textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.darkindgrey,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 230.w,
-                                                child: TextView(
-                                                  text: o.lastMessage ?? '',
-                                                  maxLines: 1,
-                                                  textOverflow:
-                                                      TextOverflow.ellipsis,
-                                                  textStyle:
-                                                      GoogleFonts.gabarito(
-                                                        color:
-                                                            AppColor.lightgrey,
-                                                        fontSize: 12.20.sp,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          TextView(
-                                            text: getWeekdayAbbreviation(
-                                              o.lastMessageTime ?? '',
-                                            ),
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.lightgrey,
-                                              fontSize: 12.20.sp,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await model.getChatIndexReload(); // Trigger refresh
+                  },
+                  child: SizedBox(
+                    height: isTablet ? 640.h : 540.h,
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 20.w,
+                        horizontal: 22.w,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 2.h),
+                          if (model.isLoading)
+                            ...List.generate(10, (i) => shimmerChatView())
+                          else if (model.getMessageIndexResponseModelList !=
+                                  null &&
+                              model
+                                  .getMessageIndexResponseModelList!
+                                  .getMessageIndexResponseModelList!
+                                  .isNotEmpty)
+                            ..._buildChatList(model)
                           else
-                            ...model
-                                .getMessageIndexResponseModelList!
-                                .getMessageIndexResponseModelList!
-                                .map(
-                                  (o) => GestureDetector(
-                                    onTap:
-                                        () => navigate.navigateTo(
-                                          Routes.doctorChatScreen,
-                                          arguments: DoctorChatScreenArguments(
-                                            id: o.conversationId.toString(),
-                                            messageModel: o,
-                                          ),
-                                        ),
-                                    child: Container(
-                                      margin: EdgeInsets.only(bottom: 20.w),
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 12.w,
-                                        horizontal: 6.w,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: AppColor.greylight,
-                                        ),
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.all(24.80.w),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: AppColor.friendlyPrimary,
-                                            ),
-                                          ),
-                                          SizedBox(width: 20.w),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              TextView(
-                                                text:
-                                                    o.contactName
-                                                        ?.capitalize() ??
-                                                    '',
-                                                textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.darkindgrey,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 230.w,
-                                                child: TextView(
-                                                  text: o.lastMessage ?? '',
-                                                  maxLines: 1,
-                                                  textOverflow:
-                                                      TextOverflow.ellipsis,
-                                                  textStyle:
-                                                      GoogleFonts.gabarito(
-                                                        color:
-                                                            AppColor.lightgrey,
-                                                        fontSize: 12.20.sp,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          TextView(
-                                            text: getWeekdayAbbreviation(
-                                              o.lastMessageTime ?? '',
-                                            ),
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.lightgrey,
-                                              fontSize: 12.20.sp,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                        else
-                          SizedBox(),
-                      ],
+                            SizedBox(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -285,5 +114,92 @@ class DoctorMessageListScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  List<Widget> _buildChatList(DocViewModel model) {
+    final data =
+        model
+            .getMessageIndexResponseModelList!
+            .getMessageIndexResponseModelList!;
+
+    final filtered =
+        model.query.isNotEmpty
+            ? data.where(
+              (e) =>
+                  e.contactName?.toLowerCase().contains(
+                    model.query.toLowerCase(),
+                  ) ??
+                  false,
+            )
+            : data;
+
+    return filtered
+        .map(
+          (o) => GestureDetector(
+            onTap:
+                () => navigate.navigateTo(
+                  Routes.doctorChatScreen,
+                  arguments: DoctorChatScreenArguments(
+                    id: o.conversationId.toString(),
+                    messageModel: o,
+                  ),
+                ),
+            child: Container(
+              margin: EdgeInsets.only(bottom: 20.w),
+              padding: EdgeInsets.symmetric(vertical: 12.w, horizontal: 6.w),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColor.greylight),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(24.80.w),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColor.friendlyPrimary,
+                    ),
+                  ),
+                  SizedBox(width: 20.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextView(
+                          text: o.contactName?.capitalize() ?? '',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextView(
+                          text: o.lastMessage ?? '',
+                          maxLines: 1,
+                          textOverflow: TextOverflow.ellipsis,
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.lightgrey,
+                            fontSize: 12.20.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextView(
+                    text: getWeekdayAbbreviation(o.lastMessageTime ?? ''),
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.lightgrey,
+                      fontSize: 12.20.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                ],
+              ),
+            ),
+          ),
+        )
+        .toList();
   }
 }

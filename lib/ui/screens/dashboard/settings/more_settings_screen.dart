@@ -54,34 +54,54 @@ class MoreSettingsScreen extends StatelessWidget {
                 Center(
                   child: Column(
                     children: [
-                      Stack(
-                        fit: StackFit.loose,
-                        children: [
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            left: 0,
-                            child: SvgPicture.asset(AppImage.edit),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(60.w),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColor.oneKindgrey,
+                      model.getDocDetailResponseModel?.original?.profileImage !=
+                              null
+                          ? ClipOval(
+                            child: SizedBox.fromSize(
+                              size: const Size.fromRadius(68),
+                              child: Image.network(
+                                model
+                                        .getDocDetailResponseModel!
+                                        .original!
+                                        .profileImage!
+                                        .contains('https')
+                                    ? '${model.getDocDetailResponseModel?.original?.profileImage}'
+                                    : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.getDocDetailResponseModel?.original?.profileImage}',
+                                fit: BoxFit.cover,
+                                errorBuilder:
+                                    (context, error, stackTrace) =>
+                                        shimmerViewPharm(),
+                              ),
                             ),
+                          )
+                          : Stack(
+                            fit: StackFit.loose,
+                            children: [
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                left: 0,
+                                child: SvgPicture.asset(AppImage.edit),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(60.w),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColor.oneKindgrey,
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                left: 96.0,
+                                child: SvgPicture.asset(
+                                  AppImage.edit,
+                                  width: 20.w,
+                                  height: 20.h,
+                                ),
+                              ),
+                            ],
                           ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            left: 96.0,
-                            child: SvgPicture.asset(
-                              AppImage.edit,
-                              width: 20.w,
-                              height: 20.h,
-                            ),
-                          ),
-                        ],
-                      ),
                       SizedBox(height: 20.h),
                       TextView(
                         text:

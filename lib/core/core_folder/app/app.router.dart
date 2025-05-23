@@ -5,12 +5,13 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i10;
+import 'package:flutter/material.dart' as _i11;
 import 'package:flutter/material.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart'
-    as _i11;
+    as _i12;
 import 'package:my_doc_lab/ui/onboarding/first_onboarding_screen.dart' as _i2;
 import 'package:my_doc_lab/ui/screens/authentication/login_screen.dart' as _i7;
+import 'package:my_doc_lab/ui/screens/dashboard/chat/chat_screen.dart' as _i10;
 import 'package:my_doc_lab/ui/screens/dashboard/chat/doc_chat_screen.dart'
     as _i9;
 import 'package:my_doc_lab/ui/screens/dashboard/dashboard_screen.dart' as _i3;
@@ -23,7 +24,7 @@ import 'package:my_doc_lab/ui/screens/dashboard/pharmacy_dashboard_screen.dart'
 import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen.dart'
     as _i8;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i12;
+import 'package:stacked_services/stacked_services.dart' as _i13;
 
 class Routes {
   static const firstOnboardingScreen = '/';
@@ -42,6 +43,8 @@ class Routes {
 
   static const doctorChatScreen = '/doctor-chat-screen';
 
+  static const chatScreen = '/chat-screen';
+
   static const all = <String>{
     firstOnboardingScreen,
     dashboard,
@@ -51,6 +54,7 @@ class Routes {
     loginScreen,
     profileScreen,
     doctorChatScreen,
+    chatScreen,
   };
 }
 
@@ -88,42 +92,46 @@ class StackedRouter extends _i1.RouterBase {
       Routes.doctorChatScreen,
       page: _i9.DoctorChatScreen,
     ),
+    _i1.RouteDef(
+      Routes.chatScreen,
+      page: _i10.ChatScreen,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.FirstOnboardingScreen: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.FirstOnboardingScreen(),
         settings: data,
       );
     },
     _i3.Dashboard: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.Dashboard(),
         settings: data,
       );
     },
     _i4.DocDashboard: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.DocDashboard(),
         settings: data,
       );
     },
     _i5.LaboratoryDashboard: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.LaboratoryDashboard(),
         settings: data,
       );
     },
     _i6.PharmacyDashboard: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.PharmacyDashboard(),
         settings: data,
       );
     },
     _i7.LoginScreen: (data) {
       final args = data.getArgs<LoginScreenArguments>(nullOk: false);
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i7.LoginScreen(key: args.key, userType: args.userType),
         settings: data,
@@ -131,15 +139,23 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i8.ProfileScreen: (data) {
       final args = data.getArgs<ProfileScreenArguments>(nullOk: false);
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => _i8.ProfileScreen(key: args.key, id: args.id),
         settings: data,
       );
     },
     _i9.DoctorChatScreen: (data) {
       final args = data.getArgs<DoctorChatScreenArguments>(nullOk: false);
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => _i9.DoctorChatScreen(
+            key: args.key, id: args.id, messageModel: args.messageModel),
+        settings: data,
+      );
+    },
+    _i10.ChatScreen: (data) {
+      final args = data.getArgs<ChatScreenArguments>(nullOk: false);
+      return _i11.MaterialPageRoute<dynamic>(
+        builder: (context) => _i10.ChatScreen(
             key: args.key, id: args.id, messageModel: args.messageModel),
         settings: data,
       );
@@ -159,7 +175,7 @@ class LoginScreenArguments {
     required this.userType,
   });
 
-  final _i10.Key? key;
+  final _i11.Key? key;
 
   final String? userType;
 
@@ -186,7 +202,7 @@ class ProfileScreenArguments {
     required this.id,
   });
 
-  final _i10.Key? key;
+  final _i11.Key? key;
 
   final String? id;
 
@@ -214,11 +230,11 @@ class DoctorChatScreenArguments {
     required this.messageModel,
   });
 
-  final _i10.Key? key;
+  final _i11.Key? key;
 
   final String? id;
 
-  final _i11.GetMessageIndexResponseModel? messageModel;
+  final _i12.GetMessageIndexResponseModel? messageModel;
 
   @override
   String toString() {
@@ -239,7 +255,39 @@ class DoctorChatScreenArguments {
   }
 }
 
-extension NavigatorStateExtension on _i12.NavigationService {
+class ChatScreenArguments {
+  const ChatScreenArguments({
+    this.key,
+    required this.id,
+    required this.messageModel,
+  });
+
+  final _i11.Key? key;
+
+  final String? id;
+
+  final _i12.GetMessageIndexResponseModel? messageModel;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "id": "$id", "messageModel": "$messageModel"}';
+  }
+
+  @override
+  bool operator ==(covariant ChatScreenArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.id == id &&
+        other.messageModel == messageModel;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ id.hashCode ^ messageModel.hashCode;
+  }
+}
+
+extension NavigatorStateExtension on _i13.NavigationService {
   Future<dynamic> navigateToFirstOnboardingScreen([
     int? routerId,
     bool preventDuplicates = true,
@@ -311,7 +359,7 @@ extension NavigatorStateExtension on _i12.NavigationService {
   }
 
   Future<dynamic> navigateToLoginScreen({
-    _i10.Key? key,
+    _i11.Key? key,
     required String? userType,
     int? routerId,
     bool preventDuplicates = true,
@@ -328,7 +376,7 @@ extension NavigatorStateExtension on _i12.NavigationService {
   }
 
   Future<dynamic> navigateToProfileScreen({
-    _i10.Key? key,
+    _i11.Key? key,
     required String? id,
     int? routerId,
     bool preventDuplicates = true,
@@ -345,9 +393,9 @@ extension NavigatorStateExtension on _i12.NavigationService {
   }
 
   Future<dynamic> navigateToDoctorChatScreen({
-    _i10.Key? key,
+    _i11.Key? key,
     required String? id,
-    required _i11.GetMessageIndexResponseModel? messageModel,
+    required _i12.GetMessageIndexResponseModel? messageModel,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -357,6 +405,25 @@ extension NavigatorStateExtension on _i12.NavigationService {
     return navigateTo<dynamic>(Routes.doctorChatScreen,
         arguments: DoctorChatScreenArguments(
             key: key, id: id, messageModel: messageModel),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToChatScreen({
+    _i11.Key? key,
+    required String? id,
+    required _i12.GetMessageIndexResponseModel? messageModel,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.chatScreen,
+        arguments:
+            ChatScreenArguments(key: key, id: id, messageModel: messageModel),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -434,7 +501,7 @@ extension NavigatorStateExtension on _i12.NavigationService {
   }
 
   Future<dynamic> replaceWithLoginScreen({
-    _i10.Key? key,
+    _i11.Key? key,
     required String? userType,
     int? routerId,
     bool preventDuplicates = true,
@@ -451,7 +518,7 @@ extension NavigatorStateExtension on _i12.NavigationService {
   }
 
   Future<dynamic> replaceWithProfileScreen({
-    _i10.Key? key,
+    _i11.Key? key,
     required String? id,
     int? routerId,
     bool preventDuplicates = true,
@@ -468,9 +535,9 @@ extension NavigatorStateExtension on _i12.NavigationService {
   }
 
   Future<dynamic> replaceWithDoctorChatScreen({
-    _i10.Key? key,
+    _i11.Key? key,
     required String? id,
-    required _i11.GetMessageIndexResponseModel? messageModel,
+    required _i12.GetMessageIndexResponseModel? messageModel,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -480,6 +547,25 @@ extension NavigatorStateExtension on _i12.NavigationService {
     return replaceWith<dynamic>(Routes.doctorChatScreen,
         arguments: DoctorChatScreenArguments(
             key: key, id: id, messageModel: messageModel),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithChatScreen({
+    _i11.Key? key,
+    required String? id,
+    required _i12.GetMessageIndexResponseModel? messageModel,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.chatScreen,
+        arguments:
+            ChatScreenArguments(key: key, id: id, messageModel: messageModel),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

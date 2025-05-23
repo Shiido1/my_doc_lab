@@ -7,14 +7,14 @@ import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
 // ignore: must_be_immutable
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+class LabChatScreen extends StatefulWidget {
+  const LabChatScreen({super.key});
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<LabChatScreen> createState() => _LabChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _LabChatScreenState extends State<LabChatScreen> {
   final ScrollController _scrollController = ScrollController();
 
   bool isContainedText = false;

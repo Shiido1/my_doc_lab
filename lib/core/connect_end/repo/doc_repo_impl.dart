@@ -12,7 +12,6 @@ import '../model/received_message_response_model/received_message_response_model
 
 @lazySingleton
 class DocRepoImpl {
-  // final _session = locator<SharedPreferencesService>();
   final _contract = locator<DocContractsImpl>();
 
   Future<GetDocDetailResponseModel> getDoctorDetail() async {
@@ -63,4 +62,5 @@ class DocRepoImpl {
     final response = await _contract.sendMessage(send);
     return response;
   }
+
 }

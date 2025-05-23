@@ -76,6 +76,10 @@ class DocViewModel extends BaseViewModel {
 
   bool hasLoadedConversation = false;
 
+  List<SendMessageEntityModel> sendList = [];
+
+  ScrollController scrollController1 = ScrollController();
+
   DateTime now = DateTime.now();
 
   loadingDialog(context) => showDialog(
@@ -533,10 +537,6 @@ class DocViewModel extends BaseViewModel {
     }
     notifyListeners();
   }
-
-  List<SendMessageEntityModel> sendList = [];
-
-  ScrollController scrollController1 = ScrollController();
 
   Future<void> sendMessage(SendMessageEntityModel send) async {
     try {

@@ -47,10 +47,11 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
       builder: (_, DocViewModel model, __) {
         return Scaffold(
           backgroundColor: AppColor.white,
+          resizeToAvoidBottomInset: true,
           body: SafeArea(
-            child: Stack(
-              children: [
-                Column(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return Column(
                   children: [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,218 +117,220 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                       ],
                     ),
                     Divider(color: AppColor.greylight),
-                  ],
-                ),
 
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 80, // Reserve space for the input field
-                      left: 10,
-                      right: 10,
-                      top: 20,
-                    ),
-                    child: SizedBox(
-                      height: 600.h,
-                      child: SingleChildScrollView(
-                        controller: model.scrollController1,
-                        reverse:
-                            true, // so the latest message stays at the bottom
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (model.receivedMessageResponseModelList !=
-                                    null &&
-                                model
-                                    .receivedMessageResponseModelList!
-                                    .receivedMessageResponseModelList!
-                                    .isNotEmpty)
-                              ...model
-                                  .receivedMessageResponseModelList!
-                                  .receivedMessageResponseModelList!
-                                  .map((o) => model.boxMessage(o)),
-                            if (model.session.chatsData['chat'] == null ||
-                                model.session.chatsData['chat'].isEmpty)
-                              SizedBox.shrink()
-                            else
-                              ...model.session.chatsData['chat']!.map(
-                                (o) => Align(
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                      right: 20.w,
-                                      left: 100.w,
-                                      bottom: 20.w,
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 4.w,
-                                      horizontal: 10.w,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(0),
-                                      ),
-                                      color: AppColor.primary1,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        TextView(
-                                          text: o['message'] ?? '',
-                                          textStyle: GoogleFonts.dmSans(
-                                            fontSize: 15.2.sp,
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColor.white,
-                                          ),
-                                        ),
-                                        TextView(
-                                          text: DateFormat('hh:mma').format(
-                                            DateTime.parse(
-                                              model.now.toString(),
-                                            ).toLocal(),
-                                          ),
-                                          textStyle: GoogleFonts.dmSans(
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w400,
-                                            color: AppColor.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            SizedBox(height: 100),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    color: Colors.white,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: 50,
-                        maxHeight: 150,
-                      ),
-                      child: Scrollbar(
-                        child: Form(
-                          key: formKey,
-                          child: Row(
+                    Expanded(
+                      child: MediaQuery.removeViewInsets(
+                        context: context,
+                        removeBottom: true,
+                        child: SingleChildScrollView(
+                          controller: model.scrollController1,
+                          reverse:
+                              true, // so the latest message stays at the bottom
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: TextFormField(
-                                  controller: model.sendtextController,
-                                  scrollController: _scrollController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  minLines: 1,
-                                  decoration: InputDecoration(
-                                    hintText: 'Type a message...',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    filled: true,
-                                    fillColor: AppColor.white,
-                                    suffixIcon: Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 13.w,
-                                        right: 16.w,
+                              if (model.receivedMessageResponseModelList !=
+                                      null &&
+                                  model
+                                      .receivedMessageResponseModelList!
+                                      .receivedMessageResponseModelList!
+                                      .isNotEmpty)
+                                ...model
+                                    .receivedMessageResponseModelList!
+                                    .receivedMessageResponseModelList!
+                                    .map((o) => model.boxMessage(o)),
+                              if (model.session.chatsData['chat'] == null ||
+                                  model.session.chatsData['chat'].isEmpty)
+                                SizedBox.shrink()
+                              else
+                                ...model.session.chatsData['chat']!.map(
+                                  (o) => Align(
+                                    alignment: Alignment.topRight,
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                        right: 20.w,
+                                        left: 100.w,
+                                        bottom: 20.w,
                                       ),
-                                      child:
-                                          !isContainedText
-                                              ? Padding(
-                                                padding: EdgeInsets.only(
-                                                  bottom: isTablet ? 10.w : 0.w,
-                                                ),
-                                                child: Wrap(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      AppImage.clipper,
-                                                      height: 20.h,
-                                                      width: 20.w,
-                                                    ),
-
-                                                    SizedBox(width: 16.w),
-                                                    SvgPicture.asset(
-                                                      AppImage.mic,
-                                                      height: 20.h,
-                                                      width: 20.w,
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                              : Padding(
-                                                padding: EdgeInsets.only(
-                                                  bottom: 10.w,
-                                                ),
-                                                child: SvgPicture.asset(
-                                                  AppImage.clipper,
-                                                ),
-                                              ),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 4.w,
+                                        horizontal: 10.w,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(0),
+                                        ),
+                                        color: AppColor.primary1,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          TextView(
+                                            text: o['message'] ?? '',
+                                            textStyle: GoogleFonts.dmSans(
+                                              fontSize: 15.2.sp,
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColor.white,
+                                            ),
+                                          ),
+                                          TextView(
+                                            text: DateFormat('hh:mma').format(
+                                              DateTime.parse(
+                                                model.now.toString(),
+                                              ).toLocal(),
+                                            ),
+                                            textStyle: GoogleFonts.dmSans(
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColor.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  onChanged: (value) {
-                                    if (value.isNotEmpty) {
-                                      setState(() {
-                                        isContainedText = true;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        isContainedText = false;
-                                      });
-                                    }
-                                  },
                                 ),
-                              ),
-                              SizedBox(width: 4.w),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.send,
-                                  color: AppColor.primary,
-                                  size: 20.sp,
-                                ),
-                                onPressed: () async {
-                                  if (model.sendtextController.text != '') {
-                                    String msg = model.sendtextController.text;
-                                    Future.delayed(Duration(seconds: 0), () {
-                                      model.sendtextController.clear();
-                                    });
-                                    await model.sendMessage(
-                                      SendMessageEntityModel(
-                                        conversationId: int.parse(
-                                          widget.messageModel!.conversationId
-                                              .toString(),
-                                        ),
-                                        receiverId: int.parse(
-                                          widget.messageModel!.contactId
-                                              .toString(),
-                                        ),
-                                        receiverType: "MydocLab\\Models\\User",
-                                        message: msg,
-                                      ),
-                                    );
-                                  } else {}
-                                },
-                              ),
+                              SizedBox(height: 60),
                             ],
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ],
+
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        color: Colors.white,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: 50,
+                            maxHeight: 150,
+                          ),
+                          child: Scrollbar(
+                            child: Form(
+                              key: formKey,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: model.sendtextController,
+                                      scrollController: _scrollController,
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                      minLines: 1,
+                                      decoration: InputDecoration(
+                                        hintText: 'Type a message...',
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        filled: true,
+                                        fillColor: AppColor.white,
+                                        suffixIcon: Padding(
+                                          padding: EdgeInsets.only(
+                                            top: 13.w,
+                                            right: 16.w,
+                                          ),
+                                          child:
+                                              !isContainedText
+                                                  ? Padding(
+                                                    padding: EdgeInsets.only(
+                                                      bottom:
+                                                          isTablet ? 10.w : 0.w,
+                                                    ),
+                                                    child: Wrap(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          AppImage.clipper,
+                                                          height: 20.h,
+                                                          width: 20.w,
+                                                        ),
+
+                                                        SizedBox(width: 16.w),
+                                                        SvgPicture.asset(
+                                                          AppImage.mic,
+                                                          height: 20.h,
+                                                          width: 20.w,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                  : Padding(
+                                                    padding: EdgeInsets.only(
+                                                      bottom: 10.w,
+                                                    ),
+                                                    child: SvgPicture.asset(
+                                                      AppImage.clipper,
+                                                    ),
+                                                  ),
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        if (value.isNotEmpty) {
+                                          setState(() {
+                                            isContainedText = true;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            isContainedText = false;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.send,
+                                      color: AppColor.primary,
+                                      size: 20.sp,
+                                    ),
+                                    onPressed: () async {
+                                      if (model.sendtextController.text != '') {
+                                        String msg =
+                                            model.sendtextController.text;
+                                        Future.delayed(
+                                          Duration(seconds: 0),
+                                          () {
+                                            model.sendtextController.clear();
+                                          },
+                                        );
+                                        await model.sendMessage(
+                                          SendMessageEntityModel(
+                                            conversationId: int.parse(
+                                              widget
+                                                  .messageModel!
+                                                  .conversationId
+                                                  .toString(),
+                                            ),
+                                            receiverId: int.parse(
+                                              widget.messageModel!.contactId
+                                                  .toString(),
+                                            ),
+                                            receiverType:
+                                                "MydocLab\\Models\\User",
+                                            message: msg,
+                                          ),
+                                        );
+                                      } else {}
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         );

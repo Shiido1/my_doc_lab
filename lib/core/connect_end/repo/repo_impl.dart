@@ -16,15 +16,20 @@ import '../model/get_all_doctors_response_model/get_all_doctors_response_model.d
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
+import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../model/login_entity.dart';
 import '../model/login_response_model/login_response_model.dart';
+import '../model/post_user_cloud_entity_model.dart';
+import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../model/received_message_response_model/received_message_response_model.dart';
 import '../model/request_otp_entity_model.dart';
 import '../model/reset_password_entity_model.dart';
 import '../model/search_doctor_entity_model.dart';
 import '../model/searched_doctor_response_model/searched_doctor_response_model.dart';
 import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
+import '../model/send_message_entity_model.dart';
 import '../model/verify_otp_entity_model.dart';
 
 @lazySingleton
@@ -144,6 +149,28 @@ class AuthRepoImpl {
     return response;
   }
 
+  Future<PostUserVerificationCloudResponse> postCloudinary(
+    PostUserCloudEntityModel postCloudinary,
+  ) async {
+    final response = await _contract.postCloudinary(postCloudinary);
+    return response;
+  }
+
+  Future<GetMessageIndexResponseModelList> chatIndex() async {
+    final response = await _contract.chatIndex();
+    return response;
+  }
+
+  Future<ReceivedMessageResponseModelList> receiveMessage(String id) async {
+    final response = await _contract.receiveMessage(id);
+    return response;
+  }
+
+  Future<dynamic> sendMessage(SendMessageEntityModel send) async {
+    final response = await _contract.sendMessage(send);
+    return response;
+  }
+  
   void _chache(data) {
     if (data != null) {
       _session.authToken = data.token!;

@@ -3,14 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/chat/chat_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/chat/lab_chat_screen.dart';
 
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_form_widget.dart';
 import '../../../widget/text_widget.dart';
 
-class MessageListScreen extends StatelessWidget {
-  const MessageListScreen({super.key});
+class LabMessageListScreen extends StatelessWidget {
+  const LabMessageListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class MessageListScreen extends StatelessWidget {
               onTap:
                   () => Navigator.of(
                     context,
-                  ).push(MaterialPageRoute(builder: (context) => ChatScreen())),
+                  ).push(MaterialPageRoute(builder: (context) => LabChatScreen())),
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12.w, horizontal: 6.w),
                 decoration: BoxDecoration(

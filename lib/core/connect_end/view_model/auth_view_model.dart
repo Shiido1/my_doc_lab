@@ -130,8 +130,14 @@ class AuthViewModel extends BaseViewModel {
   File? image;
   String? filename;
   bool hasLoadedConversation = false;
+  DateTime now = DateTime.now();
+  TextEditingController sendtextController = TextEditingController(text: '');
 
   Box<CheckoutEntityModel>? _box;
+
+  List<SendMessageEntityModel> sendList = [];
+
+  ScrollController scrollController1 = ScrollController();
 
   Box<CheckoutEntityModel> getModelBox(box) {
     _box = box;
@@ -877,7 +883,7 @@ class AuthViewModel extends BaseViewModel {
         throwException: true,
       );
       _isLoading = false;
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 1), () {
         if (hasLoadedConversation) receiveConversation(id);
       });
     } catch (e) {
@@ -898,10 +904,6 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  List<SendMessageEntityModel> sendList = [];
-
-  ScrollController scrollController1 = ScrollController();
-
   Future<void> sendMessage(SendMessageEntityModel send) async {
     try {
       sendList.add(send);
@@ -917,7 +919,7 @@ class AuthViewModel extends BaseViewModel {
             throwException: true,
           );
         }
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(Duration(seconds: 1), () {
           session.chatsData = {'chat': []};
           sendList.clear();
         });
@@ -931,7 +933,7 @@ class AuthViewModel extends BaseViewModel {
 
   boxMessage(ReceivedMessageResponseModel message) => Column(
     children: [
-      message.senderType == "MydocLab\\Models\\User"
+      message.senderType == "MydocLab\\Models\\Doctor"
           ? Align(
             alignment: Alignment.topLeft,
             child: Container(
