@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'wallets.dart';
-
 part 'data.g.dart';
 
 @JsonSerializable()
@@ -13,7 +11,7 @@ class Data {
   dynamic gender;
   String? email;
   String? phone;
-  dynamic profileImage;
+  String? profileImage;
   String? status;
   DateTime? emailVerifiedAt;
   String? accountId;
@@ -24,7 +22,6 @@ class Data {
   DateTime? updatedAt;
   dynamic deletedAt;
   String? classtype;
-  Wallets? wallets;
 
   Data({
     this.id,
@@ -34,8 +31,8 @@ class Data {
     this.gender,
     this.email,
     this.phone,
-    this.status,
     this.profileImage,
+    this.status,
     this.emailVerifiedAt,
     this.accountId,
     this.city,
@@ -45,7 +42,6 @@ class Data {
     this.updatedAt,
     this.deletedAt,
     this.classtype,
-    this.wallets,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);

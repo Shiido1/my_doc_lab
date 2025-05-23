@@ -56,13 +56,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 20.w),
                 Row(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(20.w),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColor.oneKindgrey,
-                      ),
-                    ),
+                    model.getUserResponseModel?.data?.profileImage != null
+                        ? ClipOval(
+                          child: SizedBox.fromSize(
+                            size: const Size.fromRadius(24),
+                            child: Image.network(
+                              model.getUserResponseModel!.data!.profileImage!
+                                      .contains('https')
+                                  ? '${model.getUserResponseModel!.data!.profileImage}'
+                                  : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model..getUserResponseModel!.data?.profileImage}',
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) =>
+                                      shimmerViewPharm(),
+                            ),
+                          ),
+                        )
+                        : Container(
+                          padding: EdgeInsets.all(20.w),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColor.oneKindgrey,
+                          ),
+                        ),
                     SizedBox(width: 20.w),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

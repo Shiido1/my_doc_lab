@@ -8,6 +8,7 @@ import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_us
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/request_otp_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/reset_password_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/update_user_response_model/update_user_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/verify_otp_entity_model.dart';
 import '../connect_end/model/add_booking_entity_model.dart';
 import '../connect_end/model/care_giver_resiter_entity_model.dart';
@@ -28,6 +29,7 @@ import '../connect_end/model/searched_doctor_response_model/searched_doctor_resp
 import '../connect_end/model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../connect_end/model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../connect_end/model/send_message_entity_model.dart';
+import '../connect_end/model/update_user_entity_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
 import '../core_folder/network/cloudinary_network_service.dart';
@@ -49,6 +51,23 @@ class AuthApi {
       );
       logger.d(response.data);
       return LoginResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<UpdateUserResponseModel> updateUser(
+    UpdateUserEntityModel update,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.userUpdate,
+        RequestMethod.post,
+        data: update.toJson(),
+      );
+      logger.d(response.data);
+      return UpdateUserResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;
@@ -397,5 +416,4 @@ class AuthApi {
       rethrow;
     }
   }
-
 }

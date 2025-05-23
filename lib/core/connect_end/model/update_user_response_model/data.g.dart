@@ -14,8 +14,8 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
   gender: json['gender'],
   email: json['email'] as String?,
   phone: json['phone'] as String?,
+  profileImage: json['profileImage'] as String?,
   status: json['status'] as String?,
-  profileImage: json['profileImage'],
   emailVerifiedAt:
       json['emailVerifiedAt'] == null
           ? null
@@ -34,10 +34,6 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
           : DateTime.parse(json['updatedAt'] as String),
   deletedAt: json['deletedAt'],
   classtype: json['classtype'] as String?,
-  wallets:
-      json['wallets'] == null
-          ? null
-          : Wallets.fromJson(json['wallets'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
@@ -59,5 +55,4 @@ Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
   'updatedAt': instance.updatedAt?.toIso8601String(),
   'deletedAt': instance.deletedAt,
   'classtype': instance.classtype,
-  'wallets': instance.wallets,
 };

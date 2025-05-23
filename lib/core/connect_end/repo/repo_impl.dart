@@ -4,7 +4,6 @@ import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
-
 import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../contract/contract_impl.dart';
@@ -30,6 +29,8 @@ import '../model/searched_doctor_response_model/searched_doctor_response_model.d
 import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../model/send_message_entity_model.dart';
+import '../model/update_user_entity_model.dart';
+import '../model/update_user_response_model/update_user_response_model.dart';
 import '../model/verify_otp_entity_model.dart';
 
 @lazySingleton
@@ -52,6 +53,13 @@ class AuthRepoImpl {
   Future<LoginResponseModel> login(LoginEntityModel loginEntity) async {
     final response = await _contract.login(loginEntity);
     _chache(response.data);
+    return response;
+  }
+
+  Future<UpdateUserResponseModel> updateUser(
+    UpdateUserEntityModel update,
+  ) async {
+    final response = await _contract.updateUser(update);
     return response;
   }
 
@@ -170,7 +178,7 @@ class AuthRepoImpl {
     final response = await _contract.sendMessage(send);
     return response;
   }
-  
+
   void _chache(data) {
     if (data != null) {
       _session.authToken = data.token!;

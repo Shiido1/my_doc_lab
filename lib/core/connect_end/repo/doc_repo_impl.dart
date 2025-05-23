@@ -62,5 +62,4 @@ class DocRepoImpl {
     final response = await _contract.sendMessage(send);
     return response;
   }
-
 }

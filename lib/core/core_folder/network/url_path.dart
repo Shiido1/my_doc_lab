@@ -19,6 +19,7 @@ class UrlConfig {
   static const String labt_tech = 'lab-technician';
   static const String login = 'login';
   static const String user = 'user';
+  static const String userUpdate = 'user/update';
   static const String verifyPatientOtp = 'user/verify-otp';
   static const String resentPatientOtp = 'user/request-otp';
   static const String verifyCareGiverOtp = 'caregiver/verify-otp';

@@ -52,78 +52,77 @@ class _ChatScreenState extends State<ChatScreen> {
               builder: (context, constraints) {
                 return Column(
                   children: [
-                        Row(
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.keyboard_arrow_left, size: 32.sp),
+                        ),
+                        SizedBox(width: 20.w),
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.keyboard_arrow_left, size: 32.sp),
+                            SizedBox(height: 10.h),
+                            SizedBox(
+                              width: 200.w,
+                              child: TextView(
+                                text:
+                                    widget.messageModel?.contactName
+                                        ?.capitalize() ??
+                                    '',
+                                textStyle: GoogleFonts.dmSans(
+                                  color: AppColor.black,
+                                  fontSize: 20.0.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+
+                                maxLines: 1,
+                                textOverflow: TextOverflow.fade,
+                              ),
                             ),
-                            SizedBox(width: 20.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.end,
+                            Row(
                               children: [
-                                SizedBox(height: 10.h),
-                                SizedBox(
-                                  width: 200.w,
-                                  child: TextView(
-                                    text:
-                                        widget.messageModel?.contactName
-                                            ?.capitalize() ??
-                                        '',
-                                    textStyle: GoogleFonts.dmSans(
-                                      color: AppColor.black,
-                                      fontSize: 20.0.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                
-                                    maxLines: 1,
-                                    textOverflow: TextOverflow.fade,
+                                Container(
+                                  margin: EdgeInsets.only(left: 2.w),
+                                  padding: EdgeInsets.all(4.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.primary1,
+                                    shape: BoxShape.circle,
                                   ),
                                 ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(left: 2.w),
-                                      padding: EdgeInsets.all(4.w),
-                                      decoration: BoxDecoration(
-                                        color: AppColor.primary1,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    SizedBox(width: 6.w),
-                                    TextView(
-                                      text: 'Online',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.black,
-                                        fontSize: 14.0.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
+                                SizedBox(width: 6.w),
+                                TextView(
+                                  text: 'Online',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.black,
+                                    fontSize: 14.0.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ],
                             ),
-                            Spacer(),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.w, right: 20.w),
-                              child: SvgPicture.asset(
-                                AppImage.video,
-                                width: 22.w,
-                                height: 22.0.h,
-                              ),
-                            ),
                           ],
                         ),
-                        Divider(color: AppColor.greylight),
-                     
-                
+                        Spacer(),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.w, right: 20.w),
+                          child: SvgPicture.asset(
+                            AppImage.video,
+                            width: 22.w,
+                            height: 22.0.h,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(color: AppColor.greylight),
+
                     Expanded(
                       child: MediaQuery.removeViewInsets(
-                          context: context,
-                          removeBottom: true,
-                          
+                        context: context,
+                        removeBottom: true,
+
                         child: SingleChildScrollView(
                           controller: model.scrollController1,
                           reverse:
@@ -202,7 +201,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                       ),
                     ),
-                
+
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
@@ -228,7 +227,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                       decoration: InputDecoration(
                                         hintText: 'Type a message...',
                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                         ),
                                         filled: true,
                                         fillColor: AppColor.white,
@@ -241,7 +242,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                               !isContainedText
                                                   ? Padding(
                                                     padding: EdgeInsets.only(
-                                                      bottom: isTablet ? 10.w : 0.w,
+                                                      bottom:
+                                                          isTablet ? 10.w : 0.w,
                                                     ),
                                                     child: Wrap(
                                                       children: [
@@ -250,7 +252,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                           height: 20.h,
                                                           width: 20.w,
                                                         ),
-                
+
                                                         SizedBox(width: 16.w),
                                                         SvgPicture.asset(
                                                           AppImage.mic,
@@ -292,14 +294,20 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ),
                                     onPressed: () async {
                                       if (model.sendtextController.text != '') {
-                                        String msg = model.sendtextController.text;
-                                        Future.delayed(Duration(seconds: 0), () {
-                                          model.sendtextController.clear();
-                                        });
+                                        String msg =
+                                            model.sendtextController.text;
+                                        Future.delayed(
+                                          Duration(seconds: 0),
+                                          () {
+                                            model.sendtextController.clear();
+                                          },
+                                        );
                                         await model.sendMessage(
                                           SendMessageEntityModel(
                                             conversationId: int.parse(
-                                              widget.messageModel!.conversationId
+                                              widget
+                                                  .messageModel!
+                                                  .conversationId
                                                   .toString(),
                                             ),
                                             receiverId: int.parse(
@@ -323,7 +331,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ],
                 );
-              }
+              },
             ),
           ),
         );

@@ -54,19 +54,15 @@ class MoreSettingsScreen extends StatelessWidget {
                 Center(
                   child: Column(
                     children: [
-                      model.getDocDetailResponseModel?.original?.profileImage !=
-                              null
+                      model.getUserResponseModel!.data!.profileImage != null
                           ? ClipOval(
                             child: SizedBox.fromSize(
                               size: const Size.fromRadius(68),
                               child: Image.network(
-                                model
-                                        .getDocDetailResponseModel!
-                                        .original!
-                                        .profileImage!
+                                model.getUserResponseModel!.data!.profileImage!
                                         .contains('https')
-                                    ? '${model.getDocDetailResponseModel?.original?.profileImage}'
-                                    : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.getDocDetailResponseModel?.original?.profileImage}',
+                                    ? '${model.getUserResponseModel!.data!.profileImage}'
+                                    : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.getUserResponseModel!.data!.profileImage}',
                                 fit: BoxFit.cover,
                                 errorBuilder:
                                     (context, error, stackTrace) =>

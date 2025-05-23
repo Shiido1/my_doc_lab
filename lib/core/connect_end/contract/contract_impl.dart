@@ -28,6 +28,8 @@ import '../model/searched_doctor_response_model/searched_doctor_response_model.d
 import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../model/send_message_entity_model.dart';
+import '../model/update_user_entity_model.dart';
+import '../model/update_user_response_model/update_user_response_model.dart';
 import '../model/verify_otp_entity_model.dart';
 
 @lazySingleton
@@ -43,6 +45,10 @@ class AuthContractsImpl {
 
   Future<LoginResponseModel> login(LoginEntityModel loginEntity) async =>
       await _api.login(loginEntity);
+
+  Future<UpdateUserResponseModel> updateUser(
+    UpdateUserEntityModel update,
+  ) async => await _api.updateUser(update);
 
   Future<CareGiverResponseModel> loginCareGiver(
     CareGiverEntityModel careGiverEntity,
@@ -104,12 +110,11 @@ class AuthContractsImpl {
   Future<PostUserVerificationCloudResponse> postCloudinary(
     PostUserCloudEntityModel postCloudinary,
   ) async => await _api.postTocloudinary(postCloudinary);
-  
+
   Future<GetMessageIndexResponseModelList> chatIndex() async =>
       await _api.chatIndex();
   Future<ReceivedMessageResponseModelList> receiveMessage(String id) async =>
       await _api.receiveConversation(id);
   Future<dynamic> sendMessage(SendMessageEntityModel send) async =>
       await _api.sendMessage(send);
-
 }

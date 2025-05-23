@@ -54,9 +54,9 @@ class LabMessageListScreen extends StatelessWidget {
             SizedBox(height: 20.h),
             GestureDetector(
               onTap:
-                  () => Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (context) => LabChatScreen())),
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => LabChatScreen()),
+                  ),
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12.w, horizontal: 6.w),
                 decoration: BoxDecoration(

@@ -20,6 +20,7 @@ import 'package:my_doc_lab/core/connect_end/model/login_entity.dart';
 import 'package:my_doc_lab/core/connect_end/model/login_response_model/login_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/searched_doctor_response_model/searched_doctor_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/update_user_response_model/update_user_response_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
@@ -49,6 +50,7 @@ import '../model/search_doctor_entity_model.dart';
 import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../model/send_message_entity_model.dart';
+import '../model/update_user_entity_model.dart';
 import '../repo/repo_impl.dart';
 
 class AuthViewModel extends BaseViewModel {
@@ -112,6 +114,9 @@ class AuthViewModel extends BaseViewModel {
   ReceivedMessageResponseModelList? _receivedMessageResponseModelList;
   ReceivedMessageResponseModelList? get receivedMessageResponseModelList =>
       _receivedMessageResponseModelList;
+  UpdateUserResponseModel? get updateUserResponseModel =>
+      _updateUserResponseModel;
+  UpdateUserResponseModel? _updateUserResponseModel;
 
   final debouncer = Debouncer();
 
@@ -223,11 +228,28 @@ class AuthViewModel extends BaseViewModel {
       );
       if (_loginResponseModel?.status == 'success') {
         Navigator.pop(context);
-        AppUtils.snackbar(
-          context,
-          message: _loginResponseModel?.message!,
-          error: true,
-        );
+        AppUtils.snackbar(context, message: _loginResponseModel?.message!);
+        navigate.navigateTo(Routes.dashboard);
+      }
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void updateUser(context, {UpdateUserEntityModel? updateEntity}) async {
+    try {
+      loadingDialog(context);
+      _updateUserResponseModel = await runBusyFuture(
+        repositoryImply.updateUser(updateEntity!),
+        throwException: true,
+      );
+      if (_updateUserResponseModel?.status == 'success') {
+        Navigator.pop(context);
+        AppUtils.snackbar(context, message: 'Account updated successfully!');
         navigate.navigateTo(Routes.dashboard);
       }
     } catch (e) {

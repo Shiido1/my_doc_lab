@@ -31,6 +31,7 @@ class MessageListScreen extends StatelessWidget {
       builder: (_, AuthViewModel model, __) {
         return Scaffold(
           backgroundColor: AppColor.white,
+          resizeToAvoidBottomInset: true,
           body: Column(
             children: [
               Padding(
@@ -77,34 +78,36 @@ class MessageListScreen extends StatelessWidget {
                 ),
               ),
 
-              RefreshIndicator(
-                onRefresh: () async {
-                  await model.getChatIndexReload(); // Trigger refresh
-                },
-                child: SizedBox(
-                  height: isTablet ? 640.h : 530.h,
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20.w,
-                      horizontal: 22.w,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 2.h),
-                        if (model.isLoading)
-                          ...List.generate(10, (i) => shimmerChatView())
-                        else if (model.getMessageIndexResponseModelList !=
-                                null &&
-                            model
-                                .getMessageIndexResponseModelList!
-                                .getMessageIndexResponseModelList!
-                                .isNotEmpty)
-                          ..._buildChatList(model)
-                        else
-                          SizedBox(),
-                      ],
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await model.getChatIndexReload(); // Trigger refresh
+                  },
+                  child: SizedBox(
+                    height: isTablet ? 640.h : 540.h,
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 20.w,
+                        horizontal: 22.w,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 2.h),
+                          if (model.isLoading)
+                            ...List.generate(10, (i) => shimmerChatView())
+                          else if (model.getMessageIndexResponseModelList !=
+                                  null &&
+                              model
+                                  .getMessageIndexResponseModelList!
+                                  .getMessageIndexResponseModelList!
+                                  .isNotEmpty)
+                            ..._buildChatList(model)
+                          else
+                            SizedBox(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
