@@ -76,7 +76,7 @@ shimmerViewDoc() => SizedBox(
 
 shimmerViewPharm() => SizedBox(
   width: 200.0,
-  height: 140.0,
+  height: 114.0,
   child: Shimmer.fromColors(
     baseColor: AppColor.friendlyPrimary,
     highlightColor: AppColor.primary1,

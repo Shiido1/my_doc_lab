@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/video_chat_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart' show ViewModelBuilder;
 
@@ -108,10 +109,18 @@ class _ChatScreenState extends State<ChatScreen> {
                         Spacer(),
                         Padding(
                           padding: EdgeInsets.only(top: 10.w, right: 20.w),
-                          child: SvgPicture.asset(
-                            AppImage.video,
-                            width: 22.w,
-                            height: 22.0.h,
+                          child: GestureDetector(
+                            onTap:
+                                () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => VideoChatScreen(),
+                                  ),
+                                ),
+                            child: SvgPicture.asset(
+                              AppImage.video,
+                              width: 22.w,
+                              height: 22.0.h,
+                            ),
                           ),
                         ),
                       ],
@@ -178,17 +187,30 @@ class _ChatScreenState extends State<ChatScreen> {
                                               color: AppColor.white,
                                             ),
                                           ),
-                                          TextView(
-                                            text: DateFormat('hh:mma').format(
-                                              DateTime.parse(
-                                                model.now.toString(),
-                                              ).toLocal(),
-                                            ),
-                                            textStyle: GoogleFonts.dmSans(
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.w400,
-                                              color: AppColor.white,
-                                            ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              TextView(
+                                                text: DateFormat(
+                                                  'hh:mma',
+                                                ).format(
+                                                  DateTime.parse(
+                                                    model.now.toString(),
+                                                  ).toLocal(),
+                                                ),
+                                                textStyle: GoogleFonts.dmSans(
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: AppColor.white,
+                                                ),
+                                              ),
+                                              SizedBox(width: 4.w),
+                                              Icon(
+                                                Icons.access_time,
+                                                color: AppColor.white,
+                                                size: 14.sp,
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),

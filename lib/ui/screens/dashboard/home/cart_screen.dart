@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/core/connect_end/model/checkout_entity_model/item.dart';
-import 'package:my_doc_lab/core/connect_end/model/checkoutentitymodel.dart';
 import 'package:my_doc_lab/main.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
@@ -21,8 +19,6 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<Item> items = [];
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AuthViewModel>.reactive(
@@ -103,122 +99,10 @@ class _CartScreenState extends State<CartScreen> {
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w500,
                   ),
-                  onPressed:
-                      () => showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder:
-                            (ctxt) => Dialog(
-                              backgroundColor: Colors.transparent,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 16.w,
-                                  vertical: 20.w,
-                                ),
-                                margin: EdgeInsets.only(
-                                  top: 200.w,
-                                  bottom: 200.w,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColor.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(8.w),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: AppColor.primary1,
-                                      ),
-                                      child: Icon(
-                                        Icons.check,
-                                        color: AppColor.white,
-                                        size: 30.sp,
-                                      ),
-                                    ),
-                                    SizedBox(height: 30.h),
-                                    TextView(
-                                      text: 'Payment Successful',
-                                      textStyle: GoogleFonts.dmSans(
-                                        color: AppColor.black,
-                                        fontSize: 15.80.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    SizedBox(height: 20.h),
-                                    TextView(
-                                      text: 'Your payment has been approved',
-                                      textStyle: GoogleFonts.dmSans(
-                                        color: AppColor.black,
-                                        fontSize: 15.80.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    SizedBox(height: 40.h),
-                                    ButtonWidget(
-                                      buttonText: 'Go to Appointments',
-                                      buttonHeight: 40,
-                                      buttonColor: AppColor.primary1,
-                                      buttonBorderColor: AppColor.transparent,
-                                      textStyle: GoogleFonts.dmSans(
-                                        color: AppColor.white,
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      onPressed: () {
-                                        List<CheckoutEntityModel> c = [];
-                                        for (int i = 0; i < box.length; i++) {
-                                          c.add(box.getAt(i));
-                                        }
-                                        print('oooo::::$c');
-
-                                        for (var element in c) {
-                                          print('CCCCCC:::::$element');
-                                          if (element.serviceType ==
-                                              'consult') {
-                                            items.add(
-                                              Item(
-                                                serviceType: 'consult',
-                                                serviceId: element.serviceId,
-                                                doctorId: element.doctorId,
-                                                slotId: element.slotId,
-                                                complaint: element.complaint,
-                                              ),
-                                            );
-                                          } else if (element.serviceType ==
-                                              'med') {
-                                            items.add(
-                                              Item(
-                                                serviceType: 'med',
-                                                productId: element.serviceId,
-                                              ),
-                                            );
-                                          } else {
-                                            items.add(
-                                              Item(
-                                                serviceType:
-                                                    element.serviceType,
-                                                serviceId: element.serviceId,
-                                              ),
-                                            );
-                                          }
-                                        }
-                                        print(
-                                          'print iitems::::${items[1].serviceId}',
-                                        );
-                                        // Navigator.of(context).push(
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => Dashboard(),
-                                        //   ),
-                                        // );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                      ),
+                  onPressed: () {
+                    model.clickCheckout();
+                    model.showCheckoutModal(context);
+                  },
                 ),
               ],
             ),

@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           model.getPatientDetail(context);
           model.getAllDoctors(context);
+          model.getChatIndex();
         });
       },
       disposeViewModel: false,
@@ -244,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   suffixWidget: Padding(
                     padding: EdgeInsets.all(14.w),
                     child: GestureDetector(
-                      onTap: () => modalBottomSheetFilter(context),
+                      // onTap: () => modalBottomSheetFilter(context),
                       child: SvgPicture.asset(
                         AppImage.filter,
                         height: 20.h,

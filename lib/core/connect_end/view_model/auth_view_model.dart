@@ -1,15 +1,16 @@
 // ignore_for_file: unnecessary_null_comparison
-
+import 'package:permission_handler/permission_handler.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_resiter_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
@@ -20,11 +21,14 @@ import 'package:my_doc_lab/core/connect_end/model/login_entity.dart';
 import 'package:my_doc_lab/core/connect_end/model/login_response_model/login_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/searched_doctor_response_model/searched_doctor_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/send_message_response_model/send_message_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_user_response_model/update_user_response_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
+import '../../../ui/screens/dashboard/dashboard_screen.dart';
+import '../../../ui/widget/button_widget.dart';
 import '../model/checkout_entity_model/checkout_entity_model.dart' as ch;
 import '../../../main.dart';
 import '../../../ui/app_assets/app_utils.dart';
@@ -36,6 +40,7 @@ import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
 import '../model/add_booking_entity_model.dart';
+import '../model/checkout_entity_model/item.dart';
 import '../model/checkoutentitymodel.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
@@ -122,6 +127,8 @@ class AuthViewModel extends BaseViewModel {
 
   String selectedRole = '';
 
+  List<Item> items = [];
+
   AuthViewModel({this.context});
 
   String query = '';
@@ -143,6 +150,18 @@ class AuthViewModel extends BaseViewModel {
   List<SendMessageEntityModel> sendList = [];
 
   ScrollController scrollController1 = ScrollController();
+  SendMessageResponseModel? _sendMessageResponseModel;
+  SendMessageResponseModel? get sendMessageResponseModel =>
+      _sendMessageResponseModel;
+  CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
+  CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
+      _callTokenGenerateResponseModel;
+
+  RtcEngine? engine;
+
+  dynamic _remoteUid;
+
+  bool localUserJoined = false;
 
   Box<CheckoutEntityModel> getModelBox(box) {
     _box = box;
@@ -247,11 +266,8 @@ class AuthViewModel extends BaseViewModel {
         repositoryImply.checkout(checkout!),
         throwException: true,
       );
-      if (_loginResponseModel?.status == 'success') {
-        Navigator.pop(context);
-        AppUtils.snackbar(context, message: _loginResponseModel?.message!);
-        navigate.navigateTo(Routes.dashboard);
-      }
+      Navigator.pop(context);
+      showCheckoutSuccessfulModal(context);
     } catch (e) {
       _isLoading = false;
       logger.d(e);
@@ -418,6 +434,131 @@ class AuthViewModel extends BaseViewModel {
       // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
+  }
+
+  void generateToken(context, {CallTokenGenerateEntityModel? calltoken}) async {
+    try {
+      // _isLoading = true;
+      _callTokenGenerateResponseModel = await runBusyFuture(
+        repositoryImply.generateToken(calltoken!),
+        throwException: true,
+      );
+      initializeAgoraVoiceSDK();
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  // Set up the Agora RTC engine instance
+  Future<void> initializeAgoraVoiceSDK() async {
+    await [Permission.microphone, Permission.camera].request();
+    engine = createAgoraRtcEngine();
+    await engine?.initialize(
+      const RtcEngineContext(
+        appId: "e18babecb1eb4a889feefcbbf60e5a5a",
+        channelProfile: ChannelProfileType.channelProfileCommunication,
+      ),
+    );
+    _setupLocalVideo();
+    _joinChannel();
+    _setupEventHandlers();
+  }
+
+  Future<void> _setupLocalVideo() async {
+    // The video module and preview are disabled by default.
+    await engine?.enableVideo();
+    await engine?.startPreview();
+  }
+
+  // If a remote user has joined, render their video, else display a waiting message
+  Widget remoteVideo() {
+    if (_remoteUid != null) {
+      return AgoraVideoView(
+        controller: VideoViewController.remote(
+          rtcEngine: engine!, // Uses the Agora engine instance
+          canvas: VideoCanvas(uid: _remoteUid), // Binds the remote user's video
+          connection: RtcConnection(
+            channelId: _callTokenGenerateResponseModel?.channelName,
+          ), // Specifies the channel
+        ),
+      );
+    } else {
+      return const Text(
+        'Waiting for remote user to join...',
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
+  // Displays the local user's video view using the Agora engine.
+  // Widget _localVideo() {
+  //   return AgoraVideoView(
+  //     controller: VideoViewController(
+  //       rtcEngine: engine!, // Uses the Agora engine instance
+  //       canvas: VideoCanvas(
+  //         uid: int.parse(
+  //           '${_callTokenGenerateResponseModel?.uid ?? 0}',
+  //         ), // Specifies the local user
+  //         renderMode:
+  //             RenderModeType.renderModeHidden, // Sets the video rendering mode
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Register an event handler for Agora RTC
+  void _setupEventHandlers() {
+    engine?.registerEventHandler(
+      RtcEngineEventHandler(
+        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+          debugPrint("Local user ${connection.localUid} joined");
+          localUserJoined = true;
+        },
+        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+          debugPrint("Remote user $remoteUid joined");
+          _remoteUid = remoteUid;
+        },
+        onUserOffline: (
+          RtcConnection connection,
+          int remoteUid,
+          UserOfflineReasonType reason,
+        ) {
+          debugPrint("Remote user $remoteUid left");
+          _remoteUid = null;
+        },
+      ),
+    );
+    notifyListeners();
+  }
+
+  // Join a channel as a broadcasted
+  Future<void> _joinChannel() async {
+    await engine?.joinChannel(
+      token: _callTokenGenerateResponseModel?.token ?? "",
+      channelId: _callTokenGenerateResponseModel?.channelName ?? "",
+      options: const ChannelMediaOptions(
+        autoSubscribeVideo:
+            true, // Automatically subscribe to all video streams
+        autoSubscribeAudio:
+            true, // Automatically subscribe to all audio streams
+        publishCameraTrack: true, // Publish camera-captured video
+        publishMicrophoneTrack: true, // Publish microphone-captured audio
+        // Use clientRoleBroadcaster to act as a host or clientRoleAudience for audience
+        clientRoleType: ClientRoleType.clientRoleBroadcaster,
+      ),
+      uid: int.parse('${_callTokenGenerateResponseModel?.uid ?? 0}'),
+    );
+  }
+
+  // Leaves the channel and releases resources
+  Future<void> cleanupAgoraEngine() async {
+    await engine?.leaveChannel();
+    await engine?.release();
   }
 
   void getSearchedMed(context, {SearchDoctorEntityModel? searchEntity}) async {
@@ -772,24 +913,24 @@ class AuthViewModel extends BaseViewModel {
                               ],
                             ),
                           ),
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                AppImage.location,
-                                height: 15.2.h,
-                                width: 16.2.w,
-                              ),
-                              SizedBox(width: 2.w),
-                              TextView(
-                                text: '800m away',
-                                textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.black,
-                                  fontSize: 12.0.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     SvgPicture.asset(
+                          //       AppImage.location,
+                          //       height: 15.2.h,
+                          //       width: 16.2.w,
+                          //     ),
+                          //     SizedBox(width: 2.w),
+                          //     TextView(
+                          //       text: '800m away',
+                          //       textStyle: GoogleFonts.gabarito(
+                          //         color: AppColor.black,
+                          //         fontSize: 12.0.sp,
+                          //         fontWeight: FontWeight.w500,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ],
@@ -810,23 +951,29 @@ class AuthViewModel extends BaseViewModel {
             .searchedDoctorResponseModelList
             .isNotEmpty) {
       return _searchedDoctorResponseModelList!
+                      .searchedDoctorResponseModelList[index]
+                      .profileImage !=
+                  null &&
+              _searchedDoctorResponseModelList!
+                  .searchedDoctorResponseModelList[index]
+                  .profileImage!
+                  .contains('https')
+          ? _searchedDoctorResponseModelList!
               .searchedDoctorResponseModelList[index]
               .profileImage!
-              .contains('https')
-          ? _searchedDoctorResponseModelList!
-                  .searchedDoctorResponseModelList[index]
-                  .profileImage ??
-              ''
           : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${_searchedDoctorResponseModelList!.searchedDoctorResponseModelList[index].profileImage ?? ''}';
     } else if (_getAllDoctorsResponseModelList != null) {
       return _getAllDoctorsResponseModelList!
+                      .getAllDoctorsResponseModelList![index]
+                      .profileImage !=
+                  null &&
+              _getAllDoctorsResponseModelList!
+                  .getAllDoctorsResponseModelList![index]
+                  .profileImage!
+                  .contains('https')
+          ? _getAllDoctorsResponseModelList!
               .getAllDoctorsResponseModelList![index]
               .profileImage!
-              .contains('https')
-          ? _getAllDoctorsResponseModelList!
-                  .getAllDoctorsResponseModelList![index]
-                  .profileImage ??
-              ''
           : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${_getAllDoctorsResponseModelList!.getAllDoctorsResponseModelList![index].profileImage ?? ''}';
     }
     return '';
@@ -957,15 +1104,17 @@ class AuthViewModel extends BaseViewModel {
         for (var element in session.chatsData['chat']) {
           SendMessageEntityModel sendMessageEntityModel =
               SendMessageEntityModel.fromJson(element);
-          await runBusyFuture(
+          _sendMessageResponseModel = await runBusyFuture(
             repositoryImply.sendMessage(sendMessageEntityModel),
             throwException: true,
           );
+          if (_sendMessageResponseModel?.success == true) {
+            Future.delayed(Duration(seconds: 1), () {
+              session.chatsData = {'chat': []};
+              sendList.clear();
+            });
+          }
         }
-        Future.delayed(Duration(seconds: 1), () {
-          session.chatsData = {'chat': []};
-          sendList.clear();
-        });
       }
     } catch (e) {
       _isLoading = false;
@@ -1043,16 +1192,24 @@ class AuthViewModel extends BaseViewModel {
                       color: AppColor.white,
                     ),
                   ),
-
-                  TextView(
-                    text: DateFormat('hh:mma').format(
-                      DateTime.parse(message.updatedAt.toString()).toLocal(),
-                    ),
-                    textStyle: GoogleFonts.dmSans(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: AppColor.white,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextView(
+                        text: DateFormat('hh:mma').format(
+                          DateTime.parse(
+                            message.updatedAt.toString(),
+                          ).toLocal(),
+                        ),
+                        textStyle: GoogleFonts.dmSans(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.white,
+                        ),
+                      ),
+                      SizedBox(width: 4.w),
+                      Icon(Icons.check, color: AppColor.white, size: 14.sp),
+                    ],
                   ),
                 ],
               ),
@@ -1070,4 +1227,165 @@ class AuthViewModel extends BaseViewModel {
       );
     }
   }
+
+  clickCheckout() {
+    List<CheckoutEntityModel> c = [];
+    for (int i = 0; i < box.length; i++) {
+      c.add(box.getAt(i));
+    }
+
+    for (var element in c) {
+      if (element.serviceType == 'consult') {
+        items.add(
+          Item(
+            serviceType: 'consult',
+            serviceId: element.serviceId,
+            doctorId: element.doctorId,
+            slotId: element.slotId,
+            complaint: element.complaint,
+          ),
+        );
+      } else if (element.serviceType == 'med') {
+        items.add(Item(serviceType: 'med', productId: element.serviceId));
+      } else {
+        items.add(
+          Item(serviceType: element.serviceType, serviceId: element.serviceId),
+        );
+      }
+    }
+
+    print('print iitems::::${items[0].complaint}');
+  }
+
+  showCheckoutModal(BuildContext context) => showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder:
+        (ctxt) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.w),
+            margin: EdgeInsets.only(top: 200.w, bottom: 200.w),
+            decoration: BoxDecoration(
+              color: AppColor.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8.w),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColor.primary1,
+                  ),
+                  child: Icon(Icons.check, color: AppColor.white, size: 30.sp),
+                ),
+                SizedBox(height: 30.h),
+                TextView(
+                  text: 'Click Ok to Checkout.',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.black,
+                    fontSize: 15.80.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                TextView(
+                  text: 'Your payment will be deducted from your wallet.',
+                  textAlign: TextAlign.center,
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.black,
+                    fontSize: 15.80.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 40.h),
+                ButtonWidget(
+                  buttonText: 'Checkout',
+                  buttonHeight: 40,
+                  buttonColor: AppColor.primary1,
+                  buttonBorderColor: AppColor.transparent,
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  onPressed:
+                      () => checkOut(
+                        context,
+                        checkout: ch.CheckoutEntityModel(
+                          items: items,
+                          paymentMethod: 'wallet',
+                        ),
+                      ),
+                ),
+              ],
+            ),
+          ),
+        ),
+  );
+
+  showCheckoutSuccessfulModal(BuildContext context) => showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder:
+        (ctxt) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.w),
+            margin: EdgeInsets.only(top: 200.w, bottom: 200.w),
+            decoration: BoxDecoration(
+              color: AppColor.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8.w),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColor.primary1,
+                  ),
+                  child: Icon(Icons.check, color: AppColor.white, size: 30.sp),
+                ),
+                SizedBox(height: 30.h),
+                TextView(
+                  text: 'Payment Successful',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.black,
+                    fontSize: 15.80.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                TextView(
+                  text: 'Your payment has been approved',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.black,
+                    fontSize: 15.80.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 40.h),
+                ButtonWidget(
+                  buttonText: 'Go to Dashboard',
+                  buttonHeight: 40,
+                  buttonColor: AppColor.primary1,
+                  buttonBorderColor: AppColor.transparent,
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => Dashboard()),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+  );
 }

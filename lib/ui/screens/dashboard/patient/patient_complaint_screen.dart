@@ -172,6 +172,8 @@ class _PatientDetailComplaintScreenState
                                     date: widget.slotId!.availableDate!,
                                     time: widget.slotId!.availableTime!,
                                     doctor: widget.doctor!,
+                                    productId: 0,
+                                    qty: 0,
                                   ),
                                 );
                                 AppUtils.snackbar(

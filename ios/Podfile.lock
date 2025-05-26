@@ -1,4 +1,50 @@
 PODS:
+  - agora_rtc_engine (6.5.2):
+    - AgoraIrisRTC_iOS (= 4.5.2-build.1)
+    - AgoraRtcEngine_iOS (= 4.5.2)
+    - Flutter
+  - AgoraInfra_iOS (1.2.13.1)
+  - AgoraIrisRTC_iOS (4.5.2-build.1)
+  - AgoraRtcEngine_iOS (4.5.2):
+    - AgoraRtcEngine_iOS/AIAEC (= 4.5.2)
+    - AgoraRtcEngine_iOS/AIAECLL (= 4.5.2)
+    - AgoraRtcEngine_iOS/AINS (= 4.5.2)
+    - AgoraRtcEngine_iOS/AINSLL (= 4.5.2)
+    - AgoraRtcEngine_iOS/AudioBeauty (= 4.5.2)
+    - AgoraRtcEngine_iOS/ClearVision (= 4.5.2)
+    - AgoraRtcEngine_iOS/ContentInspect (= 4.5.2)
+    - AgoraRtcEngine_iOS/FaceCapture (= 4.5.2)
+    - AgoraRtcEngine_iOS/FaceDetection (= 4.5.2)
+    - AgoraRtcEngine_iOS/LipSync (= 4.5.2)
+    - AgoraRtcEngine_iOS/ReplayKit (= 4.5.2)
+    - AgoraRtcEngine_iOS/RtcBasic (= 4.5.2)
+    - AgoraRtcEngine_iOS/SpatialAudio (= 4.5.2)
+    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.5.2)
+    - AgoraRtcEngine_iOS/VideoAv1CodecEnc (= 4.5.2)
+    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.5.2)
+    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.5.2)
+    - AgoraRtcEngine_iOS/VirtualBackground (= 4.5.2)
+    - AgoraRtcEngine_iOS/VQA (= 4.5.2)
+  - AgoraRtcEngine_iOS/AIAEC (4.5.2)
+  - AgoraRtcEngine_iOS/AIAECLL (4.5.2)
+  - AgoraRtcEngine_iOS/AINS (4.5.2)
+  - AgoraRtcEngine_iOS/AINSLL (4.5.2)
+  - AgoraRtcEngine_iOS/AudioBeauty (4.5.2)
+  - AgoraRtcEngine_iOS/ClearVision (4.5.2)
+  - AgoraRtcEngine_iOS/ContentInspect (4.5.2)
+  - AgoraRtcEngine_iOS/FaceCapture (4.5.2)
+  - AgoraRtcEngine_iOS/FaceDetection (4.5.2)
+  - AgoraRtcEngine_iOS/LipSync (4.5.2)
+  - AgoraRtcEngine_iOS/ReplayKit (4.5.2)
+  - AgoraRtcEngine_iOS/RtcBasic (4.5.2):
+    - AgoraInfra_iOS (= 1.2.13.1)
+  - AgoraRtcEngine_iOS/SpatialAudio (4.5.2)
+  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.5.2)
+  - AgoraRtcEngine_iOS/VideoAv1CodecEnc (4.5.2)
+  - AgoraRtcEngine_iOS/VideoCodecDec (4.5.2)
+  - AgoraRtcEngine_iOS/VideoCodecEnc (4.5.2)
+  - AgoraRtcEngine_iOS/VirtualBackground (4.5.2)
+  - AgoraRtcEngine_iOS/VQA (4.5.2)
   - Flutter (1.0.0)
   - flutter_native_splash (2.4.3):
     - Flutter
@@ -7,27 +53,39 @@ PODS:
     - TOCropViewController (~> 2.7.4)
   - image_picker_ios (0.0.1):
     - Flutter
+  - iris_method_channel (0.0.1):
+    - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - permission_handler_apple (9.3.0):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
   - TOCropViewController (2.7.4)
 
 DEPENDENCIES:
+  - agora_rtc_engine (from `.symlinks/plugins/agora_rtc_engine/ios`)
   - Flutter (from `Flutter`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - iris_method_channel (from `.symlinks/plugins/iris_method_channel/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
+    - AgoraInfra_iOS
+    - AgoraIrisRTC_iOS
+    - AgoraRtcEngine_iOS
     - TOCropViewController
 
 EXTERNAL SOURCES:
+  agora_rtc_engine:
+    :path: ".symlinks/plugins/agora_rtc_engine/ios"
   Flutter:
     :path: Flutter
   flutter_native_splash:
@@ -36,17 +94,27 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_cropper/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  iris_method_channel:
+    :path: ".symlinks/plugins/iris_method_channel/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
+  agora_rtc_engine: 55723c1e997b9f1d423d4a07dd8d9ec437a1eb89
+  AgoraInfra_iOS: 3691b2b277a1712a35ae96de25af319de0d73d08
+  AgoraIrisRTC_iOS: eab58c126439adf5ec99632828a558ea216860da
+  AgoraRtcEngine_iOS: 97e2398a2addda9057815a2a583a658e36796ff6
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_native_splash: df59bb2e1421aa0282cb2e95618af4dcb0c56c29
   image_cropper: e0bb0042e4404ff2ef134e5cf0492cbd892156cd
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
+  iris_method_channel: 0617c689164d8154c020c50f63ca79f92b8a7b9d
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
 

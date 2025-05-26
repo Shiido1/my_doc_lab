@@ -23,6 +23,7 @@ class DocHomeScreen extends StatelessWidget {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getDoctorsDetail(context);
+          model.getChatIndex();
         });
       },
       disposeViewModel: false,

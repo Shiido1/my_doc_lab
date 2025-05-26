@@ -5,10 +5,12 @@ import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/
 import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import '../../core_folder/app/app.locator.dart';
+import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/received_message_response_model/received_message_response_model.dart';
+import '../model/send_message_response_model/send_message_response_model.dart';
 
 @lazySingleton
 class DocRepoImpl {
@@ -58,8 +60,15 @@ class DocRepoImpl {
     return response;
   }
 
-  Future<dynamic> sendMessage(SendMessageEntityModel send) async {
+  Future<SendMessageResponseModel> sendMessage(
+    SendMessageEntityModel send,
+  ) async {
     final response = await _contract.sendMessage(send);
+    return response;
+  }
+
+  Future<GetListOfDoctorsAppointmentModelList> doctorsAppointment() async {
+    final response = await _contract.doctorsAppointment();
     return response;
   }
 }

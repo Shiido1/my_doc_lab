@@ -6,6 +6,7 @@ class UrlConfig {
   static const String doctors_availabilty = 'doctor/availability';
   static const String all_doctor = 'user/doctors';
   static const String doctor_search = 'user/doctors/search';
+  static const String doctors_appointment = 'doctor/appointments';
   static const String pharmacy_search = 'user/pharmacies/search';
   static const String meds_search = 'user/pharmacies/medicine/search';
 

@@ -26,6 +26,7 @@ class DocMoreSettingsScreen extends StatelessWidget {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getDoctorsDetail(context);
+          model.getChatIndex();
         });
       },
       disposeViewModel: false,
@@ -104,7 +105,7 @@ class DocMoreSettingsScreen extends StatelessWidget {
                       SizedBox(height: 20.h),
                       TextView(
                         text:
-                            '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
+                            '${model.getDocDetailResponseModel?.original?.firstName?.capitalize() ?? ''} ${model.getDocDetailResponseModel?.original?.lastName?.capitalize() ?? ''}',
                         textStyle: GoogleFonts.gabarito(
                           color: AppColor.black,
                           fontSize: 20.sp,

@@ -28,6 +28,7 @@ class MoreSettingsScreen extends StatelessWidget {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           model.getPatientDetail(context);
+          model.getChatIndex();
         });
       },
       disposeViewModel: false,

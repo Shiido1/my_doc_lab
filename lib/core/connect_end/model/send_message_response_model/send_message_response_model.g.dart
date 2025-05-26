@@ -1,23 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_user_response_model.dart';
+part of 'send_message_response_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GetUserResponseModel _$GetUserResponseModelFromJson(
+SendMessageResponseModel _$SendMessageResponseModelFromJson(
         Map<String, dynamic> json) =>
-    GetUserResponseModel(
-      status: json['status'] as String?,
+    SendMessageResponseModel(
+      success: json['success'] as bool?,
       data: json['data'] == null
           ? null
           : Data.fromJson(json['data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$GetUserResponseModelToJson(
-        GetUserResponseModel instance) =>
+Map<String, dynamic> _$SendMessageResponseModelToJson(
+        SendMessageResponseModel instance) =>
     <String, dynamic>{
-      'status': instance.status,
+      'success': instance.success,
       'data': instance.data,
     };

@@ -6,8 +6,10 @@ import 'package:my_doc_lab/core/connect_end/model/get_message_index_response_mod
 import 'package:my_doc_lab/core/connect_end/model/received_message_response_model/received_message_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
+import '../connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../connect_end/model/send_message_response_model/send_message_response_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
 import '../core_folder/network/cloudinary_network_service.dart';
@@ -111,7 +113,9 @@ class DocAuthApi {
     }
   }
 
-  Future<dynamic> sendMessage(SendMessageEntityModel send) async {
+  Future<SendMessageResponseModel> sendMessage(
+    SendMessageEntityModel send,
+  ) async {
     try {
       final response = await _service.call(
         UrlConfig.send_chat,
@@ -119,7 +123,21 @@ class DocAuthApi {
         data: send.toJson(),
       );
       logger.d(response.data);
-      return response.data;
+      return SendMessageResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetListOfDoctorsAppointmentModelList> doctorsAppointment() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctors_appointment,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetListOfDoctorsAppointmentModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

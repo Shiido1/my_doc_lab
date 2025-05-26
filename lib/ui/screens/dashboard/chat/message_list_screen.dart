@@ -141,8 +141,8 @@ class MessageListScreen extends StatelessWidget {
           (o) => GestureDetector(
             onTap:
                 () => navigate.navigateTo(
-                  Routes.doctorChatScreen,
-                  arguments: DoctorChatScreenArguments(
+                  Routes.chatScreen,
+                  arguments: ChatScreenArguments(
                     id: o.conversationId.toString(),
                     messageModel: o,
                   ),

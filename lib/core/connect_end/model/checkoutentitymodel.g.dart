@@ -26,13 +26,15 @@ class CheckoutEntityModelAdapter extends TypeAdapter<CheckoutEntityModel> {
       date: fields[7] as String,
       time: fields[6] as String,
       doctor: fields[5] as String,
+      productId: fields[9] as num,
+      qty: fields[10] as num,
     );
   }
 
   @override
   void write(BinaryWriter writer, CheckoutEntityModel obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.serviceType)
       ..writeByte(1)
@@ -50,7 +52,11 @@ class CheckoutEntityModelAdapter extends TypeAdapter<CheckoutEntityModel> {
       ..writeByte(7)
       ..write(obj.date)
       ..writeByte(8)
-      ..write(obj.amount);
+      ..write(obj.amount)
+      ..writeByte(9)
+      ..write(obj.productId)
+      ..writeByte(10)
+      ..write(obj.qty);
   }
 
   @override

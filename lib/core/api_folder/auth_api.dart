@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/checkout_entity_model/checkout_entity_model.dart';
@@ -30,6 +32,7 @@ import '../connect_end/model/searched_doctor_response_model/searched_doctor_resp
 import '../connect_end/model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../connect_end/model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../connect_end/model/send_message_entity_model.dart';
+import '../connect_end/model/send_message_response_model/send_message_response_model.dart';
 import '../connect_end/model/update_user_entity_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
@@ -83,7 +86,7 @@ class AuthApi {
         data: checkout.toJson(),
       );
       logger.d(response.data);
-      return UpdateUserResponseModel.fromJson(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;
@@ -418,7 +421,9 @@ class AuthApi {
     }
   }
 
-  Future<dynamic> sendMessage(SendMessageEntityModel send) async {
+  Future<SendMessageResponseModel> sendMessage(
+    SendMessageEntityModel send,
+  ) async {
     try {
       final response = await _service.call(
         UrlConfig.send_chat,
@@ -426,7 +431,24 @@ class AuthApi {
         data: send.toJson(),
       );
       logger.d(response.data);
-      return response.data;
+      return SendMessageResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<CallTokenGenerateResponseModel> genCallToken(
+    CallTokenGenerateEntityModel generate,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.call_generate_token,
+        RequestMethod.post,
+        data: generate.toJson(),
+      );
+      logger.d(response.data);
+      return CallTokenGenerateResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

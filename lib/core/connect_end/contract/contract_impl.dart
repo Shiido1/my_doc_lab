@@ -1,4 +1,6 @@
 import 'package:injectable/injectable.dart';
+import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_resiter_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
@@ -29,6 +31,7 @@ import '../model/searched_doctor_response_model/searched_doctor_response_model.d
 import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../model/send_message_entity_model.dart';
+import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_user_entity_model.dart';
 import '../model/update_user_response_model/update_user_response_model.dart';
 import '../model/verify_otp_entity_model.dart';
@@ -119,6 +122,10 @@ class AuthContractsImpl {
       await _api.chatIndex();
   Future<ReceivedMessageResponseModelList> receiveMessage(String id) async =>
       await _api.receiveConversation(id);
-  Future<dynamic> sendMessage(SendMessageEntityModel send) async =>
-      await _api.sendMessage(send);
+  Future<SendMessageResponseModel> sendMessage(
+    SendMessageEntityModel send,
+  ) async => await _api.sendMessage(send);
+  Future<CallTokenGenerateResponseModel> generateToken(
+    CallTokenGenerateEntityModel callToken,
+  ) async => await _api.genCallToken(callToken);
 }

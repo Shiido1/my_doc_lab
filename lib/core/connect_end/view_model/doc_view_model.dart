@@ -29,6 +29,7 @@ import '../model/doctor_availability_entity_model/doctor_availability_entity_mod
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../model/send_message_response_model/send_message_response_model.dart';
 
 class DocViewModel extends BaseViewModel {
   final BuildContext? context;
@@ -57,6 +58,10 @@ class DocViewModel extends BaseViewModel {
   ReceivedMessageResponseModelList? _receivedMessageResponseModelList;
   ReceivedMessageResponseModelList? get receivedMessageResponseModelList =>
       _receivedMessageResponseModelList;
+
+  SendMessageResponseModel? _sendMessageResponseModel;
+  SendMessageResponseModel? get sendMessageResponseModel =>
+      _sendMessageResponseModel;
 
   final debouncer = Debouncer();
 
@@ -548,15 +553,21 @@ class DocViewModel extends BaseViewModel {
         for (var element in session.chatsData['chat']) {
           SendMessageEntityModel sendMessageEntityModel =
               SendMessageEntityModel.fromJson(element);
-          await runBusyFuture(
+          _sendMessageResponseModel = await runBusyFuture(
             repositoryImply.sendMessage(sendMessageEntityModel),
             throwException: true,
           );
+          if (_sendMessageResponseModel?.success == true) {
+            Future.delayed(Duration(seconds: 1), () {
+              session.chatsData = {'chat': []};
+              sendList.clear();
+            });
+          }
         }
-        Future.delayed(Duration(seconds: 2), () {
-          session.chatsData = {'chat': []};
-          sendList.clear();
-        });
+        // Future.delayed(Duration(seconds: 2), () {
+        //   session.chatsData = {'chat': []};
+        //   sendList.clear();
+        // });
       }
     } catch (e) {
       _isLoading = false;
@@ -635,15 +646,24 @@ class DocViewModel extends BaseViewModel {
                     ),
                   ),
 
-                  TextView(
-                    text: DateFormat('hh:mma').format(
-                      DateTime.parse(message.updatedAt.toString()).toLocal(),
-                    ),
-                    textStyle: GoogleFonts.dmSans(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: AppColor.white,
-                    ),
+                  Row(
+                    children: [
+                      TextView(
+                        text: DateFormat('hh:mma').format(
+                          DateTime.parse(
+                            message.updatedAt.toString(),
+                          ).toLocal(),
+                        ),
+                        textStyle: GoogleFonts.dmSans(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.white,
+                        ),
+                      ),
+
+                      SizedBox(width: 4.w),
+                      Icon(Icons.check, color: AppColor.white, size: 14.sp),
+                    ],
                   ),
                 ],
               ),

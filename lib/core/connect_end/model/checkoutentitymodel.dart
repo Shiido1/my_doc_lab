@@ -22,6 +22,10 @@ class CheckoutEntityModel {
   String date;
   @HiveField(8)
   String amount;
+  @HiveField(9)
+  num productId;
+  @HiveField(10)
+  num qty;
 
   CheckoutEntityModel({
     required this.serviceType,
@@ -33,5 +37,7 @@ class CheckoutEntityModel {
     required this.date,
     required this.time,
     required this.doctor,
+    required this.productId,
+    required this.qty,
   });
 }
