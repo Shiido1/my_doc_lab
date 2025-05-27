@@ -1,14 +1,13 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/view_model/doc_view_model.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../../../../core/connect_end/view_model/auth_view_model.dart'
-    show AuthViewModel;
-
-class VideoChatScreen extends StatefulWidget {
-  VideoChatScreen({
+class DoctorVideoChatScreen extends StatefulWidget {
+  DoctorVideoChatScreen({
     super.key,
     required this.conversationId,
     required this.receiverId,
@@ -19,14 +18,14 @@ class VideoChatScreen extends StatefulWidget {
   String? receiverType;
 
   @override
-  State<VideoChatScreen> createState() => _VideoChatScreenState();
+  State<DoctorVideoChatScreen> createState() => _DoctorVideoChatScreenState();
 }
 
-class _VideoChatScreenState extends State<VideoChatScreen> {
+class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AuthViewModel>.reactive(
-      viewModelBuilder: () => AuthViewModel(),
+    return ViewModelBuilder<DocViewModel>.reactive(
+      viewModelBuilder: () => DocViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           model.generateToken(
@@ -41,7 +40,7 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
       },
       onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),
       disposeViewModel: false,
-      builder: (_, AuthViewModel model, __) {
+      builder: (_, DocViewModel model, __) {
         return Scaffold(
           body: Stack(
             children: [

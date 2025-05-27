@@ -159,7 +159,7 @@ class AuthViewModel extends BaseViewModel {
 
   RtcEngine? engine;
 
-  dynamic _remoteUid;
+  dynamic remoteUidGlobal;
 
   bool localUserJoined = false;
 
@@ -443,7 +443,8 @@ class AuthViewModel extends BaseViewModel {
         repositoryImply.generateToken(calltoken!),
         throwException: true,
       );
-      initializeAgoraVoiceSDK();
+      logger.d("message::${_callTokenGenerateResponseModel?.toJson()}");
+      initializeAgoraVoiceSDK(calltoken.receiverType);
 
       _isLoading = false;
     } catch (e) {
@@ -453,9 +454,10 @@ class AuthViewModel extends BaseViewModel {
     }
     notifyListeners();
   }
+  //006e18babecb1eb4a889feefcbbf60e5a5aIABQD9s1G6es/M/kbWiKi/dkNJI4CuvRV1fNvkIgJLIkVDJFnOkAAAAAIgDnmr0D/9g2aAQAAQCPlTVoAwCPlTVoAgCPlTVoBACPlTVo
 
   // Set up the Agora RTC engine instance
-  Future<void> initializeAgoraVoiceSDK() async {
+  Future<void> initializeAgoraVoiceSDK(broad) async {
     await [Permission.microphone, Permission.camera].request();
     engine = createAgoraRtcEngine();
     await engine?.initialize(
@@ -465,7 +467,7 @@ class AuthViewModel extends BaseViewModel {
       ),
     );
     _setupLocalVideo();
-    _joinChannel();
+    _joinChannel(broad);
     _setupEventHandlers();
   }
 
@@ -477,11 +479,14 @@ class AuthViewModel extends BaseViewModel {
 
   // If a remote user has joined, render their video, else display a waiting message
   Widget remoteVideo() {
-    if (_remoteUid != null) {
+    if (remoteUidGlobal != null) {
       return AgoraVideoView(
         controller: VideoViewController.remote(
           rtcEngine: engine!, // Uses the Agora engine instance
-          canvas: VideoCanvas(uid: _remoteUid), // Binds the remote user's video
+          canvas: VideoCanvas(
+            uid: remoteUidGlobal,
+            renderMode: RenderModeType.renderModeFit,
+          ), // Binds the remote user's video
           connection: RtcConnection(
             channelId: _callTokenGenerateResponseModel?.channelName,
           ), // Specifies the channel
@@ -496,20 +501,18 @@ class AuthViewModel extends BaseViewModel {
   }
 
   // Displays the local user's video view using the Agora engine.
-  // Widget _localVideo() {
-  //   return AgoraVideoView(
-  //     controller: VideoViewController(
-  //       rtcEngine: engine!, // Uses the Agora engine instance
-  //       canvas: VideoCanvas(
-  //         uid: int.parse(
-  //           '${_callTokenGenerateResponseModel?.uid ?? 0}',
-  //         ), // Specifies the local user
-  //         renderMode:
-  //             RenderModeType.renderModeHidden, // Sets the video rendering mode
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget localVideo() {
+    return AgoraVideoView(
+      controller: VideoViewController(
+        rtcEngine: engine!, // Uses the Agora engine instance
+        canvas: VideoCanvas(
+          uid: remoteUidGlobal, // Specifies the local user
+          renderMode:
+              RenderModeType.renderModeHidden, // Sets the video rendering mode
+        ),
+      ),
+    );
+  }
 
   // Register an event handler for Agora RTC
   void _setupEventHandlers() {
@@ -518,10 +521,13 @@ class AuthViewModel extends BaseViewModel {
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
           debugPrint("Local user ${connection.localUid} joined");
           localUserJoined = true;
+          notifyListeners();
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           debugPrint("Remote user $remoteUid joined");
-          _remoteUid = remoteUid;
+          remoteUidGlobal = remoteUid;
+          print('uuuuuuu000000000dD:${remoteUidGlobal.toString()}');
+          notifyListeners();
         },
         onUserOffline: (
           RtcConnection connection,
@@ -529,7 +535,8 @@ class AuthViewModel extends BaseViewModel {
           UserOfflineReasonType reason,
         ) {
           debugPrint("Remote user $remoteUid left");
-          _remoteUid = null;
+          remoteUidGlobal = null;
+          notifyListeners();
         },
       ),
     );
@@ -537,11 +544,11 @@ class AuthViewModel extends BaseViewModel {
   }
 
   // Join a channel as a broadcasted
-  Future<void> _joinChannel() async {
+  Future<void> _joinChannel(String? broad) async {
     await engine?.joinChannel(
       token: _callTokenGenerateResponseModel?.token ?? "",
       channelId: _callTokenGenerateResponseModel?.channelName ?? "",
-      options: const ChannelMediaOptions(
+      options: ChannelMediaOptions(
         autoSubscribeVideo:
             true, // Automatically subscribe to all video streams
         autoSubscribeAudio:

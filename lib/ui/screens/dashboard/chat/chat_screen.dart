@@ -38,7 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
-          model.receiveConversationOnce(widget.id!);
+          // model.receiveConversationOnce(widget.id!);
         });
       },
       onDispose: (viewModel) {
@@ -113,7 +113,19 @@ class _ChatScreenState extends State<ChatScreen> {
                             onTap:
                                 () => Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => VideoChatScreen(),
+                                    builder:
+                                        (context) => VideoChatScreen(
+                                          conversationId: int.parse(
+                                            widget.messageModel!.conversationId
+                                                .toString(),
+                                          ),
+                                          receiverId: int.parse(
+                                            widget.messageModel!.contactId
+                                                .toString(),
+                                          ),
+                                          receiverType:
+                                              widget.messageModel!.contactType,
+                                        ),
                                   ),
                                 ),
                             child: SvgPicture.asset(

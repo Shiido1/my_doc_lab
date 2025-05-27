@@ -10,9 +10,9 @@ CallTokenGenerateResponseModel _$CallTokenGenerateResponseModelFromJson(
   Map<String, dynamic> json,
 ) => CallTokenGenerateResponseModel(
   token: json['token'] as String?,
-  uid: json['uid'] as num?,
+  uid: json['uid'],
   channelName: json['channel_name'] as String?,
-  callId: json['call_id'] as num?,
+  callId: json['call_id'],
 );
 
 Map<String, dynamic> _$CallTokenGenerateResponseModelToJson(

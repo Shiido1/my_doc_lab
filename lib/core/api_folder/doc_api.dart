@@ -6,6 +6,8 @@ import 'package:my_doc_lab/core/connect_end/model/get_message_index_response_mod
 import 'package:my_doc_lab/core/connect_end/model/received_message_response_model/received_message_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
+import '../connect_end/model/call_token_generate_entity_model.dart';
+import '../connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -138,6 +140,23 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return GetListOfDoctorsAppointmentModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<CallTokenGenerateResponseModel> genCallToken(
+    CallTokenGenerateEntityModel generate,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.call_generate_token,
+        RequestMethod.post,
+        data: generate.toJson(),
+      );
+      logger.d(response.data);
+      return CallTokenGenerateResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

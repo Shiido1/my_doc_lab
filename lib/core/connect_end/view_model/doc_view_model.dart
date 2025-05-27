@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +14,7 @@ import 'package:my_doc_lab/core/connect_end/model/received_message_response_mode
 import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/repo/doc_repo_impl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 import '../../../main.dart';
 import '../../../ui/app_assets/app_color.dart';
@@ -24,6 +26,8 @@ import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
+import '../model/call_token_generate_entity_model.dart';
+import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
@@ -680,5 +684,146 @@ class DocViewModel extends BaseViewModel {
         curve: Curves.easeOut,
       );
     }
+  }
+
+  CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
+  CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
+      _callTokenGenerateResponseModel;
+
+  RtcEngine? engine;
+
+  dynamic remoteUidGlobal = 20;
+
+  bool localUserJoined = false;
+
+  void generateToken(context, {CallTokenGenerateEntityModel? calltoken}) async {
+    try {
+      // _isLoading = true;
+      _callTokenGenerateResponseModel = await runBusyFuture(
+        repositoryImply.generateToken(calltoken!),
+        throwException: true,
+      );
+      logger.d("message::${_callTokenGenerateResponseModel?.toJson()}");
+      initializeAgoraVoiceSDK(calltoken.receiverType);
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  // Set up the Agora RTC engine instance
+  Future<void> initializeAgoraVoiceSDK(broad) async {
+    await [Permission.microphone, Permission.camera].request();
+    engine = createAgoraRtcEngine();
+    await engine?.initialize(
+      const RtcEngineContext(
+        appId: "e18babecb1eb4a889feefcbbf60e5a5a",
+        channelProfile: ChannelProfileType.channelProfileCommunication,
+      ),
+    );
+    _setupLocalVideo();
+    _joinChannel(broad);
+    _setupEventHandlers();
+  }
+
+  Future<void> _setupLocalVideo() async {
+    // The video module and preview are disabled by default.
+    await engine?.enableVideo();
+    await engine?.startPreview();
+  }
+
+  // If a remote user has joined, render their video, else display a waiting message
+  Widget remoteVideo() {
+    if (remoteUidGlobal != null) {
+      return AgoraVideoView(
+        controller: VideoViewController.remote(
+          rtcEngine: engine!, // Uses the Agora engine instance
+          canvas: VideoCanvas(
+            uid: remoteUidGlobal,
+            renderMode: RenderModeType.renderModeFit,
+          ), // Binds the remote user's video
+          connection: RtcConnection(
+            channelId: _callTokenGenerateResponseModel?.channelName,
+          ), // Specifies the channel
+        ),
+      );
+    } else {
+      return const Text(
+        'Waiting for remote user to join...',
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
+  // Displays the local user's video view using the Agora engine.
+  Widget localVideo() {
+    return AgoraVideoView(
+      controller: VideoViewController(
+        rtcEngine: engine!, // Uses the Agora engine instance
+        canvas: VideoCanvas(
+          uid: remoteUidGlobal, // Specifies the local user
+          renderMode:
+              RenderModeType.renderModeHidden, // Sets the video rendering mode
+        ),
+      ),
+    );
+  }
+
+  // Register an event handler for Agora RTC
+  void _setupEventHandlers() {
+    engine?.registerEventHandler(
+      RtcEngineEventHandler(
+        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+          debugPrint("Local user ${connection.localUid} joined");
+          localUserJoined = true;
+          notifyListeners();
+        },
+        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+          debugPrint("Remote doctor $remoteUid joined");
+          remoteUidGlobal = remoteUid;
+          print('uuuuuuu0Doctor:${remoteUidGlobal.toString()}');
+          notifyListeners();
+        },
+        onUserOffline: (
+          RtcConnection connection,
+          int remoteUid,
+          UserOfflineReasonType reason,
+        ) {
+          debugPrint("Remote user $remoteUid left");
+          remoteUidGlobal = null;
+          notifyListeners();
+        },
+      ),
+    );
+    notifyListeners();
+  }
+
+  // Join a channel as a broadcasted
+  Future<void> _joinChannel(String? broad) async {
+    await engine?.joinChannel(
+      token: _callTokenGenerateResponseModel?.token ?? "",
+      channelId: _callTokenGenerateResponseModel?.channelName ?? "",
+      options: ChannelMediaOptions(
+        autoSubscribeVideo:
+            true, // Automatically subscribe to all video streams
+        autoSubscribeAudio:
+            true, // Automatically subscribe to all audio streams
+        publishCameraTrack: true, // Publish camera-captured video
+        publishMicrophoneTrack: true, // Publish microphone-captured audio
+        // Use clientRoleBroadcaster to act as a host or clientRoleAudience for audience
+        clientRoleType: ClientRoleType.clientRoleBroadcaster,
+      ),
+      uid: int.parse('${_callTokenGenerateResponseModel?.uid ?? 0}'),
+    );
+  }
+
+  // Leaves the channel and releases resources
+  Future<void> cleanupAgoraEngine() async {
+    await engine?.leaveChannel();
+    await engine?.release();
   }
 }

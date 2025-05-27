@@ -5,11 +5,11 @@ part 'call_token_generate_response_model.g.dart';
 @JsonSerializable()
 class CallTokenGenerateResponseModel {
   String? token;
-  num? uid;
+  dynamic uid;
   @JsonKey(name: 'channel_name')
   String? channelName;
   @JsonKey(name: 'call_id')
-  num? callId;
+  dynamic callId;
 
   CallTokenGenerateResponseModel({
     this.token,

@@ -12,6 +12,8 @@ import 'package:stacked/stacked.dart';
 
 import '../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
+import 'video_chat_agora/doctor_video_chat_screen.dart';
+import 'video_chat_agora/video_chat_screen.dart';
 
 // ignore: must_be_immutable
 class DoctorChatScreen extends StatefulWidget {
@@ -37,7 +39,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
-          model.receiveConversationOnce(widget.id!);
+          // model.receiveConversationOnce(widget.id!);
         });
       },
       onDispose: (viewModel) {
@@ -109,6 +111,25 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                         Padding(
                           padding: EdgeInsets.only(top: 10.w, right: 20.w),
                           child: GestureDetector(
+                            onTap:
+                                () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => DoctorVideoChatScreen(
+                                          conversationId: int.parse(
+                                            widget.messageModel!.conversationId
+                                                .toString(),
+                                          ),
+                                          receiverId: int.parse(
+                                            widget.messageModel!.contactId
+                                                .toString(),
+                                          ),
+                                          receiverType:
+                                              widget.messageModel!.contactType,
+                                        ),
+                                  ),
+                                ),
+
                             child: SvgPicture.asset(
                               AppImage.video,
                               width: 22.w,
