@@ -38,7 +38,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
-          // model.receiveConversationOnce(widget.id!);
+          model.receiveConversationOnce(widget.id!);
         });
       },
       onDispose: (viewModel) {
@@ -200,6 +200,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                             ),
                                           ),
                                           Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             children: [
                                               TextView(
                                                 text: DateFormat(

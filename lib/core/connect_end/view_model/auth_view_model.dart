@@ -163,6 +163,12 @@ class AuthViewModel extends BaseViewModel {
   dynamic remoteUidGlobalLocal;
 
   bool localUserJoined = false;
+  bool onSwitch = false;
+
+  onSwitched() {
+    onSwitch = !onSwitch;
+    notifyListeners();
+  }
 
   Box<CheckoutEntityModel> getModelBox(box) {
     _box = box;

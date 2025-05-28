@@ -9,7 +9,7 @@ class Data {
   @JsonKey(name: 'conversation_id')
   num? conversationId;
   @JsonKey(name: 'sender_id')
-  String? senderId;
+  dynamic senderId;
   @JsonKey(name: 'sender_type')
   String? senderType;
   String? message;

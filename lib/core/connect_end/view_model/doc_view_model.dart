@@ -568,10 +568,6 @@ class DocViewModel extends BaseViewModel {
             });
           }
         }
-        // Future.delayed(Duration(seconds: 2), () {
-        //   session.chatsData = {'chat': []};
-        //   sendList.clear();
-        // });
       }
     } catch (e) {
       _isLoading = false;
@@ -651,6 +647,7 @@ class DocViewModel extends BaseViewModel {
                   ),
 
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       TextView(
                         text: DateFormat('hh:mma').format(
@@ -696,6 +693,13 @@ class DocViewModel extends BaseViewModel {
   dynamic remoteUidGlobalLocal;
 
   bool localUserJoined = false;
+
+  bool onSwitch = false;
+
+  onSwitched() {
+    onSwitch = !onSwitch;
+    notifyListeners();
+  }
 
   void generateToken(context, {CallTokenGenerateEntityModel? calltoken}) async {
     try {

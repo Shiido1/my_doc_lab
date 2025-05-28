@@ -38,7 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
-          // model.receiveConversationOnce(widget.id!);
+          model.receiveConversationOnce(widget.id!);
         });
       },
       onDispose: (viewModel) {

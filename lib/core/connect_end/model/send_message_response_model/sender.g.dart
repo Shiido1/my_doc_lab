@@ -7,7 +7,7 @@ part of 'sender.dart';
 // **************************************************************************
 
 Sender _$SenderFromJson(Map<String, dynamic> json) => Sender(
-  id: json['id'] as String?,
+  id: json['id'],
   uuid: json['uuid'] as String?,
   firstName: json['first_name'] as String?,
   lastName: json['last_name'] as String?,

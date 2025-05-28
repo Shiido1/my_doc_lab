@@ -8,7 +8,7 @@ part of 'data.dart';
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
   conversationId: json['conversation_id'] as num?,
-  senderId: json['sender_id'] as String?,
+  senderId: json['sender_id'],
   senderType: json['sender_type'] as String?,
   message: json['message'] as String?,
   updatedAt:
