@@ -7,11 +7,9 @@ class GetLabTechDetailResponseModel {
 
   GetLabTechDetailResponseModel.fromJson(Map<String, dynamic> json) {
     headers =
-        json['headers'] != null ? new Headers.fromJson(json['headers']) : null;
+        json['headers'] != null ? Headers.fromJson(json['headers']) : null;
     original =
-        json['original'] != null
-            ? new Original.fromJson(json['original'])
-            : null;
+        json['original'] != null ? Original.fromJson(json['original']) : null;
     exception = json['exception'];
   }
 

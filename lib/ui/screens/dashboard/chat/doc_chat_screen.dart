@@ -13,7 +13,6 @@ import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import 'video_chat_agora/doctor_video_chat_screen.dart';
-import 'video_chat_agora/video_chat_screen.dart';
 
 // ignore: must_be_immutable
 class DoctorChatScreen extends StatefulWidget {

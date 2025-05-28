@@ -7,11 +7,9 @@ class GetDoctorDetailsResponseModel {
 
   GetDoctorDetailsResponseModel.fromJson(Map<String, dynamic> json) {
     headers =
-        json['headers'] != null ? new Headers.fromJson(json['headers']) : null;
+        json['headers'] != null ? Headers.fromJson(json['headers']) : null;
     original =
-        json['original'] != null
-            ? new Original.fromJson(json['original'])
-            : null;
+        json['original'] != null ? Original.fromJson(json['original']) : null;
     exception = json['exception'];
   }
 
@@ -110,13 +108,13 @@ class Original {
     if (json['availabilities'] != null) {
       availabilities = <Availabilities>[];
       json['availabilities'].forEach((v) {
-        availabilities!.add(new Availabilities.fromJson(v));
+        availabilities!.add(Availabilities.fromJson(v));
       });
     }
     if (json['available_slots'] != null) {
       availableSlots = <AvailableSlots>[];
       json['available_slots'].forEach((v) {
-        availableSlots!.add(new AvailableSlots.fromJson(v));
+        availableSlots!.add(AvailableSlots.fromJson(v));
       });
     }
   }

@@ -160,6 +160,7 @@ class AuthViewModel extends BaseViewModel {
   RtcEngine? engine;
 
   dynamic remoteUidGlobal;
+  dynamic remoteUidGlobalLocal;
 
   bool localUserJoined = false;
 
@@ -444,7 +445,7 @@ class AuthViewModel extends BaseViewModel {
         throwException: true,
       );
       logger.d("message::${_callTokenGenerateResponseModel?.toJson()}");
-      initializeAgoraVoiceSDK(calltoken.receiverType);
+      initializeAgoraVoiceSDK();
 
       _isLoading = false;
     } catch (e) {
@@ -457,7 +458,7 @@ class AuthViewModel extends BaseViewModel {
   //006e18babecb1eb4a889feefcbbf60e5a5aIABQD9s1G6es/M/kbWiKi/dkNJI4CuvRV1fNvkIgJLIkVDJFnOkAAAAAIgDnmr0D/9g2aAQAAQCPlTVoAwCPlTVoAgCPlTVoBACPlTVo
 
   // Set up the Agora RTC engine instance
-  Future<void> initializeAgoraVoiceSDK(broad) async {
+  Future<void> initializeAgoraVoiceSDK() async {
     await [Permission.microphone, Permission.camera].request();
     engine = createAgoraRtcEngine();
     await engine?.initialize(
@@ -467,8 +468,8 @@ class AuthViewModel extends BaseViewModel {
       ),
     );
     _setupLocalVideo();
-    _joinChannel(broad);
     _setupEventHandlers();
+    _joinChannel();
   }
 
   Future<void> _setupLocalVideo() async {
@@ -484,8 +485,7 @@ class AuthViewModel extends BaseViewModel {
         controller: VideoViewController.remote(
           rtcEngine: engine!, // Uses the Agora engine instance
           canvas: VideoCanvas(
-            uid: remoteUidGlobal,
-            renderMode: RenderModeType.renderModeFit,
+            uid: int.parse(remoteUidGlobal.toString()),
           ), // Binds the remote user's video
           connection: RtcConnection(
             channelId: _callTokenGenerateResponseModel?.channelName,
@@ -506,9 +506,7 @@ class AuthViewModel extends BaseViewModel {
       controller: VideoViewController(
         rtcEngine: engine!, // Uses the Agora engine instance
         canvas: VideoCanvas(
-          uid: remoteUidGlobal, // Specifies the local user
-          renderMode:
-              RenderModeType.renderModeHidden, // Sets the video rendering mode
+          uid: 0, // Specifies the local user // Sets the video rendering mode
         ),
       ),
     );
@@ -521,6 +519,7 @@ class AuthViewModel extends BaseViewModel {
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
           debugPrint("Local user ${connection.localUid} joined");
           localUserJoined = true;
+          remoteUidGlobalLocal = connection.localUid;
           notifyListeners();
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
@@ -544,7 +543,7 @@ class AuthViewModel extends BaseViewModel {
   }
 
   // Join a channel as a broadcasted
-  Future<void> _joinChannel(String? broad) async {
+  Future<void> _joinChannel() async {
     await engine?.joinChannel(
       token: _callTokenGenerateResponseModel?.token ?? "",
       channelId: _callTokenGenerateResponseModel?.channelName ?? "",
@@ -556,9 +555,9 @@ class AuthViewModel extends BaseViewModel {
         publishCameraTrack: true, // Publish camera-captured video
         publishMicrophoneTrack: true, // Publish microphone-captured audio
         // Use clientRoleBroadcaster to act as a host or clientRoleAudience for audience
-        clientRoleType: ClientRoleType.clientRoleBroadcaster,
+        clientRoleType: ClientRoleType.clientRoleAudience,
       ),
-      uid: int.parse('${_callTokenGenerateResponseModel?.uid ?? 0}'),
+      uid: 0,
     );
   }
 
@@ -733,7 +732,7 @@ class AuthViewModel extends BaseViewModel {
                   Navigator.pop(context);
                   notifyListeners();
                 },
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: TextView(
                     text: 'Doctor',
@@ -753,7 +752,7 @@ class AuthViewModel extends BaseViewModel {
                   Navigator.pop(context);
                   notifyListeners();
                 },
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: TextView(
                     text: 'Pharmacy',
@@ -772,7 +771,7 @@ class AuthViewModel extends BaseViewModel {
                   Navigator.pop(context);
                   notifyListeners();
                 },
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: TextView(
                     text: 'Lab Technician',

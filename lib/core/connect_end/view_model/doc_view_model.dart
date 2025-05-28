@@ -692,7 +692,8 @@ class DocViewModel extends BaseViewModel {
 
   RtcEngine? engine;
 
-  dynamic remoteUidGlobal = 20;
+  dynamic remoteUidGlobal;
+  dynamic remoteUidGlobalLocal;
 
   bool localUserJoined = false;
 
@@ -704,7 +705,7 @@ class DocViewModel extends BaseViewModel {
         throwException: true,
       );
       logger.d("message::${_callTokenGenerateResponseModel?.toJson()}");
-      initializeAgoraVoiceSDK(calltoken.receiverType);
+      initializeAgoraVoiceSDK();
 
       _isLoading = false;
     } catch (e) {
@@ -716,18 +717,18 @@ class DocViewModel extends BaseViewModel {
   }
 
   // Set up the Agora RTC engine instance
-  Future<void> initializeAgoraVoiceSDK(broad) async {
+  Future<void> initializeAgoraVoiceSDK() async {
     await [Permission.microphone, Permission.camera].request();
     engine = createAgoraRtcEngine();
-    await engine?.initialize(
+    await engine!.initialize(
       const RtcEngineContext(
         appId: "e18babecb1eb4a889feefcbbf60e5a5a",
         channelProfile: ChannelProfileType.channelProfileCommunication,
       ),
     );
     _setupLocalVideo();
-    _joinChannel(broad);
     _setupEventHandlers();
+    _joinChannel();
   }
 
   Future<void> _setupLocalVideo() async {
@@ -743,8 +744,8 @@ class DocViewModel extends BaseViewModel {
         controller: VideoViewController.remote(
           rtcEngine: engine!, // Uses the Agora engine instance
           canvas: VideoCanvas(
-            uid: remoteUidGlobal,
-            renderMode: RenderModeType.renderModeFit,
+            uid: int.parse(remoteUidGlobal.toString()),
+            // renderMode: RenderModeType.renderModeFit,
           ), // Binds the remote user's video
           connection: RtcConnection(
             channelId: _callTokenGenerateResponseModel?.channelName,
@@ -765,9 +766,9 @@ class DocViewModel extends BaseViewModel {
       controller: VideoViewController(
         rtcEngine: engine!, // Uses the Agora engine instance
         canvas: VideoCanvas(
-          uid: remoteUidGlobal, // Specifies the local user
-          renderMode:
-              RenderModeType.renderModeHidden, // Sets the video rendering mode
+          uid: 0, // Specifies the local user
+          // renderMode:
+          //     RenderModeType.renderModeHidden, // Sets the video rendering mode
         ),
       ),
     );
@@ -775,11 +776,12 @@ class DocViewModel extends BaseViewModel {
 
   // Register an event handler for Agora RTC
   void _setupEventHandlers() {
-    engine?.registerEventHandler(
+    engine!.registerEventHandler(
       RtcEngineEventHandler(
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
           debugPrint("Local user ${connection.localUid} joined");
           localUserJoined = true;
+          remoteUidGlobalLocal = connection.localUid;
           notifyListeners();
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
@@ -803,7 +805,7 @@ class DocViewModel extends BaseViewModel {
   }
 
   // Join a channel as a broadcasted
-  Future<void> _joinChannel(String? broad) async {
+  Future<void> _joinChannel() async {
     await engine?.joinChannel(
       token: _callTokenGenerateResponseModel?.token ?? "",
       channelId: _callTokenGenerateResponseModel?.channelName ?? "",
@@ -817,7 +819,7 @@ class DocViewModel extends BaseViewModel {
         // Use clientRoleBroadcaster to act as a host or clientRoleAudience for audience
         clientRoleType: ClientRoleType.clientRoleBroadcaster,
       ),
-      uid: int.parse('${_callTokenGenerateResponseModel?.uid ?? 0}'),
+      uid: 0,
     );
   }
 
