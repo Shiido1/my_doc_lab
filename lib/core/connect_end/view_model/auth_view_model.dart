@@ -268,6 +268,7 @@ class AuthViewModel extends BaseViewModel {
 
   void checkOut(context, {ch.CheckoutEntityModel? checkout}) async {
     try {
+      Navigator.pop(context);
       loadingDialog(context);
       await runBusyFuture(
         repositoryImply.checkout(checkout!),
@@ -279,7 +280,9 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = false;
       logger.d(e);
       Navigator.pop(context);
-      AppUtils.snackbar(context, message: e.toString(), error: true);
+      Future.delayed(Duration(seconds: 1), () {
+        AppUtils.snackbar(context, message: e.toString(), error: true);
+      });
     }
     notifyListeners();
   }
@@ -1242,6 +1245,7 @@ class AuthViewModel extends BaseViewModel {
 
   clickCheckout() {
     List<CheckoutEntityModel> c = [];
+    items.clear();
     for (int i = 0; i < box.length; i++) {
       c.add(box.getAt(i));
     }
@@ -1264,9 +1268,8 @@ class AuthViewModel extends BaseViewModel {
           Item(serviceType: element.serviceType, serviceId: element.serviceId),
         );
       }
+      print('items:::::$items');
     }
-
-    print('print iitems::::${items[0].complaint}');
   }
 
   showCheckoutModal(BuildContext context) => showDialog(
@@ -1393,6 +1396,7 @@ class AuthViewModel extends BaseViewModel {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => Dashboard()),
                     );
+                    box.clear();
                   },
                 ),
               ],

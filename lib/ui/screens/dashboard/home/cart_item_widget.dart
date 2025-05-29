@@ -101,7 +101,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 _divider(),
                 _row('Prescribed by:', 'Dr ${model.doctor}'),
                 _divider(),
-                _row(
+                _rowAmount(
                   'Amount:',
                   '${getCurrency()}${oCcy.format(double.parse(model.amount))}',
                   valueColor: AppColor.primary,
@@ -134,6 +134,33 @@ class _CartItemWidgetState extends State<CartItemWidget> {
             textStyle: GoogleFonts.dmSans(
               color: valueColor ?? AppColor.grey,
               fontSize: 15.0.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _rowAmount(String label, String value, {Color? valueColor}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 6.6.w, vertical: 8.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextView(
+            text: label,
+            textStyle: GoogleFonts.dmSans(
+              color: AppColor.black,
+              fontSize: 15.0.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          TextView(
+            text: value,
+            textStyle: TextStyle(
+              color: valueColor ?? AppColor.grey,
+              fontSize: 15.8.sp,
               fontWeight: FontWeight.w500,
             ),
           ),

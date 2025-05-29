@@ -10,7 +10,6 @@ import 'package:my_doc_lab/ui/app_assets/app_utils.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
-import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../app_assets/constant.dart';
 import '../../../widget/text_widget.dart';
@@ -25,7 +24,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  AvailableSlots? v;
+  Availabilities? v;
   AvailableSlots? t;
 
   bool isTapped = false;
@@ -33,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AuthViewModel>.reactive(
-      viewModelBuilder: () => locator<AuthViewModel>(),
+      viewModelBuilder: () => AuthViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           model.getSpecificDoctor(context, widget.id);
@@ -379,23 +378,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           model
                               .getDocDetailResponseModel!
                               .original!
-                              .availableSlots!
+                              .availabilities!
                               .isNotEmpty)
                         ...model
                             .getDocDetailResponseModel!
                             .original!
-                            .availableSlots!
+                            .availabilities!
                             .map(
                               (o) => GestureDetector(
-                                onTap:
-                                    o.isBooked == true
-                                        ? () {}
-                                        : () {
-                                          setState(() {
-                                            v = o;
-                                            print(o);
-                                          });
-                                        },
+                                onTap: () {
+                                  setState(() {
+                                    v = o;
+                                    print(o);
+                                  });
+                                },
                                 child: Container(
                                   margin: EdgeInsets.only(right: 20.w),
                                   padding: EdgeInsets.symmetric(
@@ -409,27 +405,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ? AppColor.primary1
                                             : AppColor.transparent,
                                     border: Border.all(
-                                      color: selectFadeContainer(o),
+                                      color: AppColor.funnyLookingGrey,
                                     ),
                                   ),
                                   child: Column(
                                     children: [
                                       TextView(
-                                        text: availDayForm(
-                                          o.availableDate ?? '',
-                                        ),
+                                        text: o.dayOfWeek!
+                                            .capitalize()
+                                            .substring(0, 3),
                                         textStyle: GoogleFonts.dmSans(
-                                          color: selectFadeDayText(o),
-                                          fontSize: 14.sp,
+                                          color:
+                                              v == o
+                                                  ? AppColor.white
+                                                  : AppColor.grey,
+                                          fontSize: 16.sp,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                       TextView(
-                                        text: availDateForm(
-                                          o.availableDate ?? '',
-                                        ),
+                                        text: availDateForm(o.updatedAt ?? ''),
                                         textStyle: GoogleFonts.dmSans(
-                                          color: selectFadeDateText(o),
+                                          color:
+                                              v == o
+                                                  ? AppColor.white
+                                                  : AppColor.grey,
                                           fontSize: 24.sp,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -514,7 +514,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   (context) => ConsultationScreen(
                                     bookTyoe: 'book',
                                     docId: widget.id,
-                                    slotId: v,
+                                    slotId: t,
                                     doctor:
                                         '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
                                   ),
@@ -555,7 +555,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               builder:
                                   (context) => ConsultationScreen(
                                     bookTyoe: 'book-friend',
-                                    slotId: v,
+                                    slotId: t,
                                     docId: widget.id,
                                     doctor:
                                         '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',

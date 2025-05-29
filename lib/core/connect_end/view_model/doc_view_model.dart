@@ -30,6 +30,7 @@ import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
+import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -67,6 +68,22 @@ class DocViewModel extends BaseViewModel {
   SendMessageResponseModel? get sendMessageResponseModel =>
       _sendMessageResponseModel;
 
+  CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
+  CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
+      _callTokenGenerateResponseModel;
+
+  RtcEngine? engine;
+
+  dynamic remoteUidGlobal;
+  dynamic remoteUidGlobalLocal;
+
+  bool localUserJoined = false;
+
+  bool onSwitch = false;
+  GetListOfDoctorsAppointmentModelList? _getListOfDoctorsAppointmentModelList;
+  GetListOfDoctorsAppointmentModelList?
+  get getListOfDoctorsAppointmentModelList =>
+      _getListOfDoctorsAppointmentModelList;
   final debouncer = Debouncer();
 
   String query = '';
@@ -536,6 +553,20 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> getDoctorsAppointment() async {
+    try {
+      _getListOfDoctorsAppointmentModelList = await runBusyFuture(
+        repositoryImply.doctorsAppointment(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   void receiveConversationOnce(String id) {
     if (hasLoadedConversation == false) {
       return;
@@ -682,19 +713,6 @@ class DocViewModel extends BaseViewModel {
       );
     }
   }
-
-  CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
-  CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
-      _callTokenGenerateResponseModel;
-
-  RtcEngine? engine;
-
-  dynamic remoteUidGlobal;
-  dynamic remoteUidGlobalLocal;
-
-  bool localUserJoined = false;
-
-  bool onSwitch = false;
 
   onSwitched() {
     onSwitch = !onSwitch;

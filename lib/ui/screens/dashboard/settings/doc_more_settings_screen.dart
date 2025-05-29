@@ -6,6 +6,7 @@ import 'package:my_doc_lab/core/core_folder/manager/shared_preference.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/doc_edit_profile_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/appointment/doctors_appointment/doctors_appointment_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
@@ -156,7 +157,12 @@ class DocMoreSettingsScreen extends StatelessWidget {
                   text: 'My Appointments',
                   borderColor: AppColor.lightgrey,
                   color: AppColor.black,
-                  onTap: () {},
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DoctorsAppointmentScreen(),
+                        ),
+                      ),
                 ),
                 SizedBox(height: 20.h),
                 moreContainerWidget(

@@ -81,7 +81,10 @@ class ApiError {
                   extractDescriptionFromResponse(error.response);
             }
           } else if (dioError.response?.statusCode == 500) {
+            apiErrorModel = ApiErrorModel.fromJson(dioError.response?.data);
+            print('ddddddddddddd${dioError.response}');
             errorDescription =
+                apiErrorModel?.msg ??
                 'Something went wrong while processing your request';
           } else {
             errorDescription =

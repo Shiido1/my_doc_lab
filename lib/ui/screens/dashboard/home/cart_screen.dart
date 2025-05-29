@@ -25,7 +25,9 @@ class _CartScreenState extends State<CartScreen> {
       viewModelBuilder: () => locator<AuthViewModel>(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          model.doubleTapDeleteCartSnack(context);
+          if (box.length > 0) {
+            model.doubleTapDeleteCartSnack(context);
+          }
         });
       },
       disposeViewModel: false,
@@ -80,7 +82,7 @@ class _CartScreenState extends State<CartScreen> {
                     TextView(
                       text:
                           '${getCurrency()}${oCcy.format(double.parse('${model.getCartTotal()}'))}',
-                      textStyle: GoogleFonts.dmSans(
+                      textStyle: TextStyle(
                         color: AppColor.black,
                         fontSize: 20.0.sp,
                         fontWeight: FontWeight.w400,
