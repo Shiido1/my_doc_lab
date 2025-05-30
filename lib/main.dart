@@ -14,15 +14,27 @@ late Box box;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
+
+  // Lock orientation early
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  final stopwatch = Stopwatch()..start();
+
   setupLocator();
-  await locator<SharedPreferencesService>().initilize();
-  await Hive.initFlutter();
+
+  await Future.wait([
+    locator<SharedPreferencesService>().initilize(),
+    Hive.initFlutter(),
+  ]);
+
   Hive.registerAdapter(CheckoutEntityModelAdapter());
   box = await Hive.openBox<CheckoutEntityModel>('checkout');
+
+  debugPrint('Initialization took ${stopwatch.elapsedMilliseconds} ms');
+
   runApp(const MyApp());
 }
 

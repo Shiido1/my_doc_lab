@@ -44,6 +44,27 @@ class _FirstOnboardingScreenState extends State<FirstOnboardingScreen> {
             top: 60,
             child: SvgPicture.asset(AppImage.mydoc),
           ),
+          Positioned(
+            right: 20,
+            top: 60,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ThirdOnboardingScreen(),
+                  ),
+                );
+              },
+              child: TextView(
+                text: 'SKIP',
+                textStyle: GoogleFonts.dmSans(
+                  color: AppColor.primary1,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ),
           index == 0
               ? Positioned(
                 left: 30,

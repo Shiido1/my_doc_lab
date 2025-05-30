@@ -47,7 +47,7 @@ class Original {
   String? status;
   String? emailVerifiedAt;
   dynamic certifications;
-  dynamic experience;
+  dynamic worktime;
   dynamic profileImage;
   String? city;
   String? state;
@@ -69,7 +69,7 @@ class Original {
     this.status,
     this.emailVerifiedAt,
     this.certifications,
-    this.experience,
+    this.worktime,
     this.profileImage,
     this.city,
     this.state,
@@ -92,7 +92,7 @@ class Original {
     status = json['status'];
     emailVerifiedAt = json['email_verified_at'];
     certifications = json['certifications'];
-    experience = json['experience'];
+    worktime = json['worktime'];
     profileImage = json['profile_image'];
     city = json['city'];
     state = json['state'];
@@ -117,7 +117,7 @@ class Original {
     data['status'] = status;
     data['email_verified_at'] = emailVerifiedAt;
     data['certifications'] = certifications;
-    data['experience'] = experience;
+    data['worktime'] = worktime;
     data['profile_image'] = profileImage;
     data['city'] = city;
     data['state'] = state;

@@ -8,7 +8,7 @@ import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/doc_edit_profile_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/appointment/doctors_appointment/doctors_appointment_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
@@ -167,7 +167,7 @@ class DocMoreSettingsScreen extends StatelessWidget {
                 SizedBox(height: 20.h),
                 moreContainerWidget(
                   image: AppImage.pharm,
-                  text: 'Availabilty',
+                  text: 'Availability',
                   borderColor: AppColor.lightgrey,
                   color: AppColor.black,
                   onTap:

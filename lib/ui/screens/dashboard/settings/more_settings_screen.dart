@@ -9,7 +9,7 @@ import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/pharmacy/phamacy_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 

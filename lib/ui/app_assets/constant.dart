@@ -111,8 +111,8 @@ availDateForm(time) {
   DateTime parsedDate = DateTime.parse(time);
 
   // Format as "08"
-  String formattedDate = DateFormat('dd').format(parsedDate.toLocal());
-  return formattedDate;
+  int formattedDate = parsedDate.day;
+  return formattedDate.toString();
 }
 
 String getWeekdayAbbreviation(String dateStr) {

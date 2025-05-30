@@ -18,6 +18,8 @@ class GetListOfDoctorsAppointmentModel {
   String? message;
   @JsonKey(name: 'slot_id')
   num? slotId;
+  @JsonKey(name: 'order_id')
+  dynamic orderId;
   String? status;
   @JsonKey(name: 'created_at')
   DateTime? createdAt;

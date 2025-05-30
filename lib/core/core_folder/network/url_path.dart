@@ -36,4 +36,15 @@ class UrlConfig {
   static const String end_call = 'chat/end';
   static const String chat = 'chat';
   static const String checkout = 'user/checkout';
+
+  static const String pharm_category = 'pharmacy/categories/list';
+  static const String add_pharm_category = 'pharmacy/categories/add';
+  static const String update_pharm_category = 'pharmacy/categories/';
+
+  static const String pharm_med_list = 'pharmacy/medicine/list';
+  static const String pharmacy = 'pharmacy';
+  static const String add_pharm_med_list = 'pharmacy/medicine/list';
+  static const String add_pharm_med = 'pharmacy/medicine/add';
+  static const String update_pharm_med = 'pharmacy/medicine';
+  static const String update_pharm_med_qty = 'pharmacy/medicine/quantity';
 }

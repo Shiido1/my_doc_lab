@@ -13,12 +13,16 @@ import 'package:stacked_shared/stacked_shared.dart';
 
 import '../../api_folder/auth_api.dart';
 import '../../api_folder/doc_api.dart';
+import '../../api_folder/pharm_api.dart';
 import '../../connect_end/contract/contract_impl.dart';
 import '../../connect_end/contract/doc_contract_impl.dart';
+import '../../connect_end/contract/pharm_contract_impl.dart';
 import '../../connect_end/repo/doc_repo_impl.dart';
+import '../../connect_end/repo/pharm_repo_impl.dart';
 import '../../connect_end/repo/repo_impl.dart';
 import '../../connect_end/view_model/auth_view_model.dart';
 import '../../connect_end/view_model/doc_view_model.dart';
+import '../../connect_end/view_model/pharm_view_model.dart';
 import '../manager/shared_preference.dart';
 import '../network/cloudinary_network_service.dart';
 import '../network/network_service.dart';
@@ -29,11 +33,13 @@ Future<void> setupLocator({
   String? environment,
   EnvironmentFilter? environmentFilter,
 }) async {
-// Register environments
+  // Register environments
   locator.registerEnvironment(
-      environment: environment, environmentFilter: environmentFilter);
+    environment: environment,
+    environmentFilter: environmentFilter,
+  );
 
-// Register dependencies
+  // Register dependencies
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => SnackbarService());
@@ -42,10 +48,14 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => CloudinaryNetworkService());
   locator.registerLazySingleton(() => AuthApi());
   locator.registerLazySingleton(() => DocAuthApi());
+  locator.registerLazySingleton(() => PharmAuthApi());
   locator.registerLazySingleton(() => AuthContractsImpl());
   locator.registerLazySingleton(() => DocContractsImpl());
+  locator.registerLazySingleton(() => PharmContractImpl());
   locator.registerLazySingleton(() => AuthRepoImpl());
   locator.registerLazySingleton(() => DocRepoImpl());
+  locator.registerLazySingleton(() => PharmRepoImpl());
   locator.registerLazySingleton(() => AuthViewModel());
   locator.registerLazySingleton(() => DocViewModel());
+  locator.registerLazySingleton(() => PharmViewModel());
 }

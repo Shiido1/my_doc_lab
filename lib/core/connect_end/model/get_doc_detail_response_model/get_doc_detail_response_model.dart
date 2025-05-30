@@ -157,6 +157,7 @@ class Availabilities {
   int? id;
   int? doctorId;
   String? dayOfWeek;
+  String? date;
   String? startTime;
   String? endTime;
   String? createdAt;
@@ -168,6 +169,7 @@ class Availabilities {
     this.doctorId,
     this.dayOfWeek,
     this.startTime,
+    this.date,
     this.endTime,
     this.createdAt,
     this.updatedAt,
@@ -178,6 +180,7 @@ class Availabilities {
     id = json['id'];
     doctorId = json['doctor_id'];
     dayOfWeek = json['day_of_week'];
+    date = json['date'];
     startTime = json['start_time'];
     endTime = json['end_time'];
     createdAt = json['created_at'];
@@ -190,6 +193,7 @@ class Availabilities {
     data['id'] = id;
     data['doctor_id'] = doctorId;
     data['day_of_week'] = dayOfWeek;
+    data['date'] = date;
     data['start_time'] = startTime;
     data['end_time'] = endTime;
     data['created_at'] = createdAt;
@@ -204,6 +208,7 @@ class AvailableSlots {
   int? doctorId;
   String? availableDate;
   String? availableTime;
+  dynamic availabilityId;
   bool? isBooked;
   String? createdAt;
   String? updatedAt;
@@ -214,6 +219,7 @@ class AvailableSlots {
     this.availableDate,
     this.availableTime,
     this.isBooked,
+    this.availabilityId,
     this.createdAt,
     this.updatedAt,
   });
@@ -223,6 +229,7 @@ class AvailableSlots {
     doctorId = json['doctor_id'];
     availableDate = json['available_date'];
     availableTime = json['available_time'];
+    availabilityId = json['availability_id'];
     isBooked = json['is_booked'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -234,6 +241,7 @@ class AvailableSlots {
     data['doctor_id'] = doctorId;
     data['available_date'] = availableDate;
     data['available_time'] = availableTime;
+    data['availability_id'] = availabilityId;
     data['is_booked'] = isBooked;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;

@@ -7,6 +7,7 @@ import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dar
 import '../../core_folder/app/app.locator.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
@@ -78,6 +79,11 @@ class DocRepoImpl {
     CallTokenGenerateEntityModel callToken,
   ) async {
     final response = await _contract.generateToken(callToken);
+    return response;
+  }
+
+  Future<GetDoctorsWalletResponseModel> doctorsWallet() async {
+    final response = await _contract.doctorsWallet();
     return response;
   }
 }

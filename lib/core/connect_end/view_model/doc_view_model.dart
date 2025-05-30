@@ -30,6 +30,7 @@ import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
+import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
@@ -71,6 +72,9 @@ class DocViewModel extends BaseViewModel {
   CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
   CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
       _callTokenGenerateResponseModel;
+  GetDoctorsWalletResponseModel? _getDoctorsWalletResponseModel;
+  GetDoctorsWalletResponseModel? get getDoctorsWalletResponseModel =>
+      _getDoctorsWalletResponseModel;
 
   RtcEngine? engine;
 
@@ -437,9 +441,11 @@ class DocViewModel extends BaseViewModel {
       );
       if (v['message'] == 'Availability updated successfully.') {
         Navigator.pop(context);
-        AppUtils.snackbar(context, message: v['message']);
-        navigate.navigateTo(Routes.docDashboard);
-        availabilities.clear();
+        Future.delayed(Duration(seconds: 2), () {
+          navigate.navigateTo(Routes.docDashboard);
+          AppUtils.snackbar(context, message: v['message']);
+          availabilities.clear();
+        });
       }
     } catch (e) {
       Navigator.pop(context);
@@ -513,6 +519,21 @@ class DocViewModel extends BaseViewModel {
       _isLoading = true;
       _getMessageIndexResponseModelList = await runBusyFuture(
         repositoryImply.chatIndex(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> doctorWallet() async {
+    try {
+      _isLoading = true;
+      _getDoctorsWalletResponseModel = await runBusyFuture(
+        repositoryImply.doctorsWallet(),
         throwException: true,
       );
       _isLoading = false;

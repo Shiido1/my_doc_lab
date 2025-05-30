@@ -182,7 +182,7 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                             ...model
                                 .getListOfDoctorsAppointmentModelList!
                                 .getListOfDoctorsAppointments!
-                                .where((e) => e.status == 'pending')
+                                .where((e) => e.status == 'scheduled')
                                 .map(
                                   (o) => appointMentCard(
                                     appointmentStatus: 'Upcoming',
@@ -275,13 +275,27 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                 ),
               ],
             ),
-            Container(
-              padding: EdgeInsets.all(20.w),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.oneKindgrey,
-              ),
-            ),
+            appointment?.user?.profileImage != null
+                ? ClipOval(
+                  child: SizedBox.fromSize(
+                    size: const Size.fromRadius(24),
+                    child: Image.network(
+                      appointment?.user?.profileImage!.contains('https')
+                          ? '${appointment?.user?.profileImage}'
+                          : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${appointment?.user?.profileImage}',
+                      fit: BoxFit.cover,
+                      errorBuilder:
+                          (context, error, stackTrace) => shimmerViewPharm(),
+                    ),
+                  ),
+                )
+                : Container(
+                  padding: EdgeInsets.all(20.w),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColor.oneKindgrey,
+                  ),
+                ),
             // Row(
             //   children: [
             //     Container(
@@ -360,64 +374,49 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
           ],
         ),
         SizedBox(height: 12.0.h),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 46.0.w),
-          decoration: BoxDecoration(
-            color: AppColor.primary1.withOpacity(.7),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: TextView(
-            text: 'Cancel',
-            textStyle: GoogleFonts.gabarito(
-              color: AppColor.darkindgrey,
-              fontSize: 13.20.sp,
-              fontWeight: FontWeight.w500,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8.w,
+                  horizontal: 46.0.w,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColor.primary1.withOpacity(.7),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TextView(
+                  text: 'Cancel',
+                  textStyle: GoogleFonts.gabarito(
+                    color: AppColor.darkindgrey,
+                    fontSize: 13.20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
             ),
-          ),
+            SizedBox(width: 20.w),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 36.w),
+                decoration: BoxDecoration(
+                  color: AppColor.primary1,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TextView(
+                  text: 'Reschedule',
+                  textStyle: GoogleFonts.gabarito(
+                    color: AppColor.white,
+                    fontSize: 13.20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     Expanded(
-        //       child: Container(
-        //         padding: EdgeInsets.symmetric(
-        //           vertical: 8.w,
-        //           horizontal: 46.0.w,
-        //         ),
-        //         decoration: BoxDecoration(
-        //           color: AppColor.primary1.withOpacity(.7),
-        //           borderRadius: BorderRadius.circular(8),
-        //         ),
-        //         child: TextView(
-        //           text: 'Cancel',
-        //           textStyle: GoogleFonts.gabarito(
-        //             color: AppColor.darkindgrey,
-        //             fontSize: 13.20.sp,
-        //             fontWeight: FontWeight.w500,
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //     SizedBox(width: 20.w),
-        //     Expanded(
-        //       child: Container(
-        //         padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 36.w),
-        //         decoration: BoxDecoration(
-        //           color: AppColor.primary1,
-        //           borderRadius: BorderRadius.circular(8),
-        //         ),
-        //         child: TextView(
-        //           text: 'Reschedule',
-        //           textStyle: GoogleFonts.gabarito(
-        //             color: AppColor.white,
-        //             fontSize: 13.20.sp,
-        //             fontWeight: FontWeight.w500,
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
       ],
     ),
   );

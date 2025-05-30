@@ -8,6 +8,7 @@ import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import '../connect_end/model/call_token_generate_entity_model.dart';
 import '../connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../connect_end/model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -65,6 +66,20 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetDoctorsWalletResponseModel> doctorWallet() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctors_availabilty,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetDoctorsWalletResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

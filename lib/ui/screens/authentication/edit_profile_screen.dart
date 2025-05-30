@@ -229,7 +229,10 @@ class EditProfileScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                     onPressed: () {
-                      if (formKey.currentState!.validate()) {
+                      if (formKey.currentState!.validate() &&
+                              model.getUserResponseModel?.data?.profileImage !=
+                                  null ||
+                          model.postUserVerificationCloudResponse != null) {
                         model.updateUser(
                           context,
                           updateEntity: UpdateUserEntityModel(

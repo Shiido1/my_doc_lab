@@ -219,6 +219,26 @@ class DocEditProfileScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20.h),
                   TextFormWidget(
+                    hint: 'Certification',
+                    border: 10,
+                    isFilled: true,
+                    fillColor: AppColor.oneKindgrey,
+                    borderColor: AppColor.transparent,
+                    controller: certificationController,
+                    validator: AppValidator.validateString(),
+                  ),
+                  SizedBox(height: 20.h),
+                  TextFormWidget(
+                    hint: 'Experience',
+                    border: 10,
+                    isFilled: true,
+                    fillColor: AppColor.oneKindgrey,
+                    borderColor: AppColor.transparent,
+                    controller: expController,
+                    validator: AppValidator.validateString(),
+                  ),
+                  SizedBox(height: 20.h),
+                  TextFormWidget(
                     hint: 'About',
                     border: 10,
                     isFilled: true,
@@ -240,6 +260,11 @@ class DocEditProfileScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       if (formKey.currentState!.validate() &&
+                              model
+                                      .getDocDetailResponseModel
+                                      ?.original
+                                      ?.profileImage !=
+                                  null ||
                           model.postUserVerificationCloudResponse != null) {
                         model.updateDoctorsDetail(
                           context,
@@ -252,12 +277,16 @@ class DocEditProfileScreen extends StatelessWidget {
                             phoneNumber: phoneController.text.trim(),
                             email: emailTextController.text.trim(),
                             speciality: roleController.text.trim(),
-                            certifications: roleController.text.trim(),
+                            certifications: certificationController.text.trim(),
                             experience: expController.text.trim(),
                             profileImage:
                                 model
                                     .postUserVerificationCloudResponse
-                                    ?.secureUrl,
+                                    ?.secureUrl ??
+                                model
+                                    .getDocDetailResponseModel
+                                    ?.original
+                                    ?.profileImage,
                             about: aboutController.text.trim(),
                           ),
                         );

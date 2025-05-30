@@ -4,8 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 
-import '../../../app_assets/app_image.dart';
-import '../../../widget/text_widget.dart';
+import '../../../../app_assets/app_image.dart';
+import '../../../../widget/text_widget.dart';
 
 class WalletScreen extends StatelessWidget {
   const WalletScreen({super.key});

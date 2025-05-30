@@ -79,7 +79,7 @@ class DocHomeScreen extends StatelessWidget {
                         ),
                         TextView(
                           text:
-                              'Dr. ${model.getDocDetailResponseModel?.original?.firstName ?? ''}',
+                              'Dr. ${model.getDocDetailResponseModel?.original?.firstName?.capitalize() ?? ''}',
                           textStyle: GoogleFonts.gabarito(
                             color: AppColor.greyIt,
                             fontSize: 14.20.sp,
