@@ -6,6 +6,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_doc_lab/core/connect_end/model/add_med_entity_model/add_med_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/post_user_cloud_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
@@ -333,6 +335,42 @@ class PharmViewModel extends BaseViewModel {
         throwException: true,
       );
     } catch (e) {
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  GetPharmOrderModel? _getPharmOrderModel;
+  GetPharmOrderModel? get getPharmOrderModel => _getPharmOrderModel;
+
+  GetPharmWalletResponseModel? _getPharmWalletResponseModel;
+  GetPharmWalletResponseModel? get getPharmWalletResponseModel =>
+      _getPharmWalletResponseModel;
+  void getPharmOrder() async {
+    try {
+      _isLoading = true;
+      _getPharmOrderModel = await runBusyFuture(
+        repositoryImply.pharmOrder(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      logger.d(e);
+      _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  void getPharmWallet() async {
+    try {
+      _isLoading = true;
+      _getPharmWalletResponseModel = await runBusyFuture(
+        repositoryImply.pharmWallet(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
       logger.d(e);
     }
     notifyListeners();
