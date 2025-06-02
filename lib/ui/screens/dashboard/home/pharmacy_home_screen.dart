@@ -92,8 +92,8 @@ class PharmacyHomeScreen extends StatelessWidget {
                       ],
                     ),
                     Spacer(),
-                    SvgPicture.asset(AppImage.cart, width: 24.w, height: 24.w),
-                    SizedBox(width: 20.w),
+                    // SvgPicture.asset(AppImage.cart, width: 24.w, height: 24.w),
+                    // SizedBox(width: 20.w),
                     GestureDetector(
                       onTap:
                           () => Navigator.of(context).push(
