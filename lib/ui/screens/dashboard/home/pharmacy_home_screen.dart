@@ -38,13 +38,36 @@ class PharmacyHomeScreen extends StatelessWidget {
                 SizedBox(height: 20.w),
                 Row(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(20.w),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColor.oneKindgrey,
-                      ),
-                    ),
+                    model
+                                .getPharmacyDetailResponseModel
+                                ?.original
+                                ?.profileImage !=
+                            null
+                        ? ClipOval(
+                          child: SizedBox.fromSize(
+                            size: const Size.fromRadius(24),
+                            child: Image.network(
+                              model
+                                      .getPharmacyDetailResponseModel
+                                      ?.original!
+                                      .profileImage!
+                                      .contains('https')
+                                  ? '${model.getPharmacyDetailResponseModel?.original?.profileImage}'
+                                  : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.getPharmacyDetailResponseModel?.original?.profileImage}',
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) =>
+                                      shimmerViewPharm(),
+                            ),
+                          ),
+                        )
+                        : Container(
+                          padding: EdgeInsets.all(20.w),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColor.oneKindgrey,
+                          ),
+                        ),
                     SizedBox(width: 20.w),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

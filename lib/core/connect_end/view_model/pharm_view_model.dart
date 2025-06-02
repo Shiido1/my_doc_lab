@@ -72,6 +72,13 @@ class PharmViewModel extends BaseViewModel {
   GetPharmacyCategories? get getCategoryByIdResponseModel =>
       _getCategoryByIdResponseModel;
 
+  GetPharmOrderModel? _getPharmOrderModel;
+  GetPharmOrderModel? get getPharmOrderModel => _getPharmOrderModel;
+
+  GetPharmWalletResponseModel? _getPharmWalletResponseModel;
+  GetPharmWalletResponseModel? get getPharmWalletResponseModel =>
+      _getPharmWalletResponseModel;
+
   bool selectStatus = false;
 
   String productExpiryDate = '';
@@ -340,12 +347,6 @@ class PharmViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  GetPharmOrderModel? _getPharmOrderModel;
-  GetPharmOrderModel? get getPharmOrderModel => _getPharmOrderModel;
-
-  GetPharmWalletResponseModel? _getPharmWalletResponseModel;
-  GetPharmWalletResponseModel? get getPharmWalletResponseModel =>
-      _getPharmWalletResponseModel;
   void getPharmOrder() async {
     try {
       _isLoading = true;

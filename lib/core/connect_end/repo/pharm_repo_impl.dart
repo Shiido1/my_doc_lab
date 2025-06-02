@@ -7,6 +7,8 @@ import '../../core_folder/app/app.locator.dart';
 import '../model/add_med_entity_model/add_med_entity_model.dart';
 import '../model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
 import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
+import '../model/get_pharm_order_model/get_pharm_order_model.dart';
+import '../model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -55,7 +57,6 @@ class PharmRepoImpl {
 
   Future<GetPharmacyCategories> getCategoryById(String id) async {
     final response = await _contract.getCategoryById(id);
-    print('enter again::::${response.name}');
     return response;
   }
 
@@ -97,6 +98,16 @@ class PharmRepoImpl {
 
   Future<dynamic> deletePharmMed(String id) async {
     final response = await _contract.deletePharmMed(id);
+    return response;
+  }
+
+  Future<GetPharmOrderModel> pharmOrder() async {
+    final response = await _contract.pharmOrder();
+    return response;
+  }
+
+  Future<GetPharmWalletResponseModel> pharmWallet() async {
+    final response = await _contract.pharmWallet();
     return response;
   }
 }

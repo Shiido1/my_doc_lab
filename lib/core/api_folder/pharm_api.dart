@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/model/add_med_entity_model/add_med_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
 import 'package:my_doc_lab/core/core_folder/network/cloudinary_network_service.dart';
 import '../connect_end/model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
 import '../connect_end/model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
+import '../connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../connect_end/model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -224,6 +226,34 @@ class PharmAuthApi {
       );
       logger.d(response.data);
       return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetPharmOrderModel> pharmOrder() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.pharmacy_order,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetPharmOrderModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetPharmWalletResponseModel> pharmWallet() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.pharmacy_wallet,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetPharmWalletResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

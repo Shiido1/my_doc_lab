@@ -1,11 +1,13 @@
 import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/api_folder/pharm_api.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_med_entity_model/add_med_entity_model.dart';
 import '../model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
 import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
+import '../model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -48,4 +50,7 @@ class PharmContractImpl {
       await _api.deletePharmCategories(id);
   Future<dynamic> deletePharmMed(String id) async =>
       await _api.deletePharmMed(id);
+  Future<GetPharmOrderModel> pharmOrder() async => await _api.pharmOrder();
+  Future<GetPharmWalletResponseModel> pharmWallet() async =>
+      await _api.pharmWallet();
 }
