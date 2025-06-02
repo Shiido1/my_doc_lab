@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:my_doc_lab/core/connect_end/model/add_med_entity_model/add_med_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/post_user_cloud_entity_model.dart';
@@ -20,6 +20,7 @@ import '../../../ui/app_assets/image_picker.dart';
 import '../../../ui/widget/text_form_widget.dart';
 import '../../../ui/widget/text_widget.dart';
 import '../../core_folder/app/app.logger.dart';
+import '../model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
 import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -49,10 +50,43 @@ class PharmViewModel extends BaseViewModel {
   GetPharmacyCategoriesList? get getPharmacyCategoriesList =>
       _getPharmacyCategoriesList;
   GetPharmMedResponseModelList? _getPharmMedResponseModelList;
-  GetPharmMedResponseModelList? get etPharmMedResponseModelList =>
+  GetPharmMedResponseModelList? get getPharmMedResponseModelList =>
       _getPharmMedResponseModelList;
 
-  TextEditingController textController = TextEditingController();
+  TextEditingController addPharmCategoriesTextController =
+      TextEditingController();
+  TextEditingController productNameTextController = TextEditingController();
+  TextEditingController productPriceTextController = TextEditingController();
+  TextEditingController productCategoryTextController = TextEditingController();
+  TextEditingController productVolumnTextController = TextEditingController();
+  TextEditingController productQuantityTextController = TextEditingController();
+  TextEditingController productTextController = TextEditingController();
+
+  GetPharmacyCategories? pharmacyCategoriesInfo;
+  GetMedByIdResponseModel? _getMedByIdResponseModel;
+  GetMedByIdResponseModel? get getMedByIdResponseModel =>
+      _getMedByIdResponseModel;
+  GetPharmacyCategories? _getCategoryByIdResponseModel;
+  GetPharmacyCategories? get getCategoryByIdResponseModel =>
+      _getCategoryByIdResponseModel;
+
+  bool selectStatus = false;
+
+  String productExpiryDate = '';
+
+  pickDateExpProduct(context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy/MM/dd').format(pickedDate);
+      productExpiryDate = formattedDate;
+    } else {}
+    notifyListeners();
+  }
 
   loadingDialog(context) => showDialog(
     context: context,
@@ -118,6 +152,16 @@ class PharmViewModel extends BaseViewModel {
             return SingleChildScrollView(
               child: Column(
                 children: [
+                  if (model.isLoading)
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.w),
+                      child: Center(
+                        child: SpinKitCircle(
+                          color: AppColor.primary1,
+                          size: 34.sp,
+                        ),
+                      ),
+                    ),
                   if (model.getPharmacyCategoriesList != null &&
                       model
                           .getPharmacyCategoriesList!
@@ -132,7 +176,12 @@ class PharmViewModel extends BaseViewModel {
                             children: [
                               GestureDetector(
                                 onTap: () {
+                                  productCategoryTextController.text =
+                                      o.name ?? '';
+                                  pharmacyCategoriesInfo = o;
+
                                   Navigator.pop(context);
+                                  notifyListeners();
                                 },
                                 child: Container(
                                   width: double.infinity,
@@ -264,12 +313,15 @@ class PharmViewModel extends BaseViewModel {
 
   void getPharmCategories() async {
     try {
+      _isLoading = true;
       _getPharmacyCategoriesList = await runBusyFuture(
         repositoryImply.getPharmacyCategories(),
         throwException: true,
       );
+      _isLoading = false;
     } catch (e) {
       logger.d(e);
+      _isLoading = false;
     }
     notifyListeners();
   }
@@ -286,37 +338,83 @@ class PharmViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> getPharmMedicineByID(id) async {
+    try {
+      _getMedByIdResponseModel = await runBusyFuture(
+        repositoryImply.getMedicineById(id),
+        throwException: true,
+      );
+    } catch (e) {
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getPharmCategoryByID(id) async {
+    try {
+      _getCategoryByIdResponseModel = await runBusyFuture(
+        repositoryImply.getCategoryById(id),
+        throwException: true,
+      );
+      pharmacyCategoriesInfo = _getCategoryByIdResponseModel;
+    } catch (e) {
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   void addPharmCategories(String name) async {
     try {
+      _isLoading = true;
       await runBusyFuture(
         repositoryImply.addPharmCategories(name),
         throwException: true,
       );
+      getPharmCategories();
+      addPharmCategoriesTextController.clear();
+      _isLoading = false;
     } catch (e) {
+      _isLoading = false;
       logger.d(e);
     }
     notifyListeners();
   }
 
-  void addPharmMedicine(AddMedEntityModel add) async {
+  void addPharmMedicine({context, AddMedEntityModel? add}) async {
     try {
-      await runBusyFuture(
-        repositoryImply.addPharmMedicine(add),
+      _isLoading = true;
+      var v = await runBusyFuture(
+        repositoryImply.addPharmMedicine(add!),
         throwException: true,
       );
+      _isLoading = false;
+      Navigator.pop(context);
+      AppUtils.snackbarTop(context, message: '${v['message']}');
+      getPharmMedicine();
     } catch (e) {
+      _isLoading = false;
       logger.d(e);
     }
     notifyListeners();
   }
 
-  void updatePharmMedicine({String? id, AddMedEntityModel? add}) async {
+  void updatePharmMedicine({
+    context,
+    String? id,
+    AddMedEntityModel? add,
+  }) async {
     try {
-      await runBusyFuture(
+      _isLoading = true;
+      var v = await runBusyFuture(
         repositoryImply.updatePharmMedicine(id: id, add: add),
         throwException: true,
       );
+      _isLoading = false;
+      Navigator.pop(context);
+      AppUtils.snackbarTop(context, message: '${v['message']}');
+      getPharmMedicine();
     } catch (e) {
+      _isLoading = false;
       logger.d(e);
     }
     notifyListeners();
@@ -324,11 +422,16 @@ class PharmViewModel extends BaseViewModel {
 
   void updatePharmCategories({String? name, String? id}) async {
     try {
+      _isLoading = true;
       await runBusyFuture(
         repositoryImply.updatePharmCategories(name: name, id: id),
         throwException: true,
       );
+      getPharmCategories();
+      addPharmCategoriesTextController.clear();
+      _isLoading = false;
     } catch (e) {
+      _isLoading = false;
       logger.d(e);
     }
     notifyListeners();
@@ -399,7 +502,6 @@ class PharmViewModel extends BaseViewModel {
                         model.getPharmCategories();
                       });
                     },
-                    disposeViewModel: false,
                     builder: (_, PharmViewModel model, __) {
                       return SingleChildScrollView(
                         padding: EdgeInsets.only(left: 12.w, right: 24.w),
@@ -439,7 +541,7 @@ class PharmViewModel extends BaseViewModel {
                               border: 10,
                               isFilled: true,
                               fillColor: AppColor.white,
-                              controller: textController,
+                              controller: addPharmCategoriesTextController,
                               validator: AppValidator.validateString(),
                             ),
                             SizedBox(height: 20.h),
@@ -456,13 +558,34 @@ class PharmViewModel extends BaseViewModel {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        TextView(
-                                          text: i.name ?? '',
-                                          textStyle: TextStyle(
-                                            color: AppColor.black,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              width: 250.w,
+                                              child: TextView(
+                                                text: i.name ?? '',
+                                                maxLines: 1,
+                                                textOverflow:
+                                                    TextOverflow.ellipsis,
+                                                textStyle: TextStyle(
+                                                  color: AppColor.black,
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons
+                                                    .remove_circle_outline_outlined,
+                                                color: AppColor.fineRed,
+                                                size: 22.sp,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Divider(
                                           color: AppColor.greyIt.withOpacity(
@@ -479,6 +602,7 @@ class PharmViewModel extends BaseViewModel {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 GestureDetector(
+                                  onTap: () => Navigator.pop(context),
                                   child: Container(
                                     padding:
                                         isTablet
@@ -486,7 +610,6 @@ class PharmViewModel extends BaseViewModel {
                                             : EdgeInsets.all(20.0.w),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-
                                       color: const Color.fromARGB(
                                         255,
                                         208,
@@ -507,6 +630,14 @@ class PharmViewModel extends BaseViewModel {
                                   ),
                                 ),
                                 GestureDetector(
+                                  onTap: () {
+                                    addPharmCategories(
+                                      addPharmCategoriesTextController.text
+                                          .trim(),
+                                    );
+
+                                    model.notifyListeners();
+                                  },
                                   child: Container(
                                     alignment: Alignment.center,
                                     padding:
@@ -530,6 +661,13 @@ class PharmViewModel extends BaseViewModel {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 30.h),
+                            !model.isLoading
+                                ? SizedBox.shrink()
+                                : SpinKitCircle(
+                                  color: AppColor.primary1,
+                                  size: 34.sp,
+                                ),
                           ],
                         ),
                       );
@@ -544,7 +682,7 @@ class PharmViewModel extends BaseViewModel {
     );
   }
 
-  void modalBottomSheetAddMedicine(context, {bool update = false}) {
+  void modalBottomSheetAddMedicine(context, {bool update = false, String? id}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Enables full-screen dragging
@@ -569,8 +707,45 @@ class PharmViewModel extends BaseViewModel {
                   return ViewModelBuilder<PharmViewModel>.reactive(
                     viewModelBuilder: () => PharmViewModel(),
                     onViewModelReady: (model) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) async {
                         model.getPharmCategories();
+                        model.getPharmacistDetail(context);
+                        if (update == true) {
+                          await model.getPharmMedicineByID(id);
+                          await model.getPharmCategoryByID(
+                            model.getMedByIdResponseModel?.medicineCategoryId
+                                ?.toString(),
+                          );
+                          pharmacyCategoriesInfo =
+                              model.getCategoryByIdResponseModel;
+
+                          productCategoryTextController.text =
+                              model.getCategoryByIdResponseModel?.name ?? '';
+                          productNameTextController.text =
+                              model.getMedByIdResponseModel?.name ?? '';
+                          productPriceTextController.text =
+                              model.getMedByIdResponseModel?.price.toString() ??
+                              '';
+
+                          productVolumnTextController.text =
+                              model.getMedByIdResponseModel?.volume ?? '';
+                          productQuantityTextController.text =
+                              model.getMedByIdResponseModel?.quantity
+                                  .toString() ??
+                              '';
+                          productTextController.text =
+                              model.getMedByIdResponseModel?.details ?? '';
+                          model.productExpiryDate =
+                              model.getMedByIdResponseModel?.expirationDate ??
+                              '';
+                          model.getMedByIdResponseModel?.status
+                                      ?.toLowerCase() ==
+                                  'active'
+                              ? selectStatus = true
+                              : false;
+
+                          model.notifyListeners();
+                        }
                       });
                     },
                     disposeViewModel: false,
@@ -595,7 +770,10 @@ class PharmViewModel extends BaseViewModel {
                             ),
                             SizedBox(height: 16.0.h),
                             TextView(
-                              text: 'Add New Product',
+                              text:
+                                  id == null
+                                      ? 'Add New Product'
+                                      : 'Update Product',
                               textStyle: TextStyle(
                                 color: AppColor.black,
                                 fontSize: 20.sp,
@@ -613,7 +791,7 @@ class PharmViewModel extends BaseViewModel {
                               border: 10,
                               isFilled: true,
                               fillColor: AppColor.white,
-                              controller: textController,
+                              controller: productNameTextController,
                               validator: AppValidator.validateString(),
                             ),
                             SizedBox(height: 20.h),
@@ -627,7 +805,7 @@ class PharmViewModel extends BaseViewModel {
                               border: 10,
                               isFilled: true,
                               fillColor: AppColor.white,
-                              controller: textController,
+                              controller: productPriceTextController,
                               validator: AppValidator.validateString(),
                             ),
                             SizedBox(height: 20.h),
@@ -641,7 +819,7 @@ class PharmViewModel extends BaseViewModel {
                               border: 10,
                               isFilled: true,
                               fillColor: AppColor.white,
-                              controller: textController,
+                              controller: productVolumnTextController,
                               validator: AppValidator.validateString(),
                             ),
                             SizedBox(height: 20.h),
@@ -655,12 +833,13 @@ class PharmViewModel extends BaseViewModel {
                               border: 10,
                               isFilled: true,
                               fillColor: AppColor.white,
-                              controller: textController,
+                              controller: productQuantityTextController,
                               validator: AppValidator.validateString(),
                             ),
                             SizedBox(height: 20.h),
                             TextFormWidget(
-                              label: 'Expiration Date',
+                              label: 'Description',
+                              maxline: 5,
                               labelStyle: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w400,
@@ -668,9 +847,75 @@ class PharmViewModel extends BaseViewModel {
                               ),
                               border: 10,
                               isFilled: true,
+                              alignLabelWithHint: true,
                               fillColor: AppColor.white,
-                              controller: textController,
+                              controller: productTextController,
                               validator: AppValidator.validateString(),
+                            ),
+                            SizedBox(height: 20.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    model.pickDateExpProduct(context);
+                                    notifyListeners();
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 8.w,
+                                      horizontal: 14.w,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: AppColor.darkindgrey,
+                                      ),
+                                    ),
+                                    child: TextView(
+                                      text:
+                                          model.productExpiryDate != ''
+                                              ? model.productExpiryDate
+                                              : "Select Exp Date",
+                                      textStyle: TextStyle(
+                                        color: AppColor.black,
+                                        fontSize: 14.80.sp,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(
+                                  child: Row(
+                                    children: [
+                                      TextView(
+                                        text: 'Status',
+                                        textStyle: TextStyle(
+                                          color: AppColor.black,
+                                          fontSize: 16.80.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+
+                                      Checkbox(
+                                        value: selectStatus,
+                                        onChanged: (isChecked) {
+                                          setState(() {
+                                            if (isChecked!) {
+                                              selectStatus = true;
+                                            } else {
+                                              selectStatus = false;
+                                            }
+                                          });
+                                          notifyListeners();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 20.h),
                             TextFormWidget(
@@ -684,7 +929,7 @@ class PharmViewModel extends BaseViewModel {
                               isFilled: true,
                               readOnly: true,
                               fillColor: AppColor.white,
-                              controller: textController,
+                              controller: productCategoryTextController,
                               validator: AppValidator.validateString(),
                               suffixWidget: Padding(
                                 padding: EdgeInsets.all(9.2.w),
@@ -697,63 +942,149 @@ class PharmViewModel extends BaseViewModel {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 20.h),
+                            SizedBox(height: 50.h),
+                            model.isLoading
+                                ? SpinKitCircle(
+                                  color: AppColor.primary1,
+                                  size: 34.sp,
+                                )
+                                : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      child: Container(
+                                        padding:
+                                            isTablet
+                                                ? EdgeInsets.all(12.0.w)
+                                                : EdgeInsets.all(20.0.w),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
 
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  child: Container(
-                                    padding:
-                                        isTablet
-                                            ? EdgeInsets.all(12.0.w)
-                                            : EdgeInsets.all(20.0.w),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-
-                                      color: const Color.fromARGB(
-                                        255,
-                                        208,
-                                        234,
-                                        222,
+                                          color: const Color.fromARGB(
+                                            255,
+                                            208,
+                                            234,
+                                            222,
+                                          ),
+                                        ),
+                                        width: 140.w,
+                                        alignment: Alignment.center,
+                                        child: TextView(
+                                          text: 'Cancel',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.primary1,
+                                            fontSize: 18.0.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    width: 140.w,
-                                    alignment: Alignment.center,
-                                    child: TextView(
-                                      text: 'Cancel',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.primary1,
-                                        fontSize: 18.0.sp,
-                                        fontWeight: FontWeight.w600,
+                                    GestureDetector(
+                                      onTap: () {
+                                        update == true
+                                            ? model.updatePharmMedicine(
+                                              context: context,
+                                              id: id,
+                                              add: AddMedEntityModel(
+                                                name:
+                                                    productNameTextController
+                                                        .text
+                                                        .trim(),
+                                                volume:
+                                                    productVolumnTextController
+                                                        .text
+                                                        .trim(),
+                                                details:
+                                                    productTextController.text
+                                                        .trim(),
+                                                quantity: int.parse(
+                                                  productQuantityTextController
+                                                      .text
+                                                      .trim(),
+                                                ),
+                                                medicineCategoryId:
+                                                    pharmacyCategoriesInfo?.id,
+                                                price: int.parse(
+                                                  productPriceTextController
+                                                      .text
+                                                      .trim(),
+                                                ),
+                                                status:
+                                                    selectStatus == true
+                                                        ? 'active'
+                                                        : 'inactive',
+                                                type: 'prescription',
+                                                expirationDate:
+                                                    model.productExpiryDate,
+                                              ),
+                                            )
+                                            : model.addPharmMedicine(
+                                              context: context,
+                                              add: AddMedEntityModel(
+                                                name:
+                                                    productNameTextController
+                                                        .text
+                                                        .trim(),
+                                                volume:
+                                                    productVolumnTextController
+                                                        .text
+                                                        .trim(),
+                                                details:
+                                                    productTextController.text
+                                                        .trim(),
+                                                quantity: int.parse(
+                                                  productQuantityTextController
+                                                      .text
+                                                      .trim(),
+                                                ),
+                                                medicineCategoryId:
+                                                    pharmacyCategoriesInfo?.id,
+                                                price: int.parse(
+                                                  productPriceTextController
+                                                      .text
+                                                      .trim(),
+                                                ),
+                                                status:
+                                                    selectStatus == true
+                                                        ? 'active'
+                                                        : 'inactive',
+                                                type: 'prescription',
+                                                expirationDate:
+                                                    model.productExpiryDate,
+                                              ),
+                                            );
+                                        model.notifyListeners();
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        padding:
+                                            isTablet
+                                                ? EdgeInsets.all(10.w)
+                                                : EdgeInsets.all(20.w),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: AppColor.primary1,
+                                        ),
+                                        width: 170.w,
+                                        child: TextView(
+                                          text: 'Add Product',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.white,
+                                            fontSize: 18.0.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                                GestureDetector(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding:
-                                        isTablet
-                                            ? EdgeInsets.all(10.w)
-                                            : EdgeInsets.all(20.w),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: AppColor.primary1,
-                                    ),
-                                    width: 170.w,
-                                    child: TextView(
-                                      text: 'Add Product',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.white,
-                                        fontSize: 18.0.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            SizedBox(height: 50.h),
                           ],
                         ),
                       );

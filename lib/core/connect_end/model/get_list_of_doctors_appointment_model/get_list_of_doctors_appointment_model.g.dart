@@ -37,7 +37,7 @@ GetListOfDoctorsAppointmentModel _$GetListOfDoctorsAppointmentModelFromJson(
       json['consultation'] == null
           ? null
           : Consultation.fromJson(json['consultation'] as Map<String, dynamic>),
-);
+)..orderId = json['order_id'];
 
 Map<String, dynamic> _$GetListOfDoctorsAppointmentModelToJson(
   GetListOfDoctorsAppointmentModel instance,
@@ -48,6 +48,7 @@ Map<String, dynamic> _$GetListOfDoctorsAppointmentModelToJson(
   'service_type': instance.serviceType,
   'message': instance.message,
   'slot_id': instance.slotId,
+  'order_id': instance.orderId,
   'status': instance.status,
   'created_at': instance.createdAt?.toIso8601String(),
   'updated_at': instance.updatedAt?.toIso8601String(),

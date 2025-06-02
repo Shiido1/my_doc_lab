@@ -13,6 +13,7 @@ extension StringExtension on String {
 }
 
 final oCcy = NumberFormat("#,##0.00", "en_US");
+final oCcyMeds = NumberFormat("#,##0", "en_US");
 
 String getCurrency() {
   var format = NumberFormat.simpleCurrency(

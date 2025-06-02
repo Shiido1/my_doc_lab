@@ -5,6 +5,7 @@ import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart
 
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_med_entity_model/add_med_entity_model.dart';
+import '../model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
 import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../model/post_user_cloud_entity_model.dart';
@@ -44,6 +45,17 @@ class PharmRepoImpl {
 
   Future<GetPharmMedResponseModelList> getAllMedsList() async {
     final response = await _contract.getAllMedsList();
+    return response;
+  }
+
+  Future<GetMedByIdResponseModel> getMedicineById(String id) async {
+    final response = await _contract.getMedicineById(id);
+    return response;
+  }
+
+  Future<GetPharmacyCategories> getCategoryById(String id) async {
+    final response = await _contract.getCategoryById(id);
+    print('enter again::::${response.name}');
     return response;
   }
 

@@ -4,6 +4,7 @@ import 'package:my_doc_lab/core/connect_end/model/add_med_entity_model/add_med_e
 import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
 import 'package:my_doc_lab/core/core_folder/network/cloudinary_network_service.dart';
+import '../connect_end/model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
 import '../connect_end/model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../connect_end/model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
@@ -90,6 +91,33 @@ class PharmAuthApi {
       );
       logger.d(response.data);
       return GetPharmMedResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetMedByIdResponseModel> getMedicineById(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.update_pharm_med}/$id',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetMedByIdResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetPharmacyCategories> getCategoryById(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.update_pharm_category}$id',
+        RequestMethod.get,
+      );
+      return GetPharmacyCategories.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

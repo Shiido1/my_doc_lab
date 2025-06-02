@@ -4,6 +4,7 @@ import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_m
 import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_med_entity_model/add_med_entity_model.dart';
+import '../model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
 import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../model/post_user_cloud_entity_model.dart';
@@ -27,6 +28,10 @@ class PharmContractImpl {
       await _api.getPharmacyCategories();
   Future<GetPharmMedResponseModelList> getAllMedsList() async =>
       await _api.getAllMedsList();
+  Future<GetMedByIdResponseModel> getMedicineById(String id) async =>
+      await _api.getMedicineById(id);
+  Future<GetPharmacyCategories> getCategoryById(String id) async =>
+      await _api.getCategoryById(id);
   Future<dynamic> addPharmCategories(String name) async =>
       await _api.addPharmCategories(name);
   Future<dynamic> addPharmMedicine(AddMedEntityModel add) async =>

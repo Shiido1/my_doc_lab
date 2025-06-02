@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/pharm_view_model.dart';
-import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_form_widget.dart';
 import '../../../widget/text_widget.dart';
@@ -26,7 +26,7 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return ViewModelBuilder<PharmViewModel>.reactive(
-      viewModelBuilder: () => locator<PharmViewModel>(),
+      viewModelBuilder: () => PharmViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getPharmMedicine();
@@ -37,7 +37,7 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
         return Scaffold(
           backgroundColor: AppColor.white,
           body: Padding(
-            padding: EdgeInsets.symmetric(vertical: 50.w, horizontal: 18.w),
+            padding: EdgeInsets.symmetric(vertical: 50.w, horizontal: 10.w),
             child: Column(
               children: [
                 SizedBox(height: 10.h),
@@ -87,57 +87,126 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                   ],
                 ),
                 SizedBox(height: 20.h),
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => model.modalBottomSheetAddMedicine(context),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 5.w,
-                          horizontal: 10.w,
-                        ),
-                        decoration: BoxDecoration(
-                          // ignore: deprecated_member_use
-                          color: AppColor.primary1,
 
-                          borderRadius: BorderRadius.circular(22),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.add_circle_outline_outlined,
-                              color: AppColor.white,
-                              size: 16.sp,
-                            ),
-                            SizedBox(width: 10.w),
-                            TextView(
-                              text: 'Add',
-                              textStyle: GoogleFonts.gabarito(
-                                color: AppColor.white,
-                                fontSize: 13.0.sp,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 20.h),
-                    Container(
+                // Row(
+                //   children: [
+                //     GestureDetector(
+                //       onTap: () => model.modalBottomSheetAddMedicine(context),
+                //       child: Container(
+                //         padding: EdgeInsets.symmetric(
+                //           vertical: 5.w,
+                //           horizontal: 10.w,
+                //         ),
+                //         decoration: BoxDecoration(
+                //           // ignore: deprecated_member_use
+                //           color: AppColor.primary1,
+
+                //           borderRadius: BorderRadius.circular(22),
+                //         ),
+                //         child: Row(
+                //           children: [
+                //             Icon(
+                //               Icons.add_circle_outline_outlined,
+                //               color: AppColor.white,
+                //               size: 16.sp,
+                //             ),
+                //             SizedBox(width: 10.w),
+                //             TextView(
+                //               text: 'Add',
+                //               textStyle: GoogleFonts.gabarito(
+                //                 color: AppColor.white,
+                //                 fontSize: 13.0.sp,
+                //                 fontWeight: FontWeight.w400,
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //     SizedBox(width: 20.h),
+                //     Container(
+                //       padding: EdgeInsets.symmetric(
+                //         vertical: 5.w,
+                //         horizontal: 10.w,
+                //       ),
+                //       decoration: BoxDecoration(
+                //         // ignore: deprecated_member_use
+                //         color: AppColor.fineRed,
+
+                //         borderRadius: BorderRadius.circular(22),
+                //       ),
+                //       child: Row(
+                //         children: [
+                //           Icon(
+                //             Icons.remove_circle_outline_outlined,
+                //             color: AppColor.white,
+                //             size: 16.sp,
+                //           ),
+                //           SizedBox(width: 10.w),
+                //           TextView(
+                //             text: 'Add',
+                //             textStyle: GoogleFonts.gabarito(
+                //               color: AppColor.white,
+                //               fontSize: 13.0.sp,
+                //               fontWeight: FontWeight.w400,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //     SizedBox(width: 20.h),
+                //     Container(
+                //       padding: EdgeInsets.symmetric(
+                //         vertical: 5.w,
+                //         horizontal: 10.w,
+                //       ),
+                //       decoration: BoxDecoration(
+                //         // ignore: deprecated_member_use
+                //         color: AppColor.yellow,
+
+                //         borderRadius: BorderRadius.circular(22),
+                //       ),
+                //       child: Row(
+                //         children: [
+                //           Icon(
+                //             Icons.keyboard_arrow_down_sharp,
+                //             color: AppColor.white,
+                //             size: 16.sp,
+                //           ),
+                //           SizedBox(width: 10.w),
+                //           TextView(
+                //             text: 'Action',
+                //             textStyle: GoogleFonts.gabarito(
+                //               color: AppColor.white,
+                //               fontSize: 13.0.sp,
+                //               fontWeight: FontWeight.w400,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                GestureDetector(
+                  onTap: () => model.modalBottomSheetAddMedicine(context),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      width: 80.w,
                       padding: EdgeInsets.symmetric(
                         vertical: 5.w,
                         horizontal: 10.w,
                       ),
                       decoration: BoxDecoration(
                         // ignore: deprecated_member_use
-                        color: AppColor.fineRed,
+                        color: AppColor.primary1,
 
                         borderRadius: BorderRadius.circular(22),
                       ),
                       child: Row(
                         children: [
                           Icon(
-                            Icons.remove_circle_outline_outlined,
+                            Icons.add_circle_outline_outlined,
                             color: AppColor.white,
                             size: 16.sp,
                           ),
@@ -153,38 +222,7 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(width: 20.h),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 5.w,
-                        horizontal: 10.w,
-                      ),
-                      decoration: BoxDecoration(
-                        // ignore: deprecated_member_use
-                        color: AppColor.yellow,
-
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.keyboard_arrow_down_sharp,
-                            color: AppColor.white,
-                            size: 16.sp,
-                          ),
-                          SizedBox(width: 10.w),
-                          TextView(
-                            text: 'Action',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.white,
-                              fontSize: 13.0.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
 
                 SizedBox(height: 20.h),
@@ -202,14 +240,14 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                          right: 10.w,
-                          left: 10.w,
+                          right: 20.w,
+                          left: 20.w,
                           top: 4.w,
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            SizedBox(width: 10.w),
                             TextView(
                               text: 'Name',
                               textStyle: GoogleFonts.gabarito(
@@ -218,6 +256,7 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                            SizedBox(width: 16.w),
                             TextView(
                               text: 'Price',
                               textStyle: GoogleFonts.gabarito(
@@ -226,6 +265,7 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                            SizedBox(width: 10.w),
                             TextView(
                               text: 'Qty',
                               textStyle: GoogleFonts.gabarito(
@@ -250,99 +290,122 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              ...[
-                                1,
-                                2,
-                                4,
-                                5,
-                                6,
-                                7,
-                                8,
-                                9,
-                                0,
-                                1,
-                                2,
-                                3,
-                                4,
-                                4,
-                                5,
-                                5,
-                              ].map(
-                                (o) => Padding(
-                                  padding: EdgeInsets.only(bottom: 10.w),
-                                  child: Row(
-                                    children: [
-                                      Checkbox(
-                                        value: selectedOptions.contains(
-                                          'Blood Sugar',
+                              if (model.getPharmMedResponseModelList != null &&
+                                  model
+                                      .getPharmMedResponseModelList!
+                                      .getPharmMedResponseModelList!
+                                      .isNotEmpty)
+                                ...model
+                                    .getPharmMedResponseModelList!
+                                    .getPharmMedResponseModelList!
+                                    .map(
+                                      (o) => Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: 10.w,
+                                          left: 6.0.w,
                                         ),
-                                        onChanged: (isChecked) {
-                                          setState(() {
-                                            if (isChecked!) {
-                                              selectedOptions.add(
-                                                'Blood Sugar',
-                                              );
-                                            } else {
-                                              selectedOptions.remove(
-                                                'Blood Sugar',
-                                              );
-                                            }
-                                          });
-                                        },
-                                      ),
-                                      TextView(
-                                        text: 'Furosemide',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.grey2,
-                                          fontSize: 16.sp,
-                                          letterSpacing: 0,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(width: 20.w),
-                                      TextView(
-                                        text: 'N1000',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.grey2,
-                                          fontSize: 16.sp,
-                                          letterSpacing: 0,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(width: 20.w),
-                                      TextView(
-                                        text: '100',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.grey2,
-                                          fontSize: 16.sp,
-                                          letterSpacing: 0,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(width: 30.w),
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            AppImage.edit,
-                                            width: 20.w,
-                                            height: 20.h,
-                                            color: AppColor.black,
-                                          ),
-                                          SizedBox(width: 20.w),
-                                          Icon(
-                                            Icons
-                                                .remove_circle_outline_outlined,
-                                            color: AppColor.fineRed,
-                                            size: 22.sp,
-                                          ),
-                                        ],
-                                      ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            // Checkbox(
+                                            //   value: selectedOptions.contains(
+                                            //     'Blood Sugar',
+                                            //   ),
+                                            //   onChanged: (isChecked) {
+                                            //     setState(() {
+                                            //       if (isChecked!) {
+                                            //         selectedOptions.add(
+                                            //           'Blood Sugar',
+                                            //         );
+                                            //       } else {
+                                            //         selectedOptions.remove(
+                                            //           'Blood Sugar',
+                                            //         );
+                                            //       }
+                                            //     });
+                                            //   },
+                                            // ),
+                                            SizedBox(
+                                              width: 130.w,
+                                              child: TextView(
+                                                text: o.name ?? '',
+                                                maxLines: 1,
+                                                textOverflow:
+                                                    TextOverflow.ellipsis,
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.grey2,
+                                                  fontSize: 16.sp,
+                                                  letterSpacing: 0,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            SizedBox(
+                                              width: 77.12.w,
+                                              child: TextView(
+                                                text:
+                                                    '${getCurrency()}${oCcyMeds.format(double.parse('${o.price}'))}',
+                                                maxLines: 1,
+                                                textOverflow:
+                                                    TextOverflow.ellipsis,
+                                                textStyle: TextStyle(
+                                                  color: AppColor.grey2,
+                                                  fontSize: 16.sp,
+                                                  letterSpacing: 0,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 20.w),
+                                            TextView(
+                                              text: '${o.quantity ?? ''}',
+                                              textStyle: GoogleFonts.gabarito(
+                                                color: AppColor.grey2,
+                                                fontSize: 16.sp,
+                                                letterSpacing: 0,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            SizedBox(width: 20.w),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    model
+                                                        .modalBottomSheetAddMedicine(
+                                                          context,
+                                                          update: true,
+                                                          id: o.id.toString(),
+                                                        );
+                                                    model.notifyListeners();
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                    AppImage.edit,
+                                                    width: 20.w,
+                                                    height: 20.h,
+                                                    color: AppColor.black,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10.w),
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(
+                                                    Icons
+                                                        .remove_circle_outline_outlined,
+                                                    color: AppColor.fineRed,
+                                                    size: 22.sp,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
 
-                                      // SizedBox(width: 10.w),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                                            SizedBox(width: 5.0.w),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                               SizedBox(height: 20.h),
                             ],
                           ),
