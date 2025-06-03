@@ -63,7 +63,11 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                           border: 10,
                           isFilled: true,
                           fillColor: AppColor.transparent,
-                          // controller: fullnameTextController,
+                          onChange: (p0) {
+                            model.pharmMedQuery = p0;
+                            print('print my  guy ${model.pharmMedQuery}');
+                            model.notifyListeners();
+                          },
                           prefixWidget: Padding(
                             padding: EdgeInsets.all(14.w),
                             child: SvgPicture.asset(
@@ -72,8 +76,6 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                               width: 20.w,
                             ),
                           ),
-
-                          // validator: AppValidator.validateEmail(),
                         ),
                       ),
                       IconButton(
@@ -203,26 +205,66 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                                           .getPharmMedResponseModelList!
                                           .getPharmMedResponseModelList!
                                           .isNotEmpty)
-                                    ...model
-                                        .getPharmMedResponseModelList!
-                                        .getPharmMedResponseModelList!
-                                        .map(
-                                          (o) => Padding(
-                                            padding: EdgeInsets.only(
-                                              bottom: 10.w,
-                                              left: 6.0.w,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                SizedBox(
-                                                  width: 130.w,
-                                                  child: TextView(
-                                                    text: o.name ?? '',
-                                                    maxLines: 1,
-                                                    textOverflow:
-                                                        TextOverflow.ellipsis,
+                                    if (model.pharmMedQuery != '')
+                                      ...model
+                                          .getPharmMedResponseModelList!
+                                          .getPharmMedResponseModelList!
+                                          .where(
+                                            (w) =>
+                                                w.name!.toLowerCase().contains(
+                                                  model.pharmMedQuery
+                                                      .toLowerCase(),
+                                                ),
+                                          )
+                                          .map(
+                                            (o) => Padding(
+                                              padding: EdgeInsets.only(
+                                                bottom: 10.w,
+                                                left: 6.0.w,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 130.w,
+                                                    child: TextView(
+                                                      text: o.name ?? '',
+                                                      maxLines: 1,
+                                                      textOverflow:
+                                                          TextOverflow.ellipsis,
+                                                      textStyle:
+                                                          GoogleFonts.gabarito(
+                                                            color:
+                                                                AppColor.grey2,
+                                                            fontSize: 16.sp,
+                                                            letterSpacing: 0,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 77.12.w,
+                                                    child: TextView(
+                                                      text:
+                                                          '${getCurrency()}${oCcyMeds.format(double.parse('${o.price}'))}',
+                                                      maxLines: 1,
+                                                      textOverflow:
+                                                          TextOverflow.ellipsis,
+                                                      textStyle: TextStyle(
+                                                        color: AppColor.grey2,
+                                                        fontSize: 16.sp,
+                                                        letterSpacing: 0,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 20.w),
+                                                  TextView(
+                                                    text: '${o.quantity ?? ''}',
                                                     textStyle:
                                                         GoogleFonts.gabarito(
                                                           color: AppColor.grey2,
@@ -232,80 +274,162 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                                                               FontWeight.w400,
                                                         ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  width: 77.12.w,
-                                                  child: TextView(
-                                                    text:
-                                                        '${getCurrency()}${oCcyMeds.format(double.parse('${o.price}'))}',
-                                                    maxLines: 1,
-                                                    textOverflow:
-                                                        TextOverflow.ellipsis,
-                                                    textStyle: TextStyle(
-                                                      color: AppColor.grey2,
-                                                      fontSize: 16.sp,
-                                                      letterSpacing: 0,
-                                                      fontWeight:
-                                                          FontWeight.w400,
+                                                  SizedBox(width: 20.w),
+                                                  Row(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          model.modalBottomSheetAddMedicine(
+                                                            context,
+                                                            update: true,
+                                                            id: o.id.toString(),
+                                                          );
+                                                          model
+                                                              .notifyListeners();
+                                                        },
+                                                        child: SvgPicture.asset(
+                                                          AppImage.edit,
+                                                          width: 20.w,
+                                                          height: 20.h,
+                                                          color: AppColor.black,
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 10.w),
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          model.deleteProductMedDialogBox(
+                                                            context,
+                                                            prodId:
+                                                                o.id.toString(),
+                                                          );
+                                                          model
+                                                              .notifyListeners();
+                                                        },
+                                                        icon: Icon(
+                                                          Icons
+                                                              .remove_circle_outline_outlined,
+                                                          color:
+                                                              AppColor.fineRed,
+                                                          size: 22.sp,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+
+                                                  SizedBox(height: 5.0.w),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                    else
+                                      ...model
+                                          .getPharmMedResponseModelList!
+                                          .getPharmMedResponseModelList!
+                                          .map(
+                                            (o) => Padding(
+                                              padding: EdgeInsets.only(
+                                                bottom: 10.w,
+                                                left: 6.0.w,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 130.w,
+                                                    child: TextView(
+                                                      text: o.name ?? '',
+                                                      maxLines: 1,
+                                                      textOverflow:
+                                                          TextOverflow.ellipsis,
+                                                      textStyle:
+                                                          GoogleFonts.gabarito(
+                                                            color:
+                                                                AppColor.grey2,
+                                                            fontSize: 16.sp,
+                                                            letterSpacing: 0,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
                                                     ),
                                                   ),
-                                                ),
-                                                SizedBox(width: 20.w),
-                                                TextView(
-                                                  text: '${o.quantity ?? ''}',
-                                                  textStyle:
-                                                      GoogleFonts.gabarito(
+                                                  SizedBox(
+                                                    width: 77.12.w,
+                                                    child: TextView(
+                                                      text:
+                                                          '${getCurrency()}${oCcyMeds.format(double.parse('${o.price}'))}',
+                                                      maxLines: 1,
+                                                      textOverflow:
+                                                          TextOverflow.ellipsis,
+                                                      textStyle: TextStyle(
                                                         color: AppColor.grey2,
                                                         fontSize: 16.sp,
                                                         letterSpacing: 0,
                                                         fontWeight:
                                                             FontWeight.w400,
                                                       ),
-                                                ),
-                                                SizedBox(width: 20.w),
-                                                Row(
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        model.modalBottomSheetAddMedicine(
-                                                          context,
-                                                          update: true,
-                                                          id: o.id.toString(),
-                                                        );
-                                                        model.notifyListeners();
-                                                      },
-                                                      child: SvgPicture.asset(
-                                                        AppImage.edit,
-                                                        width: 20.w,
-                                                        height: 20.h,
-                                                        color: AppColor.black,
-                                                      ),
                                                     ),
-                                                    SizedBox(width: 10.w),
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        model.deleteProductMedDialogBox(
-                                                          context,
-                                                          prodId:
-                                                              o.id.toString(),
-                                                        );
-                                                        model.notifyListeners();
-                                                      },
-                                                      icon: Icon(
-                                                        Icons
-                                                            .remove_circle_outline_outlined,
-                                                        color: AppColor.fineRed,
-                                                        size: 22.sp,
+                                                  ),
+                                                  SizedBox(width: 20.w),
+                                                  TextView(
+                                                    text: '${o.quantity ?? ''}',
+                                                    textStyle:
+                                                        GoogleFonts.gabarito(
+                                                          color: AppColor.grey2,
+                                                          fontSize: 16.sp,
+                                                          letterSpacing: 0,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                  ),
+                                                  SizedBox(width: 20.w),
+                                                  Row(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          model.modalBottomSheetAddMedicine(
+                                                            context,
+                                                            update: true,
+                                                            id: o.id.toString(),
+                                                          );
+                                                          model
+                                                              .notifyListeners();
+                                                        },
+                                                        child: SvgPicture.asset(
+                                                          AppImage.edit,
+                                                          width: 20.w,
+                                                          height: 20.h,
+                                                          color: AppColor.black,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                      SizedBox(width: 10.w),
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          model.deleteProductMedDialogBox(
+                                                            context,
+                                                            prodId:
+                                                                o.id.toString(),
+                                                          );
+                                                          model
+                                                              .notifyListeners();
+                                                        },
+                                                        icon: Icon(
+                                                          Icons
+                                                              .remove_circle_outline_outlined,
+                                                          color:
+                                                              AppColor.fineRed,
+                                                          size: 22.sp,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
 
-                                                SizedBox(height: 5.0.w),
-                                              ],
+                                                  SizedBox(height: 5.0.w),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
                                   SizedBox(height: 20.h),
                                 ],
                               ),

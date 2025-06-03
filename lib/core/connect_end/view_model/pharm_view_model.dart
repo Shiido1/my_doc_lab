@@ -44,6 +44,8 @@ class PharmViewModel extends BaseViewModel {
   bool _isLoadingPharmMed = false;
   bool get isLoadingPharmMed => _isLoadingPharmMed;
 
+  String pharmMedQuery = '';
+
   PharmViewModel({this.context});
 
   GetPharmacyDetailResponseModel? _getPharmacyDetailResponseModel;
