@@ -39,6 +39,10 @@ class PharmViewModel extends BaseViewModel {
   bool get isLoading => _isLoading;
   bool _isLoadingDelCat = false;
   bool get isLoadingDelCat => _isLoadingDelCat;
+  bool _isLoadingDelMeds = false;
+  bool get isLoadingDelMeds => _isLoadingDelMeds;
+  bool _isLoadingPharmMed = false;
+  bool get isLoadingPharmMed => _isLoadingPharmMed;
 
   PharmViewModel({this.context});
 
@@ -86,6 +90,9 @@ class PharmViewModel extends BaseViewModel {
   bool selectStatus = false;
 
   String productExpiryDate = '';
+  bool onEditCate = false;
+  GetPharmacyCategories? onEditGetPharmacyCategories;
+  GlobalKey<FormState> proFormKey = GlobalKey<FormState>();
 
   pickDateExpProduct(context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -423,41 +430,39 @@ class PharmViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void addPharmMedicine({context, AddMedEntityModel? add}) async {
+  Future<void> addPharmMedicine({context, AddMedEntityModel? add}) async {
     try {
-      _isLoading = true;
+      _isLoadingPharmMed = true;
       var v = await runBusyFuture(
         repositoryImply.addPharmMedicine(add!),
         throwException: true,
       );
-      _isLoading = false;
+      _isLoadingPharmMed = false;
       Navigator.pop(context);
       AppUtils.snackbarTop(context, message: '${v['message']}');
-      getPharmMedicine();
     } catch (e) {
-      _isLoading = false;
+      _isLoadingPharmMed = false;
       logger.d(e);
     }
     notifyListeners();
   }
 
-  void updatePharmMedicine({
+  Future<void> updatePharmMedicine({
     context,
     String? id,
     AddMedEntityModel? add,
   }) async {
     try {
-      _isLoading = true;
+      _isLoadingPharmMed = true;
       var v = await runBusyFuture(
         repositoryImply.updatePharmMedicine(id: id, add: add),
         throwException: true,
       );
-      _isLoading = false;
+      _isLoadingPharmMed = false;
       Navigator.pop(context);
       AppUtils.snackbarTop(context, message: '${v['message']}');
-      getPharmMedicine();
     } catch (e) {
-      _isLoading = false;
+      _isLoadingPharmMed = false;
       logger.d(e);
     }
     notifyListeners();
@@ -511,13 +516,17 @@ class PharmViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void deletePharmMed(String id) async {
+  Future<void> deletePharmMed(context, {String? id}) async {
     try {
+      _isLoadingDelMeds = true;
       await runBusyFuture(
-        repositoryImply.deletePharmMed(id),
+        repositoryImply.deletePharmMed(id!),
         throwException: true,
       );
+      Navigator.pop(context);
+      _isLoadingDelMeds = false;
     } catch (e) {
+      _isLoadingDelMeds = false;
       logger.d(e);
     }
     notifyListeners();
@@ -590,343 +599,371 @@ class PharmViewModel extends BaseViewModel {
                       });
                     },
                     disposeViewModel: false,
+                    onDispose: (viewModel) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        clearPharmProductController();
+                      });
+                    },
                     builder: (_, PharmViewModel model, __) {
                       return SingleChildScrollView(
                         padding: EdgeInsets.only(left: 12.w, right: 24.w),
                         controller: scrollController,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 6.0.h),
-                            Center(
-                              child: Container(
-                                width: 30.w,
-                                height: 3.5.h,
-                                margin: EdgeInsets.only(top: 10.w),
-                                decoration: BoxDecoration(
-                                  color: AppColor.grey2.withOpacity(.4),
-                                  borderRadius: BorderRadius.circular(22),
+                        child: Form(
+                          key: proFormKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 6.0.h),
+                              Center(
+                                child: Container(
+                                  width: 30.w,
+                                  height: 3.5.h,
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey2.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 16.0.h),
-                            TextView(
-                              text:
-                                  id == null
-                                      ? 'Add New Product'
-                                      : 'Update Product',
-                              textStyle: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w600,
+                              SizedBox(height: 16.0.h),
+                              TextView(
+                                text:
+                                    id == null
+                                        ? 'Add New Product'
+                                        : 'Update Product',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 20.h),
-                            TextFormWidget(
-                              label: 'Product Name',
-                              labelStyle: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                                color: AppColor.primary1,
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Product Name',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: productNameTextController,
+                                validator: AppValidator.validateString(),
                               ),
-                              border: 10,
-                              isFilled: true,
-                              fillColor: AppColor.white,
-                              controller: productNameTextController,
-                              validator: AppValidator.validateString(),
-                            ),
-                            SizedBox(height: 20.h),
-                            TextFormWidget(
-                              label: 'Price (₦)',
-                              labelStyle: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                                color: AppColor.primary1,
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Price (₦)',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: productPriceTextController,
+                                validator: AppValidator.validateInt(),
                               ),
-                              border: 10,
-                              isFilled: true,
-                              fillColor: AppColor.white,
-                              controller: productPriceTextController,
-                              validator: AppValidator.validateString(),
-                            ),
-                            SizedBox(height: 20.h),
-                            TextFormWidget(
-                              label: 'Volume',
-                              labelStyle: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                                color: AppColor.primary1,
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Volume',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: productVolumnTextController,
+                                validator: AppValidator.validateString(),
                               ),
-                              border: 10,
-                              isFilled: true,
-                              fillColor: AppColor.white,
-                              controller: productVolumnTextController,
-                              validator: AppValidator.validateString(),
-                            ),
-                            SizedBox(height: 20.h),
-                            TextFormWidget(
-                              label: 'Quantity',
-                              labelStyle: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                                color: AppColor.primary1,
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Quantity',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: productQuantityTextController,
+                                keyboardType: TextInputType.number,
+                                validator: AppValidator.validateInt(),
                               ),
-                              border: 10,
-                              isFilled: true,
-                              fillColor: AppColor.white,
-                              controller: productQuantityTextController,
-                              validator: AppValidator.validateString(),
-                            ),
-                            SizedBox(height: 20.h),
-                            TextFormWidget(
-                              label: 'Description',
-                              maxline: 5,
-                              labelStyle: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                                color: AppColor.primary1,
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Description',
+                                maxline: 5,
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                alignLabelWithHint: true,
+                                fillColor: AppColor.white,
+                                controller: productTextController,
+                                validator: AppValidator.validateString(),
                               ),
-                              border: 10,
-                              isFilled: true,
-                              alignLabelWithHint: true,
-                              fillColor: AppColor.white,
-                              controller: productTextController,
-                              validator: AppValidator.validateString(),
-                            ),
-                            SizedBox(height: 20.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    model.pickDateExpProduct(context);
-                                    notifyListeners();
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 8.w,
-                                      horizontal: 14.w,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: AppColor.darkindgrey,
+                              SizedBox(height: 20.h),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      model.pickDateExpProduct(context);
+                                      notifyListeners();
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 8.w,
+                                        horizontal: 14.w,
                                       ),
-                                    ),
-                                    child: TextView(
-                                      text:
-                                          model.productExpiryDate != ''
-                                              ? model.productExpiryDate
-                                              : "Select Exp Date",
-                                      textStyle: TextStyle(
-                                        color: AppColor.black,
-                                        fontSize: 14.80.sp,
-                                        fontWeight: FontWeight.w400,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: AppColor.darkindgrey,
+                                        ),
+                                      ),
+                                      child: TextView(
+                                        text:
+                                            model.productExpiryDate != ''
+                                                ? model.productExpiryDate
+                                                : "Select Exp Date",
+                                        textStyle: TextStyle(
+                                          color: AppColor.black,
+                                          fontSize: 14.80.sp,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
 
-                                SizedBox(
-                                  child: Row(
+                                  SizedBox(
+                                    child: Row(
+                                      children: [
+                                        TextView(
+                                          text: 'Status',
+                                          textStyle: TextStyle(
+                                            color: AppColor.black,
+                                            fontSize: 16.80.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+
+                                        Checkbox(
+                                          value: selectStatus,
+                                          onChanged: (isChecked) {
+                                            setState(() {
+                                              if (isChecked!) {
+                                                selectStatus = true;
+                                              } else {
+                                                selectStatus = false;
+                                              }
+                                            });
+                                            notifyListeners();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Medicine Category',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                readOnly: true,
+                                fillColor: AppColor.white,
+                                controller: productCategoryTextController,
+                                validator: AppValidator.validateString(),
+                                suffixWidget: Padding(
+                                  padding: EdgeInsets.all(9.2.w),
+                                  child: GestureDetector(
+                                    onTap:
+                                        update == true
+                                            ? () {}
+                                            : () => medCategoryDialog(context),
+                                    child: Icon(
+                                      Icons.arrow_drop_down,
+                                      size: 20.sp,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 50.h),
+                              model.isLoadingPharmMed
+                                  ? SpinKitCircle(
+                                    color: AppColor.primary1,
+                                    size: 34.sp,
+                                  )
+                                  : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      TextView(
-                                        text: 'Status',
-                                        textStyle: TextStyle(
-                                          color: AppColor.black,
-                                          fontSize: 16.80.sp,
-                                          fontWeight: FontWeight.w500,
+                                      GestureDetector(
+                                        onTap: () => Navigator.pop(context),
+                                        child: Container(
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(12.0.w)
+                                                  : EdgeInsets.all(20.0.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+
+                                            color: const Color.fromARGB(
+                                              255,
+                                              208,
+                                              234,
+                                              222,
+                                            ),
+                                          ),
+                                          width: 140.w,
+                                          alignment: Alignment.center,
+                                          child: TextView(
+                                            text: 'Cancel',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.primary1,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
                                         ),
                                       ),
-
-                                      Checkbox(
-                                        value: selectStatus,
-                                        onChanged: (isChecked) {
-                                          setState(() {
-                                            if (isChecked!) {
-                                              selectStatus = true;
+                                      GestureDetector(
+                                        onTap: () async {
+                                          if (proFormKey.currentState!
+                                                  .validate() &&
+                                              model.productExpiryDate != '') {
+                                            if (update == true) {
+                                              await model.updatePharmMedicine(
+                                                context: context,
+                                                id: id,
+                                                add: AddMedEntityModel(
+                                                  name:
+                                                      productNameTextController
+                                                          .text
+                                                          .trim(),
+                                                  volume:
+                                                      productVolumnTextController
+                                                          .text
+                                                          .trim(),
+                                                  details:
+                                                      productTextController.text
+                                                          .trim(),
+                                                  quantity: int.parse(
+                                                    productQuantityTextController
+                                                        .text
+                                                        .trim(),
+                                                  ),
+                                                  medicineCategoryId:
+                                                      pharmacyCategoriesInfo
+                                                          ?.id,
+                                                  price: int.parse(
+                                                    productPriceTextController
+                                                        .text
+                                                        .trim(),
+                                                  ),
+                                                  status:
+                                                      selectStatus == true
+                                                          ? 'active'
+                                                          : 'inactive',
+                                                  type: 'prescription',
+                                                  expirationDate:
+                                                      model.productExpiryDate,
+                                                ),
+                                              );
+                                              getPharmMedicine();
+                                              notifyListeners();
                                             } else {
-                                              selectStatus = false;
+                                              await model.addPharmMedicine(
+                                                context: context,
+                                                add: AddMedEntityModel(
+                                                  name:
+                                                      productNameTextController
+                                                          .text
+                                                          .trim(),
+                                                  volume:
+                                                      productVolumnTextController
+                                                          .text
+                                                          .trim(),
+                                                  details:
+                                                      productTextController.text
+                                                          .trim(),
+                                                  quantity: int.parse(
+                                                    productQuantityTextController
+                                                        .text
+                                                        .trim(),
+                                                  ),
+                                                  medicineCategoryId:
+                                                      pharmacyCategoriesInfo
+                                                          ?.id,
+                                                  price: int.parse(
+                                                    productPriceTextController
+                                                        .text
+                                                        .trim(),
+                                                  ),
+                                                  status:
+                                                      selectStatus == true
+                                                          ? 'active'
+                                                          : 'inactive',
+                                                  type: 'prescription',
+                                                  expirationDate:
+                                                      model.productExpiryDate,
+                                                ),
+                                              );
+
+                                              getPharmMedicine();
+                                              notifyListeners();
                                             }
-                                          });
-                                          notifyListeners();
+                                          }
                                         },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(10.w)
+                                                  : EdgeInsets.all(20.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: AppColor.primary1,
+                                          ),
+                                          width: 170.w,
+                                          child: TextView(
+                                            text:
+                                                id == null
+                                                    ? 'Add Product'
+                                                    : 'Update Product',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.white,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20.h),
-                            TextFormWidget(
-                              label: 'Medicine Category',
-                              labelStyle: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                                color: AppColor.primary1,
-                              ),
-                              border: 10,
-                              isFilled: true,
-                              readOnly: true,
-                              fillColor: AppColor.white,
-                              controller: productCategoryTextController,
-                              validator: AppValidator.validateString(),
-                              suffixWidget: Padding(
-                                padding: EdgeInsets.all(9.2.w),
-                                child: GestureDetector(
-                                  onTap: () => medCategoryDialog(context),
-                                  child: Icon(
-                                    Icons.arrow_drop_down,
-                                    size: 20.sp,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 50.h),
-                            model.isLoading
-                                ? SpinKitCircle(
-                                  color: AppColor.primary1,
-                                  size: 34.sp,
-                                )
-                                : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () => Navigator.pop(context),
-                                      child: Container(
-                                        padding:
-                                            isTablet
-                                                ? EdgeInsets.all(12.0.w)
-                                                : EdgeInsets.all(20.0.w),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-
-                                          color: const Color.fromARGB(
-                                            255,
-                                            208,
-                                            234,
-                                            222,
-                                          ),
-                                        ),
-                                        width: 140.w,
-                                        alignment: Alignment.center,
-                                        child: TextView(
-                                          text: 'Cancel',
-                                          textStyle: GoogleFonts.gabarito(
-                                            color: AppColor.primary1,
-                                            fontSize: 18.0.sp,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        update == true
-                                            ? model.updatePharmMedicine(
-                                              context: context,
-                                              id: id,
-                                              add: AddMedEntityModel(
-                                                name:
-                                                    productNameTextController
-                                                        .text
-                                                        .trim(),
-                                                volume:
-                                                    productVolumnTextController
-                                                        .text
-                                                        .trim(),
-                                                details:
-                                                    productTextController.text
-                                                        .trim(),
-                                                quantity: int.parse(
-                                                  productQuantityTextController
-                                                      .text
-                                                      .trim(),
-                                                ),
-                                                medicineCategoryId:
-                                                    pharmacyCategoriesInfo?.id,
-                                                price: int.parse(
-                                                  productPriceTextController
-                                                      .text
-                                                      .trim(),
-                                                ),
-                                                status:
-                                                    selectStatus == true
-                                                        ? 'active'
-                                                        : 'inactive',
-                                                type: 'prescription',
-                                                expirationDate:
-                                                    model.productExpiryDate,
-                                              ),
-                                            )
-                                            : model.addPharmMedicine(
-                                              context: context,
-                                              add: AddMedEntityModel(
-                                                name:
-                                                    productNameTextController
-                                                        .text
-                                                        .trim(),
-                                                volume:
-                                                    productVolumnTextController
-                                                        .text
-                                                        .trim(),
-                                                details:
-                                                    productTextController.text
-                                                        .trim(),
-                                                quantity: int.parse(
-                                                  productQuantityTextController
-                                                      .text
-                                                      .trim(),
-                                                ),
-                                                medicineCategoryId:
-                                                    pharmacyCategoriesInfo?.id,
-                                                price: int.parse(
-                                                  productPriceTextController
-                                                      .text
-                                                      .trim(),
-                                                ),
-                                                status:
-                                                    selectStatus == true
-                                                        ? 'active'
-                                                        : 'inactive',
-                                                type: 'prescription',
-                                                expirationDate:
-                                                    model.productExpiryDate,
-                                              ),
-                                            );
-                                        model.notifyListeners();
-                                      },
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        padding:
-                                            isTablet
-                                                ? EdgeInsets.all(10.w)
-                                                : EdgeInsets.all(20.w),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                          color: AppColor.primary1,
-                                        ),
-                                        width: 170.w,
-                                        child: TextView(
-                                          text: 'Add Product',
-                                          textStyle: GoogleFonts.gabarito(
-                                            color: AppColor.white,
-                                            fontSize: 18.0.sp,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                            SizedBox(height: 50.h),
-                          ],
+                              SizedBox(height: 50.h),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -938,6 +975,19 @@ class PharmViewModel extends BaseViewModel {
         );
       },
     );
+  }
+
+  clearPharmProductController() {
+    productNameTextController.clear();
+    productVolumnTextController.clear();
+    productTextController.clear();
+    productQuantityTextController.clear();
+    pharmacyCategoriesInfo = GetPharmacyCategories();
+    productPriceTextController.clear();
+    productCategoryTextController.clear();
+    selectStatus = false;
+    productExpiryDate = '';
+    notifyListeners();
   }
 
   void deleteCategoryDialogBox(context, {String? prodId}) => showDialog(
@@ -1008,8 +1058,71 @@ class PharmViewModel extends BaseViewModel {
     },
   );
 
-  bool onEditCate = false;
-  GetPharmacyCategories? onEditGetPharmacyCategories;
+  void deleteProductMedDialogBox(context, {String? prodId}) => showDialog(
+    context: context,
+    builder: (_) {
+      return ViewModelBuilder<PharmViewModel>.reactive(
+        viewModelBuilder: () => PharmViewModel(),
+        onViewModelReady: (model) {},
+        disposeViewModel: false,
+        builder: (_, PharmViewModel model, __) {
+          return AlertDialog(
+            title: TextView(
+              text: 'Delete Pharmaceutical Product',
+              textStyle: GoogleFonts.dmSans(
+                color: AppColor.fineRed,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            content: TextView(
+              text:
+                  'Do you want to delete this pharmaceutical product? Clicking OK will permanently delete it.',
+              textStyle: GoogleFonts.dmSans(
+                color: AppColor.black,
+                fontSize: 15.0.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            actions:
+                model.isLoadingDelMeds
+                    ? [SpinKitCircle(color: AppColor.primary1, size: 34.sp)]
+                    : [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: TextView(
+                          text: 'Cancel',
+                          textStyle: GoogleFonts.dmSans(
+                            color: AppColor.fineRed,
+                            fontSize: 16.20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await model.deletePharmMed(context, id: prodId!);
+                          getPharmMedicine();
+                          model.notifyListeners();
+                        },
+                        child: TextView(
+                          text: 'OK',
+                          textStyle: GoogleFonts.dmSans(
+                            color: AppColor.green,
+                            fontSize: 16.20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+          );
+        },
+      );
+    },
+  );
+
   void modalBottomSheetAddCategory(context) {
     showModalBottomSheet(
       context: context,
