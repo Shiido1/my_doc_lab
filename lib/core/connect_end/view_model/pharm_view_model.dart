@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_doc_lab/core/connect_end/model/add_med_entity_model/add_med_entity_model.dart';
@@ -16,6 +17,7 @@ import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
 import 'package:stacked/stacked.dart';
 import '../../../main.dart';
 import '../../../ui/app_assets/app_color.dart';
+import '../../../ui/app_assets/app_image.dart';
 import '../../../ui/app_assets/app_utils.dart';
 import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/app_assets/image_picker.dart';
@@ -35,6 +37,8 @@ class PharmViewModel extends BaseViewModel {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _isLoadingDelCat = false;
+  bool get isLoadingDelCat => _isLoadingDelCat;
 
   PharmViewModel({this.context});
 
@@ -320,7 +324,7 @@ class PharmViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void getPharmCategories() async {
+  Future<void> getPharmCategories() async {
     try {
       _isLoading = true;
       _getPharmacyCategoriesList = await runBusyFuture(
@@ -409,7 +413,7 @@ class PharmViewModel extends BaseViewModel {
         repositoryImply.addPharmCategories(name),
         throwException: true,
       );
-      getPharmCategories();
+      await getPharmCategories();
       addPharmCategoriesTextController.clear();
       _isLoading = false;
     } catch (e) {
@@ -468,6 +472,9 @@ class PharmViewModel extends BaseViewModel {
       );
       getPharmCategories();
       addPharmCategoriesTextController.clear();
+      onEditCate = false;
+
+      notifyListeners();
       _isLoading = false;
     } catch (e) {
       _isLoading = false;
@@ -488,13 +495,17 @@ class PharmViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void deletePharmCategories(String id) async {
+  Future<void> deletePharmCategories(context, {String? id}) async {
     try {
+      _isLoadingDelCat = true;
       await runBusyFuture(
-        repositoryImply.deletePharmCategories(id),
+        repositoryImply.deletePharmCategories(id!),
         throwException: true,
       );
+      Navigator.pop(context);
+      _isLoadingDelCat = false;
     } catch (e) {
+      _isLoadingDelCat = false;
       logger.d(e);
     }
     notifyListeners();
@@ -510,215 +521,6 @@ class PharmViewModel extends BaseViewModel {
       logger.d(e);
     }
     notifyListeners();
-  }
-
-  void modalBottomSheetAddCategory(context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true, // Enables full-screen dragging
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (builder) {
-        final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: DraggableScrollableSheet(
-                expand: false,
-                initialChildSize: 0.5, // 50% of screen height
-                minChildSize: 0.3, // Can be dragged to 30% of screen height
-                maxChildSize: 0.7, // Can be dragged to 90% of screen height
-                builder: (context, scrollController) {
-                  return ViewModelBuilder<PharmViewModel>.reactive(
-                    viewModelBuilder: () => PharmViewModel(),
-                    onViewModelReady: (model) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        model.getPharmCategories();
-                      });
-                    },
-                    builder: (_, PharmViewModel model, __) {
-                      return SingleChildScrollView(
-                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
-                        controller: scrollController,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 6.0.h),
-                            Center(
-                              child: Container(
-                                width: 30.w,
-                                height: 3.5.h,
-                                margin: EdgeInsets.only(top: 10.w),
-                                decoration: BoxDecoration(
-                                  color: AppColor.grey2.withOpacity(.4),
-                                  borderRadius: BorderRadius.circular(22),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 16.0.h),
-                            TextView(
-                              text: 'Add Categories',
-                              textStyle: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(height: 20.h),
-                            TextFormWidget(
-                              label: 'Category Name',
-                              labelStyle: TextStyle(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w500,
-                                color: AppColor.primary1,
-                              ),
-                              border: 10,
-                              isFilled: true,
-                              fillColor: AppColor.white,
-                              controller: addPharmCategoriesTextController,
-                              validator: AppValidator.validateString(),
-                            ),
-                            SizedBox(height: 20.h),
-                            if (model.getPharmacyCategoriesList != null &&
-                                model
-                                    .getPharmacyCategoriesList!
-                                    .getPharmacyCategoriesList!
-                                    .isNotEmpty)
-                              ...model
-                                  .getPharmacyCategoriesList!
-                                  .getPharmacyCategoriesList!
-                                  .map(
-                                    (i) => Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                              width: 250.w,
-                                              child: TextView(
-                                                text: i.name ?? '',
-                                                maxLines: 1,
-                                                textOverflow:
-                                                    TextOverflow.ellipsis,
-                                                textStyle: TextStyle(
-                                                  color: AppColor.black,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(
-                                                Icons
-                                                    .remove_circle_outline_outlined,
-                                                color: AppColor.fineRed,
-                                                size: 22.sp,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Divider(
-                                          color: AppColor.greyIt.withOpacity(
-                                            .2,
-                                          ),
-                                        ),
-                                        SizedBox(height: 2.h),
-                                      ],
-                                    ),
-                                  ),
-
-                            SizedBox(height: 25.0.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: () => Navigator.pop(context),
-                                  child: Container(
-                                    padding:
-                                        isTablet
-                                            ? EdgeInsets.all(12.0.w)
-                                            : EdgeInsets.all(20.0.w),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: const Color.fromARGB(
-                                        255,
-                                        208,
-                                        234,
-                                        222,
-                                      ),
-                                    ),
-                                    width: 140.w,
-                                    alignment: Alignment.center,
-                                    child: TextView(
-                                      text: 'Cancel',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.primary1,
-                                        fontSize: 18.0.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    addPharmCategories(
-                                      addPharmCategoriesTextController.text
-                                          .trim(),
-                                    );
-
-                                    model.notifyListeners();
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding:
-                                        isTablet
-                                            ? EdgeInsets.all(10.w)
-                                            : EdgeInsets.all(20.w),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: AppColor.primary1,
-                                    ),
-                                    width: 170.w,
-                                    child: TextView(
-                                      text: 'Add Category',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.white,
-                                        fontSize: 18.0.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 30.h),
-                            !model.isLoading
-                                ? SizedBox.shrink()
-                                : SpinKitCircle(
-                                  color: AppColor.primary1,
-                                  size: 34.sp,
-                                ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 
   void modalBottomSheetAddMedicine(context, {bool update = false, String? id}) {
@@ -1131,6 +933,342 @@ class PharmViewModel extends BaseViewModel {
                   );
                 },
               ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void deleteCategoryDialogBox(context, {String? prodId}) => showDialog(
+    context: context,
+    builder: (_) {
+      return ViewModelBuilder<PharmViewModel>.reactive(
+        viewModelBuilder: () => PharmViewModel(),
+        onViewModelReady: (model) {},
+        disposeViewModel: false,
+        builder: (_, PharmViewModel model, __) {
+          return AlertDialog(
+            title: TextView(
+              text: 'Delete Product Category',
+              textStyle: GoogleFonts.dmSans(
+                color: AppColor.fineRed,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            content: TextView(
+              text:
+                  'Do you want to delete this product category? Clicking OK will permanently delete it.',
+              textStyle: GoogleFonts.dmSans(
+                color: AppColor.black,
+                fontSize: 15.0.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            actions:
+                model.isLoadingDelCat
+                    ? [SpinKitCircle(color: AppColor.primary1, size: 34.sp)]
+                    : [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: TextView(
+                          text: 'Cancel',
+                          textStyle: GoogleFonts.dmSans(
+                            color: AppColor.fineRed,
+                            fontSize: 16.20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await model.deletePharmCategories(
+                            context,
+                            id: prodId!,
+                          );
+                          await getPharmCategories();
+                          model.notifyListeners();
+                        },
+                        child: TextView(
+                          text: 'OK',
+                          textStyle: GoogleFonts.dmSans(
+                            color: AppColor.green,
+                            fontSize: 16.20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+          );
+        },
+      );
+    },
+  );
+
+  bool onEditCate = false;
+  GetPharmacyCategories? onEditGetPharmacyCategories;
+  void modalBottomSheetAddCategory(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+        return ViewModelBuilder<PharmViewModel>.reactive(
+          viewModelBuilder: () => PharmViewModel(),
+          onViewModelReady: (model) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              model.getPharmCategories();
+            });
+          },
+          builder: (_, PharmViewModel model, __) {
+            return StatefulBuilder(
+              builder: (_, StateSetter setState) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: DraggableScrollableSheet(
+                    expand: false,
+                    initialChildSize: 0.5, // 50% of screen height
+                    minChildSize: 0.3, // Can be dragged to 30% of screen height
+                    maxChildSize: 0.7, // Can be dragged to 90% of screen height
+                    builder: (__, scrollController) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 6.0.h),
+                            Center(
+                              child: Container(
+                                width: 30.w,
+                                height: 3.5.h,
+                                margin: EdgeInsets.only(top: 10.w),
+                                decoration: BoxDecoration(
+                                  color: AppColor.grey2.withOpacity(.4),
+                                  borderRadius: BorderRadius.circular(22),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 16.0.h),
+                            TextView(
+                              text:
+                                  !model.onEditCate
+                                      ? 'Add Categories'
+                                      : 'Update Category',
+                              textStyle: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            TextFormWidget(
+                              label: 'Category Name',
+                              labelStyle: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.primary1,
+                              ),
+                              border: 10,
+                              isFilled: true,
+                              fillColor: AppColor.white,
+                              controller:
+                                  model.addPharmCategoriesTextController,
+                              validator: AppValidator.validateString(),
+                            ),
+                            SizedBox(height: 20.h),
+
+                            if (model.getPharmacyCategoriesList != null &&
+                                model
+                                    .getPharmacyCategoriesList!
+                                    .getPharmacyCategoriesList!
+                                    .isNotEmpty)
+                              ...model
+                                  .getPharmacyCategoriesList!
+                                  .getPharmacyCategoriesList!
+                                  .map(
+                                    (i) => Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              width: 250.w,
+                                              child: TextView(
+                                                text: i.name ?? '',
+                                                maxLines: 1,
+                                                textOverflow:
+                                                    TextOverflow.ellipsis,
+                                                textStyle: TextStyle(
+                                                  color: AppColor.black,
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    model.onEditCate = true;
+                                                    onEditGetPharmacyCategories =
+                                                        i;
+                                                    model
+                                                            .addPharmCategoriesTextController
+                                                            .text =
+                                                        onEditGetPharmacyCategories!
+                                                            .name!;
+                                                    model.notifyListeners();
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                    AppImage.edit,
+                                                    width: 20.w,
+                                                    height: 20.h,
+                                                    color: AppColor.black,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10.w),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    model
+                                                        .deleteCategoryDialogBox(
+                                                          context,
+                                                          prodId:
+                                                              i.id.toString(),
+                                                        );
+                                                    model.notifyListeners();
+                                                  },
+                                                  icon: Icon(
+                                                    Icons
+                                                        .remove_circle_outline_outlined,
+                                                    color: AppColor.fineRed,
+                                                    size: 22.sp,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: AppColor.greyIt.withOpacity(
+                                            .2,
+                                          ),
+                                        ),
+                                        SizedBox(height: 2.h),
+                                      ],
+                                    ),
+                                  ),
+
+                            SizedBox(height: 35.0.h),
+                            !model.isLoading
+                                ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      child: Container(
+                                        padding:
+                                            isTablet
+                                                ? EdgeInsets.all(12.0.w)
+                                                : EdgeInsets.all(20.0.w),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: const Color.fromARGB(
+                                            255,
+                                            208,
+                                            234,
+                                            222,
+                                          ),
+                                        ),
+                                        width: 140.w,
+                                        alignment: Alignment.center,
+                                        child: TextView(
+                                          text: 'Cancel',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.primary1,
+                                            fontSize: 18.0.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        !model.onEditCate
+                                            ? model.addPharmCategories(
+                                              model
+                                                  .addPharmCategoriesTextController
+                                                  .text
+                                                  .trim(),
+                                            )
+                                            : model.updatePharmCategories(
+                                              name:
+                                                  model
+                                                      .addPharmCategoriesTextController
+                                                      .text
+                                                      .trim(),
+                                              id:
+                                                  onEditGetPharmacyCategories
+                                                      ?.id
+                                                      .toString(),
+                                            );
+
+                                        model.notifyListeners();
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        padding:
+                                            isTablet
+                                                ? EdgeInsets.all(10.w)
+                                                : EdgeInsets.all(20.w),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: AppColor.primary1,
+                                        ),
+                                        child: TextView(
+                                          text:
+                                              !model.onEditCate
+                                                  ? 'Add Category'
+                                                  : 'Update Category',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.white,
+                                            fontSize: 18.0.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                                : SpinKitCircle(
+                                  color: AppColor.primary1,
+                                  size: 34.sp,
+                                ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
             );
           },
         );

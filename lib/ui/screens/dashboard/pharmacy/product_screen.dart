@@ -87,106 +87,6 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                   ],
                 ),
                 SizedBox(height: 20.h),
-
-                // Row(
-                //   children: [
-                //     GestureDetector(
-                //       onTap: () => model.modalBottomSheetAddMedicine(context),
-                //       child: Container(
-                //         padding: EdgeInsets.symmetric(
-                //           vertical: 5.w,
-                //           horizontal: 10.w,
-                //         ),
-                //         decoration: BoxDecoration(
-                //           // ignore: deprecated_member_use
-                //           color: AppColor.primary1,
-
-                //           borderRadius: BorderRadius.circular(22),
-                //         ),
-                //         child: Row(
-                //           children: [
-                //             Icon(
-                //               Icons.add_circle_outline_outlined,
-                //               color: AppColor.white,
-                //               size: 16.sp,
-                //             ),
-                //             SizedBox(width: 10.w),
-                //             TextView(
-                //               text: 'Add',
-                //               textStyle: GoogleFonts.gabarito(
-                //                 color: AppColor.white,
-                //                 fontSize: 13.0.sp,
-                //                 fontWeight: FontWeight.w400,
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //     SizedBox(width: 20.h),
-                //     Container(
-                //       padding: EdgeInsets.symmetric(
-                //         vertical: 5.w,
-                //         horizontal: 10.w,
-                //       ),
-                //       decoration: BoxDecoration(
-                //         // ignore: deprecated_member_use
-                //         color: AppColor.fineRed,
-
-                //         borderRadius: BorderRadius.circular(22),
-                //       ),
-                //       child: Row(
-                //         children: [
-                //           Icon(
-                //             Icons.remove_circle_outline_outlined,
-                //             color: AppColor.white,
-                //             size: 16.sp,
-                //           ),
-                //           SizedBox(width: 10.w),
-                //           TextView(
-                //             text: 'Add',
-                //             textStyle: GoogleFonts.gabarito(
-                //               color: AppColor.white,
-                //               fontSize: 13.0.sp,
-                //               fontWeight: FontWeight.w400,
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //     SizedBox(width: 20.h),
-                //     Container(
-                //       padding: EdgeInsets.symmetric(
-                //         vertical: 5.w,
-                //         horizontal: 10.w,
-                //       ),
-                //       decoration: BoxDecoration(
-                //         // ignore: deprecated_member_use
-                //         color: AppColor.yellow,
-
-                //         borderRadius: BorderRadius.circular(22),
-                //       ),
-                //       child: Row(
-                //         children: [
-                //           Icon(
-                //             Icons.keyboard_arrow_down_sharp,
-                //             color: AppColor.white,
-                //             size: 16.sp,
-                //           ),
-                //           SizedBox(width: 10.w),
-                //           TextView(
-                //             text: 'Action',
-                //             textStyle: GoogleFonts.gabarito(
-                //               color: AppColor.white,
-                //               fontSize: 13.0.sp,
-                //               fontWeight: FontWeight.w400,
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 GestureDetector(
                   onTap: () => model.modalBottomSheetAddMedicine(context),
                   child: Align(
@@ -256,7 +156,7 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(width: 16.w),
+                            SizedBox(width: 20.w),
                             TextView(
                               text: 'Price',
                               textStyle: GoogleFonts.gabarito(
@@ -308,24 +208,6 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            // Checkbox(
-                                            //   value: selectedOptions.contains(
-                                            //     'Blood Sugar',
-                                            //   ),
-                                            //   onChanged: (isChecked) {
-                                            //     setState(() {
-                                            //       if (isChecked!) {
-                                            //         selectedOptions.add(
-                                            //           'Blood Sugar',
-                                            //         );
-                                            //       } else {
-                                            //         selectedOptions.remove(
-                                            //           'Blood Sugar',
-                                            //         );
-                                            //       }
-                                            //     });
-                                            //   },
-                                            // ),
                                             SizedBox(
                                               width: 130.w,
                                               child: TextView(
@@ -341,7 +223,6 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(width: 10.w),
                                             SizedBox(
                                               width: 77.12.w,
                                               child: TextView(
