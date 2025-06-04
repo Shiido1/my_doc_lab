@@ -10,6 +10,7 @@ import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart'
 import '../model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
+import '../model/order_by_id_response_model/order_by_id_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 
@@ -103,6 +104,11 @@ class PharmRepoImpl {
 
   Future<GetPharmOrderModel> pharmOrder() async {
     final response = await _contract.pharmOrder();
+    return response;
+  }
+
+  Future<OrderByIdResponseModel> pharmOrderId(String id) async {
+    final response = await _contract.pharmOrderId(id);
     return response;
   }
 

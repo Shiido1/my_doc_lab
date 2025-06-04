@@ -1,4 +1,5 @@
 import 'dart:io';
+import "package:collection/collection.dart";
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +28,10 @@ import '../../core_folder/app/app.logger.dart';
 import '../model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
 import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
+import '../model/order_by_id_response_model/order_by_id_response_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart'
+    as item;
 
 class PharmViewModel extends BaseViewModel {
   final BuildContext? context;
@@ -45,6 +49,7 @@ class PharmViewModel extends BaseViewModel {
   bool get isLoadingPharmMed => _isLoadingPharmMed;
 
   String pharmMedQuery = '';
+  String tab = 'All';
 
   PharmViewModel({this.context});
 
@@ -74,6 +79,9 @@ class PharmViewModel extends BaseViewModel {
   TextEditingController productQuantityTextController = TextEditingController();
   TextEditingController productTextController = TextEditingController();
 
+  OrderByIdResponseModel? _orderByIdResponseModel;
+  OrderByIdResponseModel? get orderByIdResponseModel => _orderByIdResponseModel;
+
   GetPharmacyCategories? pharmacyCategoriesInfo;
   GetMedByIdResponseModel? _getMedByIdResponseModel;
   GetMedByIdResponseModel? get getMedByIdResponseModel =>
@@ -95,6 +103,10 @@ class PharmViewModel extends BaseViewModel {
   bool onEditCate = false;
   GetPharmacyCategories? onEditGetPharmacyCategories;
   GlobalKey<FormState> proFormKey = GlobalKey<FormState>();
+
+  List<item.Items> orderItemListInProgress = [];
+  List<item.Items> orderItemListCancelled = [];
+  List<item.Items> orderItemListCompleted = [];
 
   pickDateExpProduct(context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -360,19 +372,62 @@ class PharmViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void getPharmOrder() async {
+  Future<void> getPharmOrder() async {
     try {
       _isLoading = true;
       _getPharmOrderModel = await runBusyFuture(
         repositoryImply.pharmOrder(),
         throwException: true,
       );
+      List<item.Items> orderItemList = [];
+      for (var element in _getPharmOrderModel!.original!.orders!) {
+        orderItemList.addAll(element.items!);
+        notifyListeners();
+      }
+
+      groupBy(orderItemList, (item.Items o) {
+        if (o.status?.toLowerCase() == 'cancelled') {
+          orderItemListCancelled.add(o);
+          notifyListeners();
+        }
+      });
+      groupBy(orderItemList, (item.Items o) {
+        if (o.status?.toLowerCase() == 'completed') {
+          orderItemListCompleted.add(o);
+          notifyListeners();
+        }
+      });
+      groupBy(orderItemList, (item.Items o) {
+        if (o.status?.toLowerCase() == 'processed') {
+          orderItemListInProgress.add(o);
+          notifyListeners();
+        }
+      });
+      print('oooooojjjooooo$orderItemListCancelled');
+      print('ooooohhhhooooo$orderItemListCompleted');
+      print('tttttooooo$orderItemListInProgress');
       _isLoading = false;
     } catch (e) {
       logger.d(e);
       _isLoading = false;
     }
     notifyListeners();
+  }
+
+  getPharmOrderId(id) async {
+    try {
+      _isLoading = true;
+      _orderByIdResponseModel = await runBusyFuture(
+        repositoryImply.pharmOrderId(id),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      logger.d(e);
+      _isLoading = false;
+    }
+    // notifyListeners();
   }
 
   void getPharmWallet() async {
@@ -1389,5 +1444,25 @@ class PharmViewModel extends BaseViewModel {
         );
       },
     );
+  }
+
+  String statusValue(status) {
+    if (status == 'cancelled') {
+      return 'Failed';
+    }
+    if (status == 'processed') {
+      return 'In Process';
+    }
+    return 'Completed';
+  }
+
+  Color statusValueColor(status) {
+    if (status == 'cancelled') {
+      return AppColor.fineRed;
+    }
+    if (status == 'processed') {
+      return AppColor.yellow;
+    }
+    return AppColor.primary1;
   }
 }

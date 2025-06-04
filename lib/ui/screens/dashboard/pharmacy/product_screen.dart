@@ -59,13 +59,11 @@ class _PharmacyProductScreenState extends State<PharmacyProductScreen> {
                       Expanded(
                         child: TextFormWidget(
                           label: 'Search for products',
-                          // hint: 'Email Address',
                           border: 10,
                           isFilled: true,
                           fillColor: AppColor.transparent,
                           onChange: (p0) {
                             model.pharmMedQuery = p0;
-                            print('print my  guy ${model.pharmMedQuery}');
                             model.notifyListeners();
                           },
                           prefixWidget: Padding(

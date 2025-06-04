@@ -92,6 +92,20 @@ shimmerViewPharm() => SizedBox(
   ),
 );
 
+shimmerVieRound() => Shimmer.fromColors(
+  baseColor: AppColor.friendlyPrimary,
+  highlightColor: AppColor.primary1,
+  child: Container(
+    height: 60.h,
+    width: 60.w,
+    decoration: BoxDecoration(
+      color: AppColor.white,
+      // borderRadius: BorderRadius.circular(12.r),
+      shape: BoxShape.circle,
+    ),
+  ),
+);
+
 String formTime(time) {
   DateTime parsedTime = DateFormat("HH:mm:ss").parse(time);
 

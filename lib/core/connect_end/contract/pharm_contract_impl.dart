@@ -9,6 +9,7 @@ import '../model/get_med_by_id_response_model/get_med_by_id_response_model.dart'
 import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
+import '../model/order_by_id_response_model/order_by_id_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 
@@ -51,6 +52,8 @@ class PharmContractImpl {
   Future<dynamic> deletePharmMed(String id) async =>
       await _api.deletePharmMed(id);
   Future<GetPharmOrderModel> pharmOrder() async => await _api.pharmOrder();
+  Future<OrderByIdResponseModel> pharmOrderId(String id) async =>
+      await _api.pharmOrderId(id);
   Future<GetPharmWalletResponseModel> pharmWallet() async =>
       await _api.pharmWallet();
 }

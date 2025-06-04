@@ -9,6 +9,7 @@ import '../connect_end/model/get_med_by_id_response_model/get_med_by_id_response
 import '../connect_end/model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../connect_end/model/get_pharmacy_categories/get_pharmacy_categories.dart';
+import '../connect_end/model/order_by_id_response_model/order_by_id_response_model.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../core_folder/app/app.locator.dart';
@@ -240,6 +241,20 @@ class PharmAuthApi {
       );
       logger.d(response.data);
       return GetPharmOrderModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<OrderByIdResponseModel> pharmOrderId(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.pharmacy_order_detail}/$id',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return OrderByIdResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;
