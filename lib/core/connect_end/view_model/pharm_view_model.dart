@@ -49,6 +49,7 @@ class PharmViewModel extends BaseViewModel {
   bool get isLoadingPharmMed => _isLoadingPharmMed;
 
   String pharmMedQuery = '';
+  String pharmMedQueryOrder = '';
   String tab = 'All';
 
   PharmViewModel({this.context});
@@ -403,9 +404,6 @@ class PharmViewModel extends BaseViewModel {
           notifyListeners();
         }
       });
-      print('oooooojjjooooo$orderItemListCancelled');
-      print('ooooohhhhooooo$orderItemListCompleted');
-      print('tttttooooo$orderItemListInProgress');
       _isLoading = false;
     } catch (e) {
       logger.d(e);
@@ -413,6 +411,124 @@ class PharmViewModel extends BaseViewModel {
     }
     notifyListeners();
   }
+
+  searchStatusItem(search) {
+    notifyListeners();
+  }
+
+  onTapStatusContainer() => Container(
+    decoration: BoxDecoration(
+      // ignore: deprecated_member_use
+      color: AppColor.primary1.withOpacity(.08),
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(color: AppColor.greylight),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GestureDetector(
+          onTap: () {
+            tab = 'All';
+            notifyListeners();
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
+            decoration: BoxDecoration(
+              // ignore: deprecated_member_use
+              color: tab == 'All' ? AppColor.primary1 : AppColor.transparent,
+
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TextView(
+              text: 'All',
+              textStyle: GoogleFonts.dmSans(
+                color: tab == 'All' ? AppColor.white : AppColor.primary1,
+                fontSize: 13.0.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            tab = 'In progress';
+            pharmMedQueryOrder = '';
+            notifyListeners();
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
+            decoration: BoxDecoration(
+              // ignore: deprecated_member_use
+              color:
+                  tab == 'In progress'
+                      ? AppColor.primary1
+                      : AppColor.transparent,
+
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TextView(
+              text: 'In progress',
+              textStyle: GoogleFonts.dmSans(
+                color:
+                    tab == 'In progress' ? AppColor.white : AppColor.primary1,
+                fontSize: 13.0.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            tab = 'Failed';
+            pharmMedQueryOrder = '';
+            notifyListeners();
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
+            decoration: BoxDecoration(
+              // ignore: deprecated_member_use
+              color: tab == 'Failed' ? AppColor.primary1 : AppColor.transparent,
+
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TextView(
+              text: 'Failed',
+              textStyle: GoogleFonts.gabarito(
+                color: tab == 'Failed' ? AppColor.white : AppColor.primary1,
+                fontSize: 13.0.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            tab = 'Completed';
+            pharmMedQueryOrder = '';
+            notifyListeners();
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
+            decoration: BoxDecoration(
+              // ignore: deprecated_member_use
+              color:
+                  tab == 'Completed' ? AppColor.primary1 : AppColor.transparent,
+
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TextView(
+              text: 'Completed',
+              textStyle: GoogleFonts.gabarito(
+                color: tab == 'Completed' ? AppColor.white : AppColor.primary1,
+                fontSize: 13.0.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 
   getPharmOrderId(id) async {
     try {
