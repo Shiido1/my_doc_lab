@@ -31,7 +31,9 @@ class ProductStatusProcess extends StatelessWidget {
         return GestureDetector(
           onTap:
               () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => PatientDetailSceen()),
+                MaterialPageRoute(
+                  builder: (context) => PatientDetailSceen(item: item),
+                ),
               ),
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 8.w),

@@ -261,6 +261,44 @@ class PharmAuthApi {
     }
   }
 
+  Future<dynamic> pharmOrderUpdate({
+    String? id,
+    String? reason,
+    String? status,
+  }) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.pharmacy_order}/$id',
+        RequestMethod.getParams,
+        data: {"reason": reason, "status": status},
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> pharmOrderUpdateItem({
+    String? id,
+    String? reason,
+    String? status,
+  }) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.pharmacy_order_item}/$id',
+        RequestMethod.getParams,
+        data: {"reason": reason, "status": status},
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
   Future<GetPharmWalletResponseModel> pharmWallet() async {
     try {
       final response = await _service.call(

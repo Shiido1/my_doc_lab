@@ -116,4 +116,30 @@ class PharmRepoImpl {
     final response = await _contract.pharmWallet();
     return response;
   }
+
+  Future<dynamic> pharmOrderUpdate({
+    String? id,
+    String? reason,
+    String? status,
+  }) async {
+    final response = await _contract.pharmOrderUpdate(
+      id: id,
+      reason: reason,
+      status: status,
+    );
+    return response;
+  }
+
+  Future<dynamic> pharmOrderUpdateItem({
+    String? id,
+    String? reason,
+    String? status,
+  }) async {
+    final response = await _contract.pharmOrderUpdateItem(
+      id: id,
+      reason: reason,
+      status: status,
+    );
+    return response;
+  }
 }

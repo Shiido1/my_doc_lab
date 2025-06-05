@@ -2,240 +2,211 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-
-import '../../../widget/text_form_widget.dart';
+import 'package:stacked/stacked.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
+import '../../../../core/connect_end/view_model/pharm_view_model.dart';
+import '../../../app_assets/constant.dart';
 import '../../../widget/text_widget.dart';
 
+// ignore: must_be_immutable
 class PatientDetailSceen extends StatefulWidget {
-  const PatientDetailSceen({super.key});
+  PatientDetailSceen({super.key, this.order, this.item});
+  Orders? order;
+  Items? item;
 
   @override
   State<PatientDetailSceen> createState() => _PatientDetailSceenState();
 }
 
 class _PatientDetailSceenState extends State<PatientDetailSceen> {
-  String tab = 'Overview';
-
+  String? id;
+  var items;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 50.w, horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
-            ),
-            SizedBox(height: 20.h),
-            Row(
+    return ViewModelBuilder<PharmViewModel>.reactive(
+      viewModelBuilder: () => PharmViewModel(),
+      onViewModelReady: (model) async {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          await getId();
+          await model.getPharmOrderId(id);
+
+          items = model.orderByIdResponseModel!.original!.orders![0].items!;
+        });
+      },
+      disposeViewModel: false,
+      builder: (_, PharmViewModel model, __) {
+        return Scaffold(
+          backgroundColor: AppColor.white,
+          body: Padding(
+            padding: EdgeInsets.symmetric(vertical: 50.w, horizontal: 20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.all(48.8.w),
-                  decoration: BoxDecoration(
-                    color: AppColor.oneKindgrey,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
                 ),
-                SizedBox(width: 20.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                SizedBox(height: 20.h),
+                Row(
                   children: [
-                    TextView(
-                      text: 'Sarah Johnson',
-                      textStyle: GoogleFonts.gabarito(
-                        color: AppColor.darkindgrey,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 4.w),
-                    TextView(
-                      text: '35 years • Female',
-                      textStyle: GoogleFonts.gabarito(
-                        color: AppColor.greyIt,
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(height: 10.w),
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 4.w,
-                            horizontal: 8.w,
-                          ),
+                    model
+                                .orderByIdResponseModel
+                                ?.original
+                                ?.orders?[0]
+                                .user
+                                ?.profileImage !=
+                            null
+                        ? Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: AppColor.darkindgrey),
+                            color: AppColor.oneKindgrey,
+                            borderRadius: BorderRadius.circular(
+                              10,
+                            ), // Outer container radius
                           ),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                AppImage.chat,
-                                height: 14.h,
-                                width: 14.w,
-                                color: AppColor.darkindgrey,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              10,
+                            ), // Apply to the image as well
+                            child: SizedBox.fromSize(
+                              size: const Size.fromRadius(50),
+                              child: Image.network(
+                                model
+                                        .orderByIdResponseModel!
+                                        .original!
+                                        .orders![0]
+                                        .user!
+                                        .profileImage!
+                                        .contains('https')
+                                    ? '${model.orderByIdResponseModel?.original?.orders?[0].user?.profileImage}'
+                                    : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.orderByIdResponseModel?.original?.orders?[0].user?.profileImage}',
+                                fit: BoxFit.cover,
+                                errorBuilder:
+                                    (context, error, stackTrace) =>
+                                        shimmerViewPharm(),
                               ),
-                              SizedBox(width: 4.w),
-                              TextView(
-                                text: 'Message',
-                                textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.darkindgrey,
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                            ),
+                          ),
+                        )
+                        : Container(
+                          padding: EdgeInsets.all(48.8.w),
+                          decoration: BoxDecoration(
+                            color: AppColor.oneKindgrey,
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        SizedBox(width: 20.w),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 4.w,
-                            horizontal: 8.w,
+                    SizedBox(width: 20.w),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextView(
+                          text:
+                              '${model.orderByIdResponseModel?.original?.orders?[0].user?.firstName?.capitalize() ?? ''} ${model.orderByIdResponseModel?.original?.orders?[0].user?.lastName?.capitalize() ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
                           ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: AppColor.darkindgrey),
+                        ),
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text:
+                              'Order Id: ${model.orderByIdResponseModel?.original?.orders?[0].orderTrx ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.greyIt,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
                           ),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                AppImage.share,
-                                height: 14.h,
-                                width: 14.w,
-                                color: AppColor.darkindgrey,
-                              ),
-                              SizedBox(width: 4.w),
-                              TextView(
-                                text: 'Share',
-                                textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.darkindgrey,
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
+                        ),
+                        SizedBox(height: 10.w),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 4.w,
+                                  horizontal: 8.w,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: AppColor.darkindgrey,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      AppImage.chat,
+                                      height: 14.h,
+                                      width: 14.w,
+                                      color: AppColor.darkindgrey,
+                                    ),
+                                    SizedBox(width: 4.w),
+                                    TextView(
+                                      text: 'Message',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            SizedBox(width: 20.w),
+                            GestureDetector(
+                              onTap:
+                                  () => model.pharmOrderUpdate(
+                                    context,
+                                    id:
+                                        model
+                                            .orderByIdResponseModel!
+                                            .original!
+                                            .orders![0]
+                                            .id
+                                            .toString(),
+                                    reason: 'ok reason',
+                                    status: 'completed',
+                                  ),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 4.w,
+                                  horizontal: 8.w,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(color: AppColor.white),
+                                  color: AppColor.darkindgrey,
+                                ),
+                                child: TextView(
+                                  text: 'Approve',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.white,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
-              ],
-            ),
-            SizedBox(height: 10.w),
-            Divider(color: AppColor.greyIt, thickness: 1),
-            SizedBox(height: 10.w),
-
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => setState(() => tab = 'Overview'),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 4.w,
-                      horizontal: 14.w,
-                    ),
-                    decoration: BoxDecoration(
-                      // ignore: deprecated_member_use
-                      color:
-                          tab == 'Overview'
-                              ? AppColor.primary1
-                              : AppColor.transparent,
-
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextView(
-                      text: 'Overview',
-                      textStyle: GoogleFonts.dmSans(
-                        color:
-                            tab == 'Overview'
-                                ? AppColor.white
-                                : AppColor.primary1,
-                        fontSize: 16.0.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-
-                SizedBox(width: 20.w),
-                GestureDetector(
-                  onTap: () => setState(() => tab = 'Records'),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 4.w,
-                      horizontal: 14.w,
-                    ),
-                    decoration: BoxDecoration(
-                      // ignore: deprecated_member_use
-                      color:
-                          tab == 'Records'
-                              ? AppColor.primary1
-                              : AppColor.transparent,
-
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextView(
-                      text: 'Records',
-                      textStyle: GoogleFonts.dmSans(
-                        color:
-                            tab == 'Records'
-                                ? AppColor.white
-                                : AppColor.primary1,
-                        fontSize: 16.0.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-
-                SizedBox(width: 20.w),
-                GestureDetector(
-                  onTap: () => setState(() => tab = 'Metrics'),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 4.w,
-                      horizontal: 14.w,
-                    ),
-                    decoration: BoxDecoration(
-                      // ignore: deprecated_member_use
-                      color:
-                          tab == 'Metrics'
-                              ? AppColor.primary1
-                              : AppColor.transparent,
-
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextView(
-                      text: 'Metrics',
-                      textStyle: GoogleFonts.dmSans(
-                        color:
-                            tab == 'Metrics'
-                                ? AppColor.white
-                                : AppColor.primary1,
-                        fontSize: 16.0.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 30.h),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    if (tab == 'Overview')
-                      Column(
+                SizedBox(height: 10.w),
+                Divider(color: AppColor.greyIt, thickness: 1),
+                SizedBox(height: 30.h),
+                if (model.orderByIdResponseModel != null)
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
                         children: [
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -261,722 +232,460 @@ class _PatientDetailSceenState extends State<PatientDetailSceen> {
 
                                 SizedBox(height: 6.h),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+
                                   children: [
                                     TextView(
-                                      text: 'Email',
+                                      text: 'Address:',
                                       textStyle: GoogleFonts.gabarito(
                                         color: AppColor.darkindgrey,
                                         fontSize: 14.sp,
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    TextView(
-                                      text: 'sarah.j@example.com',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w400,
+                                    Spacer(),
+                                    SizedBox(
+                                      width: 200.w,
+                                      child: TextView(
+                                        text:
+                                            '${model.orderByIdResponseModel?.original?.orders?[0].user?.address?.capitalize() ?? ''} ${model.orderByIdResponseModel?.original?.orders?[0].user?.city?.capitalize() ?? ''} ${model.orderByIdResponseModel?.original?.orders?[0].user?.state?.capitalize() ?? ''}',
+                                        maxLines: 4,
+                                        textAlign: TextAlign.end,
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.darkindgrey,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                                 SizedBox(height: 6.h),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextView(
-                                      text: 'Phone',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    TextView(
-                                      text: '(+234) 1234-4567',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ],
                             ),
                           ),
-                          SizedBox(height: 12.h),
 
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: AppColor.greyIt),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: AppColor.primary1.withOpacity(.7),
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(6),
-                                      topRight: Radius.circular(6),
+                          model.orderByIdResponseModel != null &&
+                                  model
+                                      .orderByIdResponseModel!
+                                      .original!
+                                      .orders![0]
+                                      .items!
+                                      .any(
+                                        (element) =>
+                                            element.status!.toLowerCase() ==
+                                            'processed',
+                                      )
+                              ? Container(
+                                width: double.infinity,
+                                margin: EdgeInsets.only(top: 12.w),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: AppColor.greyIt),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColor.primary1.withOpacity(
+                                          .7,
+                                        ),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(6),
+                                          topRight: Radius.circular(6),
+                                        ),
+                                      ),
+                                      width: double.infinity,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10.w,
+                                          vertical: 4.w,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              AppImage.task,
+                                              color: AppColor.white,
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            TextView(
+                                              text: 'Upcoming Orders',
+                                              textStyle: GoogleFonts.gabarito(
+                                                color: AppColor.white,
+                                                fontSize: 14.8.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  width: double.infinity,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 10.w,
-                                      vertical: 4.w,
-                                    ),
-                                    child: Row(
+
+                                    Column(
                                       children: [
-                                        SvgPicture.asset(
-                                          AppImage.task,
-                                          color: AppColor.white,
-                                        ),
-                                        SizedBox(width: 10.w),
-                                        TextView(
-                                          text: 'Upcoming Appointment',
-                                          textStyle: GoogleFonts.gabarito(
-                                            color: AppColor.white,
-                                            fontSize: 14.8.sp,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        TextView(
-                                          text: 'Reschedules',
-                                          textStyle: GoogleFonts.gabarito(
-                                            color: AppColor.white,
-                                            fontSize: 14.8.sp,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(width: 4.w),
+                                        SizedBox(height: 10.h),
+                                        if (items.isNotEmpty)
+                                          ...items.asMap().entries.map((entry) {
+                                            final index = entry.key;
+                                            final o = entry.value;
+                                            final isLast =
+                                                index == items.length - 1;
+                                            return Wrap(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 10.w,
+                                                  ),
+
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                              horizontal: 10.w,
+                                                            ),
+                                                        child: TextView(
+                                                          text: DateFormat(
+                                                            'dd/MM/yyyy',
+                                                          ).format(
+                                                            DateTime.parse(
+                                                              o.updatedAt
+                                                                  .toString(),
+                                                            ).toLocal(),
+                                                          ),
+                                                          textStyle:
+                                                              GoogleFonts.gabarito(
+                                                                color:
+                                                                    AppColor
+                                                                        .grey,
+                                                                fontSize: 16.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            AppImage.time,
+                                                            color:
+                                                                AppColor.grey,
+                                                          ),
+                                                          SizedBox(width: 6.w),
+                                                          TextView(
+                                                            text: DateFormat(
+                                                              'hh:mma',
+                                                            ).format(
+                                                              DateTime.parse(
+                                                                o.updatedAt
+                                                                    .toString(),
+                                                              ).toLocal(),
+                                                            ),
+                                                            textStyle:
+                                                                GoogleFonts.gabarito(
+                                                                  color:
+                                                                      AppColor
+                                                                          .grey,
+                                                                  fontSize:
+                                                                      16.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                if (!isLast) ...[
+                                                  Divider(
+                                                    color: AppColor.greyIt,
+                                                  ),
+                                                ],
+                                              ],
+                                            );
+                                          }),
+                                        SizedBox(height: 10.h),
                                       ],
                                     ),
-                                  ),
+                                  ],
                                 ),
-
-                                SizedBox(height: 14.h),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w,
-                                    vertical: 4.w,
-                                  ),
-                                  child: TextView(
-                                    text: '4/18/2025',
-                                    textStyle: GoogleFonts.gabarito(
-                                      color: AppColor.grey,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w,
-                                    vertical: 4.w,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        AppImage.time,
-                                        color: AppColor.grey,
-                                      ),
-                                      SizedBox(width: 6.w),
-                                      TextView(
-                                        text: '10:30 AM',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.grey,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 4.w,
-                                          horizontal: 10.w,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          // ignore: deprecated_member_use
-                                          color: AppColor.primary1,
-
-                                          borderRadius: BorderRadius.circular(
-                                            22,
-                                          ),
-                                        ),
-                                        child: TextView(
-                                          text: 'Follow Up',
-                                          textStyle: GoogleFonts.gabarito(
-                                            color: AppColor.white,
-                                            fontSize: 12.0.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 4.h),
-                                Divider(color: AppColor.greyIt),
-                                SizedBox(height: 6.h),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w,
-                                    vertical: 4.w,
-                                  ),
-                                  child: TextView(
-                                    text: 'Blood pressure check',
-                                    textStyle: GoogleFonts.gabarito(
-                                      color: AppColor.grey,
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 6.h),
-                              ],
-                            ),
-                          ),
+                              )
+                              : SizedBox.shrink(),
 
                           SizedBox(height: 20.h),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    AppImage.pres,
-                                    height: 12.h,
-                                    width: 12.w,
-                                  ),
-                                  SizedBox(width: 6.w),
-                                  TextView(
-                                    text: 'Prescriptions',
-                                    textStyle: GoogleFonts.gabarito(
-                                      color: AppColor.darkindgrey,
-                                      fontSize: 16.20.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
+                              SvgPicture.asset(
+                                AppImage.pres,
+                                height: 12.h,
+                                width: 12.w,
                               ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: TextView(
-                                  text: 'View all',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.primary,
-                                    fontSize: 14.0.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 12.h),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 4.w,
-                              horizontal: 8.w,
-                            ),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: AppColor.grey),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextView(
-                                      text: 'Lisinopril',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-
-                                    SizedBox(height: 6.h),
-                                    TextView(
-                                      text: 'Once daily',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 15.0.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    SizedBox(height: 6.h),
-                                    TextView(
-                                      text: 'Take in the morning with food',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 15.0.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 2.4.w,
-                                    horizontal: 8.w,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    // ignore: deprecated_member_use
-                                    border: Border.all(color: AppColor.greyIt),
-                                    borderRadius: BorderRadius.circular(22),
-                                  ),
-                                  child: TextView(
-                                    text: '10 mg',
-                                    textStyle: GoogleFonts.gabarito(
-                                      color: AppColor.greyIt,
-                                      fontSize: 15.0.sp,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    AppImage.ste,
-                                    height: 12.h,
-                                    width: 12.w,
-                                  ),
-                                  SizedBox(width: 6.w),
-                                  TextView(
-                                    text: 'Medical History',
-                                    textStyle: GoogleFonts.gabarito(
-                                      color: AppColor.darkindgrey,
-                                      fontSize: 16.20.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: TextView(
-                                  text: 'View all',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.primary,
-                                    fontSize: 14.0.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 12.h),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 4.w,
-                              horizontal: 8.w,
-                            ),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: AppColor.grey),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextView(
-                                      text: 'Hypertension',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    TextView(
-                                      text: '9/10/2021',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey.withOpacity(
-                                          .4,
-                                        ),
-                                        fontSize: 15.0.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                SizedBox(height: 6.h),
-                                TextView(
-                                  text: 'Prescribed lisinopril 10mg daily',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.darkindgrey,
-                                    fontSize: 15.0.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 4.w,
-                              horizontal: 8.w,
-                            ),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: AppColor.grey),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextView(
-                                      text: 'Seasonal allergies',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    TextView(
-                                      text: '9/10/2021',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey.withOpacity(
-                                          .4,
-                                        ),
-                                        fontSize: 15.0.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                SizedBox(height: 6.h),
-                                TextView(
-                                  text: 'Recommended OTC antihistamines',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.darkindgrey,
-                                    fontSize: 15.0.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                        ],
-                      )
-                    else if (tab == 'Records')
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                              SizedBox(width: 6.w),
                               TextView(
-                                text: 'Medical Records',
+                                text: 'Prescriptions',
                                 textStyle: GoogleFonts.gabarito(
                                   color: AppColor.darkindgrey,
                                   fontSize: 16.20.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
+                            ],
+                          ),
+                          SizedBox(height: 12.h),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4.w,
+                              horizontal: 8.w,
+                            ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColor.grey),
+                            ),
+                            child: Column(
+                              children: [
+                                if (items.isNotEmpty)
+                                  ...items.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    final o = entry.value;
+                                    final isLast = index == items.length - 1;
+
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextView(
+                                          text:
+                                              'Drug: ${o.medicine?.name ?? ''}',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.darkindgrey,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        SizedBox(height: 6.h),
+                                        TextView(
+                                          text: 'Quantity: ${o.quantity}',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.darkindgrey,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        SizedBox(height: 6.h),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextView(
+                                              text:
+                                                  'Price: ${getCurrency()}${oCcy.format(double.parse(o.medicine!.price.toString()))}',
+                                              textStyle: GoogleFonts.gabarito(
+                                                color: AppColor.darkindgrey,
+                                                fontSize: 15.0.sp,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+
+                                            o.status == 'cancelled' ||
+                                                    o.status == 'completed'
+                                                ? SizedBox.shrink()
+                                                : Row(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap:
+                                                          () => model
+                                                              .pharmOrderUpdateItem(
+                                                                context,
+                                                                status:
+                                                                    'completed',
+                                                                reason:
+                                                                    'ok reason',
+                                                                id:
+                                                                    o.id.toString(),
+                                                              ),
+                                                      child: Container(
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                              vertical: 4.w,
+                                                              horizontal: 8.w,
+                                                            ),
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                6,
+                                                              ),
+                                                          border: Border.all(
+                                                            color:
+                                                                AppColor.white,
+                                                          ),
+                                                          color:
+                                                              AppColor
+                                                                  .darkindgrey,
+                                                        ),
+                                                        child: TextView(
+                                                          text: 'Approve',
+                                                          textStyle:
+                                                              GoogleFonts.gabarito(
+                                                                color:
+                                                                    AppColor
+                                                                        .white,
+                                                                fontSize: 14.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 10.w),
+                                                    GestureDetector(
+                                                      onTap:
+                                                          () => model
+                                                              .cancelItemOrderDialogBox(
+                                                                context,
+                                                                id:
+                                                                    o.id.toString(),
+                                                              ),
+                                                      child: Container(
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                              vertical: 4.w,
+                                                              horizontal: 8.w,
+                                                            ),
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                6,
+                                                              ),
+                                                          border: Border.all(
+                                                            color:
+                                                                AppColor.white,
+                                                          ),
+                                                          color: AppColor.red,
+                                                        ),
+                                                        child: TextView(
+                                                          text: 'Cancel',
+                                                          textStyle:
+                                                              GoogleFonts.gabarito(
+                                                                color:
+                                                                    AppColor
+                                                                        .white,
+                                                                fontSize: 14.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                          ],
+                                        ),
+                                        if (!isLast) ...[
+                                          SizedBox(height: 3.0.h),
+                                          Divider(color: AppColor.greyIt),
+                                          SizedBox(height: 3.0.h),
+                                        ],
+                                      ],
+                                    );
+                                  }),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  TextView(
+                                    text: 'Total:',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.darkindgrey,
+                                      fontSize: 16.20.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  TextView(
+                                    text:
+                                        '${getCurrency()}${oCcy.format(double.parse(model.orderByIdResponseModel?.original?.orders?[0].totalSum.toString() ?? '0.0'))}',
+                                    textStyle: TextStyle(
+                                      color: AppColor.darkindgrey,
+                                      fontSize: 18.20.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
                               GestureDetector(
-                                onTap: () {},
+                                onTap:
+                                    () => model.cancelItemOrderDialogBox(
+                                      context,
+                                      id:
+                                          model
+                                              .orderByIdResponseModel!
+                                              .original!
+                                              .orders![0]
+                                              .id
+                                              .toString(),
+                                    ),
                                 child: Container(
+                                  width: 100.w,
                                   padding: EdgeInsets.symmetric(
                                     vertical: 4.w,
-                                    horizontal: 14.w,
+                                    horizontal: 8.w,
                                   ),
                                   decoration: BoxDecoration(
-                                    // ignore: deprecated_member_use
-                                    color: AppColor.primary1,
-
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(color: AppColor.white),
+                                    color: AppColor.fineRed,
                                   ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.add_circle_outline_sharp,
+                                  child: Center(
+                                    child: TextView(
+                                      text: 'Cancel',
+                                      textStyle: GoogleFonts.gabarito(
                                         color: AppColor.white,
-                                        size: 20.sp,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      SizedBox(width: 6.w),
-                                      TextView(
-                                        text: 'Add Record',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.white,
-                                          fontSize: 12.80.sp,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 4.w,
-                              horizontal: 8.w,
-                            ),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: AppColor.grey),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextView(
-                                      text: 'Hypertension',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    TextView(
-                                      text: '9/10/2021',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey.withOpacity(
-                                          .4,
-                                        ),
-                                        fontSize: 15.0.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
 
-                                SizedBox(height: 6.h),
-                                TextView(
-                                  text: 'Prescribed lisinopril 10mg daily',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.darkindgrey,
-                                    fontSize: 15.0.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          SizedBox(height: 20.h),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 4.w,
-                              horizontal: 8.w,
-                            ),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: AppColor.grey),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextView(
-                                      text: 'Seasonal allergies',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    TextView(
-                                      text: '9/10/2021',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey.withOpacity(
-                                          .4,
-                                        ),
-                                        fontSize: 15.0.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                SizedBox(height: 6.h),
-                                TextView(
-                                  text: 'Recommended OTC antihistamines',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.darkindgrey,
-                                    fontSize: 15.0.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20.h),
-                          TextView(
-                            text: 'Appointment History',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.darkindgrey,
-                              fontSize: 16.20.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 4.w,
-                              horizontal: 8.w,
-                            ),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: AppColor.grey),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextView(
-                                      text: 'Follow-up',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    TextView(
-                                      text: 'Scheduled',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey.withOpacity(
-                                          .4,
-                                        ),
-                                        fontSize: 15.0.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                TextView(
-                                  text: '4/18/2025 - 10:30 AM',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.darkindgrey,
-                                    fontSize: 15.0.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 8.h),
-                                TextView(
-                                  text: 'Blood pressure check',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.darkindgrey,
-                                    fontSize: 15.0.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    else
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFormWidget(
-                            label: '',
-                            border: 10,
-                            isFilled: true,
-                            fillColor: AppColor.oneKindgrey,
-                            borderColor: AppColor.transparent,
-                            maxline: 7,
-                            alignLabelWithHint: true,
-                            // controller: emailTextController,
-                            // prefixWidget: Padding(
-                            //   padding: EdgeInsets.all(9.2.w),
-                            //   child: SvgPicture.asset(AppImage.message),
-                            // ),
-                            // validator: AppValidator.validateEmail(),
-                          ),
-                          SizedBox(height: 20.h),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Center(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 8.w,
-                                  horizontal: 14.w,
-                                ),
-                                width: 240.w,
-                                decoration: BoxDecoration(
-                                  // ignore: deprecated_member_use
-                                  color: AppColor.primary1,
-
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add_circle_outline_sharp,
-                                      color: AppColor.white,
-                                      size: 20.sp,
-                                    ),
-                                    SizedBox(width: 6.w),
-                                    TextView(
-                                      text: 'Add Record',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.white,
-                                        fontSize: 12.80.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                          SizedBox(height: 30.h),
                         ],
                       ),
-                  ],
-                ),
-              ),
+                    ),
+                  ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
+  }
+
+  Future<void> getId() async {
+    if (widget.order != null) {
+      id = widget.order!.id.toString();
+      setState(() {});
+    } else {
+      id = widget.item!.orderId.toString();
+      setState(() {});
+    }
   }
 }

@@ -56,4 +56,16 @@ class PharmContractImpl {
       await _api.pharmOrderId(id);
   Future<GetPharmWalletResponseModel> pharmWallet() async =>
       await _api.pharmWallet();
+  Future<dynamic> pharmOrderUpdate({
+    String? id,
+    String? reason,
+    String? status,
+  }) async =>
+      await _api.pharmOrderUpdate(id: id, status: status, reason: reason);
+  Future<dynamic> pharmOrderUpdateItem({
+    String? id,
+    String? reason,
+    String? status,
+  }) async =>
+      await _api.pharmOrderUpdateItem(id: id, reason: reason, status: status);
 }

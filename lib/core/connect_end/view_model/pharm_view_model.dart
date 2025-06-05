@@ -79,6 +79,7 @@ class PharmViewModel extends BaseViewModel {
   TextEditingController productVolumnTextController = TextEditingController();
   TextEditingController productQuantityTextController = TextEditingController();
   TextEditingController productTextController = TextEditingController();
+  TextEditingController reasonController = TextEditingController();
 
   OrderByIdResponseModel? _orderByIdResponseModel;
   OrderByIdResponseModel? get orderByIdResponseModel => _orderByIdResponseModel;
@@ -104,6 +105,7 @@ class PharmViewModel extends BaseViewModel {
   bool onEditCate = false;
   GetPharmacyCategories? onEditGetPharmacyCategories;
   GlobalKey<FormState> proFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   List<item.Items> orderItemListInProgress = [];
   List<item.Items> orderItemListCancelled = [];
@@ -412,10 +414,6 @@ class PharmViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  searchStatusItem(search) {
-    notifyListeners();
-  }
-
   onTapStatusContainer() => Container(
     decoration: BoxDecoration(
       // ignore: deprecated_member_use
@@ -543,7 +541,65 @@ class PharmViewModel extends BaseViewModel {
       logger.d(e);
       _isLoading = false;
     }
-    // notifyListeners();
+    notifyListeners();
+  }
+
+  pharmOrderUpdateItem(
+    context, {
+    String? id,
+    String? reason,
+    String? status,
+  }) async {
+    try {
+      loadingDialog(context);
+      var v = await runBusyFuture(
+        repositoryImply.pharmOrderUpdateItem(
+          id: id,
+          reason: reason,
+          status: status,
+        ),
+        throwException: true,
+      );
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: v['message']);
+      reasonController.text = '';
+    } catch (e) {
+      Navigator.pop(context);
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+      logger.d(e);
+      _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  pharmOrderUpdate(
+    context, {
+    String? id,
+    String? reason,
+    String? status,
+  }) async {
+    try {
+      loadingDialog(context);
+      var v = await runBusyFuture(
+        repositoryImply.pharmOrderUpdate(
+          id: id,
+          reason: reason,
+          status: status,
+        ),
+        throwException: true,
+      );
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: v['message']);
+      reasonController.text = '';
+    } catch (e) {
+      Navigator.pop(context);
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+      logger.d(e);
+      _isLoading = false;
+    }
+    notifyListeners();
   }
 
   void getPharmWallet() async {
@@ -1292,6 +1348,178 @@ class PharmViewModel extends BaseViewModel {
                     ],
           );
         },
+      );
+    },
+  );
+
+  void cancelItemOrderDialogBox(context, {String? id}) => showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        insetPadding: EdgeInsets.symmetric(
+          horizontal: 20.w,
+        ), // Adjust margin here
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.9, // 90% of screen
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextView(
+                text: 'Cancel Order',
+                textStyle: GoogleFonts.dmSans(
+                  color: AppColor.fineRed,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 16.h),
+              SizedBox(
+                height: 200.h,
+                child: Form(
+                  key: _formKey,
+                  child: TextFormWidget(
+                    label: 'Reason for cancelling item order',
+                    border: 10,
+                    isFilled: true,
+                    maxline: 4,
+                    alignLabelWithHint: true,
+                    fillColor: AppColor.transparent,
+
+                    controller: reasonController,
+                    validator: AppValidator.validateString(),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: TextView(
+                      text: 'Cancel',
+                      textStyle: GoogleFonts.dmSans(
+                        color: AppColor.fineRed,
+                        fontSize: 16.20.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        pharmOrderUpdateItem(
+                          context,
+                          id: id,
+                          reason: reasonController.text,
+                          status: 'cancelled',
+                        );
+                        notifyListeners();
+                      }
+                    },
+                    child: TextView(
+                      text: 'OK',
+                      textStyle: GoogleFonts.dmSans(
+                        color: AppColor.green,
+                        fontSize: 16.20.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+
+  void cancelOrderDialogBox(context, {String? id}) => showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        insetPadding: EdgeInsets.symmetric(
+          horizontal: 20.w,
+        ), // Adjust margin here
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.9, // 90% of screen
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextView(
+                text: 'Cancel Order',
+                textStyle: GoogleFonts.dmSans(
+                  color: AppColor.fineRed,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 16.h),
+              SizedBox(
+                height: 200.h,
+                child: Form(
+                  key: _formKey,
+                  child: TextFormWidget(
+                    label: 'Reason for cancelling order',
+                    border: 10,
+                    isFilled: true,
+                    maxline: 4,
+                    alignLabelWithHint: true,
+                    fillColor: AppColor.transparent,
+
+                    controller: reasonController,
+                    validator: AppValidator.validateString(),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: TextView(
+                      text: 'Cancel',
+                      textStyle: GoogleFonts.dmSans(
+                        color: AppColor.fineRed,
+                        fontSize: 16.20.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        pharmOrderUpdate(
+                          context,
+                          id: id,
+                          reason: 'ok reason',
+                          status: 'completed',
+                        );
+                        notifyListeners();
+                      }
+                    },
+                    child: TextView(
+                      text: 'OK',
+                      textStyle: GoogleFonts.dmSans(
+                        color: AppColor.green,
+                        fontSize: 16.20.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       );
     },
   );

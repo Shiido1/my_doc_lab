@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,7 +33,9 @@ class ProductStatusFailed extends StatelessWidget {
         return GestureDetector(
           onTap:
               () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => PatientDetailSceen()),
+                MaterialPageRoute(
+                  builder: (context) => PatientDetailSceen(item: item),
+                ),
               ),
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 8.w),

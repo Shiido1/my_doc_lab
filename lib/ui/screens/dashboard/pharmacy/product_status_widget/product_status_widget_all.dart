@@ -25,7 +25,9 @@ class ProductStatusAll extends StatelessWidget {
         return GestureDetector(
           onTap:
               () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => PatientDetailSceen()),
+                MaterialPageRoute(
+                  builder: (context) => PatientDetailSceen(order: order),
+                ),
               ),
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 8.w),
