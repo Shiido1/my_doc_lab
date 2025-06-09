@@ -142,6 +142,7 @@ class DoctorMessageListScreen extends StatelessWidget {
                   arguments: DoctorChatScreenArguments(
                     id: o.conversationId.toString(),
                     messageModel: o,
+                    app: null
                   ),
                 ),
             child: Container(
@@ -153,6 +154,21 @@ class DoctorMessageListScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
+                  o.contactProfile != null
+                  ? ClipOval(
+                    child: SizedBox.fromSize(
+                      size: const Size.fromRadius(24),
+                      child: Image.network(
+                       o.contactProfile!.contains('https')
+                            ? '${o.contactProfile}'
+                            : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${o.contactProfile}',
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (context, error, stackTrace) => shimmerViewPharm(),
+                      ),
+                    ),
+                  )
+                  :
                   Container(
                     padding: EdgeInsets.all(24.80.w),
                     decoration: BoxDecoration(

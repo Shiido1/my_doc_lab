@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
+import 'package:my_doc_lab/main.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
@@ -235,189 +237,203 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
   appointMentCard({
     String? appointmentStatus,
     GetListOfDoctorsAppointmentModel? appointment,
-  }) => Container(
-    padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 12.w),
-    margin: EdgeInsets.only(bottom: 20.w),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10),
-      border: Border.all(color: const Color.fromARGB(218, 208, 208, 208)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 200,
-                  child: TextView(
-                    text:
-                        '${appointment?.user?.firstName?.capitalize() ?? ''} ${appointment?.user?.lastName?.capitalize() ?? ''}',
-                    maxLines: 1,
-                    textOverflow: TextOverflow.ellipsis,
+  }) => GestureDetector(
+    onTap:
+        () => navigate.navigateTo(
+          Routes.doctorAppointmentDetailSceen,
+          arguments: DoctorAppointmentDetailSceenArguments(
+            appointment: appointment,
+          ),
+        ),
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 12.w),
+      margin: EdgeInsets.only(bottom: 20.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color.fromARGB(218, 208, 208, 208)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: TextView(
+                      text:
+                          '${appointment?.user?.firstName?.capitalize() ?? ''} ${appointment?.user?.lastName?.capitalize() ?? ''}',
+                      maxLines: 1,
+                      textOverflow: TextOverflow.ellipsis,
+                      textStyle: GoogleFonts.gabarito(
+                        color: AppColor.darkindgrey,
+                        fontSize: 18.0.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  TextView(
+                    text: appointment?.consultation?.name ?? '',
                     textStyle: GoogleFonts.gabarito(
                       color: AppColor.darkindgrey,
-                      fontSize: 18.0.sp,
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              appointment?.user?.profileImage != null
+                  ? ClipOval(
+                    child: SizedBox.fromSize(
+                      size: const Size.fromRadius(24),
+                      child: Image.network(
+                        appointment?.user?.profileImage!.contains('https')
+                            ? '${appointment?.user?.profileImage}'
+                            : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${appointment?.user?.profileImage}',
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (context, error, stackTrace) => shimmerViewPharm(),
+                      ),
+                    ),
+                  )
+                  : Container(
+                    padding: EdgeInsets.all(20.w),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColor.oneKindgrey,
+                    ),
+                  ),
+              // Row(
+              //   children: [
+              //     Container(
+              //       padding: EdgeInsets.all(20.w),
+              //       decoration: BoxDecoration(
+              //         shape: BoxShape.circle,
+              //         color: AppColor.oneKindgrey,
+              //       ),
+              //     ),
+              //     SizedBox(width: 16.w),
+              //     SvgPicture.asset(AppImage.more_circle),
+              //   ],
+              // ),
+            ],
+          ),
+          SizedBox(height: 40.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    AppImage.calendar,
+                    color: AppColor.darkindgrey,
+                  ),
+                  SizedBox(width: 8.w),
+                  TextView(
+                    text: DateFormat('dd/MM/yyyy').format(
+                      DateTime.parse(
+                        appointment!.slot!.availableDate!.toString(),
+                      ).toLocal(),
+                    ),
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.darkindgrey,
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  SvgPicture.asset(AppImage.time, color: AppColor.darkindgrey),
+                  SizedBox(width: 8.w),
+                  TextView(
+                    text: convertTo12Hour(
+                      appointment.slot?.availableTime ?? '',
+                    ),
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.darkindgrey,
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 2.w),
+                    padding: EdgeInsets.all(4.w),
+                    decoration: BoxDecoration(
+                      color: getAppColor(appointmentStatus!),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  TextView(
+                    text: appointmentStatus,
+                    textStyle: GoogleFonts.gabarito(
+                      color: getAppColor(appointmentStatus),
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 12.0.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.w,
+                    horizontal: 46.0.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.primary1.withOpacity(.7),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: TextView(
+                    text: 'Cancel',
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.darkindgrey,
+                      fontSize: 13.20.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-                TextView(
-                  text: appointment?.consultation?.name ?? '',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.darkindgrey,
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
+              ),
+              SizedBox(width: 20.w),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.w,
+                    horizontal: 36.w,
                   ),
-                ),
-              ],
-            ),
-            appointment?.user?.profileImage != null
-                ? ClipOval(
-                  child: SizedBox.fromSize(
-                    size: const Size.fromRadius(24),
-                    child: Image.network(
-                      appointment?.user?.profileImage!.contains('https')
-                          ? '${appointment?.user?.profileImage}'
-                          : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${appointment?.user?.profileImage}',
-                      fit: BoxFit.cover,
-                      errorBuilder:
-                          (context, error, stackTrace) => shimmerViewPharm(),
+                  decoration: BoxDecoration(
+                    color: AppColor.primary1,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: TextView(
+                    text: 'Reschedule',
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.white,
+                      fontSize: 13.20.sp,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                )
-                : Container(
-                  padding: EdgeInsets.all(20.w),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.oneKindgrey,
-                  ),
-                ),
-            // Row(
-            //   children: [
-            //     Container(
-            //       padding: EdgeInsets.all(20.w),
-            //       decoration: BoxDecoration(
-            //         shape: BoxShape.circle,
-            //         color: AppColor.oneKindgrey,
-            //       ),
-            //     ),
-            //     SizedBox(width: 16.w),
-            //     SvgPicture.asset(AppImage.more_circle),
-            //   ],
-            // ),
-          ],
-        ),
-        SizedBox(height: 40.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                SvgPicture.asset(
-                  AppImage.calendar,
-                  color: AppColor.darkindgrey,
-                ),
-                SizedBox(width: 8.w),
-                TextView(
-                  text: DateFormat('dd/MM/yyyy').format(
-                    DateTime.parse(
-                      appointment!.slot!.availableDate!.toString(),
-                    ).toLocal(),
-                  ),
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.darkindgrey,
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                SvgPicture.asset(AppImage.time, color: AppColor.darkindgrey),
-                SizedBox(width: 8.w),
-                TextView(
-                  text: convertTo12Hour(appointment.slot?.availableTime ?? ''),
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.darkindgrey,
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 2.w),
-                  padding: EdgeInsets.all(4.w),
-                  decoration: BoxDecoration(
-                    color: getAppColor(appointmentStatus!),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                SizedBox(width: 8.w),
-                TextView(
-                  text: appointmentStatus,
-                  textStyle: GoogleFonts.gabarito(
-                    color: getAppColor(appointmentStatus),
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(height: 12.0.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8.w,
-                  horizontal: 46.0.w,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColor.primary1.withOpacity(.7),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextView(
-                  text: 'Cancel',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.darkindgrey,
-                    fontSize: 13.20.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
                 ),
               ),
-            ),
-            SizedBox(width: 20.w),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 36.w),
-                decoration: BoxDecoration(
-                  color: AppColor.primary1,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextView(
-                  text: 'Reschedule',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.white,
-                    fontSize: 13.20.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     ),
   );
 

@@ -566,6 +566,7 @@ class DocViewModel extends BaseViewModel {
       _isLoading = false;
       Future.delayed(Duration(seconds: 2), () {
         if (hasLoadedConversation) receiveConversation(id);
+        session.chatsData = {'chat': []};
       });
     } catch (e) {
       _isLoading = false;
@@ -870,5 +871,54 @@ class DocViewModel extends BaseViewModel {
   Future<void> cleanupAgoraEngine() async {
     await engine?.leaveChannel();
     await engine?.release();
+  }
+
+  sendMessageAction({
+    GetListOfDoctorsAppointmentModel? app,
+    GetMessageIndexResponseModel? messageModel,
+  }) async {
+    if (sendtextController.text != '') {
+      String msg = sendtextController.text;
+      Future.delayed(Duration(seconds: 0), () {
+        sendtextController.clear();
+      });
+      if (app == null) {
+        await sendMessage(
+          SendMessageEntityModel(
+            conversationId: int.parse(messageModel!.conversationId.toString()),
+            receiverId: int.parse(messageModel.contactId.toString()),
+            receiverType: "MydocLab\\Models\\User",
+            message: msg,
+          ),
+        );
+      } else {
+        await sendMessage(
+          SendMessageEntityModel(
+            conversationId: 0,
+            receiverId: int.parse(app.userId.toString()),
+            receiverType: "MydocLab\\Models\\User",
+            message: msg,
+          ),
+        );
+      }
+    } else {}
+  }
+
+  Color getAppColor(String app) {
+    if (app == 'scheduled') {
+      return AppColor.grey;
+    } else if (app == 'canceled') {
+      return AppColor.red;
+    }
+    return AppColor.darkindgrey;
+  }
+
+  String getAppStatusText(String app) {
+    if (app == 'scheduled') {
+      return 'Upcoming';
+    } else if (app == 'canceled') {
+      return 'Canceled';
+    }
+    return 'Completed';
   }
 }

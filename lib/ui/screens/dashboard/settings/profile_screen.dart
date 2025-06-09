@@ -694,7 +694,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // ignore: non_constant_identifier_names
   surround_padding({child, value}) => Padding(
-    padding: EdgeInsetsGeometry.symmetric(horizontal: value),
+    padding: EdgeInsets.symmetric(horizontal: value),
     child: child,
   );
 

@@ -3,22 +3,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import 'video_chat_agora/doctor_video_chat_screen.dart';
 
 // ignore: must_be_immutable
 class DoctorChatScreen extends StatefulWidget {
-  DoctorChatScreen({super.key, required this.id, required this.messageModel});
+  DoctorChatScreen({
+    super.key,
+    required this.id,
+    required this.messageModel,
+    required this.app,
+  });
   GetMessageIndexResponseModel? messageModel;
   String? id;
+  GetListOfDoctorsAppointmentModel? app;
 
   @override
   State<DoctorChatScreen> createState() => _DoctorChatScreenState();
@@ -30,6 +36,8 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
 
   bool isContainedText = false;
 
+  bool isJustInitiated = false;
+
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
@@ -38,8 +46,13 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
-          model.receiveConversationOnce(widget.id!);
+          if (widget.app == null) {
+            model.receiveConversationOnce(widget.id!);
+          } else {
+            model.getChatIndex();
+          }
         });
+        print(isJustInitiated);
       },
       onDispose: (viewModel) {
         viewModel.hasLoadedConversation = false;
@@ -71,6 +84,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                               width: 200.w,
                               child: TextView(
                                 text:
+                                    widget.app?.user?.firstName?.capitalize() ??
                                     widget.messageModel?.contactName
                                         ?.capitalize() ??
                                     '',
@@ -107,35 +121,41 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                           ],
                         ),
                         Spacer(),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10.w, right: 20.w),
-                          child: GestureDetector(
-                            onTap:
-                                () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => DoctorVideoChatScreen(
-                                          conversationId: int.parse(
-                                            widget.messageModel!.conversationId
-                                                .toString(),
-                                          ),
-                                          receiverId: int.parse(
-                                            widget.messageModel!.contactId
-                                                .toString(),
-                                          ),
-                                          receiverType:
-                                              widget.messageModel!.contactType,
-                                        ),
-                                  ),
-                                ),
+                        widget.messageModel != null
+                            ? Padding(
+                              padding: EdgeInsets.only(top: 10.w, right: 20.w),
+                              child: GestureDetector(
+                                onTap:
+                                    () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => DoctorVideoChatScreen(
+                                              conversationId: int.parse(
+                                                widget
+                                                    .messageModel!
+                                                    .conversationId
+                                                    .toString(),
+                                              ),
+                                              receiverId: int.parse(
+                                                widget.messageModel!.contactId
+                                                    .toString(),
+                                              ),
+                                              receiverType:
+                                                  widget
+                                                      .messageModel!
+                                                      .contactType,
+                                            ),
+                                      ),
+                                    ),
 
-                            child: SvgPicture.asset(
-                              AppImage.video,
-                              width: 22.w,
-                              height: 22.0.h,
-                            ),
-                          ),
-                        ),
+                                child: SvgPicture.asset(
+                                  AppImage.video,
+                                  width: 22.w,
+                                  height: 22.0.h,
+                                ),
+                              ),
+                            )
+                            : SizedBox.shrink(),
                       ],
                     ),
                     Divider(color: AppColor.greylight),
@@ -218,7 +238,9 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                               ),
                                               SizedBox(width: 4.w),
                                               Icon(
-                                                Icons.access_time,
+                                                widget.app == null
+                                                    ? Icons.access_time
+                                                    : Icons.check,
                                                 color: AppColor.white,
                                                 size: 14.sp,
                                               ),
@@ -320,42 +342,36 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                     ),
                                   ),
                                   SizedBox(width: 4.w),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.send,
-                                      color: AppColor.primary,
-                                      size: 20.sp,
-                                    ),
-                                    onPressed: () async {
-                                      if (model.sendtextController.text != '') {
-                                        String msg =
-                                            model.sendtextController.text;
-                                        Future.delayed(
-                                          Duration(seconds: 0),
-                                          () {
-                                            model.sendtextController.clear();
-                                          },
-                                        );
-                                        await model.sendMessage(
-                                          SendMessageEntityModel(
-                                            conversationId: int.parse(
-                                              widget
-                                                  .messageModel!
-                                                  .conversationId
-                                                  .toString(),
-                                            ),
-                                            receiverId: int.parse(
-                                              widget.messageModel!.contactId
-                                                  .toString(),
-                                            ),
-                                            receiverType:
-                                                "MydocLab\\Models\\User",
-                                            message: msg,
-                                          ),
-                                        );
-                                      } else {}
-                                    },
-                                  ),
+                                  widget.app != null && isJustInitiated ||
+                                          model.getMessageIndexResponseModelList !=
+                                                  null &&
+                                              model
+                                                  .getMessageIndexResponseModelList!
+                                                  .getMessageIndexResponseModelList!
+                                                  .any(
+                                                    (o) =>
+                                                        o.contactId
+                                                            .toString() ==
+                                                        widget.app!.userId
+                                                            .toString(),
+                                                  )
+                                      ? SizedBox.shrink()
+                                      : IconButton(
+                                        icon: Icon(
+                                          Icons.send,
+                                          color: AppColor.primary,
+                                          size: 20.sp,
+                                        ),
+                                        onPressed: () async {
+                                          setState(() {
+                                            isJustInitiated = true;
+                                          });
+                                          model.sendMessageAction(
+                                            app: widget.app,
+                                            messageModel: widget.messageModel,
+                                          );
+                                        },
+                                      ),
                                 ],
                               ),
                             ),

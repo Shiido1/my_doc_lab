@@ -24,6 +24,8 @@ class GetMessageIndexResponseModel {
   num? conversationId;
   @JsonKey(name: 'contact_name')
   String? contactName;
+  @JsonKey(name: 'contact_profile')
+  String? contactProfile;
   @JsonKey(name: 'contact_type')
   String? contactType;
   @JsonKey(name: 'contact_id')
@@ -40,6 +42,7 @@ class GetMessageIndexResponseModel {
     this.contactName,
     this.contactType,
     this.contactId,
+    this.contactProfile,
     this.lastMessage,
     this.lastMessageTime,
     this.unreadCount,
