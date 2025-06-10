@@ -7,6 +7,7 @@ import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/screens/authentication/pharm_edit_profile_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/pharm_wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../../core/connect_end/view_model/pharm_view_model.dart';
@@ -153,6 +154,19 @@ class PharmSettingsScreen extends StatelessWidget {
                       () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => PharmMessageListScreen(),
+                        ),
+                      ),
+                ),
+                SizedBox(height: 20.h),
+                moreContainerWidget(
+                  image: AppImage.walleta,
+                  borderColor: AppColor.lightgrey,
+                  color: AppColor.black,
+                  text: 'Wallet',
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PharmWalletScreen(),
                         ),
                       ),
                 ),

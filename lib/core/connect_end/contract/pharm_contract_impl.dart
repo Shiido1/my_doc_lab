@@ -13,6 +13,7 @@ import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart'
 import '../model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../model/order_by_id_response_model/order_by_id_response_model.dart';
+import '../model/pharm_stats_response_model/pharm_stats_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/received_message_response_model/received_message_response_model.dart';
@@ -84,4 +85,6 @@ class PharmContractImpl {
   Future<CallTokenGenerateResponseModel> generateToken(
     CallTokenGenerateEntityModel callToken,
   ) async => await _api.genCallToken(callToken);
+  Future<PharmStatsResponseModel> pharmStatistics() async =>
+      await _api.pharmStatistics();
 }

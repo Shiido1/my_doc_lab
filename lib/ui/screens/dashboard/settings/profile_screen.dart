@@ -693,10 +693,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // ignore: non_constant_identifier_names
-  surround_padding({child, value}) => Padding(
-    padding: EdgeInsets.symmetric(horizontal: value),
-    child: child,
-  );
+  surround_padding({child, value}) =>
+      Padding(padding: EdgeInsets.symmetric(horizontal: value), child: child);
 
   Color selectFadeContainer(AvailableSlots? isBooked) {
     if (isBooked!.isBooked == true) {

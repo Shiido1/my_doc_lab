@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/model/add_med_entity_model/add_med_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/pharm_stats_response_model/pharm_stats_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
 import 'package:my_doc_lab/core/core_folder/network/cloudinary_network_service.dart';
 import '../connect_end/model/call_token_generate_entity_model.dart';
@@ -374,6 +375,20 @@ class PharmAuthApi {
       );
       logger.d(response.data);
       return CallTokenGenerateResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<PharmStatsResponseModel> pharmStatistics() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.pharmacy_stats,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return PharmStatsResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

@@ -38,6 +38,7 @@ import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart'
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../model/order_by_id_response_model/order_by_id_response_model.dart'
     hide Orders;
+import '../model/pharm_stats_response_model/pharm_stats_response_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart'
     as item;
@@ -123,6 +124,9 @@ class PharmViewModel extends BaseViewModel {
   GetPharmWalletResponseModel? _getPharmWalletResponseModel;
   GetPharmWalletResponseModel? get getPharmWalletResponseModel =>
       _getPharmWalletResponseModel;
+  PharmStatsResponseModel? _pharmStatsResponseModel;
+  PharmStatsResponseModel? get pharmStatsResponseModel =>
+      _pharmStatsResponseModel;
 
   bool selectStatus = false;
 
@@ -420,6 +424,18 @@ class PharmViewModel extends BaseViewModel {
     try {
       _getPharmMedResponseModelList = await runBusyFuture(
         repositoryImply.getAllMedsList(),
+        throwException: true,
+      );
+    } catch (e) {
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  void getPharmStatistics() async {
+    try {
+      _pharmStatsResponseModel = await runBusyFuture(
+        repositoryImply.pharmStatistics(),
         throwException: true,
       );
     } catch (e) {

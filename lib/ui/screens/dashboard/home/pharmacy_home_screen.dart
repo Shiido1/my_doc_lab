@@ -6,7 +6,6 @@ import 'package:my_doc_lab/core/connect_end/view_model/pharm_view_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
-import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
@@ -24,6 +23,7 @@ class PharmacyHomeScreen extends StatelessWidget {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getPharmacistDetail(context);
+          model.getPharmStatistics();
         });
       },
       disposeViewModel: false,
@@ -92,8 +92,6 @@ class PharmacyHomeScreen extends StatelessWidget {
                       ],
                     ),
                     Spacer(),
-                    // SvgPicture.asset(AppImage.cart, width: 24.w, height: 24.w),
-                    // SizedBox(width: 20.w),
                     GestureDetector(
                       onTap:
                           () => Navigator.of(context).push(
@@ -109,32 +107,32 @@ class PharmacyHomeScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 20.w),
-                TextFormWidget(
-                  label: 'Search for Medicine ...',
-                  // hint: 'Email Address',
-                  border: 10,
-                  isFilled: true,
-                  fillColor: AppColor.transparent,
-                  // controller: fullnameTextController,
-                  prefixWidget: Padding(
-                    padding: EdgeInsets.all(14.w),
-                    child: SvgPicture.asset(
-                      AppImage.search,
-                      height: 20.h,
-                      width: 20.w,
-                    ),
-                  ),
-                  suffixWidget: Padding(
-                    padding: EdgeInsets.all(14.w),
-                    child: SvgPicture.asset(
-                      AppImage.filter,
-                      height: 20.h,
-                      width: 20.w,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 30.w),
+                // TextFormWidget(
+                //   label: 'Search for Medicine ...',
+                //   // hint: 'Email Address',
+                //   border: 10,
+                //   isFilled: true,
+                //   fillColor: AppColor.transparent,
+                //   // controller: fullnameTextController,
+                //   prefixWidget: Padding(
+                //     padding: EdgeInsets.all(14.w),
+                //     child: SvgPicture.asset(
+                //       AppImage.search,
+                //       height: 20.h,
+                //       width: 20.w,
+                //     ),
+                //   ),
+                //   suffixWidget: Padding(
+                //     padding: EdgeInsets.all(14.w),
+                //     child: SvgPicture.asset(
+                //       AppImage.filter,
+                //       height: 20.h,
+                //       width: 20.w,
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -151,8 +149,9 @@ class PharmacyHomeScreen extends StatelessWidget {
                     pharmContainer(
                       context,
                       image: AppImage.double_box,
-                      text1: 'N 8,55,875',
-                      text2: 'Revenue: Jan 2022',
+                      text1:
+                          '${getCurrency()}${oCcy.format(double.parse('${model.pharmStatsResponseModel?.revenueToday.toString() ?? 0.0}'))}',
+                      text2: 'Revenue: Today',
                       text3: 'View Detailed Report',
 
                       color: AppColor.darkindgrey,
@@ -167,7 +166,8 @@ class PharmacyHomeScreen extends StatelessWidget {
                       child: pharmContainer2(
                         context,
                         image: AppImage.aid_box,
-                        text1: '299',
+                        text1:
+                            '${model.pharmStatsResponseModel?.availableMedicine ?? ''}',
                         text2: 'Medicines Available',
                         text3: 'Visit Inventory',
                         left: 0.w,
@@ -178,7 +178,8 @@ class PharmacyHomeScreen extends StatelessWidget {
                       child: pharmContainer2(
                         context,
                         image: AppImage.traingle,
-                        text1: '01',
+                        text1:
+                            '${model.pharmStatsResponseModel?.medicineLow ?? ''}',
                         text2: 'Medicine Shortage',
                         text3: 'Resolve Now',
                         color: AppColor.primary1,
@@ -303,7 +304,7 @@ class PharmacyHomeScreen extends StatelessWidget {
               SizedBox(height: 10.h),
               TextView(
                 text: text1,
-                textStyle: GoogleFonts.poppins(
+                textStyle: TextStyle(
                   color: AppColor.white,
                   fontSize: 20.30.sp,
                   letterSpacing: -1,

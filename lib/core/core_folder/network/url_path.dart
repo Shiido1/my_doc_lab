@@ -51,4 +51,5 @@ class UrlConfig {
   static const String add_pharm_med = 'pharmacy/medicine/add';
   static const String update_pharm_med = 'pharmacy/medicine';
   static const String update_pharm_med_qty = 'pharmacy/medicine/quantity';
+  static const String pharmacy_stats = 'pharmacy/stats';
 }
