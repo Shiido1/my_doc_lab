@@ -105,6 +105,7 @@ class DocViewModel extends BaseViewModel {
   TextEditingController sendtextController = TextEditingController(text: '');
 
   bool hasLoadedConversation = false;
+  bool hasLoadedIndexConversation = false;
 
   List<SendMessageEntityModel> sendList = [];
 
@@ -516,6 +517,7 @@ class DocViewModel extends BaseViewModel {
 
   Future<void> getChatIndex() async {
     try {
+      print('here');
       _isLoading = true;
       _getMessageIndexResponseModelList = await runBusyFuture(
         repositoryImply.chatIndex(),
@@ -546,10 +548,14 @@ class DocViewModel extends BaseViewModel {
 
   Future<void> getChatIndexReload() async {
     try {
+      print('ok');
       _getMessageIndexResponseModelList = await runBusyFuture(
         repositoryImply.chatIndex(),
         throwException: true,
       );
+      Future.delayed(Duration(seconds: 2), () {
+        if (hasLoadedIndexConversation) getChatIndexReload();
+      });
     } catch (e) {
       _isLoading = false;
       logger.d(e);
@@ -566,7 +572,10 @@ class DocViewModel extends BaseViewModel {
       _isLoading = false;
       Future.delayed(Duration(seconds: 2), () {
         if (hasLoadedConversation) receiveConversation(id);
-        session.chatsData = {'chat': []};
+        Future.delayed(Duration(seconds: 1), () {
+          session.chatsData = {'chat': []};
+          // sendList.clear();
+        });
       });
     } catch (e) {
       _isLoading = false;
@@ -596,6 +605,19 @@ class DocViewModel extends BaseViewModel {
       hasLoadedConversation = true;
       receiveConversation(id);
       scrollToBottom(); // existing method
+    }
+    notifyListeners();
+  }
+
+  void receiveIndexConversationOnce() {
+    print('in');
+    if (hasLoadedIndexConversation == false) {
+      print('in false');
+      return;
+    } else {
+      print('in true');
+      hasLoadedIndexConversation = true;
+      getChatIndexReload();
     }
     notifyListeners();
   }

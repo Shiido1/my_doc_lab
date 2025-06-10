@@ -46,16 +46,17 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
+          model.hasLoadedIndexConversation = false;
           if (widget.app == null) {
             model.receiveConversationOnce(widget.id!);
           } else {
             model.getChatIndex();
           }
         });
-        print(isJustInitiated);
       },
       onDispose: (viewModel) {
         viewModel.hasLoadedConversation = false;
+        viewModel.hasLoadedIndexConversation = true;
       },
       disposeViewModel: false,
       builder: (_, DocViewModel model, __) {

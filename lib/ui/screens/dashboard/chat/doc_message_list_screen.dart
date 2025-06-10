@@ -23,11 +23,14 @@ class DoctorMessageListScreen extends StatelessWidget {
       viewModelBuilder: () => locator<DocViewModel>(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          model.getChatIndex();
+        model.hasLoadedIndexConversation = true;
+          model.receiveIndexConversationOnce();
         });
       },
       disposeViewModel: false,
-      fireOnViewModelReadyOnce: true,
+      onDispose: (viewModel) {
+        viewModel.hasLoadedIndexConversation = false;
+      },
       builder: (_, DocViewModel model, __) {
         return Scaffold(
           backgroundColor: AppColor.white,

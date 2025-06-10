@@ -27,10 +27,15 @@ class DocMoreSettingsScreen extends StatelessWidget {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getDoctorsDetail(context);
-          model.getChatIndex();
+
+          model.hasLoadedIndexConversation = false;
         });
       },
       disposeViewModel: false,
+      onDispose: (viewModel) {
+        viewModel.hasLoadedIndexConversation = false;
+      },
+
       builder: (_, DocViewModel model, __) {
         return Scaffold(
           backgroundColor: AppColor.white,
