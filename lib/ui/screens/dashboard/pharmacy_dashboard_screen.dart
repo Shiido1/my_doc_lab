@@ -31,12 +31,6 @@ class _PharmacyDashboardState extends State<PharmacyDashboard> {
     PharmSettingsScreen(),
   ];
 
-  @override
-  void initState() {
-    // _currentIndex = widget.index!;
-    super.initState();
-  }
-
   Future<bool> willPopControl() async {
     return (await showDialog(
           context: context,

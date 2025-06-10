@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:injectable/injectable.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../main.dart';
@@ -31,6 +32,9 @@ class SharedPreferencesService {
   static const String notifiedKey = 'notify';
   static const String userData = 'user';
   static const String chatData = 'chat';
+  static const String processData = 'process';
+  static const String cancelData = 'cancel';
+  static const String completeData = 'complete';
 
   String get authToken => sharedPreferences?.getString(keyAuthToken) ?? '';
 
@@ -55,6 +59,50 @@ class SharedPreferencesService {
     return {};
   }
 
+  Map<String, List<Items>> get processedData {
+    final processedDataString = sharedPreferences?.getString(processData);
+    if (processedDataString != null && processedDataString.isNotEmpty) {
+      Map<String, List<Items>> itemsMap = convertToItemsMap(
+        processedDataString,
+      );
+      return itemsMap;
+    }
+    return {};
+  }
+
+  Map<String, List<Items>> get completedData {
+    final completedDataString = sharedPreferences?.getString(completeData);
+    if (completedDataString != null && completedDataString.isNotEmpty) {
+      Map<String, List<Items>> itemsMap = convertToItemsMap(
+        completedDataString,
+      );
+      return itemsMap;
+    }
+    return {};
+  }
+
+  Map<String, List<Items>> get cancelledData {
+    final cancelDataDataString = sharedPreferences?.getString(cancelData);
+    if (cancelDataDataString != null && cancelDataDataString.isNotEmpty) {
+      Map<String, List<Items>> itemsMap = convertToItemsMap(
+        cancelDataDataString,
+      );
+      return itemsMap;
+    }
+    return {};
+  }
+
+  Map<String, List<Items>> convertToItemsMap(String jsonString) {
+    final Map<String, dynamic> rawMap = jsonDecode(jsonString);
+
+    return rawMap.map((key, value) {
+      return MapEntry(
+        key,
+        List<Items>.from(value.map((item) => Items.fromJson(item))),
+      );
+    });
+  }
+
   set isLoggedIn(bool logging) =>
       sharedPreferences?.setBool(logginKey, logging);
   set isFirstLogin(bool isLog) =>
@@ -72,6 +120,12 @@ class SharedPreferencesService {
 
   set chatsData(Map<String, dynamic>? map) =>
       sharedPreferences?.setString(chatData, json.encode(map));
+  set completedData(Map<String, List<Items>>? map) =>
+      sharedPreferences?.setString(completeData, json.encode(map));
+  set cancelledData(Map<String, List<Items>>? map) =>
+      sharedPreferences?.setString(cancelData, json.encode(map));
+  set processedData(Map<String, List<Items>>? map) =>
+      sharedPreferences?.setString(processData, json.encode(map));
 
   Future<bool> logOut(role) async {
     try {

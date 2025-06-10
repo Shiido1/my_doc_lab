@@ -36,7 +36,7 @@ class PharmacyOrderScreen extends StatelessWidget {
                 SizedBox(height: 10.w),
                 Center(
                   child: TextView(
-                    text: 'Orders',
+                    text: model.tab == 'All' ? 'Orders' : 'Order Items',
                     textStyle: GoogleFonts.gabarito(
                       color: AppColor.black,
                       fontSize: 20.sp,
@@ -71,79 +71,103 @@ class PharmacyOrderScreen extends StatelessWidget {
 
                 if (model.tab == 'All')
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          if (model.getPharmOrderModel != null &&
-                              model
-                                  .getPharmOrderModel!
-                                  .original!
-                                  .orders!
-                                  .isNotEmpty)
-                            if (model.pharmMedQueryOrder != '')
-                              ...model.getPharmOrderModel!.original!.orders!
-                                  .where(
-                                    (o) =>
-                                        o.user!.firstName!
-                                            .toLowerCase()
-                                            .contains(
-                                              model.pharmMedQueryOrder
-                                                  .toLowerCase(),
-                                            ) ||
-                                        o.user!.lastName!
-                                            .toLowerCase()
-                                            .contains(
-                                              model.pharmMedQueryOrder
-                                                  .toLowerCase(),
-                                            ),
-                                  )
-                                  .map(
-                                    (order) => ProductStatusAll(order: order),
-                                  )
-                            else
-                              ...model.getPharmOrderModel!.original!.orders!
-                                  .map(
-                                    (order) => ProductStatusAll(order: order),
-                                  ),
-                        ],
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await model.getPharmOrderReload(); // Trigger refresh
+                      },
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            if (model.getPharmOrderModel != null &&
+                                model
+                                    .getPharmOrderModel!
+                                    .original!
+                                    .orders!
+                                    .isNotEmpty)
+                              if (model.pharmMedQueryOrder != '')
+                                ...model.getPharmOrderModel!.original!.orders!
+                                    .where(
+                                      (o) =>
+                                          o.user!.firstName!
+                                              .toLowerCase()
+                                              .contains(
+                                                model.pharmMedQueryOrder
+                                                    .toLowerCase(),
+                                              ) ||
+                                          o.user!.lastName!
+                                              .toLowerCase()
+                                              .contains(
+                                                model.pharmMedQueryOrder
+                                                    .toLowerCase(),
+                                              ),
+                                    )
+                                    .map(
+                                      (order) => ProductStatusAll(order: order),
+                                    )
+                              else
+                                ...model.getPharmOrderModel!.original!.orders!
+                                    .map(
+                                      (order) => ProductStatusAll(order: order),
+                                    ),
+                          ],
+                        ),
                       ),
                     ),
                   )
                 else if (model.tab == 'In progress')
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          if (model.orderItemListInProgress.isNotEmpty)
-                            ...model.orderItemListInProgress.map(
-                              (i) => ProductStatusProcess(item: i),
-                            ),
-                        ],
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await model.getPharmOrderReload(); // Trigger refresh
+                      },
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            if (model.orderItemListInProgress.isNotEmpty)
+                              ...model.orderItemListInProgress.map(
+                                (i) => ProductStatusProcess(item: i),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   )
                 else if (model.tab == 'Failed')
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          if (model.orderItemListCancelled.isNotEmpty)
-                            ...model.orderItemListCancelled.map((i) {
-                              return ProductStatusFailed(item: i);
-                            }),
-                        ],
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await model.getPharmOrderReload(); // Trigger refresh
+                      },
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            if (model.orderItemListCancelled.isNotEmpty)
+                              ...model.orderItemListCancelled.map((i) {
+                                return ProductStatusFailed(item: i);
+                              }),
+                          ],
+                        ),
                       ),
                     ),
                   )
                 else
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          ...model.orderItemListCompleted.map(
-                            (i) => ProductStatus(item: i),
-                          ),
-                        ],
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await model.getPharmOrderReload(); // Trigger refresh
+                      },
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            ...model.orderItemListCompleted.map(
+                              (i) => ProductStatus(item: i),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -7,9 +7,10 @@ import 'package:stacked/stacked.dart';
 
 import '../../../../../core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../../../../../core/connect_end/view_model/pharm_view_model.dart';
+import '../../../../../core/core_folder/app/app.router.dart';
+import '../../../../../main.dart';
 import '../../../../app_assets/app_color.dart';
 import '../../../../widget/text_widget.dart';
-import '../../patient/patient_detail_sceen.dart';
 
 // ignore: must_be_immutable
 class ProductStatus extends StatelessWidget {
@@ -23,17 +24,15 @@ class ProductStatus extends StatelessWidget {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           await model.getPharmOrderId(item?.orderId.toString());
-          model.notifyListeners();
         });
       },
       disposeViewModel: false,
       builder: (_, PharmViewModel model, __) {
         return GestureDetector(
           onTap:
-              () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => PatientDetailSceen(item: item),
-                ),
+              () => navigate.navigateTo(
+                Routes.patientDetailSceen,
+                arguments: PatientDetailSceenArguments(item: item),
               ),
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 8.w),

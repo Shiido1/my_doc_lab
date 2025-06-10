@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
+import 'package:my_doc_lab/main.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:stacked/stacked.dart';
 
@@ -8,7 +10,6 @@ import '../../../../../core/connect_end/model/get_pharm_order_model/get_pharm_or
 import '../../../../../core/connect_end/view_model/pharm_view_model.dart';
 import '../../../../app_assets/app_color.dart';
 import '../../../../widget/text_widget.dart';
-import '../../patient/patient_detail_sceen.dart';
 
 // ignore: must_be_immutable
 class ProductStatusAll extends StatelessWidget {
@@ -24,10 +25,9 @@ class ProductStatusAll extends StatelessWidget {
       builder: (_, PharmViewModel model, __) {
         return GestureDetector(
           onTap:
-              () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => PatientDetailSceen(order: order),
-                ),
+              () => navigate.navigateTo(
+                Routes.patientDetailSceen,
+                arguments: PatientDetailSceenArguments(order: order),
               ),
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 8.w),

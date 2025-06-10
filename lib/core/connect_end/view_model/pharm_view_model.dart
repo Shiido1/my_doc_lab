@@ -24,7 +24,9 @@ import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/app_assets/image_picker.dart';
 import '../../../ui/widget/text_form_widget.dart';
 import '../../../ui/widget/text_widget.dart';
+import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
+import '../../core_folder/manager/shared_preference.dart';
 import '../model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
 import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
@@ -38,6 +40,7 @@ class PharmViewModel extends BaseViewModel {
   final logger = getLogger('PharmViewModel');
 
   final repositoryImply = PharmRepoImpl();
+  final session = locator<SharedPreferencesService>();
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -51,6 +54,9 @@ class PharmViewModel extends BaseViewModel {
   String pharmMedQuery = '';
   String pharmMedQueryOrder = '';
   String tab = 'All';
+  bool isOnEnterProgressStatus = false;
+  bool isOnEnterFailedStatus = false;
+  bool isOnEnterCompletedStatus = false;
 
   PharmViewModel({this.context});
 
@@ -406,6 +412,50 @@ class PharmViewModel extends BaseViewModel {
           notifyListeners();
         }
       });
+      notifyListeners();
+      _isLoading = false;
+    } catch (e) {
+      logger.d(e);
+      _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> getPharmOrderReload() async {
+    try {
+      // _isLoading = true;
+      _getPharmOrderModel = await runBusyFuture(
+        repositoryImply.pharmOrder(),
+        throwException: true,
+      );
+      List<item.Items> orderItemList = [];
+      orderItemListCancelled.clear();
+      orderItemListCompleted.clear();
+      orderItemListInProgress.clear();
+      for (var element in _getPharmOrderModel!.original!.orders!) {
+        orderItemList.addAll(element.items!);
+        notifyListeners();
+      }
+
+      groupBy(orderItemList, (item.Items o) {
+        if (o.status?.toLowerCase() == 'cancelled') {
+          orderItemListCancelled.add(o);
+          notifyListeners();
+        }
+      });
+      groupBy(orderItemList, (item.Items o) {
+        if (o.status?.toLowerCase() == 'completed') {
+          orderItemListCompleted.add(o);
+          notifyListeners();
+        }
+      });
+      groupBy(orderItemList, (item.Items o) {
+        if (o.status?.toLowerCase() == 'processed') {
+          orderItemListInProgress.add(o);
+          notifyListeners();
+        }
+      });
+      notifyListeners();
       _isLoading = false;
     } catch (e) {
       logger.d(e);
@@ -531,6 +581,22 @@ class PharmViewModel extends BaseViewModel {
   getPharmOrderId(id) async {
     try {
       _isLoading = true;
+      _orderByIdResponseModel = await runBusyFuture(
+        repositoryImply.pharmOrderId(id),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      logger.d(e);
+      _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  getPharmOrderIdReload(id) async {
+    try {
+      // _isLoading = true;
       _orderByIdResponseModel = await runBusyFuture(
         repositoryImply.pharmOrderId(id),
         throwException: true,
