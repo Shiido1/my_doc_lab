@@ -515,6 +515,20 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> getDoctorsAppointment() async {
+    try {
+      _getListOfDoctorsAppointmentModelList = await runBusyFuture(
+        repositoryImply.doctorsAppointment(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   Future<void> getChatIndex() async {
     try {
       print('here');
@@ -577,20 +591,6 @@ class DocViewModel extends BaseViewModel {
           // sendList.clear();
         });
       });
-    } catch (e) {
-      _isLoading = false;
-      logger.d(e);
-    }
-    notifyListeners();
-  }
-
-  Future<void> getDoctorsAppointment() async {
-    try {
-      _getListOfDoctorsAppointmentModelList = await runBusyFuture(
-        repositoryImply.doctorsAppointment(),
-        throwException: true,
-      );
-      _isLoading = false;
     } catch (e) {
       _isLoading = false;
       logger.d(e);

@@ -12,6 +12,7 @@ import 'package:stacked/stacked.dart';
 import '../../../../../core/connect_end/view_model/pharm_view_model.dart';
 import '../../../../../core/core_folder/app/app.locator.dart';
 import '../../../../../core/core_folder/manager/shared_preference.dart';
+import '../../chat/pharm_message_list_screen.dart';
 import '../help_and_support_screen.dart';
 
 class PharmSettingsScreen extends StatelessWidget {
@@ -139,6 +140,19 @@ class PharmSettingsScreen extends StatelessWidget {
                       () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => PharmEditProfileScreen(),
+                        ),
+                      ),
+                ),
+                SizedBox(height: 20.h),
+                moreContainerWidget(
+                  image: AppImage.chat,
+                  borderColor: AppColor.lightgrey,
+                  color: AppColor.black,
+                  text: 'Chat',
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PharmMessageListScreen(),
                         ),
                       ),
                 ),

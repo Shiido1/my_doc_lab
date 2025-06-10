@@ -3,11 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:stacked/stacked.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../../../../core/connect_end/view_model/pharm_view_model.dart';
+import '../../../../main.dart';
 import '../../../app_assets/constant.dart';
 import '../../../widget/text_widget.dart';
 
@@ -126,7 +128,15 @@ class _PatientDetailSceenState extends State<PatientDetailSceen> {
                         Row(
                           children: [
                             GestureDetector(
-                              onTap: () {},
+                              onTap:
+                                  () => navigate.navigateTo(
+                                    Routes.pharmChatScreen,
+                                    arguments: PharmChatScreenArguments(
+                                      id: '',
+                                      messageModel: null,
+                                      appOrder: widget.order,
+                                    ),
+                                  ),
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                   vertical: 4.w,

@@ -5,13 +5,19 @@ import 'package:my_doc_lab/core/connect_end/model/get_pharm_wallet_response_mode
 import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
 import 'package:my_doc_lab/core/core_folder/network/cloudinary_network_service.dart';
+import '../connect_end/model/call_token_generate_entity_model.dart';
+import '../connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../connect_end/model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
+import '../connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../connect_end/model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../connect_end/model/get_pharmacy_categories/get_pharmacy_categories.dart';
 import '../connect_end/model/order_by_id_response_model/order_by_id_response_model.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../connect_end/model/received_message_response_model/received_message_response_model.dart';
+import '../connect_end/model/send_message_entity_model.dart';
+import '../connect_end/model/send_message_response_model/send_message_response_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
 import '../core_folder/network/network_service.dart';
@@ -307,6 +313,67 @@ class PharmAuthApi {
       );
       logger.d(response.data);
       return GetPharmWalletResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetMessageIndexResponseModelList> chatIndex() async {
+    try {
+      final response = await _service.call(UrlConfig.chat, RequestMethod.get);
+      logger.d(response.data);
+      return GetMessageIndexResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<ReceivedMessageResponseModelList> receiveConversation(
+    String id,
+  ) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.chat}/$id/messages',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return ReceivedMessageResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<SendMessageResponseModel> sendMessage(
+    SendMessageEntityModel send,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.send_chat,
+        RequestMethod.post,
+        data: send.toJson(),
+      );
+      logger.d(response.data);
+      return SendMessageResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<CallTokenGenerateResponseModel> genCallToken(
+    CallTokenGenerateEntityModel generate,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.call_generate_token,
+        RequestMethod.post,
+        data: generate.toJson(),
+      );
+      logger.d(response.data);
+      return CallTokenGenerateResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

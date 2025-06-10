@@ -41,11 +41,11 @@ class DocContractsImpl {
   Future<SendMessageResponseModel> sendMessage(
     SendMessageEntityModel send,
   ) async => await _api.sendMessage(send);
-  Future<GetListOfDoctorsAppointmentModelList> doctorsAppointment() async =>
-      await _api.doctorsAppointment();
   Future<CallTokenGenerateResponseModel> generateToken(
     CallTokenGenerateEntityModel callToken,
   ) async => await _api.genCallToken(callToken);
+  Future<GetListOfDoctorsAppointmentModelList> doctorsAppointment() async =>
+      await _api.doctorsAppointment();
   Future<GetDoctorsWalletResponseModel> doctorsWallet() async =>
       await _api.doctorWallet();
 }

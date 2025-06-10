@@ -11,9 +11,9 @@ GetMessageIndexResponseModel _$GetMessageIndexResponseModelFromJson(
     GetMessageIndexResponseModel(
       conversationId: json['conversation_id'] as num?,
       contactName: json['contact_name'] as String?,
-      contactProfile: json['contact_profile'] as String?,
       contactType: json['contact_type'] as String?,
       contactId: json['contact_id'],
+      contactProfile: json['contact_profile'] as String?,
       lastMessage: json['last_message'] as String?,
       lastMessageTime: json['last_message_time'] as String?,
       unreadCount: json['unread_count'] as num?,

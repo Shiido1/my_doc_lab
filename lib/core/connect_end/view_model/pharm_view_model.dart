@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import "package:collection/collection.dart";
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:my_doc_lab/core/connect_end/model/post_user_cloud_entity_model.d
 import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/repo/pharm_repo_impl.dart';
 import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 import '../../../main.dart';
 import '../../../ui/app_assets/app_color.dart';
@@ -27,13 +29,22 @@ import '../../../ui/widget/text_widget.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/manager/shared_preference.dart';
+import '../../debouncer.dart';
+import '../model/call_token_generate_entity_model.dart';
+import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
+import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharm_med_response_model/get_pharm_med_response_model.dart';
 import '../model/get_pharmacy_categories/get_pharmacy_categories.dart';
-import '../model/order_by_id_response_model/order_by_id_response_model.dart';
+import '../model/order_by_id_response_model/order_by_id_response_model.dart'
+    hide Orders;
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart'
     as item;
+
+import '../model/received_message_response_model/received_message_response_model.dart';
+import '../model/send_message_entity_model.dart';
+import '../model/send_message_response_model/send_message_response_model.dart';
 
 class PharmViewModel extends BaseViewModel {
   final BuildContext? context;
@@ -57,6 +68,14 @@ class PharmViewModel extends BaseViewModel {
   bool isOnEnterProgressStatus = false;
   bool isOnEnterFailedStatus = false;
   bool isOnEnterCompletedStatus = false;
+  bool hasLoadedConversation = false;
+  bool hasLoadedIndexConversation = false;
+
+  final debouncer = Debouncer();
+
+  String query = '';
+
+  DateTime now = DateTime.now();
 
   PharmViewModel({this.context});
 
@@ -116,6 +135,34 @@ class PharmViewModel extends BaseViewModel {
   List<item.Items> orderItemListInProgress = [];
   List<item.Items> orderItemListCancelled = [];
   List<item.Items> orderItemListCompleted = [];
+
+  GetMessageIndexResponseModelList? _getMessageIndexResponseModelList;
+  GetMessageIndexResponseModelList? get getMessageIndexResponseModelList =>
+      _getMessageIndexResponseModelList;
+  ReceivedMessageResponseModelList? _receivedMessageResponseModelList;
+  ReceivedMessageResponseModelList? get receivedMessageResponseModelList =>
+      _receivedMessageResponseModelList;
+
+  SendMessageResponseModel? _sendMessageResponseModel;
+  SendMessageResponseModel? get sendMessageResponseModel =>
+      _sendMessageResponseModel;
+
+  CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
+  CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
+      _callTokenGenerateResponseModel;
+
+  TextEditingController sendtextController = TextEditingController(text: '');
+
+  RtcEngine? engine;
+  bool onSwitch = false;
+
+  dynamic remoteUidGlobal;
+  dynamic remoteUidGlobalLocal;
+
+  bool localUserJoined = false;
+  List<SendMessageEntityModel> sendList = [];
+
+  ScrollController scrollController1 = ScrollController();
 
   pickDateExpProduct(context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -1854,6 +1901,390 @@ class PharmViewModel extends BaseViewModel {
         );
       },
     );
+  }
+
+  //chat stuffs
+
+  Future<void> getChatIndex() async {
+    try {
+      print('here');
+      _isLoading = true;
+      _getMessageIndexResponseModelList = await runBusyFuture(
+        repositoryImply.chatIndex(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getChatIndexReload() async {
+    try {
+      print('ok');
+      _getMessageIndexResponseModelList = await runBusyFuture(
+        repositoryImply.chatIndex(),
+        throwException: true,
+      );
+      Future.delayed(Duration(seconds: 2), () {
+        if (hasLoadedIndexConversation) getChatIndexReload();
+      });
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> receiveConversation(String id) async {
+    try {
+      _receivedMessageResponseModelList = await runBusyFuture(
+        repositoryImply.receiveMessage(id),
+        throwException: true,
+      );
+      _isLoading = false;
+      Future.delayed(Duration(seconds: 2), () {
+        if (hasLoadedConversation) receiveConversation(id);
+        Future.delayed(Duration(seconds: 1), () {
+          session.chatsData = {'chat': []};
+          // sendList.clear();
+        });
+      });
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  void receiveConversationOnce(String id) {
+    if (hasLoadedConversation == false) {
+      return;
+    } else {
+      hasLoadedConversation = true;
+      receiveConversation(id);
+      scrollToBottom(); // existing method
+    }
+    notifyListeners();
+  }
+
+  void receiveIndexConversationOnce() {
+    print('in');
+    if (hasLoadedIndexConversation == false) {
+      print('in false');
+      return;
+    } else {
+      print('in true');
+      hasLoadedIndexConversation = true;
+      getChatIndexReload();
+    }
+    notifyListeners();
+  }
+
+  Future<void> sendMessage(SendMessageEntityModel send) async {
+    try {
+      sendList.add(send);
+      session.chatsData = {'chat': sendList};
+      if (session.chatsData.isEmpty) {
+        return;
+      } else {
+        for (var element in session.chatsData['chat']) {
+          SendMessageEntityModel sendMessageEntityModel =
+              SendMessageEntityModel.fromJson(element);
+          _sendMessageResponseModel = await runBusyFuture(
+            repositoryImply.sendMessage(sendMessageEntityModel),
+            throwException: true,
+          );
+          if (_sendMessageResponseModel?.success == true) {
+            Future.delayed(Duration(seconds: 1), () {
+              session.chatsData = {'chat': []};
+              sendList.clear();
+            });
+          }
+        }
+      }
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  boxMessage(ReceivedMessageResponseModel message) => Column(
+    children: [
+      message.senderType == "MydocLab\\Models\\User"
+          ? Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              margin: EdgeInsets.only(left: 20.w, right: 100.w, bottom: 20.w),
+
+              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(0),
+                  bottomRight: Radius.circular(10),
+                ),
+                // ignore: deprecated_member_use
+                color: AppColor.primary1.withOpacity(.1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextView(
+                    text: message.message ?? '',
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 15.2.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.darkindgrey,
+                    ),
+                  ),
+                  TextView(
+                    text: DateFormat('hh:mma').format(
+                      DateTime.parse(message.updatedAt.toString()).toLocal(),
+                    ),
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.darkindgrey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+          : Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              margin: EdgeInsets.only(right: 20.w, left: 100.w, bottom: 20.w),
+              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(0),
+                ),
+                color: AppColor.primary1,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextView(
+                    text: message.message ?? '',
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 15.2.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.white,
+                    ),
+                  ),
+
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextView(
+                        text: DateFormat('hh:mma').format(
+                          DateTime.parse(
+                            message.updatedAt.toString(),
+                          ).toLocal(),
+                        ),
+                        textStyle: GoogleFonts.dmSans(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.white,
+                        ),
+                      ),
+
+                      SizedBox(width: 4.w),
+                      Icon(Icons.check, color: AppColor.white, size: 14.sp),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+    ],
+  );
+
+  void scrollToBottom() {
+    if (scrollController1.hasClients) {
+      scrollController1.animateTo(
+        scrollController1.position.minScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  onSwitched() {
+    onSwitch = !onSwitch;
+    notifyListeners();
+  }
+
+  void generateToken(context, {CallTokenGenerateEntityModel? calltoken}) async {
+    try {
+      // _isLoading = true;
+      _callTokenGenerateResponseModel = await runBusyFuture(
+        repositoryImply.generateToken(calltoken!),
+        throwException: true,
+      );
+      logger.d("message::${_callTokenGenerateResponseModel?.toJson()}");
+      initializeAgoraVoiceSDK();
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  // Set up the Agora RTC engine instance
+  Future<void> initializeAgoraVoiceSDK() async {
+    await [Permission.microphone, Permission.camera].request();
+    engine = createAgoraRtcEngine();
+    await engine!.initialize(
+      const RtcEngineContext(
+        appId: "e18babecb1eb4a889feefcbbf60e5a5a",
+        channelProfile: ChannelProfileType.channelProfileCommunication,
+      ),
+    );
+    _setupLocalVideo();
+    _setupEventHandlers();
+    _joinChannel();
+  }
+
+  Future<void> _setupLocalVideo() async {
+    // The video module and preview are disabled by default.
+    await engine?.enableVideo();
+    await engine?.startPreview();
+  }
+
+  // If a remote user has joined, render their video, else display a waiting message
+  Widget remoteVideo() {
+    if (remoteUidGlobal != null) {
+      return AgoraVideoView(
+        controller: VideoViewController.remote(
+          rtcEngine: engine!, // Uses the Agora engine instance
+          canvas: VideoCanvas(
+            uid: int.parse(remoteUidGlobal.toString()),
+            // renderMode: RenderModeType.renderModeFit,
+          ), // Binds the remote user's video
+          connection: RtcConnection(
+            channelId: _callTokenGenerateResponseModel?.channelName,
+          ), // Specifies the channel
+        ),
+      );
+    } else {
+      return const Text(
+        'Waiting for remote user to join...',
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
+  // Displays the local user's video view using the Agora engine.
+  Widget localVideo() {
+    return AgoraVideoView(
+      controller: VideoViewController(
+        rtcEngine: engine!, // Uses the Agora engine instance
+        canvas: VideoCanvas(
+          uid: 0, // Specifies the local user
+          // renderMode:
+          //     RenderModeType.renderModeHidden, // Sets the video rendering mode
+        ),
+      ),
+    );
+  }
+
+  // Register an event handler for Agora RTC
+  void _setupEventHandlers() {
+    engine!.registerEventHandler(
+      RtcEngineEventHandler(
+        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+          debugPrint("Local user ${connection.localUid} joined");
+          localUserJoined = true;
+          remoteUidGlobalLocal = connection.localUid;
+          notifyListeners();
+        },
+        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+          debugPrint("Remote doctor $remoteUid joined");
+          remoteUidGlobal = remoteUid;
+          print('uuuuuuu0Doctor:${remoteUidGlobal.toString()}');
+          notifyListeners();
+        },
+        onUserOffline: (
+          RtcConnection connection,
+          int remoteUid,
+          UserOfflineReasonType reason,
+        ) {
+          debugPrint("Remote user $remoteUid left");
+          remoteUidGlobal = null;
+          notifyListeners();
+        },
+      ),
+    );
+    notifyListeners();
+  }
+
+  // Join a channel as a broadcasted
+  Future<void> _joinChannel() async {
+    await engine?.joinChannel(
+      token: _callTokenGenerateResponseModel?.token ?? "",
+      channelId: _callTokenGenerateResponseModel?.channelName ?? "",
+      options: ChannelMediaOptions(
+        autoSubscribeVideo:
+            true, // Automatically subscribe to all video streams
+        autoSubscribeAudio:
+            true, // Automatically subscribe to all audio streams
+        publishCameraTrack: true, // Publish camera-captured video
+        publishMicrophoneTrack: true, // Publish microphone-captured audio
+        // Use clientRoleBroadcaster to act as a host or clientRoleAudience for audience
+        clientRoleType: ClientRoleType.clientRoleBroadcaster,
+      ),
+      uid: 0,
+    );
+  }
+
+  // Leaves the channel and releases resources
+  Future<void> cleanupAgoraEngine() async {
+    await engine?.leaveChannel();
+    await engine?.release();
+  }
+
+  sendMessageAction({
+    Orders? app,
+    GetMessageIndexResponseModel? messageModel,
+  }) async {
+    if (sendtextController.text != '') {
+      String msg = sendtextController.text;
+      Future.delayed(Duration(seconds: 0), () {
+        sendtextController.clear();
+      });
+      if (app == null) {
+        await sendMessage(
+          SendMessageEntityModel(
+            conversationId: int.parse(messageModel!.conversationId.toString()),
+            receiverId: int.parse(messageModel.contactId.toString()),
+            receiverType: "MydocLab\\Models\\User",
+            message: msg,
+          ),
+        );
+      } else {
+        await sendMessage(
+          SendMessageEntityModel(
+            conversationId: 0,
+            receiverId: int.parse(app.userId.toString()),
+            receiverType: "MydocLab\\Models\\User",
+            message: msg,
+          ),
+        );
+      }
+    } else {}
   }
 
   String statusValue(status) {

@@ -147,20 +147,6 @@ class DocAuthApi {
     }
   }
 
-  Future<GetListOfDoctorsAppointmentModelList> doctorsAppointment() async {
-    try {
-      final response = await _service.call(
-        UrlConfig.doctors_appointment,
-        RequestMethod.get,
-      );
-      logger.d(response.data);
-      return GetListOfDoctorsAppointmentModelList.fromJson(response.data);
-    } catch (e) {
-      logger.d("response:$e");
-      rethrow;
-    }
-  }
-
   Future<CallTokenGenerateResponseModel> genCallToken(
     CallTokenGenerateEntityModel generate,
   ) async {
@@ -172,6 +158,20 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return CallTokenGenerateResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetListOfDoctorsAppointmentModelList> doctorsAppointment() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctors_appointment,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetListOfDoctorsAppointmentModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

@@ -7,8 +7,6 @@ import 'package:stacked/stacked.dart';
 
 import '../../../../../core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../../../../../core/connect_end/view_model/pharm_view_model.dart';
-import '../../../../../core/core_folder/app/app.router.dart';
-import '../../../../../main.dart';
 import '../../../../app_assets/app_color.dart';
 import '../../../../widget/text_widget.dart';
 
@@ -29,11 +27,11 @@ class ProductStatusProcess extends StatelessWidget {
       disposeViewModel: false,
       builder: (_, PharmViewModel model, __) {
         return GestureDetector(
-          onTap:
-              () => navigate.navigateTo(
-                Routes.patientDetailSceen,
-                arguments: PatientDetailSceenArguments(item: item),
-              ),
+          // onTap:
+          //     () => navigate.navigateTo(
+          //       Routes.patientDetailSceen,
+          //       arguments: PatientDetailSceenArguments(item: item),
+          //     ),
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 8.w),
             margin: EdgeInsets.only(bottom: 14.w),

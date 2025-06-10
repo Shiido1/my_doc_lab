@@ -4,6 +4,7 @@ import '../../../ui/onboarding/first_onboarding_screen.dart';
 import '../../../ui/screens/authentication/login_screen.dart';
 import '../../../ui/screens/dashboard/chat/chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/doc_chat_screen.dart';
+import '../../../ui/screens/dashboard/chat/pharm_chat_screen.dart';
 import '../../../ui/screens/dashboard/dashboard_screen.dart';
 import '../../../ui/screens/dashboard/doctor_dashboard_screen.dart';
 import '../../../ui/screens/dashboard/lab_dashboard_screen.dart';
@@ -40,6 +41,7 @@ import '../network/network_service.dart';
     MaterialRoute(page: ChatScreen),
     MaterialRoute(page: DoctorAppointmentDetailSceen),
     MaterialRoute(page: PatientDetailSceen),
+    MaterialRoute(page: PharmChatScreen),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),
