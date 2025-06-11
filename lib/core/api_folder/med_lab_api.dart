@@ -1,6 +1,15 @@
 import 'package:injectable/injectable.dart';
-
+import 'package:my_doc_lab/core/connect_end/model/add_diagnosis_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/add_report_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_single_dia_response_model/get_single_dia_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
+import '../connect_end/model/get_category_by_id_response_model/get_category_by_id_response_model.dart';
 import '../connect_end/model/get_lab_tech_detail_response_model/get_lab_tech_detail_response_model.dart';
+import '../connect_end/model/get_lab_tech_dia_book_list_model/get_lab_tech_dia_book_list_model.dart';
+import '../connect_end/model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
+import '../connect_end/model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
 import '../connect_end/model/update_lab_tech_entity_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
@@ -35,6 +44,263 @@ class LabTechAuthApi {
         '${UrlConfig.labt_tech}/$id',
         RequestMethod.put,
         data: update?.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetLabTechDiaBookListModel> diagnosisBookingList() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_diagnosis_book_list,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetLabTechDiaBookListModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<LabTechWalletResponseModel> labTechWallet() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_wallet,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return LabTechWalletResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> updateOrderStatus({
+    UpdateStatusReasonEntityModel? update,
+    String? id,
+  }) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_update_order,
+        RequestMethod.post,
+        data: update?.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> addReport(AddReportEntityModel report) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_add_report,
+        RequestMethod.post,
+        data: report.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> updateReport({
+    AddReportEntityModel? report,
+    String? id,
+  }) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.labt_tech_update_report}$id',
+        RequestMethod.post,
+        data: report?.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<LabTechDetailResponseModel> labTechDetailReport(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.labt_tech_update_report}$id',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return LabTechDetailResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> deleteLabTechDetailReport(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.labt_tech_update_report}$id',
+        RequestMethod.delete,
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> deleteLabTechDiagnosis(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.labt_tech_diagnosis_by_id}$id',
+        RequestMethod.delete,
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> updateLabTechDiagnosis({
+    String? id,
+    AddDiagnosisEntityModel? update,
+  }) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.labt_tech_diagnosis_by_id}$id',
+        RequestMethod.put,
+        data: update?.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> addLabTechDiagnosis(AddDiagnosisEntityModel? add) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_diagnosis_add,
+        RequestMethod.post,
+        data: add?.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetSingleDiaResponseModel> getDiagnosisById(String? id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.labt_tech_diagnosis_by_id}$id',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetSingleDiaResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetAllDiagnosisListResponseModel> getAllDiagnosis() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_diagnosis_list,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetAllDiagnosisListResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<LabTechCategoryListResponseModel> getAllLabTechCategory() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_category,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return LabTechCategoryListResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetCategoryByIdResponseModel> getLabTechCategoryById(String id) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_category_by_id,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetCategoryByIdResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> addLabTechCategory(String nameCategory) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_category_add,
+        RequestMethod.post,
+        data: {'name': nameCategory},
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> updateLabTechCategory({
+    String? nameCategory,
+    String? id,
+  }) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.labt_tech_category_by_id}$id',
+        RequestMethod.post,
+        data: {'name': nameCategory},
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> deleteLabTechCategory(String? id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.labt_tech_category_by_id}$id/delete',
+        RequestMethod.delete,
       );
       logger.d(response.data);
       return response.data;
