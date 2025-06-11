@@ -2,6 +2,28 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'lab_tech_category_list_response_model.g.dart';
 
+class LabTechCategoryListResponseModelList {
+  final List<LabTechCategoryListResponseModel>?
+  labTechCategoryListResponseModelList;
+
+  LabTechCategoryListResponseModelList({
+    this.labTechCategoryListResponseModelList,
+  });
+
+  factory LabTechCategoryListResponseModelList.fromJson(
+    List<dynamic> parsedJson,
+  ) {
+    List<LabTechCategoryListResponseModel> labTechCategoryListResponseModel =
+        parsedJson
+            .map((i) => LabTechCategoryListResponseModel.fromJson(i))
+            .toList();
+
+    return LabTechCategoryListResponseModelList(
+      labTechCategoryListResponseModelList: labTechCategoryListResponseModel,
+    );
+  }
+}
+
 @JsonSerializable()
 class LabTechCategoryListResponseModel {
   num? id;

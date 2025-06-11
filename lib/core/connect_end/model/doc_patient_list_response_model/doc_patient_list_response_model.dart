@@ -5,6 +5,21 @@ import 'user.dart';
 
 part 'doc_patient_list_response_model.g.dart';
 
+class DocPatientListResponseModelList {
+  final List<DocPatientListResponseModel>? docPatientListResponseModelList;
+
+  DocPatientListResponseModelList({this.docPatientListResponseModelList});
+
+  factory DocPatientListResponseModelList.fromJson(List<dynamic> parsedJson) {
+    List<DocPatientListResponseModel> docPatientListResponseModel =
+        parsedJson.map((i) => DocPatientListResponseModel.fromJson(i)).toList();
+
+    return DocPatientListResponseModelList(
+      docPatientListResponseModelList: docPatientListResponseModel,
+    );
+  }
+}
+
 @JsonSerializable()
 class DocPatientListResponseModel {
   num? id;
