@@ -11,6 +11,7 @@ import 'package:stacked/stacked.dart';
 
 import '../../../../core/connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
+import '../../../../core/connect_end/model/get_user_response_model/data.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import 'video_chat_agora/doctor_video_chat_screen.dart';
 
@@ -21,10 +22,12 @@ class DoctorChatScreen extends StatefulWidget {
     required this.id,
     required this.messageModel,
     required this.app,
+    required this.data,
   });
   GetMessageIndexResponseModel? messageModel;
   String? id;
   GetListOfDoctorsAppointmentModel? app;
+  Data? data;
 
   @override
   State<DoctorChatScreen> createState() => _DoctorChatScreenState();
@@ -47,7 +50,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
           model.hasLoadedIndexConversation = false;
-          if (widget.app == null) {
+          if (widget.messageModel != null) {
             model.receiveConversationOnce(widget.id!);
           } else {
             model.getChatIndex();
@@ -88,6 +91,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                     widget.app?.user?.firstName?.capitalize() ??
                                     widget.messageModel?.contactName
                                         ?.capitalize() ??
+                                    widget.data?.firstName?.capitalize() ??
                                     '',
                                 textStyle: GoogleFonts.dmSans(
                                   color: AppColor.black,
@@ -352,9 +356,12 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                                   .any(
                                                     (o) =>
                                                         o.contactId
-                                                            .toString() ==
-                                                        widget.app!.userId
-                                                            .toString(),
+                                                                .toString() ==
+                                                            widget.app?.userId
+                                                                .toString() ||
+                                                        o.contactId
+                                                                .toString() ==
+                                                            widget.data?.id,
                                                   )
                                       ? SizedBox.shrink()
                                       : IconButton(

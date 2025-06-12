@@ -146,6 +146,7 @@ class DoctorMessageListScreen extends StatelessWidget {
                     id: o.conversationId.toString(),
                     messageModel: o,
                     app: null,
+                    data: null,
                   ),
                 ),
             child: Container(

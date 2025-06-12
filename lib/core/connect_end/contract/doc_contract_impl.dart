@@ -14,6 +14,7 @@ import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appoi
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
 import '../model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
+import '../model/get_user_response_model/get_user_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/prescription_view_response/prescription_view_response.dart';
@@ -27,6 +28,9 @@ import '../model/update_status_reason_entity_model.dart';
 @lazySingleton
 class DocContractsImpl {
   final _api = locator<DocAuthApi>();
+
+  Future<GetUserResponseModel> getUserDetails(String id) async =>
+      await _api.getUserDetail(id);
 
   Future<GetDocDetailResponseModel> getDoctorDetail() async =>
       await _api.getDoctorDetail();

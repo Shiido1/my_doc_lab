@@ -14,6 +14,7 @@ import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appoi
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
 import '../model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
+import '../model/get_user_response_model/get_user_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/prescription_view_response/prescription_view_response.dart';
@@ -26,6 +27,11 @@ import '../model/update_status_reason_entity_model.dart';
 @lazySingleton
 class DocRepoImpl {
   final _contract = locator<DocContractsImpl>();
+
+  Future<GetUserResponseModel> getUserDetail(String id) async {
+    final response = await _contract.getUserDetails(id);
+    return response;
+  }
 
   Future<GetDocDetailResponseModel> getDoctorDetail() async {
     final response = await _contract.getDoctorDetail();

@@ -17,6 +17,7 @@ import '../connect_end/model/get_doctors_wallet_response_model/get_doctors_walle
 import '../connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../connect_end/model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
 import '../connect_end/model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
+import '../connect_end/model/get_user_response_model/get_user_response_model.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../connect_end/model/prescription_view_response/prescription_view_response.dart';
@@ -32,6 +33,20 @@ class DocAuthApi {
   final _service = locator<NetworkService>();
   final _serviceCloud = locator<CloudinaryNetworkService>();
   final logger = getLogger('DocViewModel');
+
+  Future<GetUserResponseModel> getUserDetail(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.user_detail}/$id',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetUserResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
 
   Future<GetDocDetailResponseModel> getDoctorDetail() async {
     try {

@@ -105,6 +105,7 @@ class _DoctorAppointmentDetailSceenState
                                   id: '',
                                   messageModel: null,
                                   app: widget.appointment,
+                                  data: null,
                                 ),
                               ),
                           child: Container(

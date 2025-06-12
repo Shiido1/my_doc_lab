@@ -38,6 +38,7 @@ import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appoi
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
 import '../model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
+import '../model/get_user_response_model/get_user_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/prescription_view_response/prescription_view_response.dart';
@@ -109,6 +110,8 @@ class DocViewModel extends BaseViewModel {
   GetDoctorStatisticModel? _getDoctorStatisticModel;
   GetDoctorStatisticModel? get getDoctorStatisticModel =>
       _getDoctorStatisticModel;
+  GetUserResponseModel? _getUserResponseModel;
+  GetUserResponseModel? get getUserResponseModel => _getUserResponseModel;
   final debouncer = Debouncer();
 
   String query = '';
@@ -408,6 +411,23 @@ class DocViewModel extends BaseViewModel {
         );
       },
     );
+  }
+
+  Future<void> getUserDetail(context, {String? id}) async {
+    try {
+      _isLoading = true;
+      _getUserResponseModel = await runBusyFuture(
+        repositoryImply.getUserDetail(id!),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
   }
 
   Future<void> getDoctorsDetail(context) async {

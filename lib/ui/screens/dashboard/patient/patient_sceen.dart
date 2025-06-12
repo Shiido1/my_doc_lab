@@ -12,6 +12,7 @@ import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_form_widget.dart';
 import '../../../widget/text_widget.dart';
+import 'patient_detail_doctor_screen.dart';
 
 class PatientSceen extends StatelessWidget {
   const PatientSceen({super.key});
@@ -102,7 +103,10 @@ class PatientSceen extends StatelessWidget {
                             onTap:
                                 () => Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => PatientDetailSceen(),
+                                    builder:
+                                        (context) => PatientDetailDoctorScreen(
+                                          id: i.user?.id,
+                                        ),
                                   ),
                                 ),
                             child: Container(
@@ -226,7 +230,10 @@ class PatientSceen extends StatelessWidget {
                             onTap:
                                 () => Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => PatientDetailSceen(),
+                                    builder:
+                                        (context) => PatientDetailDoctorScreen(
+                                          id: i.user?.id,
+                                        ),
                                   ),
                                 ),
                             child: Container(
@@ -240,35 +247,22 @@ class PatientSceen extends StatelessWidget {
                                 border: Border.all(color: AppColor.oneKindgrey),
                               ),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   i.user?.profileImage != null
-                                      ? Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColor.oneKindgrey,
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ), // Outer container radius
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ), // Apply to the image as well
-                                          child: SizedBox.fromSize(
-                                            size: const Size.fromRadius(40),
-                                            child: Image.network(
-                                              i.user!.profileImage!.contains(
-                                                    'https',
-                                                  )
-                                                  ? '${i.user?.profileImage}'
-                                                  : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${i.user?.profileImage}',
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (
-                                                    context,
-                                                    error,
-                                                    stackTrace,
-                                                  ) => shimmerViewPharm(),
-                                            ),
+                                      ? ClipOval(
+                                        child: SizedBox.fromSize(
+                                          size: const Size.fromRadius(28.6),
+                                          child: Image.network(
+                                            i.user!.profileImage!.contains(
+                                                  'https',
+                                                )
+                                                ? '${i.user?.profileImage}'
+                                                : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${i.user?.profileImage}',
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) =>
+                                                    shimmerViewPharm(),
                                           ),
                                         ),
                                       )
