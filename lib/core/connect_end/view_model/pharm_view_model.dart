@@ -134,7 +134,7 @@ class PharmViewModel extends BaseViewModel {
   bool onEditCate = false;
   GetPharmacyCategories? onEditGetPharmacyCategories;
   GlobalKey<FormState> proFormKey = GlobalKey<FormState>();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   List<item.Items> orderItemListInProgress = [];
   List<item.Items> orderItemListCancelled = [];
@@ -1923,7 +1923,6 @@ class PharmViewModel extends BaseViewModel {
 
   Future<void> getChatIndex() async {
     try {
-      print('here');
       _isLoading = true;
       _getMessageIndexResponseModelList = await runBusyFuture(
         repositoryImply.chatIndex(),
@@ -1939,7 +1938,6 @@ class PharmViewModel extends BaseViewModel {
 
   Future<void> getChatIndexReload() async {
     try {
-      print('ok');
       _getMessageIndexResponseModelList = await runBusyFuture(
         repositoryImply.chatIndex(),
         throwException: true,
@@ -1987,12 +1985,9 @@ class PharmViewModel extends BaseViewModel {
   }
 
   void receiveIndexConversationOnce() {
-    print('in');
     if (hasLoadedIndexConversation == false) {
-      print('in false');
       return;
     } else {
-      print('in true');
       hasLoadedIndexConversation = true;
       getChatIndexReload();
     }
@@ -2142,19 +2137,13 @@ class PharmViewModel extends BaseViewModel {
 
   void generateToken(context, {CallTokenGenerateEntityModel? calltoken}) async {
     try {
-      // _isLoading = true;
       _callTokenGenerateResponseModel = await runBusyFuture(
         repositoryImply.generateToken(calltoken!),
         throwException: true,
       );
-      logger.d("message::${_callTokenGenerateResponseModel?.toJson()}");
       initializeAgoraVoiceSDK();
-
-      _isLoading = false;
     } catch (e) {
-      _isLoading = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -2230,7 +2219,6 @@ class PharmViewModel extends BaseViewModel {
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           debugPrint("Remote doctor $remoteUid joined");
           remoteUidGlobal = remoteUid;
-          print('uuuuuuu0Doctor:${remoteUidGlobal.toString()}');
           notifyListeners();
         },
         onUserOffline: (

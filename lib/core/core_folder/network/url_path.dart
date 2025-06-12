@@ -3,6 +3,16 @@
 class UrlConfig {
   static const String register = 'register';
   static const String doctor = 'doctor';
+  static const String doctor_stats = 'doctor/stats';
+  static const String doctor_password = 'doctor/password';
+  static const String doctor_patients = 'doctor/patients';
+  static const String doctor_app_update = 'doctor/bookings/';
+  static const String doctor_app_reschedule = 'doctor/reschedule/';
+  static const String doctor_prescription = 'doctor/prescriptions';
+  static const String doctor_prescription_create =
+      'doctor/prescriptions/create';
+  static const String doctor_prescription_medicine =
+      'doctor/prescriptions/medicine/add/';
   static const String doctors_availabilty = 'doctor/availability';
   static const String all_doctor = 'user/doctors';
   static const String doctor_search = 'user/doctors/search';
@@ -18,6 +28,20 @@ class UrlConfig {
   static const String forgot_password = 'forgot-password';
   static const String update_password = 'reset-password';
   static const String labt_tech = 'lab-technician';
+  static const String labt_tech_wallet = 'lab-technician/wallet';
+  static const String labt_tech_diagnosis_book_list =
+      'lab-technician/diagnosis/bookings/list';
+  static const String labt_tech_diagnosis_list =
+      'lab-technician/diagnosis/list';
+  static const String labt_tech_diagnosis_by_id = 'lab-technician/diagnosis/';
+  static const String labt_tech_diagnosis_add = 'lab-technician/diagnosis/add';
+  static const String labt_tech_update_order =
+      'lab-technician/diagnosis/bookings/';
+  static const String labt_tech_add_report = 'lab-technician/reports/add';
+  static const String labt_tech_category = 'lab-technician/categories/list';
+  static const String labt_tech_category_by_id = 'lab-technician/categories/';
+  static const String labt_tech_category_add = 'lab-technician/categories/add';
+  static const String labt_tech_update_report = 'lab-technician/reports/';
   static const String login = 'login';
   static const String user = 'user';
   static const String userUpdate = 'user/update';

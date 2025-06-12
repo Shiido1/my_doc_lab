@@ -13,6 +13,7 @@ import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/
 import 'package:my_doc_lab/core/connect_end/model/received_message_response_model/received_message_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/repo/doc_repo_impl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
@@ -30,12 +31,16 @@ import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
+import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
+import '../model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../model/reschedule_booking_entity_model.dart';
 import '../model/send_message_response_model/send_message_response_model.dart';
+import '../model/update_password_entity_model.dart';
 
 class DocViewModel extends BaseViewModel {
   final BuildContext? context;
@@ -75,6 +80,9 @@ class DocViewModel extends BaseViewModel {
   GetDoctorsWalletResponseModel? _getDoctorsWalletResponseModel;
   GetDoctorsWalletResponseModel? get getDoctorsWalletResponseModel =>
       _getDoctorsWalletResponseModel;
+  DocPatientListResponseModelList? _docPatientListResponseModelList;
+  DocPatientListResponseModelList? get docPatientListResponseModelList =>
+      _docPatientListResponseModelList;
 
   RtcEngine? engine;
 
@@ -88,6 +96,9 @@ class DocViewModel extends BaseViewModel {
   GetListOfDoctorsAppointmentModelList?
   get getListOfDoctorsAppointmentModelList =>
       _getListOfDoctorsAppointmentModelList;
+  GetDoctorStatisticModel? _getDoctorStatisticModel;
+  GetDoctorStatisticModel? get getDoctorStatisticModel =>
+      _getDoctorStatisticModel;
   final debouncer = Debouncer();
 
   String query = '';
@@ -550,6 +561,90 @@ class DocViewModel extends BaseViewModel {
       _isLoading = true;
       _getDoctorsWalletResponseModel = await runBusyFuture(
         repositoryImply.doctorsWallet(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> doctorsAppointmentReschedule({
+    String? id,
+    RescheduleBookingEntityModel? reschedule,
+  }) async {
+    try {
+      _isLoading = true;
+      await runBusyFuture(
+        repositoryImply.doctorsAppointmentReschedule(
+          id: id,
+          reschedule: reschedule,
+        ),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> doctorsAppointmentUpdate({
+    String? id,
+    UpdateStatusReasonEntityModel? update,
+  }) async {
+    try {
+      _isLoading = true;
+      await runBusyFuture(
+        repositoryImply.doctorsAppointmentUpdate(id: id, update: update),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getPatientsList() async {
+    try {
+      _isLoading = true;
+      _docPatientListResponseModelList = await runBusyFuture(
+        repositoryImply.getPatientsList(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> updatePassword(UpdatePasswordEntityModel update) async {
+    try {
+      _isLoading = true;
+      await runBusyFuture(
+        repositoryImply.updatePassword(update),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> updatePassword(UpdatePasswordEntityModel update) async {
+    try {
+      _isLoading = true;
+      await runBusyFuture(
+        repositoryImply.getDoctorsStatistic(update),
         throwException: true,
       );
       _isLoading = false;

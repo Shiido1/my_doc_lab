@@ -2,7 +2,18 @@ import 'package:injectable/injectable.dart';
 
 import '../../api_folder/med_lab_api.dart';
 import '../../core_folder/app/app.locator.dart';
+import '../model/add_diagnosis_entity_model.dart';
+import '../model/add_report_entity_model.dart';
+import '../model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_response_model.dart';
+import '../model/get_category_by_id_response_model/get_category_by_id_response_model.dart';
 import '../model/get_lab_tech_detail_response_model/get_lab_tech_detail_response_model.dart';
+import '../model/get_lab_tech_dia_book_list_model/get_lab_tech_dia_book_list_model.dart';
+import '../model/get_single_dia_response_model/get_single_dia_response_model.dart';
+import '../model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
+import '../model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
+import '../model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
+import '../model/update_lab_tech_entity_model.dart';
+import '../model/update_status_reason_entity_model.dart';
 
 @lazySingleton
 class LabTechContractsImpl {
@@ -10,4 +21,70 @@ class LabTechContractsImpl {
 
   Future<GetLabTechDetailResponseModel> getLabTechDetail() async =>
       await _api.getLabTechDetail();
+
+  Future<dynamic> updateLabTechDetail({
+    String? id,
+    UpdateLabTechEntityModel? update,
+  }) async => await _api.updateLabTechDetail(update: update, id: id);
+
+  Future<GetLabTechDiaBookListModel> diagnosisBookingList() async =>
+      await _api.diagnosisBookingList();
+
+  Future<LabTechWalletResponseModel> labTechWallet() async =>
+      await _api.labTechWallet();
+
+  Future<dynamic> updateOrderStatus({
+    UpdateStatusReasonEntityModel? update,
+    String? id,
+  }) async => await _api.updateOrderStatus(update: update, id: id);
+
+  Future<dynamic> addReport(AddReportEntityModel report) async =>
+      await _api.addReport(report);
+
+  Future<dynamic> updateReport({
+    AddReportEntityModel? report,
+    String? id,
+  }) async => await _api.updateReport(report: report, id: id);
+
+  Future<LabTechDetailResponseModel> labTechDetailReport(String id) async =>
+      await _api.labTechDetailReport(id);
+
+  Future<dynamic> deleteLabTechDetailReport(String id) async =>
+      await _api.deleteLabTechDetailReport(id);
+
+  Future<dynamic> deleteLabTechDiagnosis(String id) async =>
+      await _api.deleteLabTechDiagnosis(id);
+
+  Future<dynamic> updateLabTechDiagnosis({
+    String? id,
+    AddDiagnosisEntityModel? update,
+  }) async => await _api.updateLabTechDiagnosis(id: id, update: update);
+
+  Future<dynamic> addLabTechDiagnosis(AddDiagnosisEntityModel? add) async =>
+      await _api.addLabTechDiagnosis(add);
+
+  Future<GetSingleDiaResponseModel> getDiagnosisById(String? id) async =>
+      await _api.getDiagnosisById(id);
+
+  Future<GetAllDiagnosisListResponseModel> getAllDiagnosis() async =>
+      await _api.getAllDiagnosis();
+
+  Future<LabTechCategoryListResponseModel> getAllLabTechCategory() async =>
+      await _api.getAllLabTechCategory();
+
+  Future<GetCategoryByIdResponseModel> getLabTechCategoryById(
+    String id,
+  ) async => await _api.getLabTechCategoryById(id);
+
+  Future<dynamic> addLabTechCategory(String nameCategory) async =>
+      await _api.addLabTechCategory(nameCategory);
+
+  Future<dynamic> updateLabTechCategory({
+    String? nameCategory,
+    String? id,
+  }) async =>
+      await _api.updateLabTechCategory(nameCategory: nameCategory, id: id);
+
+  Future<dynamic> deleteLabTechCategory(String? id) async =>
+      await _api.deleteLabTechCategory(id);
 }

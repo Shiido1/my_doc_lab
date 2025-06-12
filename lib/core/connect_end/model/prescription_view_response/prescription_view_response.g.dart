@@ -1,21 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'doc_patient_list_response_model.dart';
+part of 'prescription_view_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-DocPatientListResponseModel _$DocPatientListResponseModelFromJson(
+PrescriptionViewResponse _$PrescriptionViewResponseFromJson(
   Map<String, dynamic> json,
-) => DocPatientListResponseModel(
+) => PrescriptionViewResponse(
   id: json['id'] as num?,
   userId: json['user_id'] as num?,
   doctorId: json['doctor_id'] as num?,
-  serviceType: json['service_type'] as String?,
-  message: json['message'] as String?,
-  slotId: json['slot_id'] as num?,
-  orderId: json['order_id'] as num?,
+  notes: json['notes'] as String?,
+  file: json['file'],
   status: json['status'] as String?,
   createdAt:
       json['created_at'] == null
@@ -26,30 +24,33 @@ DocPatientListResponseModel _$DocPatientListResponseModelFromJson(
           ? null
           : DateTime.parse(json['updated_at'] as String),
   deletedAt: json['deleted_at'],
+  drugs:
+      (json['drugs'] as List<dynamic>?)
+          ?.map((e) => Drug.fromJson(e as Map<String, dynamic>))
+          .toList(),
   user:
       json['user'] == null
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>),
-  consultation:
-      json['consultation'] == null
+  doctor:
+      json['doctor'] == null
           ? null
-          : Consultation.fromJson(json['consultation'] as Map<String, dynamic>),
+          : Doctor.fromJson(json['doctor'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$DocPatientListResponseModelToJson(
-  DocPatientListResponseModel instance,
+Map<String, dynamic> _$PrescriptionViewResponseToJson(
+  PrescriptionViewResponse instance,
 ) => <String, dynamic>{
   'id': instance.id,
   'user_id': instance.userId,
   'doctor_id': instance.doctorId,
-  'service_type': instance.serviceType,
-  'message': instance.message,
-  'slot_id': instance.slotId,
-  'order_id': instance.orderId,
+  'notes': instance.notes,
+  'file': instance.file,
   'status': instance.status,
   'created_at': instance.createdAt?.toIso8601String(),
   'updated_at': instance.updatedAt?.toIso8601String(),
   'deleted_at': instance.deletedAt,
+  'drugs': instance.drugs,
   'user': instance.user,
-  'consultation': instance.consultation,
+  'doctor': instance.doctor,
 };
