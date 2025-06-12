@@ -7,13 +7,21 @@ import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dar
 import '../../core_folder/app/app.locator.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../model/create_prescription_entity_model.dart';
+import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
+import '../model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
+import '../model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../model/prescription_view_response/prescription_view_response.dart';
 import '../model/received_message_response_model/received_message_response_model.dart';
+import '../model/reschedule_booking_entity_model.dart';
 import '../model/send_message_response_model/send_message_response_model.dart';
+import '../model/update_password_entity_model.dart';
+import '../model/update_status_reason_entity_model.dart';
 
 @lazySingleton
 class DocRepoImpl {
@@ -84,6 +92,71 @@ class DocRepoImpl {
 
   Future<GetDoctorsWalletResponseModel> doctorsWallet() async {
     final response = await _contract.doctorsWallet();
+    return response;
+  }
+
+  Future<dynamic> doctorsAppointmentReschedule({
+    String? id,
+    RescheduleBookingEntityModel? reschedule,
+  }) async {
+    final response = await _contract.doctorsAppointmentReschedule(
+      id: id,
+      reschedule: reschedule,
+    );
+    return response;
+  }
+
+  Future<dynamic> doctorsAppointmentUpdate({
+    String? id,
+    UpdateStatusReasonEntityModel? update,
+  }) async {
+    final response = await _contract.doctorsAppointmentUpdate(
+      id: id,
+      update: update,
+    );
+    return response;
+  }
+
+  Future<DocPatientListResponseModelList> getPatientsList() async {
+    final response = await _contract.getPatientsList();
+    return response;
+  }
+
+  Future<dynamic> updatePassword(UpdatePasswordEntityModel update) async {
+    final response = await _contract.updatePassword(update);
+    return response;
+  }
+
+  Future<GetDoctorStatisticModel> getDoctorsStatistic() async {
+    final response = await _contract.getDoctorsStatistic();
+    return response;
+  }
+
+  Future<GetPrescriptionListResponseModelList> getPrescriptionList() async {
+    final response = await _contract.getPrescriptionList();
+    return response;
+  }
+
+  Future<PrescriptionViewResponse> getPrescriptionView(String id) async {
+    final response = await _contract.getPrescriptionView(id);
+    return response;
+  }
+
+  Future<dynamic> createPrescrition(
+    CreatePrescriptionEntityModel create,
+  ) async {
+    final response = await _contract.createPrescrition(create);
+    return response;
+  }
+
+  Future<dynamic> createMedicinePrescrition({
+    String? id,
+    CreatePrescriptionEntityModel? create,
+  }) async {
+    final response = await _contract.createMedicinePrescrition(
+      create: create,
+      id: id,
+    );
     return response;
   }
 }

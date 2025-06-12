@@ -29,6 +29,7 @@ import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../model/create_prescription_entity_model.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
 import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
@@ -36,8 +37,10 @@ import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_m
 import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
+import '../model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../model/prescription_view_response/prescription_view_response.dart';
 import '../model/reschedule_booking_entity_model.dart';
 import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_password_entity_model.dart';
@@ -73,6 +76,10 @@ class DocViewModel extends BaseViewModel {
   SendMessageResponseModel? _sendMessageResponseModel;
   SendMessageResponseModel? get sendMessageResponseModel =>
       _sendMessageResponseModel;
+  GetPrescriptionListResponseModelList? _getPrescriptionListResponseModelList;
+  GetPrescriptionListResponseModelList?
+  get getPrescriptionListResponseModelList =>
+      _getPrescriptionListResponseModelList;
 
   CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
   CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
@@ -83,6 +90,9 @@ class DocViewModel extends BaseViewModel {
   DocPatientListResponseModelList? _docPatientListResponseModelList;
   DocPatientListResponseModelList? get docPatientListResponseModelList =>
       _docPatientListResponseModelList;
+  PrescriptionViewResponse? _prescriptionViewResponse;
+  PrescriptionViewResponse? get prescriptionViewResponse =>
+      _prescriptionViewResponse;
 
   RtcEngine? engine;
 
@@ -102,6 +112,7 @@ class DocViewModel extends BaseViewModel {
   final debouncer = Debouncer();
 
   String query = '';
+  String queryPatient = '';
 
   DocViewModel({this.context});
 
@@ -640,11 +651,74 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> updatePassword(UpdatePasswordEntityModel update) async {
+  Future<void> getDoctorsStatistic() async {
+    try {
+      _isLoading = true;
+      _getDoctorStatisticModel = await runBusyFuture(
+        repositoryImply.getDoctorsStatistic(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getPrescriptionList() async {
+    try {
+      _isLoading = true;
+      _getPrescriptionListResponseModelList = await runBusyFuture(
+        repositoryImply.getPrescriptionList(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getPrescriptionView(String id) async {
+    try {
+      _isLoading = true;
+      _prescriptionViewResponse = await runBusyFuture(
+        repositoryImply.getPrescriptionView(id),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> createPrescrition(CreatePrescriptionEntityModel create) async {
     try {
       _isLoading = true;
       await runBusyFuture(
-        repositoryImply.getDoctorsStatistic(update),
+        repositoryImply.createPrescrition(create),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<dynamic> createMedicinePrescrition({
+    String? id,
+    CreatePrescriptionEntityModel? create,
+  }) async {
+    try {
+      _isLoading = true;
+      await runBusyFuture(
+        repositoryImply.createMedicinePrescrition(create: create, id: id),
         throwException: true,
       );
       _isLoading = false;

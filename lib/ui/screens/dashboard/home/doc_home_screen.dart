@@ -24,6 +24,7 @@ class DocHomeScreen extends StatelessWidget {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getDoctorsDetail(context);
           model.getChatIndex();
+          model.getDoctorsStatistic();
         });
       },
       disposeViewModel: false,
@@ -139,7 +140,8 @@ class DocHomeScreen extends StatelessWidget {
                       contColor: AppColor.primary1,
                       firstText: 'Patients',
                       secondText: 'Total Patients:',
-                      thirdText: '45',
+                      thirdText:
+                          '${model.getDoctorStatisticModel?.totalPatients ?? 0}',
                     ),
                     SizedBox(width: 10.w),
                     dashContainer(
@@ -148,7 +150,8 @@ class DocHomeScreen extends StatelessWidget {
                       contColor: AppColor.darkindgrey,
                       firstText: 'Calendar',
                       secondText: 'Today:',
-                      thirdText: '45',
+                      thirdText:
+                          '${model.getDoctorStatisticModel?.appointmentToday ?? 0}',
                     ),
                   ],
                 ),
@@ -161,7 +164,8 @@ class DocHomeScreen extends StatelessWidget {
                       contColor: AppColor.primary1,
                       firstText: 'Message',
                       secondText: 'Unread:',
-                      thirdText: '5',
+                      thirdText:
+                          '${model.getDoctorStatisticModel?.unread ?? 0}',
                     ),
                     SizedBox(width: 10.w),
                     dashContainer(

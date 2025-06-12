@@ -1,17 +1,25 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:my_doc_lab/core/connect_end/model/create_prescription_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/received_message_response_model/received_message_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/reschedule_booking_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/update_password_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
 import '../connect_end/model/call_token_generate_entity_model.dart';
 import '../connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../connect_end/model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../connect_end/model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
+import '../connect_end/model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
+import '../connect_end/model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../connect_end/model/prescription_view_response/prescription_view_response.dart';
 import '../connect_end/model/send_message_response_model/send_message_response_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
@@ -172,6 +180,148 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return GetListOfDoctorsAppointmentModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> doctorsAppointmentReschedule({
+    String? id,
+    RescheduleBookingEntityModel? reschedule,
+  }) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.doctor_app_reschedule}$id',
+        RequestMethod.post,
+        data: reschedule?.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> doctorsAppointmentUpdate({
+    String? id,
+    UpdateStatusReasonEntityModel? update,
+  }) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.doctor_app_update}$id',
+        RequestMethod.post,
+        data: update?.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<DocPatientListResponseModelList> getPatientsList() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctor_patients,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return DocPatientListResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> updatePassword(UpdatePasswordEntityModel update) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctor_password,
+        RequestMethod.post,
+        data: update.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetDoctorStatisticModel> getDoctorsStatistic() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctor_stats,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetDoctorStatisticModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetPrescriptionListResponseModelList> getPrescriptionList() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctor_prescription,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetPrescriptionListResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<PrescriptionViewResponse> getPrescriptionView(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.doctor_prescription}/$id',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return PrescriptionViewResponse.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> createPrescrition(
+    CreatePrescriptionEntityModel create,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctor_prescription_create,
+        RequestMethod.post,
+        data: create.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> createMedicinePrescrition({
+    String? id,
+    CreatePrescriptionEntityModel? create,
+  }) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.doctor_prescription_medicine}/$id',
+        RequestMethod.post,
+        data: create?.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;

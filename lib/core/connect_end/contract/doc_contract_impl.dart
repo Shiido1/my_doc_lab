@@ -73,15 +73,20 @@ class DocContractsImpl {
 
   Future<dynamic> updatePassword(UpdatePasswordEntityModel update) async =>
       await _api.updatePassword(update);
+
   Future<GetDoctorStatisticModel> getDoctorsStatistic() async =>
       await _api.getDoctorsStatistic();
+
   Future<GetPrescriptionListResponseModelList> getPrescriptionList() async =>
       await _api.getPrescriptionList();
+
   Future<PrescriptionViewResponse> getPrescriptionView(String id) async =>
       await _api.getPrescriptionView(id);
+
   Future<dynamic> createPrescrition(
     CreatePrescriptionEntityModel create,
   ) async => await _api.createPrescrition(create);
+
   Future<dynamic> createMedicinePrescrition({
     String? id,
     CreatePrescriptionEntityModel? create,
