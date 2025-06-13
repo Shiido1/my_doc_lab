@@ -185,7 +185,7 @@ class LabTechAuthApi {
   Future<dynamic> deleteLabTechDiagnosis(String id) async {
     try {
       final response = await _service.call(
-        '${UrlConfig.labt_tech_diagnosis_by_id}$id',
+        '${UrlConfig.labt_tech_diagnosis_by_id}$id/delete',
         RequestMethod.delete,
       );
       logger.d(response.data);
@@ -257,14 +257,14 @@ class LabTechAuthApi {
     }
   }
 
-  Future<LabTechCategoryListResponseModel> getAllLabTechCategory() async {
+  Future<LabTechCategoryListResponseModelList> getAllLabTechCategory() async {
     try {
       final response = await _service.call(
         UrlConfig.labt_tech_category,
         RequestMethod.get,
       );
       logger.d(response.data);
-      return LabTechCategoryListResponseModel.fromJson(response.data);
+      return LabTechCategoryListResponseModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

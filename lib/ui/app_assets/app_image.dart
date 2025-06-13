@@ -46,6 +46,7 @@ class AppImage {
   static const String time = 'assets/svg/time.svg';
   static const String pClip = 'assets/svg/pclip.svg';
   static const String pdf = 'assets/svg/pdf.svg';
+  static const String diagnosis = 'assets/svg/diagnosis.svg';
   static const String exp = 'assets/svg/exp.svg';
   static const String aidbox = 'assets/svg/aidbox.svg';
   static const String patient = 'assets/svg/patient.svg';

@@ -145,7 +145,7 @@ class LabSettingsScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 moreContainerWidget(
-                  image: AppImage.person,
+                  image: AppImage.diagnosis,
                   borderColor: AppColor.lightgrey,
                   color: AppColor.black,
                   text: 'Diagnosis',
@@ -158,7 +158,7 @@ class LabSettingsScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 moreContainerWidget(
-                  image: AppImage.person,
+                  image: AppImage.results,
                   borderColor: AppColor.lightgrey,
                   color: AppColor.black,
                   text: 'Results',

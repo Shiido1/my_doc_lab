@@ -117,7 +117,7 @@ class LabTechRepoImpl {
     return response;
   }
 
-  Future<LabTechCategoryListResponseModel> getAllLabTechCategory() async {
+  Future<LabTechCategoryListResponseModelList> getAllLabTechCategory() async {
     final response = await _contract.getAllLabTechCategory();
     return response;
   }

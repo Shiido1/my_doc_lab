@@ -75,7 +75,7 @@ class LabTechContractsImpl {
   Future<GetAllDiagnosisListResponseModelList> getAllDiagnosis() async =>
       await _api.getAllDiagnosis();
 
-  Future<LabTechCategoryListResponseModel> getAllLabTechCategory() async =>
+  Future<LabTechCategoryListResponseModelList> getAllLabTechCategory() async =>
       await _api.getAllLabTechCategory();
 
   Future<GetCategoryByIdResponseModel> getLabTechCategoryById(

@@ -27,7 +27,7 @@ class _LaboratoryDiagnosisScreenState extends State<LaboratoryDiagnosisScreen> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LabTechViewModel>.reactive(
-      viewModelBuilder: () => locator<LabTechViewModel>(),
+      viewModelBuilder: () => LabTechViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getAllDiagnosis(context);
@@ -74,30 +74,37 @@ class _LaboratoryDiagnosisScreenState extends State<LaboratoryDiagnosisScreen> {
                 SizedBox(height: 20.h),
                 Align(
                   alignment: Alignment.topRight,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 4.w,
-                      vertical: 3.4.w,
-                    ),
-                    width: 160.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: AppColor.primary1,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add, color: AppColor.white, size: 17.20.sp),
-                        SizedBox(width: 2.4.w),
-                        TextView(
-                          text: 'Add New Service',
-                          textStyle: GoogleFonts.gabarito(
+                  child: GestureDetector(
+                    onTap: () => model.modalBottomSheetLabDiagnosis(context),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 4.w,
+                        vertical: 3.4.w,
+                      ),
+                      width: 160.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: AppColor.primary1,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add,
                             color: AppColor.white,
-                            fontSize: 14.8.sp,
-                            fontWeight: FontWeight.w400,
+                            size: 17.20.sp,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 2.4.w),
+                          TextView(
+                            text: 'Add New Service',
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.white,
+                              fontSize: 14.8.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -376,72 +383,98 @@ class _LaboratoryDiagnosisScreenState extends State<LaboratoryDiagnosisScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 4.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  border: Border.all(
-                                                    color: AppColor.grey,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  model
+                                                      .modalBottomSheetLabDiagnosis(
+                                                        context,
+                                                        update: true,
+                                                        id: i.id.toString(),
+                                                      );
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 4.w,
                                                   ),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.edit_square,
-                                                      color:
-                                                          AppColor.darkindgrey,
-                                                      size: 14.20.sp,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          4,
+                                                        ),
+                                                    border: Border.all(
+                                                      color: AppColor.grey,
                                                     ),
-                                                    SizedBox(width: 2.4.w),
-                                                    TextView(
-                                                      text: 'Edit',
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color:
-                                                                AppColor
-                                                                    .darkindgrey,
-                                                            fontSize: 14.8.sp,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                    ),
-                                                  ],
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.edit_square,
+                                                        color:
+                                                            AppColor
+                                                                .darkindgrey,
+                                                        size: 14.20.sp,
+                                                      ),
+                                                      SizedBox(width: 2.4.w),
+                                                      TextView(
+                                                        text: 'Edit',
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor
+                                                                      .darkindgrey,
+                                                              fontSize: 14.8.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 4.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  border: Border.all(
-                                                    color: AppColor.grey,
+                                              GestureDetector(
+                                                onTap:
+                                                    () => model
+                                                        .deleteProductMedDialogBox(
+                                                          context,
+                                                          id: i.id.toString(),
+                                                        ),
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 4.w,
                                                   ),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .delete_outline_rounded,
-                                                      color: AppColor.red,
-                                                      size: 14.20.sp,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          4,
+                                                        ),
+                                                    border: Border.all(
+                                                      color: AppColor.grey,
                                                     ),
-                                                    SizedBox(width: 2.4.w),
-                                                    TextView(
-                                                      text: 'Delete',
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color: AppColor.red,
-                                                            fontSize: 14.8.sp,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                    ),
-                                                  ],
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .delete_outline_rounded,
+                                                        color: AppColor.red,
+                                                        size: 14.20.sp,
+                                                      ),
+                                                      SizedBox(width: 2.4.w),
+                                                      TextView(
+                                                        text: 'Delete',
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor.red,
+                                                              fontSize: 14.8.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -452,250 +485,254 @@ class _LaboratoryDiagnosisScreenState extends State<LaboratoryDiagnosisScreen> {
                                   ),
                                 )
                           else if (tab == 'In progress')
-                            ...[1, 2].map(
-                              (i) => GestureDetector(
-                                onTap:
-                                    () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) =>
-                                                LabOrderPatientDetailSceen(),
-                                      ),
-                                    ),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 8.w,
-                                    horizontal: 8.w,
-                                  ),
-                                  margin: EdgeInsets.only(bottom: 14.w),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: AppColor.oneKindgrey,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(28.8.w),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColor.oneKindgrey,
-                                        ),
-                                      ),
-                                      SizedBox(width: 20.w),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextView(
-                                            text: 'Sarah Johnson',
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.darkindgrey,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          SizedBox(height: 4.w),
-                                          TextView(
-                                            text: 'Order No: #57',
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.greyIt,
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                          SizedBox(height: 10.w),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: 2.w,
-                                              horizontal: 6.w,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: AppColor.yellow
-                                                  .withOpacity(.2),
-                                              borderRadius:
-                                                  BorderRadius.circular(22),
-                                            ),
-                                            child: TextView(
-                                              text: 'In progress',
-                                              textStyle: GoogleFonts.gabarito(
-                                                color: AppColor.brown,
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
+                            Container()
+                          // ...[1, 2].map(
+                          //   (i) => GestureDetector(
+                          //     onTap:
+                          //         () => Navigator.of(context).push(
+                          //           MaterialPageRoute(
+                          //             builder:
+                          //                 (context) =>
+                          //                     LabOrderPatientDetailSceen(),
+                          //           ),
+                          //         ),
+                          //     child: Container(
+                          //       padding: EdgeInsets.symmetric(
+                          //         vertical: 8.w,
+                          //         horizontal: 8.w,
+                          //       ),
+                          //       margin: EdgeInsets.only(bottom: 14.w),
+                          //       decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(12),
+                          //         border: Border.all(
+                          //           color: AppColor.oneKindgrey,
+                          //         ),
+                          //       ),
+                          //       child: Row(
+                          //         children: [
+                          //           Container(
+                          //             padding: EdgeInsets.all(28.8.w),
+                          //             decoration: BoxDecoration(
+                          //               shape: BoxShape.circle,
+                          //               color: AppColor.oneKindgrey,
+                          //             ),
+                          //           ),
+                          //           SizedBox(width: 20.w),
+                          //           Column(
+                          //             crossAxisAlignment:
+                          //                 CrossAxisAlignment.start,
+                          //             children: [
+                          //               TextView(
+                          //                 text: 'Sarah Johnson',
+                          //                 textStyle: GoogleFonts.gabarito(
+                          //                   color: AppColor.darkindgrey,
+                          //                   fontSize: 16.sp,
+                          //                   fontWeight: FontWeight.w500,
+                          //                 ),
+                          //               ),
+                          //               SizedBox(height: 4.w),
+                          //               TextView(
+                          //                 text: 'Order No: #57',
+                          //                 textStyle: GoogleFonts.gabarito(
+                          //                   color: AppColor.greyIt,
+                          //                   fontSize: 13.sp,
+                          //                   fontWeight: FontWeight.w400,
+                          //                 ),
+                          //               ),
+                          //               SizedBox(height: 10.w),
+                          //               Container(
+                          //                 padding: EdgeInsets.symmetric(
+                          //                   vertical: 2.w,
+                          //                   horizontal: 6.w,
+                          //                 ),
+                          //                 decoration: BoxDecoration(
+                          //                   color: AppColor.yellow
+                          //                       .withOpacity(.2),
+                          //                   borderRadius:
+                          //                       BorderRadius.circular(22),
+                          //                 ),
+                          //                 child: TextView(
+                          //                   text: 'In progress',
+                          //                   textStyle: GoogleFonts.gabarito(
+                          //                     color: AppColor.brown,
+                          //                     fontSize: 12.sp,
+                          //                     fontWeight: FontWeight.w400,
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // )
                           else if (tab == 'Failed')
-                            ...[1, 2].map(
-                              (i) => GestureDetector(
-                                onTap:
-                                    () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) =>
-                                                LabOrderPatientDetailSceen(),
-                                      ),
-                                    ),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 8.w,
-                                    horizontal: 8.w,
-                                  ),
-                                  margin: EdgeInsets.only(bottom: 14.w),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: AppColor.oneKindgrey,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(28.8.w),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColor.oneKindgrey,
-                                        ),
-                                      ),
-                                      SizedBox(width: 20.w),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextView(
-                                            text: 'Sarah Johnson',
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.darkindgrey,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          SizedBox(height: 4.w),
-                                          TextView(
-                                            text: 'Order No: #57',
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.greyIt,
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                          SizedBox(height: 10.w),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: 2.w,
-                                              horizontal: 6.w,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: AppColor.fineRed
-                                                  .withOpacity(.2),
-                                              borderRadius:
-                                                  BorderRadius.circular(22),
-                                            ),
-                                            child: TextView(
-                                              text: 'Failed',
-                                              textStyle: GoogleFonts.gabarito(
-                                                color: AppColor.fineRed,
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
+                            Container()
+                          // ...[1, 2].map(
+                          //   (i) => GestureDetector(
+                          //     onTap:
+                          //         () => Navigator.of(context).push(
+                          //           MaterialPageRoute(
+                          //             builder:
+                          //                 (context) =>
+                          //                     LabOrderPatientDetailSceen(),
+                          //           ),
+                          //         ),
+                          //     child: Container(
+                          //       padding: EdgeInsets.symmetric(
+                          //         vertical: 8.w,
+                          //         horizontal: 8.w,
+                          //       ),
+                          //       margin: EdgeInsets.only(bottom: 14.w),
+                          //       decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(12),
+                          //         border: Border.all(
+                          //           color: AppColor.oneKindgrey,
+                          //         ),
+                          //       ),
+                          //       child: Row(
+                          //         children: [
+                          //           Container(
+                          //             padding: EdgeInsets.all(28.8.w),
+                          //             decoration: BoxDecoration(
+                          //               shape: BoxShape.circle,
+                          //               color: AppColor.oneKindgrey,
+                          //             ),
+                          //           ),
+                          //           SizedBox(width: 20.w),
+                          //           Column(
+                          //             crossAxisAlignment:
+                          //                 CrossAxisAlignment.start,
+                          //             children: [
+                          //               TextView(
+                          //                 text: 'Sarah Johnson',
+                          //                 textStyle: GoogleFonts.gabarito(
+                          //                   color: AppColor.darkindgrey,
+                          //                   fontSize: 16.sp,
+                          //                   fontWeight: FontWeight.w500,
+                          //                 ),
+                          //               ),
+                          //               SizedBox(height: 4.w),
+                          //               TextView(
+                          //                 text: 'Order No: #57',
+                          //                 textStyle: GoogleFonts.gabarito(
+                          //                   color: AppColor.greyIt,
+                          //                   fontSize: 13.sp,
+                          //                   fontWeight: FontWeight.w400,
+                          //                 ),
+                          //               ),
+                          //               SizedBox(height: 10.w),
+                          //               Container(
+                          //                 padding: EdgeInsets.symmetric(
+                          //                   vertical: 2.w,
+                          //                   horizontal: 6.w,
+                          //                 ),
+                          //                 decoration: BoxDecoration(
+                          //                   color: AppColor.fineRed
+                          //                       .withOpacity(.2),
+                          //                   borderRadius:
+                          //                       BorderRadius.circular(22),
+                          //                 ),
+                          //                 child: TextView(
+                          //                   text: 'Failed',
+                          //                   textStyle: GoogleFonts.gabarito(
+                          //                     color: AppColor.fineRed,
+                          //                     fontSize: 12.sp,
+                          //                     fontWeight: FontWeight.w400,
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          // )
                           else
-                            GestureDetector(
-                              onTap:
-                                  () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) =>
-                                              LabOrderPatientDetailSceen(),
-                                    ),
-                                  ),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 8.w,
-                                  horizontal: 8.w,
-                                ),
-                                margin: EdgeInsets.only(bottom: 14.w),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: AppColor.oneKindgrey,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(28.8.w),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: AppColor.oneKindgrey,
-                                      ),
-                                    ),
-                                    SizedBox(width: 20.w),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextView(
-                                          text: 'Sarah Johnson',
-                                          textStyle: GoogleFonts.gabarito(
-                                            color: AppColor.darkindgrey,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 4.w),
-                                        TextView(
-                                          text: 'Order No: #57',
-                                          textStyle: GoogleFonts.gabarito(
-                                            color: AppColor.greyIt,
-                                            fontSize: 13.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10.w),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 2.w,
-                                            horizontal: 6.w,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: AppColor.primary1
-                                                .withOpacity(.2),
-                                            borderRadius: BorderRadius.circular(
-                                              22,
-                                            ),
-                                          ),
-                                          child: TextView(
-                                            text: 'Completed',
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.primary1,
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            Container(),
+
+                        // GestureDetector(
+                        //   onTap:
+                        //       () => Navigator.of(context).push(
+                        //         MaterialPageRoute(
+                        //           builder:
+                        //               (context) =>
+                        //                   LabOrderPatientDetailSceen(),
+                        //         ),
+                        //       ),
+                        //   child: Container(
+                        //     padding: EdgeInsets.symmetric(
+                        //       vertical: 8.w,
+                        //       horizontal: 8.w,
+                        //     ),
+                        //     margin: EdgeInsets.only(bottom: 14.w),
+                        //     decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(12),
+                        //       border: Border.all(
+                        //         color: AppColor.oneKindgrey,
+                        //       ),
+                        //     ),
+                        //     child: Row(
+                        //       children: [
+                        //         Container(
+                        //           padding: EdgeInsets.all(28.8.w),
+                        //           decoration: BoxDecoration(
+                        //             shape: BoxShape.circle,
+                        //             color: AppColor.oneKindgrey,
+                        //           ),
+                        //         ),
+                        //         SizedBox(width: 20.w),
+                        //         Column(
+                        //           crossAxisAlignment:
+                        //               CrossAxisAlignment.start,
+                        //           children: [
+                        //             TextView(
+                        //               text: 'Sarah Johnson',
+                        //               textStyle: GoogleFonts.gabarito(
+                        //                 color: AppColor.darkindgrey,
+                        //                 fontSize: 16.sp,
+                        //                 fontWeight: FontWeight.w500,
+                        //               ),
+                        //             ),
+                        //             SizedBox(height: 4.w),
+                        //             TextView(
+                        //               text: 'Order No: #57',
+                        //               textStyle: GoogleFonts.gabarito(
+                        //                 color: AppColor.greyIt,
+                        //                 fontSize: 13.sp,
+                        //                 fontWeight: FontWeight.w400,
+                        //               ),
+                        //             ),
+                        //             SizedBox(height: 10.w),
+                        //             Container(
+                        //               padding: EdgeInsets.symmetric(
+                        //                 vertical: 2.w,
+                        //                 horizontal: 6.w,
+                        //               ),
+                        //               decoration: BoxDecoration(
+                        //                 color: AppColor.primary1
+                        //                     .withOpacity(.2),
+                        //                 borderRadius: BorderRadius.circular(
+                        //                   22,
+                        //                 ),
+                        //               ),
+                        //               child: TextView(
+                        //                 text: 'Completed',
+                        //                 textStyle: GoogleFonts.gabarito(
+                        //                   color: AppColor.primary1,
+                        //                   fontSize: 12.sp,
+                        //                   fontWeight: FontWeight.w400,
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
