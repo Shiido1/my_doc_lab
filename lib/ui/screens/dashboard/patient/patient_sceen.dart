@@ -5,9 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/patient/patient_detail_sceen.dart';
 import 'package:stacked/stacked.dart';
-
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_form_widget.dart';

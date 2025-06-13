@@ -12,6 +12,8 @@ import '../model/get_single_dia_response_model/get_single_dia_response_model.dar
 import '../model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
 import '../model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
 import '../model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
+import '../model/post_user_cloud_entity_model.dart';
+import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/update_lab_tech_entity_model.dart';
 import '../model/update_status_reason_entity_model.dart';
 
@@ -19,6 +21,13 @@ import '../model/update_status_reason_entity_model.dart';
 class LabTechRepoImpl {
   // final _session = locator<SharedPreferencesService>();
   final _contract = locator<LabTechContractsImpl>();
+
+  Future<PostUserVerificationCloudResponse> postCloudinary(
+    PostUserCloudEntityModel postCloudinary,
+  ) async {
+    final response = await _contract.postCloudinary(postCloudinary);
+    return response;
+  }
 
   Future<GetLabTechDetailResponseModel> getLabTechDetail() async {
     final response = await _contract.getLabTechDetail();
@@ -103,7 +112,7 @@ class LabTechRepoImpl {
     return response;
   }
 
-  Future<GetAllDiagnosisListResponseModel> getAllDiagnosis() async {
+  Future<GetAllDiagnosisListResponseModelList> getAllDiagnosis() async {
     final response = await _contract.getAllDiagnosis();
     return response;
   }

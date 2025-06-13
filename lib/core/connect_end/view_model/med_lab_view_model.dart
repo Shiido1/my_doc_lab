@@ -1,7 +1,19 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../main.dart';
+import '../../../ui/app_assets/app_color.dart';
+import '../../../ui/app_assets/app_utils.dart';
+import '../../../ui/app_assets/image_picker.dart';
+import '../../../ui/widget/text_widget.dart';
 import '../../core_folder/app/app.logger.dart';
+import '../../core_folder/app/app.router.dart';
 import '../model/add_diagnosis_entity_model.dart';
 import '../model/add_report_entity_model.dart';
 import '../model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_response_model.dart';
@@ -12,6 +24,8 @@ import '../model/get_single_dia_response_model/get_single_dia_response_model.dar
 import '../model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
 import '../model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
 import '../model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
+import '../model/post_user_cloud_entity_model.dart';
+import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/update_lab_tech_entity_model.dart';
 import '../model/update_status_reason_entity_model.dart';
 import '../repo/med_repo_impl.dart';
@@ -43,8 +57,8 @@ class LabTechViewModel extends BaseViewModel {
   LabTechDetailResponseModel? _labTechDetailResponseModel;
   LabTechDetailResponseModel? get labTechDetailResponseModel =>
       _labTechDetailResponseModel;
-  GetAllDiagnosisListResponseModel? _getAllDiagnosisListResponseModel;
-  GetAllDiagnosisListResponseModel? get getAllDiagnosisListResponseModel =>
+  GetAllDiagnosisListResponseModelList? _getAllDiagnosisListResponseModel;
+  GetAllDiagnosisListResponseModelList? get getAllDiagnosisListResponseModel =>
       _getAllDiagnosisListResponseModel;
   LabTechCategoryListResponseModel? _labTechCategoryListResponseModel;
   LabTechCategoryListResponseModel? get labTechCategoryListResponseModel =>
@@ -52,6 +66,110 @@ class LabTechViewModel extends BaseViewModel {
   GetCategoryByIdResponseModel? _getCategoryByIdResponseModel;
   GetCategoryByIdResponseModel? get getCategoryByIdResponseModel =>
       _getCategoryByIdResponseModel;
+
+  PostUserVerificationCloudResponse? _postUserVerificationCloudResponse;
+  PostUserVerificationCloudResponse? get postUserVerificationCloudResponse =>
+      _postUserVerificationCloudResponse;
+  final _pickImage = ImagePickerHandler();
+  File? image;
+  String? filename;
+
+  loadingDialog(context) => showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: TextView(
+          text: 'Please wait..',
+          textAlign: TextAlign.center,
+          textStyle: GoogleFonts.gabarito(
+            color: AppColor.primary1,
+
+            fontSize: 20.2.sp,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 20.h),
+              SpinKitPouringHourGlassRefined(
+                color: AppColor.primary1,
+                size: 50.sp,
+              ),
+              SizedBox(height: 40.h),
+              TextView(
+                text: 'Loading...!',
+                textStyle: GoogleFonts.gabarito(
+                  color: AppColor.primary1,
+                  fontSize: 17.2.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+
+  formartFileImage(File? imageFile) {
+    if (imageFile == null) return;
+    return File(imageFile.path.replaceAll('\'', '').replaceAll('File: ', ''));
+  }
+
+  void pickImage(BuildContext context) {
+    try {
+      _pickImage.pickImage(
+        context: context,
+        file: (file) {
+          image = file;
+          filename = image!.path.split("/").last;
+          postToCloudinary(
+            context,
+            postCloudinary: PostUserCloudEntityModel(
+              file: MultipartFile.fromBytes(
+                formartFileImage(image).readAsBytesSync(),
+                filename: image!.path.split("/").last,
+              ),
+              uploadPreset: 'profilePicture',
+              apiKey: '229558523244366',
+            ),
+          );
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  Future<void> postToCloudinary(
+    context, {
+    PostUserCloudEntityModel? postCloudinary,
+  }) async {
+    try {
+      loadingDialog(context);
+      _postUserVerificationCloudResponse = await runBusyFuture(
+        repositoryImply.postCloudinary(postCloudinary!),
+        throwException: true,
+      );
+      if (_postUserVerificationCloudResponse != null) {
+        Navigator.pop(context);
+        AppUtils.snackbar(
+          context,
+          message: 'Image uploaded to cloudinary Sucessfully.!',
+        );
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      AppUtils.snackbar(
+        context,
+        message: 'Please try again later.',
+        error: true,
+      );
+    }
+    notifyListeners();
+  }
 
   Future<void> getLabTechDetail(context) async {
     try {
@@ -75,14 +193,18 @@ class LabTechViewModel extends BaseViewModel {
     UpdateLabTechEntityModel? update,
   }) async {
     try {
-      _isLoading = true;
+      loadingDialog(context);
       var v = await runBusyFuture(
         repositoryImply.updateLabTechDetail(id: id, update: update),
         throwException: true,
       );
-      _isLoading = false;
+      if (v['message'] == 'Account updated successfully!') {
+        Navigator.pop(context);
+        AppUtils.snackbar(context, message: v['message']);
+        navigate.navigateTo(Routes.laboratoryDashboard);
+      }
     } catch (e) {
-      _isLoading = false;
+      Navigator.pop(context);
       logger.d(e);
       // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
@@ -250,16 +372,19 @@ class LabTechViewModel extends BaseViewModel {
     AddDiagnosisEntityModel? update,
   }) async {
     try {
-      _isLoading = true;
+      loadingDialog(context);
       var v = await runBusyFuture(
         repositoryImply.updateLabTechDiagnosis(id: id, update: update),
         throwException: true,
       );
-      _isLoading = false;
+      if (v['message'] == 'Account updated successfully!') {
+        Navigator.pop(context);
+        AppUtils.snackbar(context, message: v['message']);
+        navigate.navigateTo(Routes.laboratoryDashboard);
+      }
     } catch (e) {
-      _isLoading = false;
-      logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -381,5 +506,25 @@ class LabTechViewModel extends BaseViewModel {
       // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
+  }
+
+  String statusValue(status) {
+    if (status == 'cancelled') {
+      return 'Failed';
+    }
+    if (status == 'processed') {
+      return 'In Process';
+    }
+    return 'Completed';
+  }
+
+  Color statusValueColor(status) {
+    if (status == 'cancelled') {
+      return AppColor.fineRed;
+    }
+    if (status == 'processed') {
+      return AppColor.yellow;
+    }
+    return AppColor.primary1;
   }
 }

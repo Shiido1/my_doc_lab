@@ -7,6 +7,9 @@ class UpdateLabTechEntityModel {
   String? experience;
   String? profileImage;
   String? about;
+  String? address;
+  String? city;
+  String? state;
 
   UpdateLabTechEntityModel({
     this.firstName,
@@ -17,6 +20,9 @@ class UpdateLabTechEntityModel {
     this.experience,
     this.profileImage,
     this.about,
+    this.state,
+    this.address,
+    this.city,
   });
 
   factory UpdateLabTechEntityModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +35,9 @@ class UpdateLabTechEntityModel {
       experience: json['experience']?.toString(),
       profileImage: json['profile_image']?.toString(),
       about: json['about']?.toString(),
+      city: json['city']?.toString(),
+      address: json['address']?.toString(),
+      state: json['state']?.toString(),
     );
   }
 
@@ -41,5 +50,8 @@ class UpdateLabTechEntityModel {
     if (experience != null) 'experience': experience,
     if (profileImage != null) 'profile_image': profileImage,
     if (about != null) 'about': about,
+    if (city != null) 'city': city,
+    if (state != null) 'state': state,
+    if (address != null) 'address': address,
   };
 }

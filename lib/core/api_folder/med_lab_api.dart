@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/model/add_diagnosis_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/add_report_entity_model.dart';
@@ -10,15 +11,19 @@ import '../connect_end/model/get_lab_tech_detail_response_model/get_lab_tech_det
 import '../connect_end/model/get_lab_tech_dia_book_list_model/get_lab_tech_dia_book_list_model.dart';
 import '../connect_end/model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
 import '../connect_end/model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
+import '../connect_end/model/post_user_cloud_entity_model.dart';
+import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../connect_end/model/update_lab_tech_entity_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
+import '../core_folder/network/cloudinary_network_service.dart';
 import '../core_folder/network/network_service.dart';
 import '../core_folder/network/url_path.dart';
 
 @lazySingleton
 class LabTechAuthApi {
   final _service = locator<NetworkService>();
+  final _serviceCloud = locator<CloudinaryNetworkService>();
   final logger = getLogger('LabTechViewModel');
 
   Future<GetLabTechDetailResponseModel> getLabTechDetail() async {
@@ -29,6 +34,23 @@ class LabTechAuthApi {
       );
       logger.d(response.data);
       return GetLabTechDetailResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<PostUserVerificationCloudResponse> postTocloudinary(
+    PostUserCloudEntityModel post,
+  ) async {
+    try {
+      final response = await _serviceCloud.call(
+        'upload',
+        CloudRequestMethod.upload,
+        data: FormData.fromMap(post.toJson()),
+      );
+      logger.d(response.data);
+      return PostUserVerificationCloudResponse.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;
@@ -221,14 +243,14 @@ class LabTechAuthApi {
     }
   }
 
-  Future<GetAllDiagnosisListResponseModel> getAllDiagnosis() async {
+  Future<GetAllDiagnosisListResponseModelList> getAllDiagnosis() async {
     try {
       final response = await _service.call(
         UrlConfig.labt_tech_diagnosis_list,
         RequestMethod.get,
       );
       logger.d(response.data);
-      return GetAllDiagnosisListResponseModel.fromJson(response.data);
+      return GetAllDiagnosisListResponseModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

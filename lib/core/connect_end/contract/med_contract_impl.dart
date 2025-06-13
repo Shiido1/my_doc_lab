@@ -12,6 +12,8 @@ import '../model/get_single_dia_response_model/get_single_dia_response_model.dar
 import '../model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
 import '../model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
 import '../model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
+import '../model/post_user_cloud_entity_model.dart';
+import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/update_lab_tech_entity_model.dart';
 import '../model/update_status_reason_entity_model.dart';
 
@@ -21,6 +23,10 @@ class LabTechContractsImpl {
 
   Future<GetLabTechDetailResponseModel> getLabTechDetail() async =>
       await _api.getLabTechDetail();
+
+  Future<PostUserVerificationCloudResponse> postCloudinary(
+    PostUserCloudEntityModel postCloudinary,
+  ) async => await _api.postTocloudinary(postCloudinary);
 
   Future<dynamic> updateLabTechDetail({
     String? id,
@@ -66,7 +72,7 @@ class LabTechContractsImpl {
   Future<GetSingleDiaResponseModel> getDiagnosisById(String? id) async =>
       await _api.getDiagnosisById(id);
 
-  Future<GetAllDiagnosisListResponseModel> getAllDiagnosis() async =>
+  Future<GetAllDiagnosisListResponseModelList> getAllDiagnosis() async =>
       await _api.getAllDiagnosis();
 
   Future<LabTechCategoryListResponseModel> getAllLabTechCategory() async =>

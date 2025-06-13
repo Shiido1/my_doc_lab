@@ -14,15 +14,19 @@ import '../../../ui/screens/dashboard/pharmacy_dashboard_screen.dart';
 import '../../../ui/screens/dashboard/settings/profile_screen.dart';
 import '../../api_folder/auth_api.dart';
 import '../../api_folder/doc_api.dart';
+import '../../api_folder/med_lab_api.dart';
 import '../../api_folder/pharm_api.dart';
 import '../../connect_end/contract/contract_impl.dart';
 import '../../connect_end/contract/doc_contract_impl.dart';
+import '../../connect_end/contract/med_contract_impl.dart';
 import '../../connect_end/contract/pharm_contract_impl.dart';
 import '../../connect_end/repo/doc_repo_impl.dart';
+import '../../connect_end/repo/med_repo_impl.dart';
 import '../../connect_end/repo/pharm_repo_impl.dart';
 import '../../connect_end/repo/repo_impl.dart';
 import '../../connect_end/view_model/auth_view_model.dart';
 import '../../connect_end/view_model/doc_view_model.dart';
+import '../../connect_end/view_model/med_lab_view_model.dart';
 import '../../connect_end/view_model/pharm_view_model.dart';
 import '../manager/shared_preference.dart';
 import '../network/cloudinary_network_service.dart';
@@ -53,15 +57,19 @@ import '../network/network_service.dart';
     LazySingleton(classType: AuthApi),
     LazySingleton(classType: DocAuthApi),
     LazySingleton(classType: PharmAuthApi),
+    LazySingleton(classType: LabTechAuthApi),
     LazySingleton(classType: AuthContractsImpl),
     LazySingleton(classType: DocContractsImpl),
     LazySingleton(classType: PharmContractImpl),
+    LazySingleton(classType: LabTechContractsImpl),
     LazySingleton(classType: AuthRepoImpl),
     LazySingleton(classType: DocRepoImpl),
     LazySingleton(classType: PharmRepoImpl),
+    LazySingleton(classType: LabTechRepoImpl),
     LazySingleton(classType: AuthViewModel),
     LazySingleton(classType: DocViewModel),
     LazySingleton(classType: PharmViewModel),
+    LazySingleton(classType: LabTechViewModel),
   ],
   logger: StackedLogger(),
 )
