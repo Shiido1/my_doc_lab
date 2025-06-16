@@ -2,6 +2,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import '../../../ui/onboarding/first_onboarding_screen.dart';
 import '../../../ui/screens/authentication/login_screen.dart';
+import '../../../ui/screens/dashboard/appointment/prescription_detail_screen.dart';
 import '../../../ui/screens/dashboard/chat/chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/doc_chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/pharm_chat_screen.dart';
@@ -46,6 +47,7 @@ import '../network/network_service.dart';
     MaterialRoute(page: DoctorAppointmentDetailSceen),
     MaterialRoute(page: PatientDetailSceen),
     MaterialRoute(page: PharmChatScreen),
+    MaterialRoute(page: PrescriptionDetailScreen),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),

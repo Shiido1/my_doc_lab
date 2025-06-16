@@ -21,6 +21,7 @@ import '../connect_end/model/get_user_response_model/get_user_response_model.dar
 import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../connect_end/model/prescription_view_response/prescription_view_response.dart';
+import '../connect_end/model/recent_appointment_response_model/recent_appointment_response_model.dart';
 import '../connect_end/model/send_message_response_model/send_message_response_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
@@ -337,6 +338,20 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<RecentAppointmentResponseModelList> recentAppointment() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctor_recent_appointment,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return RecentAppointmentResponseModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

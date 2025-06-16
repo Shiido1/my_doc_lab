@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import "package:collection/collection.dart";
@@ -1730,7 +1732,6 @@ class PharmViewModel extends BaseViewModel {
                               validator: AppValidator.validateString(),
                             ),
                             SizedBox(height: 20.h),
-
                             if (model.getPharmacyCategoriesList != null &&
                                 model
                                     .getPharmacyCategoriesList!
@@ -1814,7 +1815,6 @@ class PharmViewModel extends BaseViewModel {
                                       ],
                                     ),
                                   ),
-
                             SizedBox(height: 35.0.h),
                             !model.isLoading
                                 ? Row(

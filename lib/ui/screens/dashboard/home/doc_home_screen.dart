@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/tasks/tasks_screen.dart';
@@ -12,6 +13,7 @@ import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../app_assets/constant.dart';
 import '../../../widget/text_widget.dart';
+import '../appointment/doctors_appointment/doctors_appointment_screen.dart';
 
 class DocHomeScreen extends StatelessWidget {
   const DocHomeScreen({super.key});
@@ -25,6 +27,7 @@ class DocHomeScreen extends StatelessWidget {
           model.getDoctorsDetail(context);
           model.getChatIndex();
           model.getDoctorsStatistic();
+          model.getRecentAppointment();
         });
       },
       disposeViewModel: false,
@@ -145,7 +148,7 @@ class DocHomeScreen extends StatelessWidget {
                     ),
                     SizedBox(width: 10.w),
                     dashContainer(
-                      flex: 4,
+                      flex: 3,
                       image: AppImage.calendar,
                       contColor: AppColor.darkindgrey,
                       firstText: 'Calendar',
@@ -159,7 +162,7 @@ class DocHomeScreen extends StatelessWidget {
                 Row(
                   children: [
                     dashContainer(
-                      flex: 2,
+                      flex: 3,
                       image: AppImage.docMsg,
                       contColor: AppColor.primary1,
                       firstText: 'Message',
@@ -169,12 +172,13 @@ class DocHomeScreen extends StatelessWidget {
                     ),
                     SizedBox(width: 10.w),
                     dashContainer(
-                      flex: 2,
+                      flex: 4,
                       image: AppImage.task,
                       contColor: AppColor.darkindgrey,
-                      firstText: 'Task',
-                      secondText: 'Urgent:',
-                      thirdText: '2',
+                      firstText: 'Balance',
+                      secondText: 'Current:',
+                      thirdText:
+                          '${getCurrency()}${oCcy.format(model.getDoctorStatisticModel?.totalPatients ?? 0.0)}',
                       onTap:
                           () => Navigator.of(context).push(
                             MaterialPageRoute(
@@ -197,7 +201,12 @@ class DocHomeScreen extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DoctorsAppointmentScreen(),
+                            ),
+                          ),
                       child: TextView(
                         text: 'View all',
                         textStyle: GoogleFonts.gabarito(
@@ -210,179 +219,223 @@ class DocHomeScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 20.h),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 14.w,
-                    horizontal: 18.w,
-                  ),
-                  margin: EdgeInsets.only(bottom: 12.w),
-                  decoration: BoxDecoration(
-                    color: AppColor.finegrey2,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColor.white),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextView(
-                            text: 'Sarah Johnson',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.darkindgrey,
-                              fontSize: 15.20.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
+                if (model.recentAppointmentResponseModelList != null &&
+                    model
+                        .recentAppointmentResponseModelList!
+                        .recentAppointmentResponseModelList!
+                        .isEmpty)
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      vertical: 14.w,
+                      horizontal: 18.w,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColor.primary1.withOpacity(.6),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColor.white),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextView(
+                          text: 'No appointments for today',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.white,
+                            fontSize: 13.20.sp,
+                            fontWeight: FontWeight.w400,
                           ),
-                          SizedBox(height: 4.2.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              TextView(
-                                text: '9:30 AM - ',
-                                textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.darkindgrey,
-                                  fontSize: 12.0.sp,
-                                  fontWeight: FontWeight.w300,
-                                ),
+                        ),
+                        SizedBox(height: 12.h),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.add_circle_outline_rounded,
+                              color: AppColor.white,
+                            ),
+                            SizedBox(width: 10.w),
+                            TextView(
+                              text: 'Schedule appointment',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.white,
+                                fontSize: 12.0.sp,
+                                fontWeight: FontWeight.w600,
                               ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                if (model.recentAppointmentResponseModelList != null &&
+                    model
+                        .recentAppointmentResponseModelList!
+                        .recentAppointmentResponseModelList!
+                        .isNotEmpty)
+                  ...model
+                      .recentAppointmentResponseModelList!
+                      .recentAppointmentResponseModelList!
+                      .map(
+                        (recent) => Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 14.w,
+                            horizontal: 18.w,
+                          ),
+                          margin: EdgeInsets.only(bottom: 12.w),
+                          decoration: BoxDecoration(
+                            color: AppColor.finegrey2,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppColor.white),
+                          ),
+                          child: Row(
+                            children: [
+                              recent.user?.profileImage != null
+                                  ? ClipOval(
+                                    child: SizedBox.fromSize(
+                                      size: const Size.fromRadius(20),
+                                      child: Image.network(
+                                        recent.user!.profileImage!.contains(
+                                              'https',
+                                            )
+                                            ? '${recent.user?.profileImage}'
+                                            : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${recent.user?.profileImage}',
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                shimmerViewPharm(),
+                                      ),
+                                    ),
+                                  )
+                                  : Container(
+                                    padding: EdgeInsets.all(20.w),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColor.oneKindgrey,
+                                    ),
+                                  ),
+                              SizedBox(width: 14.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextView(
+                                    text:
+                                        '${recent.user?.firstName?.capitalize() ?? ''} ${recent.user?.lastName?.capitalize() ?? ''}',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.darkindgrey,
+                                      fontSize: 15.20.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4.2.h),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      TextView(
+                                        text:
+                                            '${DateFormat('hh:mm a').format(DateTime.parse(recent.updatedAt.toString()).toLocal())} - ',
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.darkindgrey,
+                                          fontSize: 12.0.sp,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                      TextView(
+                                        text: 'Follow-Up',
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.darkindgrey,
+                                          fontSize: 12.0.sp,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
                               TextView(
-                                text: 'Follow-Up',
+                                text: '${recent.status?.capitalize()}',
                                 textStyle: GoogleFonts.gabarito(
                                   color: AppColor.darkindgrey,
-                                  fontSize: 12.0.sp,
-                                  fontWeight: FontWeight.w300,
+                                  fontSize: 13.10.sp,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                      TextView(
-                        text: 'Confirmed',
-                        textStyle: GoogleFonts.gabarito(
-                          color: AppColor.darkindgrey,
-                          fontSize: 13.10.sp,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 14.w,
-                    horizontal: 18.w,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColor.primary1.withOpacity(.6),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColor.white),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextView(
-                        text: 'No appointments for today',
-                        textStyle: GoogleFonts.gabarito(
-                          color: AppColor.white,
-                          fontSize: 13.20.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.add_circle_outline_rounded,
-                            color: AppColor.white,
-                          ),
-                          SizedBox(width: 10.w),
-                          TextView(
-                            text: 'Schedule appointment',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.white,
-                              fontSize: 12.0.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
                 SizedBox(height: 20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextView(
-                      text: 'Priority Tasks',
-                      textStyle: GoogleFonts.dmSans(
-                        color: AppColor.black,
-                        fontSize: 16.20.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: TextView(
-                        text: 'View all',
-                        textStyle: GoogleFonts.gabarito(
-                          color: AppColor.primary,
-                          fontSize: 14.0.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 14.w,
-                    horizontal: 18.w,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColor.primary1,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColor.white),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextView(
-                        text: 'Review Sarah Johnson\'s blood test results',
-                        textStyle: GoogleFonts.gabarito(
-                          color: AppColor.white,
-                          fontSize: 15.20.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      TextView(
-                        text: 'Due: 4/12/2025',
-                        textStyle: GoogleFonts.gabarito(
-                          color: AppColor.white,
-                          fontSize: 12.0.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      TextView(
-                        text: 'Check hypertension medication effectiveness',
-                        textStyle: GoogleFonts.gabarito(
-                          color: AppColor.white,
-                          fontSize: 12.0.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     TextView(
+                //       text: 'Priority Tasks',
+                //       textStyle: GoogleFonts.dmSans(
+                //         color: AppColor.black,
+                //         fontSize: 16.20.sp,
+                //         fontWeight: FontWeight.w700,
+                //       ),
+                //     ),
+                //     GestureDetector(
+                //       onTap: () {},
+                //       child: TextView(
+                //         text: 'View all',
+                //         textStyle: GoogleFonts.gabarito(
+                //           color: AppColor.primary,
+                //           fontSize: 14.0.sp,
+                //           fontWeight: FontWeight.w400,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(height: 20.h),
+                // Container(
+                //   width: double.infinity,
+                //   padding: EdgeInsets.symmetric(
+                //     vertical: 14.w,
+                //     horizontal: 18.w,
+                //   ),
+                //   decoration: BoxDecoration(
+                //     color: AppColor.primary1,
+                //     borderRadius: BorderRadius.circular(10),
+                //     border: Border.all(color: AppColor.white),
+                //   ),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       TextView(
+                //         text: 'Review Sarah Johnson\'s blood test results',
+                //         textStyle: GoogleFonts.gabarito(
+                //           color: AppColor.white,
+                //           fontSize: 15.20.sp,
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ),
+                //       SizedBox(height: 12.h),
+                //       TextView(
+                //         text: 'Due: 4/12/2025',
+                //         textStyle: GoogleFonts.gabarito(
+                //           color: AppColor.white,
+                //           fontSize: 12.0.sp,
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ),
+                //       SizedBox(height: 12.h),
+                //       TextView(
+                //         text: 'Check hypertension medication effectiveness',
+                //         textStyle: GoogleFonts.gabarito(
+                //           color: AppColor.white,
+                //           fontSize: 12.0.sp,
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),

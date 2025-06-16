@@ -307,7 +307,7 @@ class LabTechAuthApi {
     try {
       final response = await _service.call(
         '${UrlConfig.labt_tech_category_by_id}$id',
-        RequestMethod.post,
+        RequestMethod.put,
         data: {'name': nameCategory},
       );
       logger.d(response.data);

@@ -19,6 +19,7 @@ import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/prescription_view_response/prescription_view_response.dart';
 import '../model/received_message_response_model/received_message_response_model.dart';
+import '../model/recent_appointment_response_model/recent_appointment_response_model.dart';
 import '../model/reschedule_booking_entity_model.dart';
 import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_password_entity_model.dart';
@@ -163,6 +164,11 @@ class DocRepoImpl {
       create: create,
       id: id,
     );
+    return response;
+  }
+
+  Future<RecentAppointmentResponseModelList> recentAppointment() async {
+    final response = await _contract.recentAppointment();
     return response;
   }
 }

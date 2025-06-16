@@ -57,6 +57,23 @@ shimmerChatView() => SizedBox(
     ),
   ),
 );
+shimmerPresView() => SizedBox(
+  width: double.infinity.w,
+  height: 70.h,
+  child: Shimmer.fromColors(
+    baseColor: AppColor.white,
+    highlightColor: AppColor.white,
+    child: Container(
+      width: double.infinity.w,
+      height: 80.h,
+      margin: EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        color: AppColor.white,
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+    ),
+  ),
+);
 
 shimmerViewDoc() => SizedBox(
   width: 160.0,

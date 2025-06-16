@@ -19,6 +19,8 @@ import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/prescription_view_response/prescription_view_response.dart';
 import '../model/received_message_response_model/received_message_response_model.dart';
+import '../model/recent_appointment_response_model/recent_appointment_response_model.dart'
+    show RecentAppointmentResponseModelList;
 import '../model/reschedule_booking_entity_model.dart';
 import '../model/send_message_entity_model.dart';
 import '../model/send_message_response_model/send_message_response_model.dart';
@@ -95,4 +97,6 @@ class DocContractsImpl {
     String? id,
     CreatePrescriptionEntityModel? create,
   }) async => await _api.createMedicinePrescrition(create: create, id: id);
+  Future<RecentAppointmentResponseModelList> recentAppointment() async =>
+      await _api.recentAppointment();
 }

@@ -20,7 +20,9 @@ import 'package:stacked/stacked.dart';
 import '../../../main.dart';
 import '../../../ui/app_assets/app_color.dart';
 import '../../../ui/app_assets/app_utils.dart';
+import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/app_assets/image_picker.dart';
+import '../../../ui/widget/text_form_widget.dart';
 import '../../../ui/widget/text_widget.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
@@ -42,6 +44,7 @@ import '../model/get_user_response_model/get_user_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/prescription_view_response/prescription_view_response.dart';
+import '../model/recent_appointment_response_model/recent_appointment_response_model.dart';
 import '../model/reschedule_booking_entity_model.dart';
 import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_password_entity_model.dart';
@@ -54,6 +57,9 @@ class DocViewModel extends BaseViewModel {
   final session = locator<SharedPreferencesService>();
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
+  GlobalKey<FormState> presFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> presMedsFormKey = GlobalKey<FormState>();
 
   GetDocDetailResponseModel? _getDocDetailResponseModel;
   GetDocDetailResponseModel? get getDocDetailResponseModel =>
@@ -113,6 +119,9 @@ class DocViewModel extends BaseViewModel {
   GetUserResponseModel? _getUserResponseModel;
   GetUserResponseModel? get getUserResponseModel => _getUserResponseModel;
   final debouncer = Debouncer();
+  RecentAppointmentResponseModelList? _recentAppointmentResponseModelList;
+  RecentAppointmentResponseModelList? get recentAppointmentResponseModelList =>
+      _recentAppointmentResponseModelList;
 
   String query = '';
   String queryPatient = '';
@@ -137,6 +146,15 @@ class DocViewModel extends BaseViewModel {
   ScrollController scrollController1 = ScrollController();
 
   DateTime now = DateTime.now();
+
+  TextEditingController patientNameTextController = TextEditingController();
+  TextEditingController patientConditionTextController =
+      TextEditingController();
+
+  TextEditingController medicationTextController = TextEditingController();
+  TextEditingController dosageTextController = TextEditingController();
+  TextEditingController frequencyTextController = TextEditingController();
+  TextEditingController noteTextController = TextEditingController();
 
   loadingDialog(context) => showDialog(
     context: context,
@@ -573,7 +591,6 @@ class DocViewModel extends BaseViewModel {
 
   Future<void> getChatIndex() async {
     try {
-      print('here');
       _isLoading = true;
       _getMessageIndexResponseModelList = await runBusyFuture(
         repositoryImply.chatIndex(),
@@ -686,6 +703,21 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> getRecentAppointment() async {
+    try {
+      _isLoading = true;
+      _recentAppointmentResponseModelList = await runBusyFuture(
+        repositoryImply.recentAppointment(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   Future<void> getPrescriptionList() async {
     try {
       _isLoading = true;
@@ -751,7 +783,6 @@ class DocViewModel extends BaseViewModel {
 
   Future<void> getChatIndexReload() async {
     try {
-      print('ok');
       _getMessageIndexResponseModelList = await runBusyFuture(
         repositoryImply.chatIndex(),
         throwException: true,
@@ -799,12 +830,9 @@ class DocViewModel extends BaseViewModel {
   }
 
   void receiveIndexConversationOnce() {
-    print('in');
     if (hasLoadedIndexConversation == false) {
-      print('in false');
       return;
     } else {
-      print('in true');
       hasLoadedIndexConversation = true;
       getChatIndexReload();
     }
@@ -954,7 +982,6 @@ class DocViewModel extends BaseViewModel {
 
   void generateToken(context, {CallTokenGenerateEntityModel? calltoken}) async {
     try {
-      // _isLoading = true;
       _callTokenGenerateResponseModel = await runBusyFuture(
         repositoryImply.generateToken(calltoken!),
         throwException: true,
@@ -966,7 +993,6 @@ class DocViewModel extends BaseViewModel {
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -1131,5 +1157,370 @@ class DocViewModel extends BaseViewModel {
       return 'Canceled';
     }
     return 'Completed';
+  }
+
+  void modalBottomSheetCreatePrescription(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        // final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: DraggableScrollableSheet(
+                expand: false,
+                initialChildSize: 0.43, // 50% of screen height
+                minChildSize: 0.3, // Can be dragged to 30% of screen height
+                maxChildSize: 0.5, // Can be dragged to 90% of screen height
+                builder: (context, scrollController) {
+                  return ViewModelBuilder<DocViewModel>.reactive(
+                    viewModelBuilder: () => DocViewModel(),
+                    onViewModelReady: (model) {},
+                    disposeViewModel: false,
+                    onDispose: (viewModel) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // clearPharmProductController();
+                      });
+                    },
+                    builder: (_, DocViewModel model, __) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Form(
+                          key: presFormKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 6.0.h),
+                              Center(
+                                child: Container(
+                                  width: 30.w,
+                                  height: 3.5.h,
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey2.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.0.h),
+                              TextView(
+                                text: 'Create New Prescription',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Patient Name',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: patientNameTextController,
+                                validator: AppValidator.validateString(),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Patient\'s Condition',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                keyboardType: TextInputType.multiline,
+                                alignLabelWithHint: true,
+                                maxline: 4,
+                                fillColor: AppColor.white,
+                                controller: patientConditionTextController,
+                                validator: AppValidator.validateInt(),
+                              ),
+                              SizedBox(height: 20.h),
+
+                              model.isLoading
+                                  ? SpinKitCircle(
+                                    color: AppColor.primary1,
+                                    size: 34.sp,
+                                  )
+                                  : Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Navigator.pop(context),
+                                        child: Container(
+                                          padding: EdgeInsets.all(10.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            border: Border.all(
+                                              color: AppColor.primary1,
+                                            ),
+
+                                            color: AppColor.white,
+                                          ),
+                                          width: 100.w,
+                                          alignment: Alignment.center,
+                                          child: TextView(
+                                            text: 'Cancel',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.primary1,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 20.w),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding: EdgeInsets.all(10.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: AppColor.primary1,
+                                          ),
+                                          width: 80.w,
+                                          child: TextView(
+                                            text: 'Save',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.white,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              SizedBox(height: 10.h),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void modalBottomSheetAddMedsPrescription(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        // final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: DraggableScrollableSheet(
+                expand: false,
+                initialChildSize: 0.5, // 50% of screen height
+                minChildSize: 0.4, // Can be dragged to 30% of screen height
+                maxChildSize: 0.7, // Can be dragged to 90% of screen height
+                builder: (context, scrollController) {
+                  return ViewModelBuilder<DocViewModel>.reactive(
+                    viewModelBuilder: () => DocViewModel(),
+                    onViewModelReady: (model) {},
+                    disposeViewModel: false,
+                    onDispose: (viewModel) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // clearPharmProductController();
+                      });
+                    },
+                    builder: (_, DocViewModel model, __) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Form(
+                          key: presFormKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 6.0.h),
+                              Center(
+                                child: Container(
+                                  width: 30.w,
+                                  height: 3.5.h,
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey2.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.0.h),
+                              TextView(
+                                text: 'Add Prescription',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Medication',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: medicationTextController,
+                                validator: AppValidator.validateString(),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Dosage',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: dosageTextController,
+                                validator: AppValidator.validateString(),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Frequency',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: patientNameTextController,
+                                validator: AppValidator.validateString(),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Note (Optional)',
+                                labelStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                keyboardType: TextInputType.multiline,
+                                alignLabelWithHint: true,
+                                maxline: 4,
+                                fillColor: AppColor.white,
+                                controller: patientConditionTextController,
+                                validator: AppValidator.validateString(),
+                              ),
+                              SizedBox(height: 20.h),
+
+                              model.isLoading
+                                  ? SpinKitCircle(
+                                    color: AppColor.primary1,
+                                    size: 34.sp,
+                                  )
+                                  : Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Navigator.pop(context),
+                                        child: Container(
+                                          padding: EdgeInsets.all(10.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            border: Border.all(
+                                              color: AppColor.primary1,
+                                            ),
+
+                                            color: AppColor.white,
+                                          ),
+                                          width: 100.w,
+                                          alignment: Alignment.center,
+                                          child: TextView(
+                                            text: 'Cancel',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.primary1,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 20.w),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding: EdgeInsets.all(10.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: AppColor.primary1,
+                                          ),
+                                          child: TextView(
+                                            text: 'Create Prescription',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.white,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              SizedBox(height: 10.h),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
