@@ -6,7 +6,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
@@ -16,7 +15,6 @@ import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../app_assets/constant.dart';
 import '../../../widget/text_widget.dart';
-import '../appointment/consultation_screen.dart';
 import 'med_profile_screen.dart';
 
 class ProfileScreen1 extends StatefulWidget {
@@ -578,78 +576,79 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                           ),
                 ),
                 SizedBox(height: 40.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap:
-                          () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => ConsultationScreen(
-                                    bookTyoe: 'book',
-                                    slotId: AvailableSlots(),
-                                    docId: widget.id,
-                                    doctor:
-                                        '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
-                                  ),
-                            ),
-                          ),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 7.2.w,
-                          horizontal: 14.0.w,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColor.primary1,
-                        ),
-                        child: TextView(
-                          text: 'Book Appointment',
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.white,
-                            fontSize: 14.0.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap:
-                          () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => ConsultationScreen(
-                                    bookTyoe: 'book-friend',
 
-                                    slotId: AvailableSlots(),
-                                    docId: widget.id,
-                                    doctor:
-                                        '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
-                                  ),
-                            ),
-                          ),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 7.2.w,
-                          horizontal: 14.0.w,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color.fromARGB(255, 181, 222, 204),
-                        ),
-                        child: TextView(
-                          text: 'Book for Someone else',
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.darkindgrey,
-                            fontSize: 14.0.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     GestureDetector(
+                //       onTap:
+                //           () => Navigator.of(context).push(
+                //             MaterialPageRoute(
+                //               builder:
+                //                   (context) => ConsultationScreen(
+                //                     bookTyoe: 'book',
+                //                     slotId: AvailableSlots(),
+                //                     docId: widget.id,
+                //                     doctor:
+                //                         '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
+                //                   ),
+                //             ),
+                //           ),
+                //       child: Container(
+                //         padding: EdgeInsets.symmetric(
+                //           vertical: 7.2.w,
+                //           horizontal: 14.0.w,
+                //         ),
+                //         decoration: BoxDecoration(
+                //           borderRadius: BorderRadius.circular(10),
+                //           color: AppColor.primary1,
+                //         ),
+                //         child: TextView(
+                //           text: 'Book Appointment',
+                //           textStyle: GoogleFonts.gabarito(
+                //             color: AppColor.white,
+                //             fontSize: 14.0.sp,
+                //             fontWeight: FontWeight.w600,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     GestureDetector(
+                //       onTap:
+                //           () => Navigator.of(context).push(
+                //             MaterialPageRoute(
+                //               builder:
+                //                   (context) => ConsultationScreen(
+                //                     bookTyoe: 'book-friend',
+
+                //                     slotId: AvailableSlots(),
+                //                     docId: widget.id,
+                //                     doctor:
+                //                         '${model.getDocDetailResponseModel?.original?.firstName ?? ''} ${model.getDocDetailResponseModel?.original?.lastName ?? ''}',
+                //                   ),
+                //             ),
+                //           ),
+                //       child: Container(
+                //         padding: EdgeInsets.symmetric(
+                //           vertical: 7.2.w,
+                //           horizontal: 14.0.w,
+                //         ),
+                //         decoration: BoxDecoration(
+                //           borderRadius: BorderRadius.circular(10),
+                //           color: const Color.fromARGB(255, 181, 222, 204),
+                //         ),
+                //         child: TextView(
+                //           text: 'Book for Someone else',
+                //           textStyle: GoogleFonts.gabarito(
+                //             color: AppColor.darkindgrey,
+                //             fontSize: 14.0.sp,
+                //             fontWeight: FontWeight.w600,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 SizedBox(height: 60.h),
               ],
             ),

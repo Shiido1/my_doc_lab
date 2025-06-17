@@ -5,7 +5,10 @@ class Item {
   num? qty;
   num? doctorId;
   num? slotId;
+  num? labTechnicianId;
   String? complaint;
+  String? date;
+  String? time;
 
   Item({
     this.serviceType,
@@ -14,7 +17,10 @@ class Item {
     this.qty,
     this.doctorId,
     this.slotId,
+    this.labTechnicianId,
     this.complaint,
+    this.date,
+    this.time,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
@@ -24,7 +30,10 @@ class Item {
     qty: num.tryParse(json['qty'].toString()),
     doctorId: num.tryParse(json['doctor_id'].toString()),
     slotId: num.tryParse(json['slot_id'].toString()),
+    labTechnicianId: num.tryParse(json['lab_technician_id'].toString()),
     complaint: json['complaint']?.toString(),
+    date: json['date']?.toString(),
+    time: json['date']?.toString(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +43,9 @@ class Item {
     if (qty != null) 'qty': qty,
     if (doctorId != null) 'doctor_id': doctorId,
     if (slotId != null) 'slot_id': slotId,
+    if (labTechnicianId != null) 'lab_technician_id': labTechnicianId,
     if (complaint != null) 'complaint': complaint,
+    if (date != null) 'date': date,
+    if (time != null) 'time': time,
   };
 }

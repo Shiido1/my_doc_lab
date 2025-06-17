@@ -3,13 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/home/cart_screen.dart';
 import 'package:stacked/stacked.dart';
+import '../../../../core/connect_end/model/checkoutentitymodel.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
+import '../../../../main.dart';
+import '../../../app_assets/app_utils.dart';
 import '../../../widget/text_widget.dart';
+import '../home/cart_screen.dart';
 
 class MedProfileScreen extends StatefulWidget {
   MedProfileScreen({super.key, required this.id});
@@ -180,7 +184,12 @@ class _MedProfileScreenState extends State<MedProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CartScreen(),
+                            ),
+                          ),
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           vertical: 8.w,
@@ -191,7 +200,7 @@ class _MedProfileScreenState extends State<MedProfileScreen> {
                           color: AppColor.primary1,
                         ),
                         child: TextView(
-                          text: 'Buy Now',
+                          text: 'Go to Cart',
                           textStyle: GoogleFonts.gabarito(
                             color: AppColor.white,
                             fontSize: 14.0.sp,
@@ -201,12 +210,36 @@ class _MedProfileScreenState extends State<MedProfileScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap:
-                          () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => CartScreen(),
+                      onTap: () async {
+                        await box.add(
+                          CheckoutEntityModel(
+                            serviceType: 'med',
+                            serviceId: 0,
+                            doctorId: 0,
+                            slotId: 0,
+                            complaint: '',
+                            amount:
+                                model.getMedDetailResponseModel!.price!
+                                    .toString(),
+                            date: DateFormat('dd MMM, yyyy').format(
+                              DateTime.parse(model.now.toString()).toLocal(),
                             ),
+                            time: DateFormat('hh:mm a').format(
+                              DateTime.parse(model.now.toString()).toLocal(),
+                            ),
+                            doctor: 'Pharmacist',
+                            productId: model.getMedDetailResponseModel!.id!,
+                            qty: 1,
                           ),
+                        );
+                        AppUtils.snackbar(
+                          context,
+                          message: 'Medicine added to Cart..!',
+                        );
+
+                        setState(() {});
+                      },
+
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           vertical: 8.w,

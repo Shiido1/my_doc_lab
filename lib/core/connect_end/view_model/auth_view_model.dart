@@ -831,132 +831,143 @@ class AuthViewModel extends BaseViewModel {
             : _getAllDoctorsResponseModelList?.getAllDoctorsResponseModelList ??
                 [];
 
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        mainAxisExtent: Platform.isIOS ? mainAxisExtent : 200,
-      ),
-      itemCount: doctorsList.length,
-      itemBuilder: (context, index) {
-        dynamic doctor = doctorsList[index];
-        final doctorName =
-            'Dr ${doctor.firstName ?? ''} ${doctor.lastName ?? ''}';
-        final speciality = doctor.speciality ?? '';
-
-        return GestureDetector(
-          onTap: () {
-            navigate.navigateTo(
-              Routes.profileScreen,
-              arguments: ProfileScreenArguments(id: doctor.id.toString()),
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: AppColor.funnyLookingGrey.withOpacity(0.3),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(10),
-                  ),
-                  child: Image.network(
-                    imageString(index),
-                    height: 120.h,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder:
-                        (context, error, stackTrace) => shimmerViewPharm(),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(8.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextView(
-                        text: doctorName,
-                        textStyle: GoogleFonts.gabarito(
-                          color: AppColor.black,
-                          fontSize: 16.0.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      TextView(
-                        text: speciality,
-                        textStyle: GoogleFonts.gabarito(
-                          color: AppColor.grey,
-                          fontSize: 12.0.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      SizedBox(height: 14.0.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 1.w,
-                              horizontal: 4.w,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: AppColor.primary,
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color: AppColor.white,
-                                  size: 15.0.sp,
-                                ),
-                                SizedBox(width: 2.w),
-                                TextView(
-                                  text: '4.8',
-                                  textStyle: GoogleFonts.dmSans(
-                                    color: AppColor.white,
-                                    fontSize: 12.0.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Row(
-                          //   children: [
-                          //     SvgPicture.asset(
-                          //       AppImage.location,
-                          //       height: 15.2.h,
-                          //       width: 16.2.w,
-                          //     ),
-                          //     SizedBox(width: 2.w),
-                          //     TextView(
-                          //       text: '800m away',
-                          //       textStyle: GoogleFonts.gabarito(
-                          //         color: AppColor.black,
-                          //         fontSize: 12.0.sp,
-                          //         fontWeight: FontWeight.w500,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+    return doctorsList.isEmpty
+        ? Center(
+          child: TextView(
+            text: 'No Available Doctor',
+            textStyle: GoogleFonts.dmSans(
+              color: AppColor.darkindgrey,
+              fontSize: 17.80.sp,
+              fontWeight: FontWeight.w500,
             ),
           ),
+        )
+        : GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            mainAxisExtent: Platform.isIOS ? mainAxisExtent : 200,
+          ),
+          itemCount: doctorsList.length,
+          itemBuilder: (context, index) {
+            dynamic doctor = doctorsList[index];
+            final doctorName =
+                'Dr ${doctor.firstName ?? ''} ${doctor.lastName ?? ''}';
+            final speciality = doctor.speciality ?? '';
+
+            return GestureDetector(
+              onTap: () {
+                navigate.navigateTo(
+                  Routes.profileScreen,
+                  arguments: ProfileScreenArguments(id: doctor.id.toString()),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: AppColor.funnyLookingGrey.withOpacity(0.3),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(10),
+                      ),
+                      child: Image.network(
+                        imageString(index),
+                        height: 120.h,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (context, error, stackTrace) => shimmerViewPharm(),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextView(
+                            text: doctorName,
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.black,
+                              fontSize: 16.0.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          TextView(
+                            text: speciality,
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.grey,
+                              fontSize: 12.0.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(height: 14.0.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 1.w,
+                                  horizontal: 4.w,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: AppColor.primary,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      color: AppColor.white,
+                                      size: 15.0.sp,
+                                    ),
+                                    SizedBox(width: 2.w),
+                                    TextView(
+                                      text: '4.8',
+                                      textStyle: GoogleFonts.dmSans(
+                                        color: AppColor.white,
+                                        fontSize: 12.0.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Row(
+                              //   children: [
+                              //     SvgPicture.asset(
+                              //       AppImage.location,
+                              //       height: 15.2.h,
+                              //       width: 16.2.w,
+                              //     ),
+                              //     SizedBox(width: 2.w),
+                              //     TextView(
+                              //       text: '800m away',
+                              //       textStyle: GoogleFonts.gabarito(
+                              //         color: AppColor.black,
+                              //         fontSize: 12.0.sp,
+                              //         fontWeight: FontWeight.w500,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
-      },
-    );
   }
 
   String imageString(int index) {
@@ -1262,7 +1273,13 @@ class AuthViewModel extends BaseViewModel {
           ),
         );
       } else if (element.serviceType == 'med') {
-        items.add(Item(serviceType: 'med', productId: element.serviceId));
+        items.add(
+          Item(
+            serviceType: 'med',
+            productId: element.serviceId,
+            qty: element.qty,
+          ),
+        );
       } else {
         items.add(
           Item(serviceType: element.serviceType, serviceId: element.serviceId),

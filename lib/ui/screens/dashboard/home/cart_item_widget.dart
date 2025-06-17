@@ -32,7 +32,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
     return Column(
       children: [
         GestureDetector(
-          onDoubleTap:
+          onLongPress:
               () => showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -100,10 +100,31 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 _row('Time:', model.time),
                 _divider(),
                 _row('Prescribed by:', 'Dr ${model.doctor}'),
+                model.qty != 0 ? _divider() : SizedBox.shrink(),
+                model.qty != 0
+                    ? _rowQuantity(
+                      'Quantity:',
+                      '${model.qty}',
+                      onAdd: () {
+                        if (model.qty > 0) {
+                          model.qty = model.qty + 1;
+                          setState(() {});
+                        } else {}
+                      },
+                      onSubstract: () {
+                        if (model.qty == 1) {
+                        } else {
+                          model.qty -= 1;
+                          setState(() {});
+                        }
+                      },
+                      valueColor: AppColor.primary,
+                    )
+                    : SizedBox.shrink(),
                 _divider(),
                 _rowAmount(
                   'Amount:',
-                  '${getCurrency()}${oCcy.format(double.parse(model.amount))}',
+                  '${getCurrency()}${oCcy.format(double.parse(getAmount(quantity: model.qty, amount: double.parse(model.amount))))}',
                   valueColor: AppColor.primary,
                 ),
                 SizedBox(height: 6.h),
@@ -113,6 +134,15 @@ class _CartItemWidgetState extends State<CartItemWidget> {
         ),
       ],
     );
+  }
+
+  String getAmount({num? quantity, double? amount}) {
+    if (quantity == 0) {
+      amount = amount;
+    } else {
+      amount = amount! * quantity!;
+    }
+    return amount.toString();
   }
 
   Widget _row(String label, String value, {Color? valueColor}) {
@@ -136,6 +166,84 @@ class _CartItemWidgetState extends State<CartItemWidget> {
               fontSize: 15.0.sp,
               fontWeight: FontWeight.w500,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _rowQuantity(
+    String label,
+    String value, {
+    Color? valueColor,
+    Function()? onAdd,
+    Function()? onSubstract,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 6.6.w, vertical: 8.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextView(
+            text: label,
+            textStyle: GoogleFonts.dmSans(
+              color: AppColor.black,
+              fontSize: 15.0.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Row(
+            children: [
+              Container(
+                width: 30.w,
+                height: 30.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: AppColor.primary1),
+                ),
+                child: Center(
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: onSubstract,
+                    icon: Icon(
+                      Icons.remove,
+                      color: AppColor.primary1,
+                      size: 20.sp,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 10.w),
+              TextView(
+                text: value,
+                textStyle: GoogleFonts.dmSans(
+                  color: valueColor ?? AppColor.grey,
+                  fontSize: 18.0.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              SizedBox(width: 10.w),
+              Container(
+                width: 30.w,
+                height: 30.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: AppColor.primary1),
+                ),
+                child: Center(
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: onAdd,
+                    icon: Icon(
+                      Icons.add,
+                      color: AppColor.primary1,
+                      size: 20.sp,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
