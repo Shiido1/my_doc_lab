@@ -102,8 +102,8 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
                               'Account Id: ${model.getUserResponseModel?.data?.accountId ?? ''}',
                           textStyle: GoogleFonts.gabarito(
                             color: AppColor.greyIt,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w400,
+                            fontSize: 16.3.sp,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         SizedBox(height: 10.w),
@@ -181,6 +181,40 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
+                                SizedBox(height: 10.h),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                                  children: [
+                                    TextView(
+                                      text: 'Email:',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    SizedBox(
+                                      width: 240.w,
+                                      child: TextView(
+                                        text:
+                                            model
+                                                .getUserResponseModel
+                                                ?.data
+                                                ?.email ??
+                                            '',
+                                        maxLines: 4,
+                                        textAlign: TextAlign.end,
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.darkindgrey,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
 
                                 SizedBox(height: 6.h),
                                 Row(
@@ -212,7 +246,41 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 6.h),
+
+                                SizedBox(height: 10.h),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                                  children: [
+                                    TextView(
+                                      text: 'Phone no:',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    SizedBox(
+                                      width: 200.w,
+                                      child: TextView(
+                                        text:
+                                            model
+                                                .getUserResponseModel
+                                                ?.data
+                                                ?.phone ??
+                                            '',
+                                        maxLines: 4,
+                                        textAlign: TextAlign.end,
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.darkindgrey,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),

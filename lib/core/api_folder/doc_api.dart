@@ -12,6 +12,7 @@ import 'package:my_doc_lab/core/connect_end/model/update_password_entity_model.d
 import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
 import '../connect_end/model/call_token_generate_entity_model.dart';
 import '../connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../connect_end/model/create_add_medicine_entity_model.dart';
 import '../connect_end/model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../connect_end/model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
@@ -22,7 +23,10 @@ import '../connect_end/model/post_user_cloud_entity_model.dart';
 import '../connect_end/model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../connect_end/model/prescription_view_response/prescription_view_response.dart';
 import '../connect_end/model/recent_appointment_response_model/recent_appointment_response_model.dart';
+import '../connect_end/model/search_doctor_entity_model.dart';
+import '../connect_end/model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../connect_end/model/send_message_response_model/send_message_response_model.dart';
+import '../connect_end/model/user_search_response_model/user_search_response_model.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
 import '../core_folder/network/cloudinary_network_service.dart';
@@ -99,7 +103,7 @@ class DocAuthApi {
   Future<GetDoctorsWalletResponseModel> doctorWallet() async {
     try {
       final response = await _service.call(
-        UrlConfig.doctors_availabilty,
+        UrlConfig.doctor_wallet,
         RequestMethod.get,
       );
       logger.d(response.data);
@@ -328,7 +332,7 @@ class DocAuthApi {
 
   Future<dynamic> createMedicinePrescrition({
     String? id,
-    CreatePrescriptionEntityModel? create,
+    CreateAddMedicineEntityModel? create,
   }) async {
     try {
       final response = await _service.call(
@@ -352,6 +356,38 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return RecentAppointmentResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<UserSearchResponseModelList> userSearch(String query) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.user_search,
+        RequestMethod.post,
+        data: {'query': query},
+      );
+      logger.d(response.data);
+      return UserSearchResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<SearchedMedicineResponseModelList> getSearchedMedicine(
+    SearchDoctorEntityModel searchedMedicine,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.meds_search,
+        RequestMethod.post,
+        data: searchedMedicine.toJson(),
+      );
+      logger.d(response.data);
+      return SearchedMedicineResponseModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

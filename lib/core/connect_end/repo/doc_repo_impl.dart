@@ -7,6 +7,7 @@ import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dar
 import '../../core_folder/app/app.locator.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../model/create_add_medicine_entity_model.dart';
 import '../model/create_prescription_entity_model.dart';
 import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
@@ -21,9 +22,12 @@ import '../model/prescription_view_response/prescription_view_response.dart';
 import '../model/received_message_response_model/received_message_response_model.dart';
 import '../model/recent_appointment_response_model/recent_appointment_response_model.dart';
 import '../model/reschedule_booking_entity_model.dart';
+import '../model/search_doctor_entity_model.dart';
+import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_password_entity_model.dart';
 import '../model/update_status_reason_entity_model.dart';
+import '../model/user_search_response_model/user_search_response_model.dart';
 
 @lazySingleton
 class DocRepoImpl {
@@ -158,7 +162,7 @@ class DocRepoImpl {
 
   Future<dynamic> createMedicinePrescrition({
     String? id,
-    CreatePrescriptionEntityModel? create,
+    CreateAddMedicineEntityModel? create,
   }) async {
     final response = await _contract.createMedicinePrescrition(
       create: create,
@@ -169,6 +173,18 @@ class DocRepoImpl {
 
   Future<RecentAppointmentResponseModelList> recentAppointment() async {
     final response = await _contract.recentAppointment();
+    return response;
+  }
+
+  Future<UserSearchResponseModelList> userSearch(String query) async {
+    final response = await _contract.userSearch(query);
+    return response;
+  }
+
+  Future<SearchedMedicineResponseModelList> getSearchedMedicine(
+    SearchDoctorEntityModel searchEntity,
+  ) async {
+    final response = await _contract.getSearchedMedicine(searchEntity);
     return response;
   }
 }

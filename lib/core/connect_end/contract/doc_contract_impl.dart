@@ -7,6 +7,7 @@ import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dar
 import '../../core_folder/app/app.locator.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../model/create_add_medicine_entity_model.dart';
 import '../model/create_prescription_entity_model.dart';
 import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
@@ -22,10 +23,13 @@ import '../model/received_message_response_model/received_message_response_model
 import '../model/recent_appointment_response_model/recent_appointment_response_model.dart'
     show RecentAppointmentResponseModelList;
 import '../model/reschedule_booking_entity_model.dart';
+import '../model/search_doctor_entity_model.dart';
+import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../model/send_message_entity_model.dart';
 import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_password_entity_model.dart';
 import '../model/update_status_reason_entity_model.dart';
+import '../model/user_search_response_model/user_search_response_model.dart';
 
 @lazySingleton
 class DocContractsImpl {
@@ -95,8 +99,13 @@ class DocContractsImpl {
 
   Future<dynamic> createMedicinePrescrition({
     String? id,
-    CreatePrescriptionEntityModel? create,
+    CreateAddMedicineEntityModel? create,
   }) async => await _api.createMedicinePrescrition(create: create, id: id);
   Future<RecentAppointmentResponseModelList> recentAppointment() async =>
       await _api.recentAppointment();
+  Future<UserSearchResponseModelList> userSearch(String query) async =>
+      await _api.userSearch(query);
+  Future<SearchedMedicineResponseModelList> getSearchedMedicine(
+    SearchDoctorEntityModel searchedMedicine,
+  ) async => await _api.getSearchedMedicine(searchedMedicine);
 }

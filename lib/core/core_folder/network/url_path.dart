@@ -15,11 +15,12 @@ class UrlConfig {
       'doctor/prescriptions/medicine/add/';
   static const String doctors_availabilty = 'doctor/availability';
   static const String all_doctor = 'user/doctors';
+  static const String user_search = 'user/search';
   static const String doctor_recent_appointment = 'doctor/recent_user';
   static const String doctor_search = 'user/doctors/search';
   static const String doctors_appointment = 'doctor/appointments';
   static const String pharmacy_search = 'user/pharmacies/search';
-  static const String meds_search = 'user/pharmacies/medicine/search';
+  static const String meds_search = 'medicine/search';
 
   static const String all_pharmacies = 'user/pharmacies';
   static const String spec_pharmacist = 'user/pharmacies/';
@@ -73,6 +74,7 @@ class UrlConfig {
   static const String pharmacy_order_item = 'pharmacy/orders/item';
   static const String pharmacy_order_detail = 'pharmacy/orders/detail';
   static const String pharmacy_wallet = 'pharmacy/wallet';
+  static const String doctor_wallet = 'doctor/wallet';
   static const String add_pharm_med_list = 'pharmacy/medicine/list';
   static const String add_pharm_med = 'pharmacy/medicine/add';
   static const String update_pharm_med = 'pharmacy/medicine';

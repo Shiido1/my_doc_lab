@@ -51,30 +51,30 @@ class DoctorWalletScreen extends StatelessWidget {
                   ],
                 ),
                 Divider(color: AppColor.greylight),
-                SizedBox(height: 20.w),
-                Card(
-                  elevation: 3,
-                  shadowColor: const Color.fromARGB(255, 143, 143, 143),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 6.w,
-                      horizontal: 8.w,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColor.primary1,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: TextView(
-                      text: 'Top-Up',
-                      textStyle: GoogleFonts.gabarito(
-                        color: AppColor.white,
-                        fontSize: 18.20.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
 
+                // SizedBox(height: 20.w),
+                // Card(
+                //   elevation: 3,
+                //   shadowColor: const Color.fromARGB(255, 143, 143, 143),
+                //   child: Container(
+                //     padding: EdgeInsets.symmetric(
+                //       vertical: 6.w,
+                //       horizontal: 8.w,
+                //     ),
+                //     decoration: BoxDecoration(
+                //       color: AppColor.primary1,
+                //       borderRadius: BorderRadius.circular(12),
+                //     ),
+                //     child: TextView(
+                //       text: 'Top-Up',
+                //       textStyle: GoogleFonts.gabarito(
+                //         color: AppColor.white,
+                //         fontSize: 18.20.sp,
+                //         fontWeight: FontWeight.w700,
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 SizedBox(height: 20.w),
                 Container(
                   width: double.infinity,

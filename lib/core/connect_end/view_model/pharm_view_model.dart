@@ -531,7 +531,6 @@ class PharmViewModel extends BaseViewModel {
 
   onTapStatusContainer() => Container(
     decoration: BoxDecoration(
-      // ignore: deprecated_member_use
       color: AppColor.primary1.withOpacity(.08),
       borderRadius: BorderRadius.circular(10),
       border: Border.all(color: AppColor.greylight),
@@ -547,7 +546,6 @@ class PharmViewModel extends BaseViewModel {
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
             decoration: BoxDecoration(
-              // ignore: deprecated_member_use
               color: tab == 'All' ? AppColor.primary1 : AppColor.transparent,
 
               borderRadius: BorderRadius.circular(10),
@@ -571,7 +569,6 @@ class PharmViewModel extends BaseViewModel {
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
             decoration: BoxDecoration(
-              // ignore: deprecated_member_use
               color:
                   tab == 'In progress'
                       ? AppColor.primary1
@@ -599,7 +596,6 @@ class PharmViewModel extends BaseViewModel {
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
             decoration: BoxDecoration(
-              // ignore: deprecated_member_use
               color: tab == 'Failed' ? AppColor.primary1 : AppColor.transparent,
 
               borderRadius: BorderRadius.circular(10),
@@ -623,7 +619,6 @@ class PharmViewModel extends BaseViewModel {
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
             decoration: BoxDecoration(
-              // ignore: deprecated_member_use
               color:
                   tab == 'Completed' ? AppColor.primary1 : AppColor.transparent,
 
@@ -2039,7 +2034,6 @@ class PharmViewModel extends BaseViewModel {
                   bottomLeft: Radius.circular(0),
                   bottomRight: Radius.circular(10),
                 ),
-                // ignore: deprecated_member_use
                 color: AppColor.primary1.withOpacity(.1),
               ),
               child: Column(

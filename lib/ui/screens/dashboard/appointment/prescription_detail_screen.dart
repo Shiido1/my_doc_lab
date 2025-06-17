@@ -154,7 +154,7 @@ class PrescriptionDetailScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
-                                          SizedBox(width: isTablet ? 120 : 100),
+                                          SizedBox(width: 140),
                                           TextView(
                                             text: 'Prescribed by',
                                             textOverflow: TextOverflow.ellipsis,
@@ -225,7 +225,7 @@ class PrescriptionDetailScreen extends StatelessWidget {
                                                           ),
 
                                                           SizedBox(
-                                                            width: 140.w,
+                                                            width: 80.w,
                                                             child: TextView(
                                                               text:
                                                                   o.dosage ??
@@ -246,10 +246,13 @@ class PrescriptionDetailScreen extends StatelessWidget {
                                                               maxLines: 1,
                                                             ),
                                                           ),
+                                                          SizedBox(width: 40),
                                                           SizedBox(
-                                                            width: 100.w,
+                                                            width: 120.w,
                                                             child: TextView(
-                                                              text: '0',
+                                                              text:
+                                                                  o.frequency ??
+                                                                  '',
                                                               textStyle: GoogleFonts.gabarito(
                                                                 color:
                                                                     AppColor
@@ -293,6 +296,7 @@ class PrescriptionDetailScreen extends StatelessWidget {
                                                             ),
                                                           ),
 
+                                                          SizedBox(width: 20.h),
                                                           SizedBox(
                                                             width: 200,
                                                             child: TextView(
@@ -317,10 +321,7 @@ class PrescriptionDetailScreen extends StatelessWidget {
                                                         ],
                                                       ),
                                                       SizedBox(
-                                                        width:
-                                                            isTablet
-                                                                ? 800
-                                                                : 720,
+                                                        width: 900,
                                                         child: Divider(
                                                           color:
                                                               AppColor

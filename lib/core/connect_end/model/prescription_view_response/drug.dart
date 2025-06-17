@@ -13,6 +13,7 @@ class Drug {
   String? medicineId;
   dynamic other;
   String? dosage;
+  String? frequency;
   String? instructions;
   @JsonKey(name: 'created_at')
   DateTime? createdAt;
@@ -26,6 +27,7 @@ class Drug {
     this.medicineId,
     this.other,
     this.dosage,
+    this.frequency,
     this.instructions,
     this.createdAt,
     this.updatedAt,

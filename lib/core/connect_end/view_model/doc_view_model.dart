@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, deprecated_member_use
 
 import 'dart:io';
 
@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
@@ -15,10 +16,12 @@ import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/repo/doc_repo_impl.dart';
+import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 import '../../../main.dart';
 import '../../../ui/app_assets/app_color.dart';
+import '../../../ui/app_assets/app_image.dart';
 import '../../../ui/app_assets/app_utils.dart';
 import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/app_assets/image_picker.dart';
@@ -31,6 +34,7 @@ import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../model/create_add_medicine_entity_model.dart';
 import '../model/create_prescription_entity_model.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
@@ -46,8 +50,11 @@ import '../model/post_user_verification_cloud_response/post_user_verification_cl
 import '../model/prescription_view_response/prescription_view_response.dart';
 import '../model/recent_appointment_response_model/recent_appointment_response_model.dart';
 import '../model/reschedule_booking_entity_model.dart';
+import '../model/search_doctor_entity_model.dart';
+import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_password_entity_model.dart';
+import '../model/user_search_response_model/user_search_response_model.dart';
 
 class DocViewModel extends BaseViewModel {
   final BuildContext? context;
@@ -57,6 +64,10 @@ class DocViewModel extends BaseViewModel {
   final session = locator<SharedPreferencesService>();
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _isLoadingUserSearch = false;
+  bool get isLoadingUserSearch => _isLoadingUserSearch;
+  bool _isLoadingMedSearch = false;
+  bool get isLoadingMedSearch => _isLoadingMedSearch;
 
   GlobalKey<FormState> presFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> presMedsFormKey = GlobalKey<FormState>();
@@ -122,6 +133,12 @@ class DocViewModel extends BaseViewModel {
   RecentAppointmentResponseModelList? _recentAppointmentResponseModelList;
   RecentAppointmentResponseModelList? get recentAppointmentResponseModelList =>
       _recentAppointmentResponseModelList;
+  UserSearchResponseModelList? _userSearchResponseModelList;
+  UserSearchResponseModelList? get userSearchResponseModelList =>
+      _userSearchResponseModelList;
+  SearchedMedicineResponseModelList? _searchedMedResponseModelList;
+  SearchedMedicineResponseModelList? get searchedMedResponseModelList =>
+      _searchedMedResponseModelList;
 
   String query = '';
   String queryPatient = '';
@@ -155,6 +172,9 @@ class DocViewModel extends BaseViewModel {
   TextEditingController dosageTextController = TextEditingController();
   TextEditingController frequencyTextController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
+  UserSearchResponseModel? _searchedUser;
+  SearchedMedicineResponseModel? _searchedMeds;
+  String presFrequency = '';
 
   loadingDialog(context) => showDialog(
     context: context,
@@ -604,6 +624,21 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> userSearch(String query) async {
+    try {
+      _isLoadingUserSearch = true;
+      _userSearchResponseModelList = await runBusyFuture(
+        repositoryImply.userSearch(query),
+        throwException: true,
+      );
+      _isLoadingUserSearch = false;
+    } catch (e) {
+      _isLoadingUserSearch = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   Future<void> doctorWallet() async {
     try {
       _isLoading = true;
@@ -733,6 +768,21 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> getPrescriptionListReload() async {
+    try {
+      // _isLoading = true;
+      _getPrescriptionListResponseModelList = await runBusyFuture(
+        repositoryImply.getPrescriptionList(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   Future<void> getPrescriptionView(String id) async {
     try {
       _isLoading = true;
@@ -748,35 +798,65 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> createPrescrition(CreatePrescriptionEntityModel create) async {
+  Future<void> createPrescrition(
+    context, {
+    CreatePrescriptionEntityModel? create,
+  }) async {
     try {
       _isLoading = true;
-      await runBusyFuture(
-        repositoryImply.createPrescrition(create),
+      var v = await runBusyFuture(
+        repositoryImply.createPrescrition(create!),
         throwException: true,
       );
       _isLoading = false;
+      await AppUtils.snackbar(context, message: v['message']);
+      Navigator.pop(context);
     } catch (e) {
       _isLoading = false;
+      await AppUtils.snackbar(context, message: e.toString(), error: true);
+      Navigator.pop(context);
       logger.d(e);
     }
     notifyListeners();
   }
 
-  Future<dynamic> createMedicinePrescrition({
+  Future<dynamic> createMedicinePrescrition(
+    context, {
     String? id,
-    CreatePrescriptionEntityModel? create,
+    CreateAddMedicineEntityModel? create,
   }) async {
     try {
       _isLoading = true;
-      await runBusyFuture(
+      var v = await runBusyFuture(
         repositoryImply.createMedicinePrescrition(create: create, id: id),
         throwException: true,
       );
+
       _isLoading = false;
+      await AppUtils.snackbar(context, message: v['message']);
+      Navigator.pop(context);
     } catch (e) {
       _isLoading = false;
+      await AppUtils.snackbar(context, message: e.toString(), error: true);
+      Navigator.pop(context);
       logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  void getSearchedMed(SearchDoctorEntityModel searchEntity) async {
+    try {
+      _isLoadingMedSearch = true;
+      _searchedMedResponseModelList = await runBusyFuture(
+        repositoryImply.getSearchedMedicine(searchEntity),
+        throwException: true,
+      );
+
+      _isLoadingMedSearch = false;
+    } catch (e) {
+      _isLoadingMedSearch = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -884,7 +964,6 @@ class DocViewModel extends BaseViewModel {
                   bottomLeft: Radius.circular(0),
                   bottomRight: Radius.circular(10),
                 ),
-                // ignore: deprecated_member_use
                 color: AppColor.primary1.withOpacity(.1),
               ),
               child: Column(
@@ -1177,9 +1256,9 @@ class DocViewModel extends BaseViewModel {
               ),
               child: DraggableScrollableSheet(
                 expand: false,
-                initialChildSize: 0.43, // 50% of screen height
+                initialChildSize: 0.49, // 50% of screen height
                 minChildSize: 0.3, // Can be dragged to 30% of screen height
-                maxChildSize: 0.5, // Can be dragged to 90% of screen height
+                maxChildSize: 0.7, // Can be dragged to 90% of screen height
                 builder: (context, scrollController) {
                   return ViewModelBuilder<DocViewModel>.reactive(
                     viewModelBuilder: () => DocViewModel(),
@@ -1187,7 +1266,8 @@ class DocViewModel extends BaseViewModel {
                     disposeViewModel: false,
                     onDispose: (viewModel) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // clearPharmProductController();
+                        patientNameTextController.clear();
+                        patientConditionTextController.clear();
                       });
                     },
                     builder: (_, DocViewModel model, __) {
@@ -1232,8 +1312,147 @@ class DocViewModel extends BaseViewModel {
                                 isFilled: true,
                                 fillColor: AppColor.white,
                                 controller: patientNameTextController,
+                                prefixWidget:
+                                    model.isLoadingUserSearch
+                                        ? SizedBox(
+                                          width: 10.w,
+                                          height: 10.h,
+                                          child: SpinKitDualRing(
+                                            color: AppColor.darkindgrey,
+                                            size: 10.sp,
+                                          ),
+                                        )
+                                        : Padding(
+                                          padding: EdgeInsets.all(14.w),
+                                          child: SvgPicture.asset(
+                                            AppImage.search,
+                                            height: 20.h,
+                                            width: 20.w,
+                                          ),
+                                        ),
+                                onChange: (p0) {
+                                  model.debouncer.run(() {
+                                    model.query = p0;
+                                    model.userSearch(p0);
+                                  });
+                                  model.notifyListeners();
+                                },
                                 validator: AppValidator.validateString(),
                               ),
+                              SizedBox(
+                                height:
+                                    model.userSearchResponseModelList != null &&
+                                            model.query != ''
+                                        ? 10.h
+                                        : 0.h,
+                              ),
+                              if (model.userSearchResponseModelList != null &&
+                                  model
+                                      .userSearchResponseModelList!
+                                      .userSearchResponseModelList!
+                                      .isNotEmpty &&
+                                  model.query != '')
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(maxHeight: 300),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 15.20.w,
+                                      horizontal: 20.w,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColor.primary1.withOpacity(.14),
+                                    ),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ...model.userSearchResponseModelList!.userSearchResponseModelList!.map(
+                                            (o) => Column(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    _searchedUser = o;
+                                                    patientNameTextController
+                                                            .text =
+                                                        '${o.firstName?.capitalize()} ${o.lastName?.capitalize()}';
+                                                    model
+                                                        .userSearchResponseModelList!
+                                                        .userSearchResponseModelList!
+                                                        .clear();
+                                                    model.notifyListeners();
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(
+                                                      6.w,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            6.r,
+                                                          ),
+                                                      color: AppColor.white
+                                                          .withOpacity(.5),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 160.w,
+                                                          child: TextView(
+                                                            text:
+                                                                '${o.firstName?.capitalize()} ${o.lastName?.capitalize()}',
+                                                            maxLines: 1,
+                                                            textOverflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            textStyle: TextStyle(
+                                                              color:
+                                                                  AppColor
+                                                                      .darkindgrey,
+                                                              fontSize:
+                                                                  16.20.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        TextView(
+                                                          text:
+                                                              o.accountId ?? '',
+                                                          maxLines: 1,
+                                                          textOverflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                          textStyle: TextStyle(
+                                                            color:
+                                                                AppColor
+                                                                    .darkindgrey,
+                                                            fontSize: 14.20.sp,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  color: AppColor.darkindgrey,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               SizedBox(height: 20.h),
                               TextFormWidget(
                                 label: 'Patient\'s Condition',
@@ -1289,7 +1508,23 @@ class DocViewModel extends BaseViewModel {
                                       ),
                                       SizedBox(width: 20.w),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          if (presFormKey.currentState!
+                                              .validate()) {
+                                            model.createPrescrition(
+                                              context,
+                                              create: CreatePrescriptionEntityModel(
+                                                notes:
+                                                    patientConditionTextController
+                                                        .text
+                                                        .trim(),
+                                                userId:
+                                                    _searchedUser!.accountId,
+                                              ),
+                                            );
+                                          }
+                                          model.notifyListeners();
+                                        },
                                         child: Container(
                                           alignment: Alignment.center,
                                           padding: EdgeInsets.all(10.w),
@@ -1328,7 +1563,7 @@ class DocViewModel extends BaseViewModel {
     );
   }
 
-  void modalBottomSheetAddMedsPrescription(context) {
+  void modalBottomSheetAddMedsPrescription(context, {String? id}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Enables full-screen dragging
@@ -1356,7 +1591,10 @@ class DocViewModel extends BaseViewModel {
                     disposeViewModel: false,
                     onDispose: (viewModel) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        // clearPharmProductController();
+                        medicationTextController.clear();
+                        dosageTextController.clear();
+                        frequencyTextController.clear();
+                        noteTextController.clear();
                       });
                     },
                     builder: (_, DocViewModel model, __) {
@@ -1364,7 +1602,7 @@ class DocViewModel extends BaseViewModel {
                         padding: EdgeInsets.only(left: 12.w, right: 24.w),
                         controller: scrollController,
                         child: Form(
-                          key: presFormKey,
+                          key: presMedsFormKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -1401,8 +1639,149 @@ class DocViewModel extends BaseViewModel {
                                 isFilled: true,
                                 fillColor: AppColor.white,
                                 controller: medicationTextController,
+                                prefixWidget:
+                                    model.isLoadingMedSearch
+                                        ? SizedBox(
+                                          width: 10.w,
+                                          height: 10.h,
+                                          child: SpinKitDualRing(
+                                            color: AppColor.darkindgrey,
+                                            size: 10.sp,
+                                          ),
+                                        )
+                                        : Padding(
+                                          padding: EdgeInsets.all(14.w),
+                                          child: SvgPicture.asset(
+                                            AppImage.search,
+                                            height: 20.h,
+                                            width: 20.w,
+                                          ),
+                                        ),
+                                onChange: (p0) {
+                                  model.debouncer.run(() {
+                                    model.query = p0;
+                                    model.getSearchedMed(
+                                      SearchDoctorEntityModel(query: p0),
+                                    );
+                                  });
+                                  model.notifyListeners();
+                                },
                                 validator: AppValidator.validateString(),
                               ),
+                              SizedBox(
+                                height:
+                                    model.searchedMedResponseModelList !=
+                                                null &&
+                                            model.query != ''
+                                        ? 10.h
+                                        : 0.h,
+                              ),
+                              if (model.searchedMedResponseModelList != null &&
+                                  model
+                                      .searchedMedResponseModelList!
+                                      .searchedMedicineResponseModelList!
+                                      .isNotEmpty &&
+                                  model.query != '')
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(maxHeight: 300),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 15.20.w,
+                                      horizontal: 20.w,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColor.primary1.withOpacity(.14),
+                                    ),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ...model.searchedMedResponseModelList!.searchedMedicineResponseModelList!.map(
+                                            (o) => Column(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    _searchedMeds = o;
+                                                    medicationTextController
+                                                            .text =
+                                                        '${o.name?.capitalize()}';
+                                                    model
+                                                        .searchedMedResponseModelList!
+                                                        .searchedMedicineResponseModelList!
+                                                        .clear();
+                                                    model.notifyListeners();
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(
+                                                      6.w,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            6.r,
+                                                          ),
+                                                      color: AppColor.white
+                                                          .withOpacity(.5),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 160.w,
+                                                          child: TextView(
+                                                            text:
+                                                                '${o.name?.capitalize()}',
+                                                            maxLines: 1,
+                                                            textOverflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            textStyle: TextStyle(
+                                                              color:
+                                                                  AppColor
+                                                                      .darkindgrey,
+                                                              fontSize:
+                                                                  16.20.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        TextView(
+                                                          text: o.volume ?? '',
+                                                          maxLines: 1,
+                                                          textOverflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                          textStyle: TextStyle(
+                                                            color:
+                                                                AppColor
+                                                                    .darkindgrey,
+                                                            fontSize: 13.20.sp,
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  color: AppColor.darkindgrey,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               SizedBox(height: 20.h),
                               TextFormWidget(
                                 label: 'Dosage',
@@ -1413,6 +1792,7 @@ class DocViewModel extends BaseViewModel {
                                 ),
                                 border: 10,
                                 isFilled: true,
+                                keyboardType: TextInputType.number,
                                 fillColor: AppColor.white,
                                 controller: dosageTextController,
                                 validator: AppValidator.validateString(),
@@ -1425,10 +1805,59 @@ class DocViewModel extends BaseViewModel {
                                   fontWeight: FontWeight.w400,
                                   color: AppColor.primary1,
                                 ),
+                                readOnly: true,
                                 border: 10,
                                 isFilled: true,
                                 fillColor: AppColor.white,
-                                controller: patientNameTextController,
+                                controller: frequencyTextController,
+                                suffixWidget: PopupMenuButton<String>(
+                                  onSelected: (String item) {
+                                    // Handle the selected menu item
+                                  },
+                                  itemBuilder: (BuildContext context) {
+                                    return [
+                                      PopupMenuItem<String>(
+                                        value: 'daily',
+                                        child: TextView(
+                                          text: 'Daily',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.darkindgrey,
+                                            fontSize: 15.40.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          presFrequency = 'daily';
+                                          frequencyTextController.text =
+                                              'Daily';
+                                          model.notifyListeners();
+                                        },
+                                      ),
+                                      PopupMenuItem<String>(
+                                        value: 'weekly',
+                                        child: TextView(
+                                          text: 'Weekly',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.darkindgrey,
+                                            fontSize: 15.40.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          presFrequency = 'weekly';
+                                          frequencyTextController.text =
+                                              'Weekly';
+                                          model.notifyListeners();
+                                        },
+                                      ),
+                                    ];
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_drop_down_sharp,
+                                    size: 30.sp,
+                                    color: AppColor.darkindgrey,
+                                  ), // Optional: Customize the button's icon
+                                ),
                                 validator: AppValidator.validateString(),
                               ),
                               SizedBox(height: 20.h),
@@ -1445,7 +1874,7 @@ class DocViewModel extends BaseViewModel {
                                 alignLabelWithHint: true,
                                 maxline: 4,
                                 fillColor: AppColor.white,
-                                controller: patientConditionTextController,
+                                controller: noteTextController,
                                 validator: AppValidator.validateString(),
                               ),
                               SizedBox(height: 20.h),
@@ -1486,7 +1915,32 @@ class DocViewModel extends BaseViewModel {
                                       ),
                                       SizedBox(width: 20.w),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          if (presMedsFormKey.currentState!
+                                              .validate()) {
+                                            model.createMedicinePrescrition(
+                                              context,
+                                              id: id,
+                                              create:
+                                                  CreateAddMedicineEntityModel(
+                                                    medicineId:
+                                                        _searchedMeds?.id,
+                                                    dosage:
+                                                        dosageTextController
+                                                            .text
+                                                            .trim(),
+                                                    other:
+                                                        noteTextController.text
+                                                            .trim(),
+                                                    frequency: presFrequency,
+                                                    instructions:
+                                                        noteTextController.text
+                                                            .trim(),
+                                                  ),
+                                            );
+                                          }
+                                          model.notifyListeners();
+                                        },
                                         child: Container(
                                           alignment: Alignment.center,
                                           padding: EdgeInsets.all(10.w),

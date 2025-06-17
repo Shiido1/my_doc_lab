@@ -190,14 +190,14 @@ class DocEditProfileScreen extends StatelessWidget {
                     validator: AppValidator.validateString(),
                   ),
                   SizedBox(height: 20.h),
-                  TextFormWidget(
-                    hint: 'Age',
-                    border: 10,
-                    isFilled: true,
-                    fillColor: AppColor.oneKindgrey,
-                    borderColor: AppColor.transparent,
-                  ),
-                  SizedBox(height: 20.h),
+                  // TextFormWidget(
+                  //   hint: 'Age',
+                  //   border: 10,
+                  //   isFilled: true,
+                  //   fillColor: AppColor.oneKindgrey,
+                  //   borderColor: AppColor.transparent,
+                  // ),
+                  // SizedBox(height: 20.h),
                   TextFormWidget(
                     hint: 'Email Address',
                     border: 10,

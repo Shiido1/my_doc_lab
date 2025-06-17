@@ -8,7 +8,6 @@ import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/doc_edit_profile_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/appointment/doctors_appointment/doctors_appointment_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
@@ -17,6 +16,7 @@ import '../../../app_assets/constant.dart';
 import '../appointment/doctors_appointment/doctors_availabilty_screen.dart';
 import '../appointment/prescription_screen.dart';
 import 'help_and_support_screen.dart';
+import 'wallet/doc_wallet_screen.dart';
 
 class DocMoreSettingsScreen extends StatelessWidget {
   const DocMoreSettingsScreen({super.key});
@@ -154,7 +154,9 @@ class DocMoreSettingsScreen extends StatelessWidget {
                   text: 'Wallet',
                   onTap:
                       () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => WalletScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => DoctorWalletScreen(),
+                        ),
                       ),
                 ),
                 SizedBox(height: 20.h),
