@@ -12,7 +12,7 @@ Drug _$DrugFromJson(Map<String, dynamic> json) => Drug(
       medicineId: json['medicine_id'] as String?,
       other: json['other'],
       dosage: json['dosage'] as String?,
-      frequency: json['frequency'] as String?,
+      frequency: json['frequency'],
       instructions: json['instructions'] as String?,
       createdAt: json['created_at'] == null
           ? null

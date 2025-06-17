@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'prescription_view_response.dart';
+part of 'view_doctors_prescription_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PrescriptionViewResponse _$PrescriptionViewResponseFromJson(
+ViewDoctorsPrescriptionModel _$ViewDoctorsPrescriptionModelFromJson(
         Map<String, dynamic> json) =>
-    PrescriptionViewResponse(
+    ViewDoctorsPrescriptionModel(
       id: json['id'] as num?,
       userId: json['user_id'] as num?,
       doctorId: json['doctor_id'] as num?,
@@ -33,8 +33,8 @@ PrescriptionViewResponse _$PrescriptionViewResponseFromJson(
           : Doctor.fromJson(json['doctor'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$PrescriptionViewResponseToJson(
-        PrescriptionViewResponse instance) =>
+Map<String, dynamic> _$ViewDoctorsPrescriptionModelToJson(
+        ViewDoctorsPrescriptionModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'user_id': instance.userId,
