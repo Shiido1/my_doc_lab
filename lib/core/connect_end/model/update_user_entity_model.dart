@@ -27,7 +27,7 @@ class UpdateUserEntityModel {
     return UpdateUserEntityModel(
       firstName: json['firstName']?.toString(),
       lastName: json['lastName']?.toString(),
-      phoneNumber: json['phoneNumber']?.toString(),
+      phoneNumber: json['phone']?.toString(),
       email: json['email']?.toString(),
       password: json['password']?.toString(),
       confirmPassword: json['confirmPassword']?.toString(),
@@ -41,7 +41,7 @@ class UpdateUserEntityModel {
   Map<String, dynamic> toJson() => {
     if (firstName != null) 'firstName': firstName,
     if (lastName != null) 'lastName': lastName,
-    if (phoneNumber != null) 'phoneNumber': phoneNumber,
+    if (phoneNumber != null) 'phone': phoneNumber,
     if (email != null) 'email': email,
     if (password != null) 'password': password,
     if (confirmPassword != null) 'confirmPassword': confirmPassword,
