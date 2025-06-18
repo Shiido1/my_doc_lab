@@ -265,7 +265,8 @@ class DocEditProfileScreen extends StatelessWidget {
                                       ?.original
                                       ?.profileImage !=
                                   null ||
-                          model.postUserVerificationCloudResponse != null) {
+                          formKey.currentState!.validate() &&
+                              model.postUserVerificationCloudResponse != null) {
                         model.updateDoctorsDetail(
                           context,
                           id:

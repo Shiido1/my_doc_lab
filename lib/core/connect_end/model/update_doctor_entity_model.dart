@@ -25,7 +25,7 @@ class UpdateDoctorEntityModel {
     return UpdateDoctorEntityModel(
       firstName: json['firstName']?.toString(),
       lastName: json['lastName']?.toString(),
-      phoneNumber: json['phoneNumber']?.toString(),
+      phoneNumber: json['phone']?.toString(),
       email: json['email']?.toString(),
       speciality: json['speciality']?.toString(),
       certifications: json['certifications']?.toString(),
@@ -38,7 +38,7 @@ class UpdateDoctorEntityModel {
   Map<String, dynamic> toJson() => {
     if (firstName != null) 'firstName': firstName,
     if (lastName != null) 'lastName': lastName,
-    if (phoneNumber != null) 'phoneNumber': phoneNumber,
+    if (phoneNumber != null) 'phone': phoneNumber,
     if (email != null) 'email': email,
     if (speciality != null) 'speciality': speciality,
     if (certifications != null) 'certifications': certifications,
