@@ -6,7 +6,6 @@ import 'package:my_doc_lab/core/core_folder/manager/shared_preference.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/pharmacy/phamacy_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/user_prescription/user_prescription_screen.dart';
@@ -56,7 +55,9 @@ class MoreSettingsScreen extends StatelessWidget {
                 Center(
                   child: Column(
                     children: [
-                      model.getUserResponseModel!.data!.profileImage != null
+                      model.getUserResponseModel != null &&
+                              model.getUserResponseModel!.data!.profileImage !=
+                                  null
                           ? ClipOval(
                             child: SizedBox.fromSize(
                               size: const Size.fromRadius(68),

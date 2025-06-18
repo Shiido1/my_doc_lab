@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison
+import 'package:pay_with_paystack/pay_with_paystack.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'dart:io';
@@ -27,8 +28,10 @@ import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
+import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/screens/dashboard/dashboard_screen.dart';
 import '../../../ui/widget/button_widget.dart';
+import '../../../ui/widget/text_form_widget.dart';
 import '../model/checkout_entity_model/checkout_entity_model.dart' as ch;
 import '../../../main.dart';
 import '../../../ui/app_assets/app_utils.dart';
@@ -49,6 +52,7 @@ import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_m
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import '../model/pay_stack_payment_model/pay_stack_payment_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/received_message_response_model/received_message_response_model.dart';
@@ -75,6 +79,7 @@ class AuthViewModel extends BaseViewModel {
   GetUserResponseModel? _getUserResponseModel;
   GetUserResponseModel? get getUserResponseModel => _getUserResponseModel;
 
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
 
@@ -128,6 +133,8 @@ class AuthViewModel extends BaseViewModel {
   GetDoctorsWalletResponseModel? _getUsersWalletResponseModel;
   GetDoctorsWalletResponseModel? get getUsersWalletResponseModel =>
       _getUsersWalletResponseModel;
+  PayStackPaymentModel? _payStackPaymentModel;
+  PayStackPaymentModel? get payStackPaymentModel => _payStackPaymentModel;
 
   final debouncer = Debouncer();
 
@@ -150,6 +157,7 @@ class AuthViewModel extends BaseViewModel {
   bool hasLoadedConversation = false;
   DateTime now = DateTime.now();
   TextEditingController sendtextController = TextEditingController(text: '');
+  TextEditingController amountController = TextEditingController();
 
   Box<CheckoutEntityModel>? _box;
 
@@ -460,6 +468,20 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> userWalletReload() async {
+    try {
+      _getUsersWalletResponseModel = await runBusyFuture(
+        repositoryImply.userWallet(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   void getSearchedDoctor(
     context, {
     SearchDoctorEntityModel? searchEntity,
@@ -476,6 +498,44 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = false;
       logger.d(e);
       // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void paymentTopUp(context, {String? amount}) async {
+    try {
+      _isLoading = true;
+      _payStackPaymentModel = await runBusyFuture(
+        repositoryImply.paymentTopUp(amount!),
+        throwException: true,
+      );
+      _isLoading = false;
+      await AppUtils.snackbar(
+        context,
+        message: _payStackPaymentModel?.message ?? '',
+      );
+
+      PayWithPayStack().now(
+        context: context,
+        secretKey: "sk_test_b0cbfeb4f179474ec111bc4112077d61e1a6f811",
+        customerEmail: payStackPaymentModel?.paystackData?.email ?? '',
+        reference: _payStackPaymentModel!.paystackData!.reference!,
+        currency: "NGN",
+        amount: double.parse(
+          _payStackPaymentModel!.paystackData!.amount!.toString(),
+        ),
+        callbackUrl: _payStackPaymentModel!.authorizationUrl!,
+        transactionCompleted: (paymentData) {
+          debugPrint(paymentData.toString());
+        },
+        transactionNotCompleted: (reason) {
+          debugPrint("==> Transaction failed reason $reason");
+        },
+      );
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -1474,4 +1534,129 @@ class AuthViewModel extends BaseViewModel {
           ),
         ),
   );
+
+  void modalBottomSheetTopUp(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        return StatefulBuilder(
+          builder: (_, StateSetter setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: DraggableScrollableSheet(
+                expand: false,
+                initialChildSize: 0.35, // 50% of screen height
+                minChildSize: 0.28, // Can be dragged to 30% of screen height
+                maxChildSize: 0.45, // Can be dragged to 90% of screen height
+                builder: (__, scrollController) {
+                  return ViewModelBuilder<AuthViewModel>.reactive(
+                    viewModelBuilder: () => AuthViewModel(),
+                    onViewModelReady: (model) {},
+                    builder: (_, AuthViewModel model, __) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 6.0.h),
+                              Center(
+                                child: Container(
+                                  width: 30.w,
+                                  height: 3.5.h,
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey2.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.0.h),
+                              TextView(
+                                text: 'Top Up Wallet',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Amount',
+                                labelStyle: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                isFilled: true,
+                                keyboardType: TextInputType.number,
+                                fillColor: AppColor.white,
+                                controller: amountController,
+                                validator: AppValidator.validateString(),
+                              ),
+
+                              SizedBox(height: 20.h),
+
+                              !model.isLoading
+                                  ? GestureDetector(
+                                    onTap: () {
+                                      if (formKey.currentState!.validate()) {
+                                        model.paymentTopUp(
+                                          context,
+                                          amount: amountController.text.trim(),
+                                        );
+                                      }
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(10.w),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: AppColor.primary1,
+                                      ),
+                                      child: TextView(
+                                        text: 'Send',
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.white,
+                                          fontSize: 22.0.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  : SpinKitCircle(
+                                    color: AppColor.primary1,
+                                    size: 34.sp,
+                                  ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Color trnsType(status) {
+    if (status.toLowerCase() == 'debit') {
+      return AppColor.red;
+    }
+    return AppColor.primary1;
+  }
 }

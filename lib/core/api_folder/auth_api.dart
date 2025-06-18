@@ -8,6 +8,7 @@ import 'package:my_doc_lab/core/connect_end/model/checkout_entity_model/checkout
 import 'package:my_doc_lab/core/connect_end/model/forgot_password_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/pay_stack_payment_model/pay_stack_payment_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/request_otp_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/reset_password_entity_model.dart';
@@ -479,6 +480,21 @@ class AuthApi {
       );
       logger.d(response.data);
       return GetDoctorsWalletResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<PayStackPaymentModel> paymentTopUp(String amount) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.payment,
+        RequestMethod.post,
+        data: {'amount': amount},
+      );
+      logger.d(response.data);
+      return PayStackPaymentModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

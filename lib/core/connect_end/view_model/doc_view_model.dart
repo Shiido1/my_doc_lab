@@ -654,6 +654,20 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> doctorWalletReload() async {
+    try {
+      _getDoctorsWalletResponseModel = await runBusyFuture(
+        repositoryImply.doctorsWallet(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   Future<void> doctorsAppointmentReschedule({
     String? id,
     RescheduleBookingEntityModel? reschedule,

@@ -488,7 +488,6 @@ class PharmViewModel extends BaseViewModel {
 
   Future<void> getPharmOrderReload() async {
     try {
-      // _isLoading = true;
       _getPharmOrderModel = await runBusyFuture(
         repositoryImply.pharmOrder(),
         throwException: true,
@@ -656,7 +655,6 @@ class PharmViewModel extends BaseViewModel {
 
   getPharmOrderIdReload(id) async {
     try {
-      // _isLoading = true;
       _orderByIdResponseModel = await runBusyFuture(
         repositoryImply.pharmOrderId(id),
         throwException: true,
@@ -731,6 +729,20 @@ class PharmViewModel extends BaseViewModel {
   void getPharmWallet() async {
     try {
       _isLoading = true;
+      _getPharmWalletResponseModel = await runBusyFuture(
+        repositoryImply.pharmWallet(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getPharmWalletReload() async {
+    try {
       _getPharmWalletResponseModel = await runBusyFuture(
         repositoryImply.pharmWallet(),
         throwException: true,
