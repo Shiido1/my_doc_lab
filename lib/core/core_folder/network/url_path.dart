@@ -9,6 +9,7 @@ class UrlConfig {
   static const String doctor_app_update = 'doctor/bookings/';
   static const String doctor_app_reschedule = 'doctor/reschedule/';
   static const String doctor_prescription = 'doctor/prescriptions';
+  static const String user_prescription = 'user/prescriptions';
   static const String doctor_prescription_create =
       'doctor/prescriptions/create';
   static const String doctor_prescription_medicine =

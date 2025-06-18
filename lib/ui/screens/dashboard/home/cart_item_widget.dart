@@ -108,6 +108,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                       onAdd: () {
                         if (model.qty > 0) {
                           model.qty = model.qty + 1;
+                          updateQuantityBox(model);
                           setState(() {});
                         } else {}
                       },
@@ -115,6 +116,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         if (model.qty == 1) {
                         } else {
                           model.qty -= 1;
+                          updateQuantityBox(model);
                           setState(() {});
                         }
                       },
@@ -284,5 +286,24 @@ class _CartItemWidgetState extends State<CartItemWidget> {
     if (name == 'consult') return 'Consultation';
     if (name == 'lab') return 'Laboratory Test';
     return 'Pharmacy Medication';
+  }
+
+  updateQuantityBox(model) {
+    box.putAt(
+      widget.index,
+      CheckoutEntityModel(
+        serviceType: model.serviceType,
+        serviceId: model.serviceId,
+        doctorId: model.doctorId,
+        slotId: model.slotId,
+        complaint: model.complaint,
+        amount: model.amount,
+        date: model.date,
+        time: model.time,
+        doctor: model.doctor,
+        productId: model.productId,
+        qty: model.qty,
+      ),
+    );
   }
 }

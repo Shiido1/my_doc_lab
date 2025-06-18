@@ -35,6 +35,7 @@ import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_user_entity_model.dart';
 import '../model/update_user_response_model/update_user_response_model.dart';
 import '../model/verify_otp_entity_model.dart';
+import '../model/view_doctors_prescription_model/view_doctors_prescription_model.dart';
 
 @lazySingleton
 class AuthContractsImpl {
@@ -128,4 +129,6 @@ class AuthContractsImpl {
   Future<CallTokenGenerateResponseModel> generateToken(
     CallTokenGenerateEntityModel callToken,
   ) async => await _api.genCallToken(callToken);
+  Future<ViewDoctorsPrescriptionModelList> viewDocPrescription() async =>
+      await _api.viewDocPrescription();
 }

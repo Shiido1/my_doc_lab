@@ -13,6 +13,7 @@ import '../../../ui/screens/dashboard/patient/doctor_patient_detail_sceen.dart';
 import '../../../ui/screens/dashboard/patient/patient_detail_sceen.dart';
 import '../../../ui/screens/dashboard/pharmacy_dashboard_screen.dart';
 import '../../../ui/screens/dashboard/settings/profile_screen.dart';
+import '../../../ui/screens/dashboard/settings/user_prescription/user_prescription_detail_screen.dart';
 import '../../api_folder/auth_api.dart';
 import '../../api_folder/doc_api.dart';
 import '../../api_folder/med_lab_api.dart';
@@ -48,6 +49,7 @@ import '../network/network_service.dart';
     MaterialRoute(page: PatientDetailSceen),
     MaterialRoute(page: PharmChatScreen),
     MaterialRoute(page: PrescriptionDetailScreen),
+    MaterialRoute(page: UserPrescriptionDetailScreen),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),

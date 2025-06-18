@@ -56,6 +56,7 @@ import '../model/searched_medicine_response_model/searched_medicine_response_mod
 import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../model/send_message_entity_model.dart';
 import '../model/update_user_entity_model.dart';
+import '../model/view_doctors_prescription_model/view_doctors_prescription_model.dart';
 import '../repo/repo_impl.dart';
 
 class AuthViewModel extends BaseViewModel {
@@ -156,7 +157,9 @@ class AuthViewModel extends BaseViewModel {
   CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
   CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
       _callTokenGenerateResponseModel;
-
+  ViewDoctorsPrescriptionModelList? _viewDoctorsPrescriptionModel;
+  ViewDoctorsPrescriptionModelList? get viewDoctorsPrescriptionModel =>
+      _viewDoctorsPrescriptionModel;
   RtcEngine? engine;
 
   dynamic remoteUidGlobal;
@@ -402,6 +405,37 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = false;
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void viewDoctorsPrescription(context) async {
+    try {
+      _isLoading = true;
+      _viewDoctorsPrescriptionModel = await runBusyFuture(
+        repositoryImply.viewDocPrescription(),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> viewDoctorsPrescriptionReload() async {
+    try {
+      _viewDoctorsPrescriptionModel = await runBusyFuture(
+        repositoryImply.viewDocPrescription(),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
     }
     notifyListeners();
   }
@@ -818,7 +852,7 @@ class AuthViewModel extends BaseViewModel {
   doubleTapDeleteCartSnack(context) {
     AppUtils.snackbarTop(
       context,
-      message: 'Kindly double tap item to delete items from cart',
+      message: 'Kindly long press item to delete item from cart',
     );
   }
 
@@ -1276,7 +1310,7 @@ class AuthViewModel extends BaseViewModel {
         items.add(
           Item(
             serviceType: 'med',
-            productId: element.serviceId,
+            productId: element.productId,
             qty: element.qty,
           ),
         );
@@ -1285,7 +1319,7 @@ class AuthViewModel extends BaseViewModel {
           Item(serviceType: element.serviceType, serviceId: element.serviceId),
         );
       }
-      print('items:::::$items');
+      print('items:::::${items[0].toJson()}');
     }
   }
 

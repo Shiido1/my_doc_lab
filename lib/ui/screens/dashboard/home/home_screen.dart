@@ -311,7 +311,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 SizedBox(
-                  height: 370.h,
+                  height:
+                      model.getAllDoctorsResponseModelList != null &&
+                              model
+                                  .getAllDoctorsResponseModelList!
+                                  .getAllDoctorsResponseModelList!
+                                  .isNotEmpty
+                          ? 370.h
+                          : 100.h,
                   child:
                       model.isLoading
                           ? GridView.builder(

@@ -13,6 +13,7 @@ import 'package:my_doc_lab/core/connect_end/model/request_otp_entity_model.dart'
 import 'package:my_doc_lab/core/connect_end/model/reset_password_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_user_response_model/update_user_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/verify_otp_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/view_doctors_prescription_model/view_doctors_prescription_model.dart';
 import '../connect_end/model/add_booking_entity_model.dart';
 import '../connect_end/model/care_giver_resiter_entity_model.dart';
 import '../connect_end/model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
@@ -449,6 +450,20 @@ class AuthApi {
       );
       logger.d(response.data);
       return CallTokenGenerateResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<ViewDoctorsPrescriptionModelList> viewDocPrescription() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.user_prescription,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return ViewDoctorsPrescriptionModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

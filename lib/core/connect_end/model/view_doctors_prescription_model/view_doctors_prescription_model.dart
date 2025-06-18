@@ -6,6 +6,23 @@ import 'user.dart';
 
 part 'view_doctors_prescription_model.g.dart';
 
+class ViewDoctorsPrescriptionModelList {
+  final List<ViewDoctorsPrescriptionModel>? viewDoctorsPrescriptionModelList;
+
+  ViewDoctorsPrescriptionModelList({this.viewDoctorsPrescriptionModelList});
+
+  factory ViewDoctorsPrescriptionModelList.fromJson(List<dynamic> parsedJson) {
+    List<ViewDoctorsPrescriptionModel> viewDoctorsPrescriptionModel =
+        parsedJson
+            .map((i) => ViewDoctorsPrescriptionModel.fromJson(i))
+            .toList();
+
+    return ViewDoctorsPrescriptionModelList(
+      viewDoctorsPrescriptionModelList: viewDoctorsPrescriptionModel,
+    );
+  }
+}
+
 @JsonSerializable()
 class ViewDoctorsPrescriptionModel {
   num? id;
