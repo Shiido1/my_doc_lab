@@ -5,30 +5,30 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:stacked/stacked.dart';
-import '../../../../../core/connect_end/view_model/doc_view_model.dart';
+import '../../../../../core/connect_end/view_model/med_lab_view_model.dart';
 import '../../../../app_assets/app_image.dart';
 import '../../../../app_assets/constant.dart';
 import '../../../../widget/text_widget.dart';
 
-class DoctorWalletScreen extends StatelessWidget {
-  const DoctorWalletScreen({super.key});
+class LabTechWalletScreen extends StatelessWidget {
+  const LabTechWalletScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<DocViewModel>.reactive(
-      viewModelBuilder: () => DocViewModel(),
+    return ViewModelBuilder<LabTechViewModel>.reactive(
+      viewModelBuilder: () => LabTechViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          model.doctorWallet();
+          model.labTechWallet();
         });
       },
       disposeViewModel: false,
-      builder: (_, DocViewModel model, __) {
-        return RefreshIndicator(
-          onRefresh: model.doctorWalletReload,
-          child: Scaffold(
-            backgroundColor: AppColor.white,
-            body: SingleChildScrollView(
+      builder: (_, LabTechViewModel model, __) {
+        return Scaffold(
+          backgroundColor: AppColor.white,
+          body: RefreshIndicator(
+            onRefresh: model.labTechWalletReload,
+            child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(vertical: 50.w, horizontal: 22.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,6 +52,8 @@ class DoctorWalletScreen extends StatelessWidget {
                     ],
                   ),
                   Divider(color: AppColor.greylight),
+                  SizedBox(height: 20.w),
+
                   SizedBox(height: 20.w),
                   Container(
                     width: double.infinity,
@@ -86,7 +88,7 @@ class DoctorWalletScreen extends StatelessWidget {
                             SizedBox(width: 10.w),
                             TextView(
                               text:
-                                  '${getCurrency()}${oCcy.format(double.parse('${model.getDoctorsWalletResponseModel?.balance ?? 0}'))}',
+                                  '${getCurrency()}${oCcy.format(double.parse('${model.labTechWalletResponseModel?.balance ?? 0}'))}',
                               textStyle: TextStyle(
                                 color: AppColor.primary1,
                                 fontSize: 32.20.sp,
@@ -108,12 +110,9 @@ class DoctorWalletScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10.h),
-                  if (model.getDoctorsWalletResponseModel != null &&
-                      model
-                          .getDoctorsWalletResponseModel!
-                          .histories!
-                          .isNotEmpty)
-                    ...model.getDoctorsWalletResponseModel!.histories!.reversed.map(
+                  if (model.labTechWalletResponseModel != null &&
+                      model.labTechWalletResponseModel!.histories!.isNotEmpty)
+                    ...model.labTechWalletResponseModel!.histories!.reversed.map(
                       (o) => Container(
                         width: double.infinity,
                         padding: EdgeInsets.symmetric(

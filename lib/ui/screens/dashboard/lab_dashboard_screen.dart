@@ -15,7 +15,6 @@ import 'home/laboratory_home_screen.dart';
 // ignore: must_be_immutable
 class LaboratoryDashboard extends StatefulWidget {
   const LaboratoryDashboard({super.key});
-  // int? index;
 
   @override
   State<LaboratoryDashboard> createState() => _LaboratoryDashboardState();
@@ -30,12 +29,6 @@ class _LaboratoryDashboardState extends State<LaboratoryDashboard> {
     LaboratoryOrderScreen(),
     LabSettingsScreen(),
   ];
-
-  @override
-  void initState() {
-    // _currentIndex = widget.index!;
-    super.initState();
-  }
 
   Future<bool> willPopControl() async {
     return (await showDialog(

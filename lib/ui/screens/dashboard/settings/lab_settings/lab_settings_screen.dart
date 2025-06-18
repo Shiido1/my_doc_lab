@@ -15,6 +15,7 @@ import '../../../../../core/core_folder/manager/shared_preference.dart';
 import '../../../authentication/lab_edit_profile_screen.dart';
 import '../../laboratory/lab_diagnosis_screen.dart';
 import '../help_and_support_screen.dart';
+import '../wallet/lab_tech_wallet_screen.dart';
 
 class LabSettingsScreen extends StatelessWidget {
   const LabSettingsScreen({super.key});
@@ -158,6 +159,19 @@ class LabSettingsScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 moreContainerWidget(
+                  image: AppImage.walleta,
+                  borderColor: AppColor.lightgrey,
+                  color: AppColor.black,
+                  text: 'Wallet',
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => LabTechWalletScreen(),
+                        ),
+                      ),
+                ),
+                SizedBox(height: 20.h),
+                moreContainerWidget(
                   image: AppImage.results,
                   borderColor: AppColor.lightgrey,
                   color: AppColor.black,
@@ -171,7 +185,7 @@ class LabSettingsScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 moreContainerWidget(
-                  image: AppImage.walleta,
+                  image: AppImage.notification,
                   borderColor: AppColor.lightgrey,
                   color: AppColor.black,
                   text: 'Notification',

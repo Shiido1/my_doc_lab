@@ -1,5 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison
-import 'package:pay_with_paystack/pay_with_paystack.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/web_view_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'dart:io';
@@ -514,23 +514,13 @@ class AuthViewModel extends BaseViewModel {
         context,
         message: _payStackPaymentModel?.message ?? '',
       );
-
-      PayWithPayStack().now(
-        context: context,
-        secretKey: "sk_test_b0cbfeb4f179474ec111bc4112077d61e1a6f811",
-        customerEmail: payStackPaymentModel?.paystackData?.email ?? '',
-        reference: _payStackPaymentModel!.paystackData!.reference!,
-        currency: "NGN",
-        amount: double.parse(
-          _payStackPaymentModel!.paystackData!.amount!.toString(),
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder:
+              (context) => WebViewScreen(
+                payStackUrl: _payStackPaymentModel?.authorizationUrl,
+              ),
         ),
-        callbackUrl: _payStackPaymentModel!.authorizationUrl!,
-        transactionCompleted: (paymentData) {
-          debugPrint(paymentData.toString());
-        },
-        transactionNotCompleted: (reason) {
-          debugPrint("==> Transaction failed reason $reason");
-        },
       );
     } catch (e) {
       _isLoading = false;
@@ -1559,6 +1549,9 @@ class AuthViewModel extends BaseViewModel {
                   return ViewModelBuilder<AuthViewModel>.reactive(
                     viewModelBuilder: () => AuthViewModel(),
                     onViewModelReady: (model) {},
+                    onDispose: (viewModel) {
+                      amountController.clear();
+                    },
                     builder: (_, AuthViewModel model, __) {
                       return SingleChildScrollView(
                         padding: EdgeInsets.only(left: 12.w, right: 24.w),
@@ -1605,7 +1598,7 @@ class AuthViewModel extends BaseViewModel {
                                 validator: AppValidator.validateString(),
                               ),
 
-                              SizedBox(height: 20.h),
+                              SizedBox(height: 30.h),
 
                               !model.isLoading
                                   ? GestureDetector(

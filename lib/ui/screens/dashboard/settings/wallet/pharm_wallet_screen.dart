@@ -158,10 +158,7 @@ class PharmWalletScreen extends StatelessWidget {
                                   TextView(
                                     text: o.type?.capitalize() ?? '',
                                     textStyle: GoogleFonts.gabarito(
-                                      color:
-                                          o.type?.toLowerCase() == 'credit'
-                                              ? AppColor.green
-                                              : AppColor.black,
+                                      color: model.trnsType(o.type),
                                       fontSize: 14.20.sp,
                                       fontWeight: FontWeight.w300,
                                     ),
@@ -176,7 +173,7 @@ class PharmWalletScreen extends StatelessWidget {
                                   text:
                                       '${getCurrency()}${oCcy.format(double.parse('${o.amount ?? 0}'))}',
                                   textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.primary1,
+                                    color: model.trnsType(o.type),
                                     fontSize: 22.20.sp,
                                     fontWeight: FontWeight.w600,
                                   ),

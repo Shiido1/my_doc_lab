@@ -267,6 +267,22 @@ class LabTechViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> labTechWalletReload() async {
+    try {
+      // _isLoading = true;
+      _labTechWalletResponseModel = await runBusyFuture(
+        repositoryImply.labTechWallet(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
   Future<void> updateOrderStatus(
     context, {
     UpdateStatusReasonEntityModel? update,
@@ -1495,4 +1511,11 @@ class LabTechViewModel extends BaseViewModel {
       );
     },
   );
+
+  Color trnsType(status) {
+    if (status.toLowerCase() == 'debit') {
+      return AppColor.red;
+    }
+    return AppColor.primary1;
+  }
 }

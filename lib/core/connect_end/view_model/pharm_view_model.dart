@@ -2316,4 +2316,11 @@ class PharmViewModel extends BaseViewModel {
     }
     return AppColor.primary1;
   }
+
+  Color trnsType(status) {
+    if (status.toLowerCase() == 'debit') {
+      return AppColor.red;
+    }
+    return AppColor.primary1;
+  }
 }

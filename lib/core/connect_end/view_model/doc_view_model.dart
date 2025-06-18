@@ -1991,4 +1991,11 @@ class DocViewModel extends BaseViewModel {
       },
     );
   }
+
+  Color trnsType(status) {
+    if (status.toLowerCase() == 'debit') {
+      return AppColor.red;
+    }
+    return AppColor.primary1;
+  }
 }
