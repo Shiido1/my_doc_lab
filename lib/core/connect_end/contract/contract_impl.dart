@@ -17,6 +17,7 @@ import '../model/get_all_consultant_response_model/get_all_consultant_response_m
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
+import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -131,4 +132,6 @@ class AuthContractsImpl {
   ) async => await _api.genCallToken(callToken);
   Future<ViewDoctorsPrescriptionModelList> viewDocPrescription() async =>
       await _api.viewDocPrescription();
+  Future<GetDoctorsWalletResponseModel> userWallet() async =>
+      await _api.userWallet();
 }

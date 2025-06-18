@@ -17,6 +17,7 @@ import '../model/get_all_consultant_response_model/get_all_consultant_response_m
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
+import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -200,6 +201,11 @@ class AuthRepoImpl {
 
   Future<ViewDoctorsPrescriptionModelList> viewDocPrescription() async {
     final response = await _contract.viewDocPrescription();
+    return response;
+  }
+
+  Future<GetDoctorsWalletResponseModel> userWallet() async {
+    final response = await _contract.userWallet();
     return response;
   }
 

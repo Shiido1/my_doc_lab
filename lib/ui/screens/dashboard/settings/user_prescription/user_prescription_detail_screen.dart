@@ -31,6 +31,8 @@ class UserPrescriptionDetailScreen extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
+
+            Divider(color: AppColor.greylight, thickness: 1),
             SizedBox(height: 10.h),
             TextView(
               text:

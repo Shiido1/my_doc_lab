@@ -9,6 +9,7 @@ import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/pharmacy/phamacy_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/user_prescription/user_prescription_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
@@ -161,13 +162,13 @@ class MoreSettingsScreen extends StatelessWidget {
                 SizedBox(height: 20.h),
                 moreContainerWidget(
                   image: AppImage.pharm,
-                  text: 'Pharmacy',
+                  text: 'Prescription',
                   borderColor: AppColor.lightgrey,
                   color: AppColor.black,
                   onTap:
                       () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => PharmacyScreen(),
+                          builder: (context) => UserPrescriptionScreen(),
                         ),
                       ),
                 ),

@@ -20,6 +20,7 @@ import '../connect_end/model/get_all_consultant_response_model/get_all_consultan
 import '../connect_end/model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../connect_end/model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../connect_end/model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
+import '../connect_end/model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../connect_end/model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -464,6 +465,20 @@ class AuthApi {
       );
       logger.d(response.data);
       return ViewDoctorsPrescriptionModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetDoctorsWalletResponseModel> userWallet() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.user_wallet,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetDoctorsWalletResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

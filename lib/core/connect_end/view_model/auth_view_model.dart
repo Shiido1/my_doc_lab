@@ -45,6 +45,7 @@ import '../model/checkoutentitymodel.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
+import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -123,6 +124,10 @@ class AuthViewModel extends BaseViewModel {
   UpdateUserResponseModel? get updateUserResponseModel =>
       _updateUserResponseModel;
   UpdateUserResponseModel? _updateUserResponseModel;
+
+  GetDoctorsWalletResponseModel? _getUsersWalletResponseModel;
+  GetDoctorsWalletResponseModel? get getUsersWalletResponseModel =>
+      _getUsersWalletResponseModel;
 
   final debouncer = Debouncer();
 
@@ -436,6 +441,21 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = false;
     } catch (e) {
       _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> userWallet() async {
+    try {
+      _isLoading = true;
+      _getUsersWalletResponseModel = await runBusyFuture(
+        repositoryImply.userWallet(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
     }
     notifyListeners();
   }
@@ -1319,7 +1339,6 @@ class AuthViewModel extends BaseViewModel {
           Item(serviceType: element.serviceType, serviceId: element.serviceId),
         );
       }
-      print('items:::::${items[0].toJson()}');
     }
   }
 

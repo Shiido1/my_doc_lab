@@ -15,7 +15,6 @@ import 'home/home_screen.dart';
 // ignore: must_be_immutable
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
-  // int? index;
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -30,12 +29,6 @@ class _DashboardState extends State<Dashboard> {
     MessageListScreen(),
     MoreSettingsScreen(),
   ];
-
-  @override
-  void initState() {
-    // _currentIndex = widget.index!;
-    super.initState();
-  }
 
   Future<bool> willPopControl() async {
     return (await showDialog(
