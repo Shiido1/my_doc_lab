@@ -70,7 +70,7 @@ class UserPrescriptionScreen extends StatelessWidget {
 
                 SizedBox(height: 20.h),
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: isTablet ? 700 : 600),
+                  constraints: BoxConstraints(maxHeight: isTablet ? 630 : 510),
                   child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(
@@ -88,8 +88,9 @@ class UserPrescriptionScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (model.isLoading)
-                              ...List.generate(10, (i) => shimmerPresView()),
-                            if (model.viewDoctorsPrescriptionModel != null &&
+                              ...List.generate(10, (i) => shimmerPresView())
+                            else if (model.viewDoctorsPrescriptionModel !=
+                                    null &&
                                 model
                                     .viewDoctorsPrescriptionModel!
                                     .viewDoctorsPrescriptionModelList!
@@ -114,9 +115,9 @@ class UserPrescriptionScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              ),
-
-                            if (model.viewDoctorsPrescriptionModel != null &&
+                              )
+                            else if (model.viewDoctorsPrescriptionModel !=
+                                    null &&
                                 model
                                     .viewDoctorsPrescriptionModel!
                                     .viewDoctorsPrescriptionModelList!

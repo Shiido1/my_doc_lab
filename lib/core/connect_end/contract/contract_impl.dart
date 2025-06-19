@@ -21,6 +21,7 @@ import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_m
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import '../model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../model/login_entity.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../model/pay_stack_payment_model/pay_stack_payment_model.dart';
@@ -110,6 +111,9 @@ class AuthContractsImpl {
   Future<dynamic> updatePassword(
     ResetPasswordEntityModel updatePassword,
   ) async => await _api.updatePassword(updatePassword);
+
+  Future<GetUsersAppointmentModelList> getUsersAppointment() async =>
+      await _api.getUsersAppointment();
 
   Future<dynamic> verifyOtp(VerifyOtpEntityModel verifyOtp) async =>
       await _api.verifyOtp(verifyOtp);

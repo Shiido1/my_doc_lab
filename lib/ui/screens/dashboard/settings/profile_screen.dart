@@ -297,7 +297,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 padding: EdgeInsets.only(bottom: 4.4.w),
                                 child: TextView(
                                   text:
-                                      '${e.dayOfWeek?.capitalize()} :  ${formTime(e.startTime)} - ${formTime(e.endTime)}',
+                                      '${e.dayOfWeek?.capitalize()} :  ${e.startTime} - ${e.endTime}',
                                   textStyle: GoogleFonts.gabarito(
                                     color: AppColor.black,
                                     fontSize: 15.20.sp,

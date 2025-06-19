@@ -23,7 +23,8 @@ class MessageListScreen extends StatelessWidget {
       viewModelBuilder: () => locator<AuthViewModel>(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          model.getChatIndex();
+          model.hasLoadedIndexConversation = true;
+          model.receiveIndexConversationOnce();
         });
       },
       disposeViewModel: false,

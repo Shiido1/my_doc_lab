@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
           model.getPatientDetail(context);
           model.getAllDoctors(context);
           model.getChatIndex();
+          model.getUsersAppointment(context);
         });
       },
       disposeViewModel: false,

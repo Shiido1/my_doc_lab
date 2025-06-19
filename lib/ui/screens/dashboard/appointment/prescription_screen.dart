@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -106,7 +108,7 @@ class PrescriptionScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: isTablet ? 700 : 600),
+                  constraints: BoxConstraints(maxHeight: isTablet ? 630 : 510),
                   child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(

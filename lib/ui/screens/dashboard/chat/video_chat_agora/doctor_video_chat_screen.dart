@@ -61,8 +61,12 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.mic),
-                      onPressed: () {},
+                      icon: Icon(
+                        model.onToggleMic ? Icons.mic : Icons.mic_off_outlined,
+                      ),
+                      onPressed: () {
+                        model.onToggleMicrophone();
+                      },
                       color: AppColor.white,
                       iconSize: 40.sp,
                     ),

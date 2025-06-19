@@ -21,6 +21,7 @@ import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_m
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import '../model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../model/login_entity.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../model/pay_stack_payment_model/pay_stack_payment_model.dart';
@@ -212,6 +213,11 @@ class AuthRepoImpl {
 
   Future<PayStackPaymentModel> paymentTopUp(String amount) async {
     final response = await _contract.paymentTopUp(amount);
+    return response;
+  }
+
+  Future<GetUsersAppointmentModelList> getUserAppointment() async {
+    final response = await _contract.getUsersAppointment();
     return response;
   }
 

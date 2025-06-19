@@ -13,7 +13,6 @@ import '../../../../../core/connect_end/view_model/med_lab_view_model.dart';
 import '../../../../../core/core_folder/app/app.locator.dart';
 import '../../../../../core/core_folder/manager/shared_preference.dart';
 import '../../../authentication/lab_edit_profile_screen.dart';
-import '../../chat/lab_tech_message_list_screen.dart';
 import '../../laboratory/lab_diagnosis_screen.dart';
 import '../help_and_support_screen.dart';
 import '../wallet/lab_tech_wallet_screen.dart';
@@ -147,19 +146,19 @@ class LabSettingsScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
 
-                moreContainerWidget(
-                  image: AppImage.chat,
-                  borderColor: AppColor.lightgrey,
-                  color: AppColor.black,
-                  text: 'Chat',
-                  onTap:
-                      () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => LabTechMessageListScreen(),
-                        ),
-                      ),
-                ),
-                SizedBox(height: 20.h),
+                // moreContainerWidget(
+                //   image: AppImage.chat,
+                //   borderColor: AppColor.lightgrey,
+                //   color: AppColor.black,
+                //   text: 'Chat',
+                //   onTap:
+                //       () => Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (context) => LabTechMessageListScreen(),
+                //         ),
+                //       ),
+                // ),
+                // SizedBox(height: 20.h),
                 moreContainerWidget(
                   image: AppImage.diagnosis,
                   borderColor: AppColor.lightgrey,

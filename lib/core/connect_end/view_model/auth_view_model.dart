@@ -52,6 +52,7 @@ import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_m
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import '../model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../model/pay_stack_payment_model/pay_stack_payment_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -85,6 +86,7 @@ class AuthViewModel extends BaseViewModel {
 
   bool get isTogglePasswordConfirm => _isTogglePasswordConfirm;
   bool _isTogglePasswordConfirm = false;
+  bool onToggleMic = false;
 
   GetAllDoctorsResponseModelList? _getAllDoctorsResponseModelList;
   GetAllDoctorsResponseModelList? get getAllDoctorsResponseModelList =>
@@ -135,6 +137,9 @@ class AuthViewModel extends BaseViewModel {
       _getUsersWalletResponseModel;
   PayStackPaymentModel? _payStackPaymentModel;
   PayStackPaymentModel? get payStackPaymentModel => _payStackPaymentModel;
+  GetUsersAppointmentModelList? _getUsersAppointmentModelList;
+  GetUsersAppointmentModelList? get getUsersAppointmentModelList =>
+      _getUsersAppointmentModelList;
 
   final debouncer = Debouncer();
 
@@ -155,6 +160,7 @@ class AuthViewModel extends BaseViewModel {
   File? image;
   String? filename;
   bool hasLoadedConversation = false;
+  bool hasLoadedIndexConversation = false;
   DateTime now = DateTime.now();
   TextEditingController sendtextController = TextEditingController(text: '');
   TextEditingController amountController = TextEditingController();
@@ -180,6 +186,23 @@ class AuthViewModel extends BaseViewModel {
 
   bool localUserJoined = false;
   bool onSwitch = false;
+
+  onToggleMicrophone() {
+    if (onToggleMic == false) {
+      engine?.muteLocalAudioStream(false);
+      engine?.muteRemoteAudioStream(
+        uid: int.parse(remoteUidGlobal.toString()),
+        mute: false,
+      );
+    } else {
+      engine?.muteLocalAudioStream(true);
+      engine?.muteRemoteAudioStream(
+        uid: int.parse(remoteUidGlobal.toString()),
+        mute: true,
+      );
+    }
+    notifyListeners();
+  }
 
   onSwitched() {
     onSwitch = !onSwitch;
@@ -361,6 +384,21 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = true;
       _getUserResponseModel = await runBusyFuture(
         repositoryImply.getUserDetails(),
+        throwException: true,
+      );
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getUsersAppointment(context) async {
+    try {
+      _isLoading = true;
+      _getUsersAppointmentModelList = await runBusyFuture(
+        repositoryImply.getUserAppointment(),
         throwException: true,
       );
     } catch (e) {
@@ -1220,6 +1258,16 @@ class AuthViewModel extends BaseViewModel {
       hasLoadedConversation = true;
       receiveConversation(id);
       scrollToBottom(); // existing method
+    }
+    notifyListeners();
+  }
+
+  void receiveIndexConversationOnce() {
+    if (hasLoadedIndexConversation == false) {
+      return;
+    } else {
+      hasLoadedIndexConversation = true;
+      getChatIndexReload();
     }
     notifyListeners();
   }

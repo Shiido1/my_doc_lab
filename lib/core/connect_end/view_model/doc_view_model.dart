@@ -120,6 +120,7 @@ class DocViewModel extends BaseViewModel {
   bool localUserJoined = false;
 
   bool onSwitch = false;
+  bool onToggleMic = false;
   GetListOfDoctorsAppointmentModelList? _getListOfDoctorsAppointmentModelList;
   GetListOfDoctorsAppointmentModelList?
   get getListOfDoctorsAppointmentModelList =>
@@ -175,6 +176,23 @@ class DocViewModel extends BaseViewModel {
   UserSearchResponseModel? _searchedUser;
   SearchedMedicineResponseModel? _searchedMeds;
   String presFrequency = '';
+
+  onToggleMicrophone() {
+    if (onToggleMic == false) {
+      engine?.muteLocalAudioStream(false);
+      engine?.muteRemoteAudioStream(
+        uid: int.parse(remoteUidGlobal.toString()),
+        mute: false,
+      );
+    } else {
+      engine?.muteLocalAudioStream(true);
+      engine?.muteRemoteAudioStream(
+        uid: int.parse(remoteUidGlobal.toString()),
+        mute: true,
+      );
+    }
+    notifyListeners();
+  }
 
   loadingDialog(context) => showDialog(
     context: context,

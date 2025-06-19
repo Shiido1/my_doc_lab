@@ -3,13 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:stacked/stacked.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../../../../core/connect_end/view_model/pharm_view_model.dart';
-import '../../../../main.dart';
 import '../../../app_assets/constant.dart';
 import '../../../widget/text_widget.dart';
 
@@ -125,87 +123,88 @@ class _PatientDetailSceenState extends State<PatientDetailSceen> {
                           ),
                         ),
                         SizedBox(height: 10.w),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap:
-                                  () => navigate.navigateTo(
-                                    Routes.pharmChatScreen,
-                                    arguments: PharmChatScreenArguments(
-                                      id: '',
-                                      messageModel: null,
-                                      appOrder: widget.order,
-                                    ),
-                                  ),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 4.w,
-                                  horizontal: 8.w,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(
-                                    color: AppColor.darkindgrey,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      AppImage.chat,
-                                      height: 14.h,
-                                      width: 14.w,
-                                      color: AppColor.darkindgrey,
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    TextView(
-                                      text: 'Message',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.darkindgrey,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 20.w),
-                            GestureDetector(
-                              onTap:
-                                  () => model.pharmOrderUpdate(
-                                    context,
-                                    id:
-                                        model
-                                            .orderByIdResponseModel!
-                                            .original!
-                                            .orders![0]
-                                            .id
-                                            .toString(),
-                                    reason: 'ok reason',
-                                    status: 'completed',
-                                  ),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 4.w,
-                                  horizontal: 8.w,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: AppColor.white),
-                                  color: AppColor.darkindgrey,
-                                ),
-                                child: TextView(
-                                  text: 'Approve',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.white,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+
+                        // Row(
+                        //   children: [
+                        //     GestureDetector(
+                        //       onTap:
+                        //           () => navigate.navigateTo(
+                        //             Routes.pharmChatScreen,
+                        //             arguments: PharmChatScreenArguments(
+                        //               id: '',
+                        //               messageModel: null,
+                        //               appOrder: widget.order,
+                        //             ),
+                        //           ),
+                        //       child: Container(
+                        //         padding: EdgeInsets.symmetric(
+                        //           vertical: 4.w,
+                        //           horizontal: 8.w,
+                        //         ),
+                        //         decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(6),
+                        //           border: Border.all(
+                        //             color: AppColor.darkindgrey,
+                        //           ),
+                        //         ),
+                        //         child: Row(
+                        //           children: [
+                        //             SvgPicture.asset(
+                        //               AppImage.chat,
+                        //               height: 14.h,
+                        //               width: 14.w,
+                        //               color: AppColor.darkindgrey,
+                        //             ),
+                        //             SizedBox(width: 4.w),
+                        //             TextView(
+                        //               text: 'Message',
+                        //               textStyle: GoogleFonts.gabarito(
+                        //                 color: AppColor.darkindgrey,
+                        //                 fontSize: 14.sp,
+                        //                 fontWeight: FontWeight.w500,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     SizedBox(width: 20.w),
+                        //     GestureDetector(
+                        //       onTap:
+                        //           () => model.pharmOrderUpdate(
+                        //             context,
+                        //             id:
+                        //                 model
+                        //                     .orderByIdResponseModel!
+                        //                     .original!
+                        //                     .orders![0]
+                        //                     .id
+                        //                     .toString(),
+                        //             reason: 'ok reason',
+                        //             status: 'completed',
+                        //           ),
+                        //       child: Container(
+                        //         padding: EdgeInsets.symmetric(
+                        //           vertical: 4.w,
+                        //           horizontal: 8.w,
+                        //         ),
+                        //         decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(6),
+                        //           border: Border.all(color: AppColor.white),
+                        //           color: AppColor.darkindgrey,
+                        //         ),
+                        //         child: TextView(
+                        //           text: 'Approve',
+                        //           textStyle: GoogleFonts.gabarito(
+                        //             color: AppColor.white,
+                        //             fontSize: 14.sp,
+                        //             fontWeight: FontWeight.w500,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ],
