@@ -172,7 +172,7 @@ class PharmSettingsScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 moreContainerWidget(
-                  image: AppImage.walleta,
+                  image: AppImage.notification,
                   borderColor: AppColor.lightgrey,
                   color: AppColor.black,
                   text: 'Notification',
@@ -183,7 +183,6 @@ class PharmSettingsScreen extends StatelessWidget {
                         ),
                       ),
                 ),
-
                 SizedBox(height: 20.h),
                 moreContainerWidget(
                   image: AppImage.help,

@@ -28,6 +28,7 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getLabTechDetail(context);
+          model.getChatIndex();
         });
       },
       disposeViewModel: false,
@@ -42,13 +43,36 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                 SizedBox(height: 20.w),
                 Row(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(20.w),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColor.oneKindgrey,
-                      ),
-                    ),
+                    model
+                                .getLabTechDetailResponseModel
+                                ?.original
+                                ?.profileImage !=
+                            null
+                        ? ClipOval(
+                          child: SizedBox.fromSize(
+                            size: const Size.fromRadius(24),
+                            child: Image.network(
+                              model
+                                      .getLabTechDetailResponseModel!
+                                      .original!
+                                      .profileImage!
+                                      .contains('https')
+                                  ? '${model.getLabTechDetailResponseModel?.original?.profileImage}'
+                                  : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.getLabTechDetailResponseModel?.original?.profileImage}',
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) =>
+                                      shimmerViewPharm(),
+                            ),
+                          ),
+                        )
+                        : Container(
+                          padding: EdgeInsets.all(20.w),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColor.oneKindgrey,
+                          ),
+                        ),
                     SizedBox(width: 20.w),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

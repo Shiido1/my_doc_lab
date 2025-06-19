@@ -16,8 +16,6 @@ class PharmacyHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-    // final double? mainAxisExtent = isTablet ? null : 220.h;
     return ViewModelBuilder<PharmViewModel>.reactive(
       viewModelBuilder: () => locator<PharmViewModel>(),
       onViewModelReady: (model) {

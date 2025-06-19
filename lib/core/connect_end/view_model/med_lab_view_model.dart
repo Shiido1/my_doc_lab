@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../main.dart';
@@ -16,20 +19,30 @@ import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/app_assets/image_picker.dart';
 import '../../../ui/widget/text_form_widget.dart';
 import '../../../ui/widget/text_widget.dart';
+import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
+import '../../core_folder/manager/shared_preference.dart';
+import '../../debouncer.dart';
 import '../model/add_diagnosis_entity_model.dart';
 import '../model/add_report_entity_model.dart';
+import '../model/call_token_generate_entity_model.dart';
+import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_response_model.dart';
 import '../model/get_category_by_id_response_model/get_category_by_id_response_model.dart';
 import '../model/get_lab_tech_detail_response_model/get_lab_tech_detail_response_model.dart';
 import '../model/get_lab_tech_dia_book_list_model/get_lab_tech_dia_book_list_model.dart';
+import '../model/get_message_index_response_model/get_message_index_response_model.dart';
+import '../model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../model/get_single_dia_response_model/get_single_dia_response_model.dart';
 import '../model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
 import '../model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
 import '../model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../model/received_message_response_model/received_message_response_model.dart';
+import '../model/send_message_entity_model.dart';
+import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_lab_tech_entity_model.dart';
 import '../model/update_status_reason_entity_model.dart';
 import '../repo/med_repo_impl.dart';
@@ -39,7 +52,7 @@ class LabTechViewModel extends BaseViewModel {
   final logger = getLogger('LabTechViewModel');
 
   final repositoryImply = LabTechRepoImpl();
-  // final session = locator<SharedPreferencesService>();
+  final session = locator<SharedPreferencesService>();
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -47,6 +60,12 @@ class LabTechViewModel extends BaseViewModel {
   bool get isLoadingDelCat => _isLoadingDelCat;
   bool isSwitched = false;
   bool onEditCate = false;
+  bool hasLoadedConversation = false;
+  bool hasLoadedIndexConversation = false;
+
+  DateTime now = DateTime.now();
+  final debouncer = Debouncer();
+  String query = '';
 
   LabTechViewModel({this.context});
 
@@ -97,6 +116,34 @@ class LabTechViewModel extends BaseViewModel {
   LabTechCategoryListResponseModel? labTechCategory;
 
   List<String> listGroup = ['individual', 'group'];
+
+  GetMessageIndexResponseModelList? _getMessageIndexResponseModelList;
+  GetMessageIndexResponseModelList? get getMessageIndexResponseModelList =>
+      _getMessageIndexResponseModelList;
+  ReceivedMessageResponseModelList? _receivedMessageResponseModelList;
+  ReceivedMessageResponseModelList? get receivedMessageResponseModelList =>
+      _receivedMessageResponseModelList;
+
+  SendMessageResponseModel? _sendMessageResponseModel;
+  SendMessageResponseModel? get sendMessageResponseModel =>
+      _sendMessageResponseModel;
+
+  CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
+  CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
+      _callTokenGenerateResponseModel;
+
+  TextEditingController sendtextController = TextEditingController(text: '');
+
+  RtcEngine? engine;
+  bool onSwitch = false;
+
+  dynamic remoteUidGlobal;
+  dynamic remoteUidGlobalLocal;
+
+  bool localUserJoined = false;
+  List<SendMessageEntityModel> sendList = [];
+
+  ScrollController scrollController1 = ScrollController();
 
   loadingDialog(context) => showDialog(
     context: context,
@@ -1517,5 +1564,376 @@ class LabTechViewModel extends BaseViewModel {
       return AppColor.red;
     }
     return AppColor.primary1;
+  }
+
+  // chat stuffs
+
+  Future<void> getChatIndex() async {
+    try {
+      _isLoading = true;
+      _getMessageIndexResponseModelList = await runBusyFuture(
+        repositoryImply.chatIndex(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getChatIndexReload() async {
+    try {
+      _getMessageIndexResponseModelList = await runBusyFuture(
+        repositoryImply.chatIndex(),
+        throwException: true,
+      );
+      Future.delayed(Duration(seconds: 2), () {
+        if (hasLoadedIndexConversation) getChatIndexReload();
+      });
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> receiveConversation(String id) async {
+    try {
+      _receivedMessageResponseModelList = await runBusyFuture(
+        repositoryImply.receiveMessage(id),
+        throwException: true,
+      );
+      _isLoading = false;
+      Future.delayed(Duration(seconds: 2), () {
+        if (hasLoadedConversation) receiveConversation(id);
+        Future.delayed(Duration(seconds: 1), () {
+          session.chatsData = {'chat': []};
+          // sendList.clear();
+        });
+      });
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  void receiveConversationOnce(String id) {
+    if (hasLoadedConversation == false) {
+      return;
+    } else {
+      hasLoadedConversation = true;
+      receiveConversation(id);
+      scrollToBottom(); // existing method
+    }
+    notifyListeners();
+  }
+
+  void receiveIndexConversationOnce() {
+    if (hasLoadedIndexConversation == false) {
+      return;
+    } else {
+      hasLoadedIndexConversation = true;
+      getChatIndexReload();
+    }
+    notifyListeners();
+  }
+
+  Future<void> sendMessage(SendMessageEntityModel send) async {
+    try {
+      sendList.add(send);
+      session.chatsData = {'chat': sendList};
+      if (session.chatsData.isEmpty) {
+        return;
+      } else {
+        for (var element in session.chatsData['chat']) {
+          SendMessageEntityModel sendMessageEntityModel =
+              SendMessageEntityModel.fromJson(element);
+          _sendMessageResponseModel = await runBusyFuture(
+            repositoryImply.sendMessage(sendMessageEntityModel),
+            throwException: true,
+          );
+          if (_sendMessageResponseModel?.success == true) {
+            Future.delayed(Duration(seconds: 1), () {
+              session.chatsData = {'chat': []};
+              sendList.clear();
+            });
+          }
+        }
+      }
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  boxMessage(ReceivedMessageResponseModel message) => Column(
+    children: [
+      message.senderType == "MydocLab\\Models\\User"
+          ? Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              margin: EdgeInsets.only(left: 20.w, right: 100.w, bottom: 20.w),
+
+              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(0),
+                  bottomRight: Radius.circular(10),
+                ),
+                color: AppColor.primary1.withOpacity(.1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextView(
+                    text: message.message ?? '',
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 15.2.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.darkindgrey,
+                    ),
+                  ),
+                  TextView(
+                    text: DateFormat('hh:mma').format(
+                      DateTime.parse(message.updatedAt.toString()).toLocal(),
+                    ),
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.darkindgrey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+          : Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              margin: EdgeInsets.only(right: 20.w, left: 100.w, bottom: 20.w),
+              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(0),
+                ),
+                color: AppColor.primary1,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextView(
+                    text: message.message ?? '',
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 15.2.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.white,
+                    ),
+                  ),
+
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextView(
+                        text: DateFormat('hh:mma').format(
+                          DateTime.parse(
+                            message.updatedAt.toString(),
+                          ).toLocal(),
+                        ),
+                        textStyle: GoogleFonts.dmSans(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.white,
+                        ),
+                      ),
+
+                      SizedBox(width: 4.w),
+                      Icon(Icons.check, color: AppColor.white, size: 14.sp),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+    ],
+  );
+
+  void scrollToBottom() {
+    if (scrollController1.hasClients) {
+      scrollController1.animateTo(
+        scrollController1.position.minScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  onSwitched() {
+    onSwitch = !onSwitch;
+    notifyListeners();
+  }
+
+  void generateToken(context, {CallTokenGenerateEntityModel? calltoken}) async {
+    try {
+      _callTokenGenerateResponseModel = await runBusyFuture(
+        repositoryImply.generateToken(calltoken!),
+        throwException: true,
+      );
+      initializeAgoraVoiceSDK();
+    } catch (e) {
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  // Set up the Agora RTC engine instance
+  Future<void> initializeAgoraVoiceSDK() async {
+    await [Permission.microphone, Permission.camera].request();
+    engine = createAgoraRtcEngine();
+    await engine!.initialize(
+      const RtcEngineContext(
+        appId: "e18babecb1eb4a889feefcbbf60e5a5a",
+        channelProfile: ChannelProfileType.channelProfileCommunication,
+      ),
+    );
+    _setupLocalVideo();
+    _setupEventHandlers();
+    _joinChannel();
+  }
+
+  Future<void> _setupLocalVideo() async {
+    // The video module and preview are disabled by default.
+    await engine?.enableVideo();
+    await engine?.startPreview();
+  }
+
+  // If a remote user has joined, render their video, else display a waiting message
+  Widget remoteVideo() {
+    if (remoteUidGlobal != null) {
+      return AgoraVideoView(
+        controller: VideoViewController.remote(
+          rtcEngine: engine!, // Uses the Agora engine instance
+          canvas: VideoCanvas(
+            uid: int.parse(remoteUidGlobal.toString()),
+            // renderMode: RenderModeType.renderModeFit,
+          ), // Binds the remote user's video
+          connection: RtcConnection(
+            channelId: _callTokenGenerateResponseModel?.channelName,
+          ), // Specifies the channel
+        ),
+      );
+    } else {
+      return const Text(
+        'Waiting for remote user to join...',
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
+  // Displays the local user's video view using the Agora engine.
+  Widget localVideo() {
+    return AgoraVideoView(
+      controller: VideoViewController(
+        rtcEngine: engine!, // Uses the Agora engine instance
+        canvas: VideoCanvas(
+          uid: 0, // Specifies the local user
+          // renderMode:
+          //     RenderModeType.renderModeHidden, // Sets the video rendering mode
+        ),
+      ),
+    );
+  }
+
+  // Register an event handler for Agora RTC
+  void _setupEventHandlers() {
+    engine!.registerEventHandler(
+      RtcEngineEventHandler(
+        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+          debugPrint("Local user ${connection.localUid} joined");
+          localUserJoined = true;
+          remoteUidGlobalLocal = connection.localUid;
+          notifyListeners();
+        },
+        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+          debugPrint("Remote doctor $remoteUid joined");
+          remoteUidGlobal = remoteUid;
+          notifyListeners();
+        },
+        onUserOffline: (
+          RtcConnection connection,
+          int remoteUid,
+          UserOfflineReasonType reason,
+        ) {
+          debugPrint("Remote user $remoteUid left");
+          remoteUidGlobal = null;
+          notifyListeners();
+        },
+      ),
+    );
+    notifyListeners();
+  }
+
+  // Join a channel as a broadcasted
+  Future<void> _joinChannel() async {
+    await engine?.joinChannel(
+      token: _callTokenGenerateResponseModel?.token ?? "",
+      channelId: _callTokenGenerateResponseModel?.channelName ?? "",
+      options: ChannelMediaOptions(
+        autoSubscribeVideo:
+            true, // Automatically subscribe to all video streams
+        autoSubscribeAudio:
+            true, // Automatically subscribe to all audio streams
+        publishCameraTrack: true, // Publish camera-captured video
+        publishMicrophoneTrack: true, // Publish microphone-captured audio
+        // Use clientRoleBroadcaster to act as a host or clientRoleAudience for audience
+        clientRoleType: ClientRoleType.clientRoleBroadcaster,
+      ),
+      uid: 0,
+    );
+  }
+
+  // Leaves the channel and releases resources
+  Future<void> cleanupAgoraEngine() async {
+    await engine?.leaveChannel();
+    await engine?.release();
+  }
+
+  sendMessageAction({
+    Orders? app,
+    GetMessageIndexResponseModel? messageModel,
+  }) async {
+    if (sendtextController.text != '') {
+      String msg = sendtextController.text;
+      Future.delayed(Duration(seconds: 0), () {
+        sendtextController.clear();
+      });
+      if (app == null) {
+        await sendMessage(
+          SendMessageEntityModel(
+            conversationId: int.parse(messageModel!.conversationId.toString()),
+            receiverId: int.parse(messageModel.contactId.toString()),
+            receiverType: "MydocLab\\Models\\User",
+            message: msg,
+          ),
+        );
+      } else {
+        await sendMessage(
+          SendMessageEntityModel(
+            conversationId: 0,
+            receiverId: int.parse(app.userId.toString()),
+            receiverType: "MydocLab\\Models\\User",
+            message: msg,
+          ),
+        );
+      }
+    } else {}
   }
 }

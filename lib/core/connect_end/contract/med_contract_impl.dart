@@ -4,16 +4,22 @@ import '../../api_folder/med_lab_api.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_diagnosis_entity_model.dart';
 import '../model/add_report_entity_model.dart';
+import '../model/call_token_generate_entity_model.dart';
+import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_response_model.dart';
 import '../model/get_category_by_id_response_model/get_category_by_id_response_model.dart';
 import '../model/get_lab_tech_detail_response_model/get_lab_tech_detail_response_model.dart';
 import '../model/get_lab_tech_dia_book_list_model/get_lab_tech_dia_book_list_model.dart';
+import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_single_dia_response_model/get_single_dia_response_model.dart';
 import '../model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
 import '../model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
 import '../model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../model/received_message_response_model/received_message_response_model.dart';
+import '../model/send_message_entity_model.dart';
+import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_lab_tech_entity_model.dart';
 import '../model/update_status_reason_entity_model.dart';
 
@@ -93,4 +99,14 @@ class LabTechContractsImpl {
 
   Future<dynamic> deleteLabTechCategory(String? id) async =>
       await _api.deleteLabTechCategory(id);
+  Future<GetMessageIndexResponseModelList> chatIndex() async =>
+      await _api.chatIndex();
+  Future<ReceivedMessageResponseModelList> receiveMessage(String id) async =>
+      await _api.receiveConversation(id);
+  Future<SendMessageResponseModel> sendMessage(
+    SendMessageEntityModel send,
+  ) async => await _api.sendMessage(send);
+  Future<CallTokenGenerateResponseModel> generateToken(
+    CallTokenGenerateEntityModel callToken,
+  ) async => await _api.genCallToken(callToken);
 }
