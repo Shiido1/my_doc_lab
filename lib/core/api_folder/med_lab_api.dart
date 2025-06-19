@@ -6,6 +6,8 @@ import 'package:my_doc_lab/core/connect_end/model/get_all_diagnosis_list_respons
 import 'package:my_doc_lab/core/connect_end/model/get_single_dia_response_model/get_single_dia_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
+import '../connect_end/model/bank_save_entity_model.dart';
+import '../connect_end/model/bank_save_response_model/bank_save_response_model.dart';
 import '../connect_end/model/call_token_generate_entity_model.dart';
 import '../connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../connect_end/model/get_category_by_id_response_model/get_category_by_id_response_model.dart';
@@ -393,6 +395,38 @@ class LabTechAuthApi {
       );
       logger.d(response.data);
       return CallTokenGenerateResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<BankSaveResponseModel> bankSaveAccount(
+    BankSaveEntityModel bankEntity,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.bank_save,
+        RequestMethod.post,
+        data: bankEntity.toJson(),
+      );
+      logger.d(response.data);
+      return BankSaveResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> withFundToAccount(num amount) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.bank_withdraw,
+        RequestMethod.post,
+        data: {'amount': amount},
+      );
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;

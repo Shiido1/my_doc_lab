@@ -5,6 +5,8 @@ import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 
 import '../../core_folder/app/app.locator.dart';
+import '../model/bank_save_entity_model.dart';
+import '../model/bank_save_response_model/bank_save_response_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/create_add_medicine_entity_model.dart';
@@ -108,4 +110,11 @@ class DocContractsImpl {
   Future<SearchedMedicineResponseModelList> getSearchedMedicine(
     SearchDoctorEntityModel searchedMedicine,
   ) async => await _api.getSearchedMedicine(searchedMedicine);
+
+  Future<BankSaveResponseModel> bankSaveAccount(
+    BankSaveEntityModel bankEntity,
+  ) async => await _api.bankSaveAccount(bankEntity);
+
+  Future<dynamic> withFundsToAccount(num amount) async =>
+      await _api.withFundToAccount(amount);
 }

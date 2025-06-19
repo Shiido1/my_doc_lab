@@ -4,6 +4,8 @@ import '../../api_folder/med_lab_api.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_diagnosis_entity_model.dart';
 import '../model/add_report_entity_model.dart';
+import '../model/bank_save_entity_model.dart';
+import '../model/bank_save_response_model/bank_save_response_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_response_model.dart';
@@ -109,4 +111,10 @@ class LabTechContractsImpl {
   Future<CallTokenGenerateResponseModel> generateToken(
     CallTokenGenerateEntityModel callToken,
   ) async => await _api.genCallToken(callToken);
+  Future<BankSaveResponseModel> bankSaveAccount(
+    BankSaveEntityModel bankEntity,
+  ) async => await _api.bankSaveAccount(bankEntity);
+
+  Future<dynamic> withFundsToAccount(num amount) async =>
+      await _api.withFundToAccount(amount);
 }

@@ -6,6 +6,8 @@ import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_m
 import 'package:my_doc_lab/core/connect_end/model/pharm_stats_response_model/pharm_stats_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
 import 'package:my_doc_lab/core/core_folder/network/cloudinary_network_service.dart';
+import '../connect_end/model/bank_save_entity_model.dart';
+import '../connect_end/model/bank_save_response_model/bank_save_response_model.dart';
 import '../connect_end/model/call_token_generate_entity_model.dart';
 import '../connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../connect_end/model/get_med_by_id_response_model/get_med_by_id_response_model.dart';
@@ -389,6 +391,38 @@ class PharmAuthApi {
       );
       logger.d(response.data);
       return PharmStatsResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<BankSaveResponseModel> bankSaveAccount(
+    BankSaveEntityModel bankEntity,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.bank_save,
+        RequestMethod.post,
+        data: bankEntity.toJson(),
+      );
+      logger.d(response.data);
+      return BankSaveResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> withFundToAccount(num amount) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.bank_withdraw,
+        RequestMethod.post,
+        data: {'amount': amount},
+      );
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;

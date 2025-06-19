@@ -4,6 +4,8 @@ import '../../core_folder/app/app.locator.dart';
 import '../contract/med_contract_impl.dart';
 import '../model/add_diagnosis_entity_model.dart';
 import '../model/add_report_entity_model.dart';
+import '../model/bank_save_entity_model.dart';
+import '../model/bank_save_response_model/bank_save_response_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_response_model.dart';
@@ -175,6 +177,18 @@ class LabTechRepoImpl {
     SendMessageEntityModel send,
   ) async {
     final response = await _contract.sendMessage(send);
+    return response;
+  }
+
+  Future<BankSaveResponseModel> bankSaveAccount(
+    BankSaveEntityModel bankEntity,
+  ) async {
+    final response = await _contract.bankSaveAccount(bankEntity);
+    return response;
+  }
+
+  Future<dynamic> withdrawToAccount(num amount) async {
+    final response = await _contract.withFundsToAccount(amount);
     return response;
   }
 }

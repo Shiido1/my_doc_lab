@@ -11,6 +11,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:my_doc_lab/core/connect_end/model/bank_save_response_model/bank_save_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/received_message_response_model/received_message_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
@@ -33,6 +34,7 @@ import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
+import '../model/bank_save_entity_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/create_add_medicine_entity_model.dart';
@@ -113,6 +115,8 @@ class DocViewModel extends BaseViewModel {
   PrescriptionViewResponse? _prescriptionViewResponse;
   PrescriptionViewResponse? get prescriptionViewResponse =>
       _prescriptionViewResponse;
+  BankSaveResponseModel? get bankSaveResponseModel => _bankSaveResponseModel;
+  BankSaveResponseModel? _bankSaveResponseModel;
 
   RtcEngine? engine;
 
@@ -835,6 +839,36 @@ class DocViewModel extends BaseViewModel {
       _isLoading = true;
       _docPatientListResponseModelList = await runBusyFuture(
         repositoryImply.getPatientsList(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> saveBankAccount(BankSaveEntityModel bankEntity) async {
+    try {
+      _isLoading = true;
+      _bankSaveResponseModel = await runBusyFuture(
+        repositoryImply.bankSaveAccount(bankEntity),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> withdrawFundsToAccount(num amount) async {
+    try {
+      _isLoading = true;
+      var v = await runBusyFuture(
+        repositoryImply.withdrawToAccount(amount),
         throwException: true,
       );
       _isLoading = false;

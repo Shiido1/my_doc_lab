@@ -1,5 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/contract/doc_contract_impl.dart';
+import 'package:my_doc_lab/core/connect_end/model/bank_save_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/bank_save_response_model/bank_save_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
@@ -185,6 +187,18 @@ class DocRepoImpl {
     SearchDoctorEntityModel searchEntity,
   ) async {
     final response = await _contract.getSearchedMedicine(searchEntity);
+    return response;
+  }
+
+  Future<BankSaveResponseModel> bankSaveAccount(
+    BankSaveEntityModel bankEntity,
+  ) async {
+    final response = await _contract.bankSaveAccount(bankEntity);
+    return response;
+  }
+
+  Future<dynamic> withdrawToAccount(num amount) async {
+    final response = await _contract.withFundsToAccount(amount);
     return response;
   }
 }
