@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -52,22 +54,23 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 ),
                 SizedBox(height: 20.h),
                 TextFormWidget(
-                  label: 'Search for appointments by name or date sortttt',
+                  label: 'Search for appointments by name or date sort',
                   // hint: 'Email Address',
                   border: 10,
                   isFilled: true,
                   fillColor: AppColor.transparent,
-                  // controller: fullnameTextController,
                   prefixWidget: Padding(
                     padding: EdgeInsets.all(14.w),
                     child: SvgPicture.asset(AppImage.search),
                   ),
-                  // validator: AppValidator.validateEmail(),
+                  onChange: (p0) {
+                    model.query = p0;
+                    model.notifyListeners();
+                  },
                 ),
                 SizedBox(height: 20.h),
                 Container(
                   decoration: BoxDecoration(
-                    // ignore: deprecated_member_use
                     color: AppColor.primary1.withOpacity(.68),
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -82,7 +85,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             horizontal: 20.w,
                           ),
                           decoration: BoxDecoration(
-                            // ignore: deprecated_member_use
                             color:
                                 tab == 'Upcoming'
                                     ? AppColor.primary1
@@ -111,7 +113,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             horizontal: 20.w,
                           ),
                           decoration: BoxDecoration(
-                            // ignore: deprecated_member_use
                             color:
                                 tab == 'Completed'
                                     ? AppColor.primary1
@@ -133,26 +134,25 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => setState(() => tab = 'Canceled'),
+                        onTap: () => setState(() => tab = 'Cancelled'),
                         child: Container(
                           padding: EdgeInsets.symmetric(
                             vertical: 11.w,
                             horizontal: 20.w,
                           ),
                           decoration: BoxDecoration(
-                            // ignore: deprecated_member_use
                             color:
-                                tab == 'Canceled'
+                                tab == 'Cancelled'
                                     ? AppColor.primary1
                                     : AppColor.transparent,
 
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextView(
-                            text: 'Canceled',
+                            text: 'Cancelled',
                             textStyle: GoogleFonts.dmSans(
                               color:
-                                  tab == 'Canceled'
+                                  tab == 'Cancelled'
                                       ? AppColor.white
                                       : AppColor.darkindgrey,
                               fontSize: 13.0.sp,
@@ -168,70 +168,95 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      await model.getUsersAppointment(context);
+                      await model.getUsersAppointmentReload();
                     },
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
                           if (tab == 'Upcoming')
-                            if (model.getUsersAppointmentModelList != null &&
-                                model
-                                    .getUsersAppointmentModelList!
-                                    .getUsersAppointmentModelList!
-                                    .isNotEmpty)
-                              ...model
-                                  .getUsersAppointmentModelList!
-                                  .getUsersAppointmentModelList!
+                            if (model.query != '')
+                              ...model.getListOfScheduledAppointmentModelList!
                                   .where(
                                     (w) =>
-                                        w.status?.toLowerCase() == 'scheduled',
+                                        w.doctor!.firstName!
+                                            .toLowerCase()
+                                            .contains(model.query) ||
+                                        w.doctor!.lastName!
+                                            .toLowerCase()
+                                            .contains(
+                                              model.query.toLowerCase(),
+                                            ),
                                   )
                                   .map(
                                     (o) => appointMentCard(
-                                      getUsersAppointmentModel: o,
                                       appointmentStatus: 'Upcoming',
+                                      getUsersAppointmentModel: o,
                                     ),
                                   )
-                            else if (tab == 'Completed')
-                              if (model.getUsersAppointmentModelList != null &&
-                                  model
-                                      .getUsersAppointmentModelList!
-                                      .getUsersAppointmentModelList!
-                                      .isNotEmpty)
-                                ...model
-                                    .getUsersAppointmentModelList!
-                                    .getUsersAppointmentModelList!
-                                    .where(
-                                      (w) =>
-                                          w.status?.toLowerCase() ==
-                                          'scheduled',
-                                    )
-                                    .map(
-                                      (o) => appointMentCard(
-                                        getUsersAppointmentModel: o,
-                                        appointmentStatus: 'Completed',
-                                      ),
-                                    )
-                              else if (model.getUsersAppointmentModelList !=
-                                      null &&
-                                  model
-                                      .getUsersAppointmentModelList!
-                                      .getUsersAppointmentModelList!
-                                      .isNotEmpty)
-                                ...model
-                                    .getUsersAppointmentModelList!
-                                    .getUsersAppointmentModelList!
-                                    .where(
-                                      (w) =>
-                                          w.status?.toLowerCase() ==
-                                          'scheduled',
-                                    )
-                                    .map(
-                                      (o) => appointMentCard(
-                                        getUsersAppointmentModel: o,
-                                        appointmentStatus: 'Canceled',
-                                      ),
+                            else
+                              ...model.getListOfScheduledAppointmentModelList!
+                                  .map(
+                                    (o) => appointMentCard(
+                                      appointmentStatus: 'Upcoming',
+                                      getUsersAppointmentModel: o,
                                     ),
+                                  )
+                          else if (tab == 'Completed')
+                            if (model.query != '')
+                              ...model.getListOfCompletedAppointmentModelList!
+                                  .where(
+                                    (w) =>
+                                        w.doctor!.firstName!
+                                            .toLowerCase()
+                                            .contains(model.query) ||
+                                        w.doctor!.lastName!
+                                            .toLowerCase()
+                                            .contains(
+                                              model.query.toLowerCase(),
+                                            ),
+                                  )
+                                  .map(
+                                    (o) => appointMentCard(
+                                      appointmentStatus: 'Completed',
+                                      getUsersAppointmentModel: o,
+                                    ),
+                                  )
+                            else
+                              ...model.getListOfCompletedAppointmentModelList!
+                                  .map(
+                                    (o) => appointMentCard(
+                                      appointmentStatus: 'Completed',
+                                      getUsersAppointmentModel: o,
+                                    ),
+                                  )
+                          else if (tab == 'Cancelled')
+                            if (model.query != '')
+                              ...model.getListOfCancelledAppointmentModelList!
+                                  .where(
+                                    (w) =>
+                                        w.doctor!.firstName!
+                                            .toLowerCase()
+                                            .contains(model.query) ||
+                                        w.doctor!.lastName!
+                                            .toLowerCase()
+                                            .contains(
+                                              model.query.toLowerCase(),
+                                            ),
+                                  )
+                                  .map(
+                                    (o) => appointMentCard(
+                                      appointmentStatus: 'Cancelled',
+                                      getUsersAppointmentModel: o,
+                                    ),
+                                  )
+                            else
+                              ...model.getListOfCancelledAppointmentModelList!
+                                  .map(
+                                    (o) => appointMentCard(
+                                      appointmentStatus: 'Cancelled',
+                                      getUsersAppointmentModel: o,
+                                    ),
+                                  ),
                         ],
                       ),
                     ),
@@ -291,10 +316,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 ),
               ],
             ),
-            getUsersAppointmentModel?.doctor?.profileImage != null ||
-                    getUsersAppointmentModel!.doctor!.profileImage!.contains(
-                      'https',
-                    )
+            getUsersAppointmentModel?.doctor?.profileImage != null
                 ? ClipOval(
                   child: SizedBox.fromSize(
                     size: const Size.fromRadius(24),
@@ -311,7 +333,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   ),
                 )
                 : Container(
-                  padding: EdgeInsets.all(20.w),
+                  padding: EdgeInsets.all(24.w),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColor.oneKindgrey,
@@ -333,7 +355,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 TextView(
                   text: DateFormat('dd/MM/yyyy').format(
                     DateTime.parse(
-                      getUsersAppointmentModel.slot!.availableDate.toString(),
+                      getUsersAppointmentModel!.slot!.availableDate.toString(),
                     ).toLocal(),
                   ),
                   textStyle: GoogleFonts.gabarito(

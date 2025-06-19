@@ -7,15 +7,16 @@ part of 'slot.dart';
 // **************************************************************************
 
 Slot _$SlotFromJson(Map<String, dynamic> json) => Slot(
-      id: json['id'] as num?,
-      availableDate: json['available_date'] == null
+  id: json['id'] as num?,
+  availableDate:
+      json['available_date'] == null
           ? null
           : DateTime.parse(json['available_date'] as String),
-      availableTime: json['available_time'] as String?,
-    );
+  availableTime: json['available_time'] as String?,
+);
 
 Map<String, dynamic> _$SlotToJson(Slot instance) => <String, dynamic>{
-      'id': instance.id,
-      'available_date': instance.availableDate?.toIso8601String(),
-      'available_time': instance.availableTime,
-    };
+  'id': instance.id,
+  'available_date': instance.availableDate?.toIso8601String(),
+  'available_time': instance.availableTime,
+};

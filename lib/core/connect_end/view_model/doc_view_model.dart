@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import "package:collection/collection.dart";
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ class DocViewModel extends BaseViewModel {
   bool _isLoadingMedSearch = false;
   bool get isLoadingMedSearch => _isLoadingMedSearch;
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> presFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> presMedsFormKey = GlobalKey<FormState>();
 
@@ -121,6 +123,13 @@ class DocViewModel extends BaseViewModel {
 
   bool onSwitch = false;
   bool onToggleMic = false;
+  List<GetListOfDoctorsAppointmentModel>?
+  getListOfCompletedAppointmentModelList = [];
+  List<GetListOfDoctorsAppointmentModel>?
+  getListOfCancelledAppointmentModelList = [];
+  List<GetListOfDoctorsAppointmentModel>?
+  getListOfScheduledAppointmentModelList = [];
+
   GetListOfDoctorsAppointmentModelList? _getListOfDoctorsAppointmentModelList;
   GetListOfDoctorsAppointmentModelList?
   get getListOfDoctorsAppointmentModelList =>
@@ -168,6 +177,7 @@ class DocViewModel extends BaseViewModel {
   TextEditingController patientNameTextController = TextEditingController();
   TextEditingController patientConditionTextController =
       TextEditingController();
+  TextEditingController reasonController = TextEditingController();
 
   TextEditingController medicationTextController = TextEditingController();
   TextEditingController dosageTextController = TextEditingController();
@@ -615,10 +625,73 @@ class DocViewModel extends BaseViewModel {
 
   Future<void> getDoctorsAppointment() async {
     try {
+      _isLoading = true;
       _getListOfDoctorsAppointmentModelList = await runBusyFuture(
         repositoryImply.doctorsAppointment(),
         throwException: true,
       );
+      getListOfCancelledAppointmentModelList?.clear();
+      getListOfCompletedAppointmentModelList?.clear();
+      getListOfScheduledAppointmentModelList?.clear();
+
+      List<GetListOfDoctorsAppointmentModel>? appointmentList = [];
+      for (var element
+          in _getListOfDoctorsAppointmentModelList!
+              .getListOfDoctorsAppointments!) {
+        appointmentList.add(element);
+        notifyListeners();
+      }
+
+      groupBy(appointmentList, (GetListOfDoctorsAppointmentModel o) {
+        if (o.status?.toLowerCase() == 'cancelled') {
+          getListOfCancelledAppointmentModelList!.add(o);
+        }
+        if (o.status?.toLowerCase() == 'completed') {
+          getListOfCompletedAppointmentModelList!.add(o);
+        }
+        if (o.status?.toLowerCase() == 'scheduled') {
+          getListOfScheduledAppointmentModelList!.add(o);
+        }
+      });
+      notifyListeners();
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getDoctorsAppointmentReload() async {
+    try {
+      _getListOfDoctorsAppointmentModelList = await runBusyFuture(
+        repositoryImply.doctorsAppointment(),
+        throwException: true,
+      );
+      getListOfCancelledAppointmentModelList?.clear();
+      getListOfCompletedAppointmentModelList?.clear();
+      getListOfScheduledAppointmentModelList?.clear();
+
+      List<GetListOfDoctorsAppointmentModel>? appointmentList = [];
+      for (var element
+          in _getListOfDoctorsAppointmentModelList!
+              .getListOfDoctorsAppointments!) {
+        appointmentList.add(element);
+        notifyListeners();
+      }
+
+      groupBy(appointmentList, (GetListOfDoctorsAppointmentModel o) {
+        if (o.status?.toLowerCase() == 'cancelled') {
+          getListOfCancelledAppointmentModelList!.add(o);
+        }
+        if (o.status?.toLowerCase() == 'completed') {
+          getListOfCompletedAppointmentModelList!.add(o);
+        }
+        if (o.status?.toLowerCase() == 'scheduled') {
+          getListOfScheduledAppointmentModelList!.add(o);
+        }
+      });
+      notifyListeners();
       _isLoading = false;
     } catch (e) {
       _isLoading = false;
@@ -686,13 +759,14 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> doctorsAppointmentReschedule({
+  Future<void> doctorsAppointmentReschedule(
+    context, {
     String? id,
     RescheduleBookingEntityModel? reschedule,
   }) async {
     try {
       _isLoading = true;
-      await runBusyFuture(
+      var v = await runBusyFuture(
         repositoryImply.doctorsAppointmentReschedule(
           id: id,
           reschedule: reschedule,
@@ -700,27 +774,58 @@ class DocViewModel extends BaseViewModel {
         throwException: true,
       );
       _isLoading = false;
+      reasonController.clear();
+      await AppUtils.snackbar(context, message: '${v['message']}');
+      getDoctorsAppointment();
     } catch (e) {
       _isLoading = false;
-      logger.d(e);
+      await AppUtils.snackbar(context, message: e.toString(), error: true);
+      Navigator.of(context).pop();
     }
     notifyListeners();
   }
 
-  Future<void> doctorsAppointmentUpdate({
+  Future<void> doctorsAppointmentUpdate(
+    context, {
     String? id,
     UpdateStatusReasonEntityModel? update,
   }) async {
     try {
       _isLoading = true;
-      await runBusyFuture(
+      var v = await runBusyFuture(
         repositoryImply.doctorsAppointmentUpdate(id: id, update: update),
         throwException: true,
       );
       _isLoading = false;
+      reasonController.clear();
+      await AppUtils.snackbar(context, message: '${v['message']}');
+      getDoctorsAppointment();
+      Navigator.of(context).pop();
     } catch (e) {
       _isLoading = false;
-      logger.d(e);
+      await AppUtils.snackbar(context, message: e.toString(), error: true);
+      Navigator.of(context).pop();
+    }
+    notifyListeners();
+  }
+
+  Future<void> doctorsAppointmentCompleteUpdate(
+    context, {
+    String? id,
+    UpdateStatusReasonEntityModel? update,
+  }) async {
+    try {
+      _isLoading = true;
+      var v = await runBusyFuture(
+        repositoryImply.doctorsAppointmentUpdate(id: id, update: update),
+        throwException: true,
+      );
+      _isLoading = false;
+      await AppUtils.snackbar(context, message: '${v['message']}');
+      getDoctorsAppointment();
+    } catch (e) {
+      _isLoading = false;
+      await AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -888,7 +993,6 @@ class DocViewModel extends BaseViewModel {
     } catch (e) {
       _isLoadingMedSearch = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -2016,4 +2120,216 @@ class DocViewModel extends BaseViewModel {
     }
     return AppColor.primary1;
   }
+
+  void cancelAppointmentDialogBox(context, {String? id}) => showDialog(
+    context: context,
+    builder: (context) {
+      return ViewModelBuilder<DocViewModel>.reactive(
+        viewModelBuilder: () => DocViewModel(),
+        onViewModelReady: (model) {},
+        disposeViewModel: false,
+        onDispose: (viewModel) {
+          reasonController.clear();
+        },
+        builder: (_, DocViewModel model, __) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: 20.w,
+            ), // Adjust margin here
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9, // 90% of screen
+              padding: EdgeInsets.all(16.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextView(
+                    text: 'Cancel Appointment',
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.fineRed,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  SizedBox(
+                    height: 200.h,
+                    child: Form(
+                      key: _formKey,
+                      child: TextFormWidget(
+                        label: 'Reason for cancelling appointment',
+                        border: 10,
+                        isFilled: true,
+                        maxline: 4,
+                        alignLabelWithHint: true,
+                        fillColor: AppColor.transparent,
+
+                        controller: reasonController,
+                        validator: AppValidator.validateString(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  model.isLoading
+                      ? SpinKitCircle(color: AppColor.grey1, size: 30.sp)
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              reasonController.clear();
+                              Navigator.of(context).pop();
+                            },
+                            child: TextView(
+                              text: 'Cancel',
+                              textStyle: GoogleFonts.dmSans(
+                                color: AppColor.fineRed,
+                                fontSize: 16.20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                model.doctorsAppointmentUpdate(
+                                  context,
+                                  id: id,
+                                  update: UpdateStatusReasonEntityModel(
+                                    reason: reasonController.text,
+                                    status: 'cancelled',
+                                  ),
+                                );
+                                model.notifyListeners();
+                              }
+                            },
+                            child: TextView(
+                              text: 'OK',
+                              textStyle: GoogleFonts.dmSans(
+                                color: AppColor.green,
+                                fontSize: 16.20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+
+  void rescheduleAppointmentDialogBox(context, {String? id, String? slotId}) =>
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ViewModelBuilder<DocViewModel>.reactive(
+            viewModelBuilder: () => DocViewModel(),
+            onViewModelReady: (model) {},
+            disposeViewModel: false,
+            onDispose: (viewModel) {
+              reasonController.clear();
+            },
+            builder: (_, DocViewModel model, __) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                insetPadding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                ), // Adjust margin here
+                child: Container(
+                  width:
+                      MediaQuery.of(context).size.width * 0.9, // 90% of screen
+                  padding: EdgeInsets.all(16.w),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextView(
+                        text: 'Reschedule Appointment',
+                        textStyle: GoogleFonts.dmSans(
+                          color: AppColor.fineRed,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      SizedBox(
+                        height: 200.h,
+                        child: Form(
+                          key: _formKey,
+                          child: TextFormWidget(
+                            label: 'Reason for rescheduling appointment',
+                            border: 10,
+                            isFilled: true,
+                            maxline: 4,
+                            alignLabelWithHint: true,
+                            fillColor: AppColor.transparent,
+
+                            controller: reasonController,
+                            validator: AppValidator.validateString(),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      model.isLoading
+                          ? SpinKitCircle(color: AppColor.grey1, size: 30.sp)
+                          : Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  reasonController.clear();
+                                  Navigator.of(context).pop();
+                                },
+                                child: TextView(
+                                  text: 'Cancel',
+                                  textStyle: GoogleFonts.dmSans(
+                                    color: AppColor.fineRed,
+                                    fontSize: 16.20.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    model.doctorsAppointmentReschedule(
+                                      context,
+                                      id: id,
+                                      reschedule: RescheduleBookingEntityModel(
+                                        reason: reasonController.text,
+                                        slotId: int.parse(slotId!),
+                                      ),
+                                    );
+                                    model.notifyListeners();
+                                  }
+                                },
+                                child: TextView(
+                                  text: 'OK',
+                                  textStyle: GoogleFonts.dmSans(
+                                    color: AppColor.green,
+                                    fontSize: 16.20.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
 }

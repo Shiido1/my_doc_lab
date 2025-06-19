@@ -462,21 +462,15 @@ class PharmViewModel extends BaseViewModel {
       groupBy(orderItemList, (item.Items o) {
         if (o.status?.toLowerCase() == 'cancelled') {
           orderItemListCancelled.add(o);
-          notifyListeners();
         }
-      });
-      groupBy(orderItemList, (item.Items o) {
         if (o.status?.toLowerCase() == 'completed') {
           orderItemListCompleted.add(o);
-          notifyListeners();
         }
-      });
-      groupBy(orderItemList, (item.Items o) {
         if (o.status?.toLowerCase() == 'processed') {
           orderItemListInProgress.add(o);
-          notifyListeners();
         }
       });
+
       notifyListeners();
       _isLoading = false;
     } catch (e) {

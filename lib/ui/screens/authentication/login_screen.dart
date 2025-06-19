@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +9,7 @@ import 'package:my_doc_lab/core/connect_end/model/login_entity.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/forgot_password.dart';
+import 'package:my_doc_lab/ui/screens/authentication/sign_up_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
@@ -184,18 +187,29 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   SizedBox(height: 26.0.h),
-                  RichText(
-                    text: TextSpan(
-                      text: 'Don\'t have an account? ',
-                      style: GoogleFonts.gabarito(
-                        color: AppColor.black,
-                        fontSize: 16.4.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
+                  GestureDetector(
+                    onTap:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    SignUpScreen(userType: widget.userType),
+                          ),
+                        ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextView(
+                          text: 'Don\'t have an account? ',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.black,
+                            fontSize: 16.4.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextView(
                           text: 'Sign Up',
-                          style: GoogleFonts.gabarito(
+                          textStyle: GoogleFonts.gabarito(
                             color: AppColor.primary1,
                             fontSize: 16.4.sp,
                             fontWeight: FontWeight.w500,
@@ -204,30 +218,41 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
+
                   SizedBox(height: 30.h),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 12.w,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      border: Border.all(color: AppColor.lightgrey),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SvgPicture.asset(AppImage.google),
-                        TextView(
-                          text: 'Sign in with Google',
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.darkindgrey,
-                            fontSize: 16.4.sp,
-                            fontWeight: FontWeight.w500,
+                  GestureDetector(
+                    onTap:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    SignUpScreen(userType: widget.userType),
                           ),
                         ),
-                        SizedBox(height: 20.h, width: 20.w),
-                      ],
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 12.w,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(color: AppColor.lightgrey),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SvgPicture.asset(AppImage.google),
+                          TextView(
+                            text: 'Sign in with Google',
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.darkindgrey,
+                              fontSize: 16.4.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(height: 20.h, width: 20.w),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: 20.h),

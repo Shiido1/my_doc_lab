@@ -53,7 +53,7 @@ class ApiError {
               dioError.response?.statusCode == 404 ||
               dioError.response?.statusCode == 409) {
             apiErrorModel = ApiErrorModel.fromJson(dioError.response?.data);
-            print('..u... ${apiErrorModel?.data}');
+            print('..u... ${apiErrorModel?.msg}');
             if (apiErrorModel?.error != null) {
               if (apiErrorModel?.error['code'] != null) {
                 errorDescription = apiErrorModel?.error['code'][0];
@@ -73,6 +73,8 @@ class ApiError {
                 errorDescription = apiErrorModel?.error['checked_in'][0];
               } else if (apiErrorModel?.error['data'] != null) {
                 errorDescription = apiErrorModel?.error['data'];
+              } else if (apiErrorModel?.error['slot'] != null) {
+                errorDescription = apiErrorModel?.error['slot'][0];
               }
             } else {
               errorDescription =

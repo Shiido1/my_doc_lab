@@ -1,24 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_response_model.dart';
+part of 'bank_save_response_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-LoginResponseModel _$LoginResponseModelFromJson(Map<String, dynamic> json) =>
-    LoginResponseModel(
+BankSaveResponseModel _$BankSaveResponseModelFromJson(
+        Map<String, dynamic> json) =>
+    BankSaveResponseModel(
       status: json['status'] as String?,
-      data:
-          json['data'] == null
-              ? null
-              : Data.fromJson(json['data'] as Map<String, dynamic>),
       message: json['message'] as String?,
+      data: json['data'] == null
+          ? null
+          : Data.fromJson(json['data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$LoginResponseModelToJson(LoginResponseModel instance) =>
+Map<String, dynamic> _$BankSaveResponseModelToJson(
+        BankSaveResponseModel instance) =>
     <String, dynamic>{
       'status': instance.status,
-      'data': instance.data,
       'message': instance.message,
+      'data': instance.data,
     };

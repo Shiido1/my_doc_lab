@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,6 +14,7 @@ import 'package:stacked/stacked.dart';
 
 import '../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../core/core_folder/app/app.locator.dart';
+import '../../app_assets/app_utils.dart';
 import '../../app_assets/app_validatiion.dart';
 import '../../widget/button_widget.dart';
 
@@ -69,7 +72,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 30.h),
                   TextFormWidget(
                     label: 'Enter your First Name',
-                    // hint: 'Email Address',
                     border: 10,
                     isFilled: true,
                     fillColor: AppColor.white,
@@ -87,7 +89,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 20.h),
                   TextFormWidget(
                     label: 'Enter your Last Name',
-                    // hint: 'Email Address',
                     border: 10,
                     isFilled: true,
                     fillColor: AppColor.white,
@@ -125,26 +126,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ? Column(
                         children: [
                           TextFormWidget(
-                            label: 'Enter Profession',
-                            // hint: 'Email Address',
+                            label: 'Enter Area of Specialization',
                             border: 10,
                             isFilled: true,
-                            // readOnly: true,
                             fillColor: AppColor.white,
-                            controller: profTextController,
+                            controller: specTextController,
                             prefixWidget: Padding(
                               padding: EdgeInsets.all(9.2.w),
                               child: SvgPicture.asset(
                                 AppImage.prof,
                                 width: 20.w,
                                 height: 20.h,
-                              ),
-                            ),
-                            suffixWidget: IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 20.sp,
                               ),
                             ),
                             validator: AppValidator.validateString(),
@@ -178,7 +170,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : SizedBox.shrink(),
                   TextFormWidget(
                     label: 'Email Address',
-                    // hint: 'Email Address',
                     border: 10,
                     isFilled: true,
                     fillColor: AppColor.white,
@@ -191,12 +182,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 20.h,
                       ),
                     ),
-                    // validator: AppValidator.validateEmail(),
                   ),
                   SizedBox(height: 20.h),
                   TextFormWidget(
                     label: 'Enter your password',
-                    // hint: 'Email Address',
                     border: 10,
                     isFilled: true,
                     fillColor: AppColor.white,
@@ -229,7 +218,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 20.h),
                   TextFormWidget(
                     label: 'Confirm your password',
-                    // hint: 'Email Address',
                     border: 10,
                     isFilled: true,
                     fillColor: AppColor.white,
@@ -265,7 +253,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 20.h),
                   TextFormWidget(
                     label: 'Address',
-                    // hint: 'Email Address',
                     border: 10,
                     isFilled: true,
                     fillColor: AppColor.white,
@@ -283,7 +270,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 20.h),
                   TextFormWidget(
                     label: 'City',
-                    // hint: 'Email Address',
                     border: 10,
                     isFilled: true,
                     fillColor: AppColor.white,
@@ -301,7 +287,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 20.h),
                   TextFormWidget(
                     label: 'State',
-                    // hint: 'Email Address',
                     border: 10,
                     isFilled: true,
                     fillColor: AppColor.white,
@@ -324,10 +309,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       GestureDetector(
                         onTap: () => setState(() => _onTap = !_onTap),
                         child:
-                            _onTap
+                            !_onTap
                                 ? Container(
-                                  height: 18.0.h,
-                                  width: 18.0.w,
+                                  height: 20.0.h,
+                                  width: 21.0.w,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(2.r),
                                     color: AppColor.grey.withOpacity(.3),
@@ -354,7 +339,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: [
                           RichText(
                             text: TextSpan(
-                              text: 'I agree to My DocLab\'s ',
+                              text: 'I agree to Doclabpharm\'s ',
                               style: GoogleFonts.gabarito(
                                 color: AppColor.black,
                                 fontSize: 14.sp,
@@ -388,7 +373,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                               ),
-
                               children: <TextSpan>[],
                             ),
                           ),
@@ -407,7 +391,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       fontWeight: FontWeight.w500,
                     ),
                     onPressed: () {
-                      if (formKey.currentState!.validate()) {
+                      if (formKey.currentState!.validate() && _onTap) {
                         widget.userType == 'care-giver'
                             ? model.careRegisterUser(
                               context,
@@ -441,6 +425,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 state: stateTextController.text.trim(),
                               ),
                             );
+                      } else {
+                        AppUtils.snackbarTop(
+                          context,
+                          message:
+                              'Fill all information and agree to Doclabpharm terms and condition.',
+                          error: true,
+                        );
                       }
                     },
                   ),

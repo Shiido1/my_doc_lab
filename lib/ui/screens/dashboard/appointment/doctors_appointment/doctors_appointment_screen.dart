@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +12,7 @@ import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../../core/connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
+import '../../../../../core/connect_end/model/update_status_reason_entity_model.dart';
 import '../../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../../../core/core_folder/app/app.locator.dart';
 import '../../../../widget/text_form_widget.dart';
@@ -59,21 +62,21 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                 SizedBox(height: 20.h),
                 TextFormWidget(
                   label: 'Search for appointments by name or date sort',
-                  // hint: 'Email Address',
                   border: 10,
                   isFilled: true,
                   fillColor: AppColor.transparent,
-                  // controller: fullnameTextController,
                   prefixWidget: Padding(
                     padding: EdgeInsets.all(14.w),
                     child: SvgPicture.asset(AppImage.search),
                   ),
-                  // validator: AppValidator.validateEmail(),
+                  onChange: (p0) {
+                    model.query = p0;
+                    model.notifyListeners();
+                  },
                 ),
                 SizedBox(height: 20.h),
                 Container(
                   decoration: BoxDecoration(
-                    // ignore: deprecated_member_use
                     color: AppColor.primary1.withOpacity(.68),
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -88,7 +91,6 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                             horizontal: 20.w,
                           ),
                           decoration: BoxDecoration(
-                            // ignore: deprecated_member_use
                             color:
                                 tab == 'Upcoming'
                                     ? AppColor.primary1
@@ -117,7 +119,6 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                             horizontal: 20.w,
                           ),
                           decoration: BoxDecoration(
-                            // ignore: deprecated_member_use
                             color:
                                 tab == 'Completed'
                                     ? AppColor.primary1
@@ -139,26 +140,25 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => setState(() => tab = 'Canceled'),
+                        onTap: () => setState(() => tab = 'Cancelled'),
                         child: Container(
                           padding: EdgeInsets.symmetric(
                             vertical: 11.w,
                             horizontal: 20.w,
                           ),
                           decoration: BoxDecoration(
-                            // ignore: deprecated_member_use
                             color:
-                                tab == 'Canceled'
+                                tab == 'Cancelled'
                                     ? AppColor.primary1
                                     : AppColor.transparent,
 
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextView(
-                            text: 'Canceled',
+                            text: 'Cancelled',
                             textStyle: GoogleFonts.dmSans(
                               color:
-                                  tab == 'Canceled'
+                                  tab == 'Cancelled'
                                       ? AppColor.white
                                       : AppColor.darkindgrey,
                               fontSize: 13.0.sp,
@@ -177,43 +177,101 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                         .getListOfDoctorsAppointments!
                         .isNotEmpty)
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          if (tab == 'Upcoming')
-                            ...model
-                                .getListOfDoctorsAppointmentModelList!
-                                .getListOfDoctorsAppointments!
-                                .where((e) => e.status == 'scheduled')
-                                .map(
-                                  (o) => appointMentCard(
-                                    appointmentStatus: 'Upcoming',
-                                    appointment: o,
-                                  ),
-                                )
-                          else if (tab == 'Completed')
-                            ...model
-                                .getListOfDoctorsAppointmentModelList!
-                                .getListOfDoctorsAppointments!
-                                .where((e) => e.status == 'complete')
-                                .map(
-                                  (o) => appointMentCard(
-                                    appointmentStatus: 'Completed',
-                                    appointment: o,
-                                  ),
-                                )
-                          else
-                            ...model
-                                .getListOfDoctorsAppointmentModelList!
-                                .getListOfDoctorsAppointments!
-                                .where((e) => e.status == 'canceled')
-                                .map(
-                                  (o) => appointMentCard(
-                                    appointmentStatus: 'Canceled',
-                                    appointment: o,
-                                  ),
-                                ),
-                        ],
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await model.getDoctorsAppointmentReload();
+                      },
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            if (tab == 'Upcoming')
+                              if (model.query != '')
+                                ...model.getListOfScheduledAppointmentModelList!
+                                    .where(
+                                      (w) =>
+                                          w.user!.firstName!
+                                              .toLowerCase()
+                                              .contains(model.query) ||
+                                          w.user!.lastName!
+                                              .toLowerCase()
+                                              .contains(
+                                                model.query.toLowerCase(),
+                                              ),
+                                    )
+                                    .map(
+                                      (o) => appointMentCard(
+                                        appointmentStatus: 'Upcoming',
+                                        appointment: o,
+                                        doc: model,
+                                      ),
+                                    )
+                              else
+                                ...model.getListOfScheduledAppointmentModelList!
+                                    .map(
+                                      (o) => appointMentCard(
+                                        appointmentStatus: 'Upcoming',
+                                        appointment: o,
+                                        doc: model,
+                                      ),
+                                    )
+                            else if (tab == 'Completed')
+                              if (model.query != '')
+                                ...model.getListOfCompletedAppointmentModelList!
+                                    .where(
+                                      (w) =>
+                                          w.user!.firstName!
+                                              .toLowerCase()
+                                              .contains(model.query) ||
+                                          w.user!.lastName!
+                                              .toLowerCase()
+                                              .contains(
+                                                model.query.toLowerCase(),
+                                              ),
+                                    )
+                                    .map(
+                                      (o) => appointMentCard(
+                                        appointmentStatus: 'Completed',
+                                        appointment: o,
+                                      ),
+                                    )
+                              else
+                                ...model.getListOfCompletedAppointmentModelList!
+                                    .map(
+                                      (o) => appointMentCard(
+                                        appointmentStatus: 'Completed',
+                                        appointment: o,
+                                      ),
+                                    )
+                            else if (tab == 'Cancelled')
+                              if (model.query != '')
+                                ...model.getListOfCancelledAppointmentModelList!
+                                    .where(
+                                      (w) =>
+                                          w.user!.firstName!
+                                              .toLowerCase()
+                                              .contains(model.query) ||
+                                          w.user!.lastName!
+                                              .toLowerCase()
+                                              .contains(
+                                                model.query.toLowerCase(),
+                                              ),
+                                    )
+                                    .map(
+                                      (o) => appointMentCard(
+                                        appointmentStatus: 'Cancelled',
+                                        appointment: o,
+                                      ),
+                                    )
+                              else
+                                ...model.getListOfCancelledAppointmentModelList!
+                                    .map(
+                                      (o) => appointMentCard(
+                                        appointmentStatus: 'Cancelled',
+                                        appointment: o,
+                                      ),
+                                    ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -237,6 +295,7 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
   appointMentCard({
     String? appointmentStatus,
     GetListOfDoctorsAppointmentModel? appointment,
+    DocViewModel? doc,
   }) => GestureDetector(
     onTap:
         () => navigate.navigateTo(
@@ -285,40 +344,67 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                   ),
                 ],
               ),
-              appointment?.user?.profileImage != null
-                  ? ClipOval(
-                    child: SizedBox.fromSize(
-                      size: const Size.fromRadius(24),
-                      child: Image.network(
-                        appointment?.user?.profileImage!.contains('https')
-                            ? '${appointment?.user?.profileImage}'
-                            : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${appointment?.user?.profileImage}',
-                        fit: BoxFit.cover,
-                        errorBuilder:
-                            (context, error, stackTrace) => shimmerViewPharm(),
+              Row(
+                children: [
+                  appointment?.user?.profileImage != null
+                      ? ClipOval(
+                        child: SizedBox.fromSize(
+                          size: const Size.fromRadius(24),
+                          child: Image.network(
+                            appointment?.user?.profileImage!.contains('https')
+                                ? '${appointment?.user?.profileImage}'
+                                : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${appointment?.user?.profileImage}',
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) =>
+                                    shimmerViewPharm(),
+                          ),
+                        ),
+                      )
+                      : Container(
+                        padding: EdgeInsets.all(20.w),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColor.oneKindgrey,
+                        ),
                       ),
-                    ),
-                  )
-                  : Container(
-                    padding: EdgeInsets.all(20.w),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColor.oneKindgrey,
-                    ),
-                  ),
-              // Row(
-              //   children: [
-              //     Container(
-              //       padding: EdgeInsets.all(20.w),
-              //       decoration: BoxDecoration(
-              //         shape: BoxShape.circle,
-              //         color: AppColor.oneKindgrey,
-              //       ),
-              //     ),
-              //     SizedBox(width: 16.w),
-              //     SvgPicture.asset(AppImage.more_circle),
-              //   ],
-              // ),
+
+                  SizedBox(width: 12.20.w),
+                  appointmentStatus == 'Upcoming'
+                      ? GestureDetector(
+                        child: PopupMenuButton<String>(
+                          onSelected: (String item) {},
+                          itemBuilder: (BuildContext context) {
+                            return [
+                              PopupMenuItem<String>(
+                                value: 'complete',
+                                child: TextView(
+                                  text: 'Complete',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.darkindgrey,
+                                    fontSize: 15.40.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                onTap:
+                                    () => doc!.doctorsAppointmentCompleteUpdate(
+                                      context,
+                                      id: appointment!.id.toString(),
+                                      update: UpdateStatusReasonEntityModel(
+                                        reason:
+                                            'Appointment Completed Succesfully',
+                                        status: 'completed',
+                                      ),
+                                    ),
+                              ),
+                            ];
+                          },
+                          child: SvgPicture.asset(AppImage.more_circle),
+                        ),
+                      )
+                      : SizedBox.shrink(),
+                ],
+              ),
             ],
           ),
           SizedBox(height: 40.h),
@@ -386,52 +472,69 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
             ],
           ),
           SizedBox(height: 12.0.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.w,
-                    horizontal: 46.0.w,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColor.primary1.withOpacity(.7),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TextView(
-                    text: 'Cancel',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.darkindgrey,
-                      fontSize: 13.20.sp,
-                      fontWeight: FontWeight.w500,
+          appointmentStatus == 'Upcoming'
+              ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap:
+                          () => doc?.cancelAppointmentDialogBox(
+                            context,
+                            id: appointment.id.toString(),
+                          ),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8.w,
+                          horizontal: 46.0.w,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColor.primary1.withOpacity(.7),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextView(
+                          text: 'Cancel',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 13.20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              SizedBox(width: 20.w),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.w,
-                    horizontal: 36.w,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColor.primary1,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TextView(
-                    text: 'Reschedule',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.white,
-                      fontSize: 13.20.sp,
-                      fontWeight: FontWeight.w500,
+                  SizedBox(width: 20.w),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap:
+                          () => doc?.rescheduleAppointmentDialogBox(
+                            context,
+                            id: appointment.id.toString(),
+                            slotId: appointment.slot!.id.toString(),
+                          ),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8.w,
+                          horizontal: 36.w,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColor.primary1,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextView(
+                          text: 'Reschedule',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.white,
+                            fontSize: 13.20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ],
-          ),
+                ],
+              )
+              : SizedBox.shrink(),
         ],
       ),
     ),

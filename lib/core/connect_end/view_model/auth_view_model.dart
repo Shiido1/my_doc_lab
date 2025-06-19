@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison
+import "package:collection/collection.dart";
 import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/web_view_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
@@ -140,6 +141,10 @@ class AuthViewModel extends BaseViewModel {
   GetUsersAppointmentModelList? _getUsersAppointmentModelList;
   GetUsersAppointmentModelList? get getUsersAppointmentModelList =>
       _getUsersAppointmentModelList;
+
+  List<GetUsersAppointmentModel>? getListOfCompletedAppointmentModelList = [];
+  List<GetUsersAppointmentModel>? getListOfCancelledAppointmentModelList = [];
+  List<GetUsersAppointmentModel>? getListOfScheduledAppointmentModelList = [];
 
   final debouncer = Debouncer();
 
@@ -401,10 +406,70 @@ class AuthViewModel extends BaseViewModel {
         repositoryImply.getUserAppointment(),
         throwException: true,
       );
+
+      getListOfCancelledAppointmentModelList?.clear();
+      getListOfCompletedAppointmentModelList?.clear();
+      getListOfScheduledAppointmentModelList?.clear();
+
+      List<GetUsersAppointmentModel>? appointmentList = [];
+      for (var element
+          in _getUsersAppointmentModelList!.getUsersAppointmentModelList!) {
+        appointmentList.add(element);
+        notifyListeners();
+      }
+
+      groupBy(appointmentList, (GetUsersAppointmentModel o) {
+        if (o.status?.toLowerCase() == 'cancelled') {
+          getListOfCancelledAppointmentModelList!.add(o);
+        }
+        if (o.status?.toLowerCase() == 'completed') {
+          getListOfCompletedAppointmentModelList!.add(o);
+        }
+        if (o.status?.toLowerCase() == 'scheduled') {
+          getListOfScheduledAppointmentModelList!.add(o);
+        }
+      });
     } catch (e) {
       _isLoading = false;
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getUsersAppointmentReload() async {
+    try {
+      _isLoading = true;
+      _getUsersAppointmentModelList = await runBusyFuture(
+        repositoryImply.getUserAppointment(),
+        throwException: true,
+      );
+
+      getListOfCancelledAppointmentModelList?.clear();
+      getListOfCompletedAppointmentModelList?.clear();
+      getListOfScheduledAppointmentModelList?.clear();
+      List<GetUsersAppointmentModel>? appointmentList = [];
+      for (var element
+          in _getUsersAppointmentModelList!.getUsersAppointmentModelList!) {
+        appointmentList.add(element);
+        notifyListeners();
+      }
+
+      groupBy(appointmentList, (GetUsersAppointmentModel o) {
+        if (o.status?.toLowerCase() == 'cancelled') {
+          getListOfCancelledAppointmentModelList!.add(o);
+        }
+        if (o.status?.toLowerCase() == 'completed') {
+          getListOfCompletedAppointmentModelList!.add(o);
+        }
+        if (o.status?.toLowerCase() == 'scheduled') {
+          getListOfScheduledAppointmentModelList!.add(o);
+        }
+      });
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
     }
     notifyListeners();
   }

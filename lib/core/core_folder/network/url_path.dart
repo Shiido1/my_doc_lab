@@ -84,4 +84,6 @@ class UrlConfig {
   static const String update_pharm_med_qty = 'pharmacy/medicine/quantity';
   static const String pharmacy_stats = 'pharmacy/stats';
   static const String payment = 'user/payment/generate';
+  static const String bank_save = 'bank/save';
+  static const String bank_withdraw = 'bank/withdraw';
 }
