@@ -38,7 +38,7 @@ class UserPrescriptionScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 10.h),
+                SizedBox(height: 20.h),
                 TextView(
                   text: 'Prescriptions',
                   textStyle: GoogleFonts.gabarito(
@@ -48,7 +48,7 @@ class UserPrescriptionScreen extends StatelessWidget {
                   ),
                 ),
                 Divider(color: AppColor.greylight, thickness: 1),
-                SizedBox(height: 10.h),
+                SizedBox(height: 16.20.h),
                 TextFormWidget(
                   label: 'Search prescriptions',
                   border: 10,
@@ -68,507 +68,1040 @@ class UserPrescriptionScreen extends StatelessWidget {
                   },
                 ),
 
-                SizedBox(height: 20.h),
-                ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: isTablet ? 630 : 510),
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20.w,
-                      horizontal: 20.w,
+                SizedBox(height: 30.h),
+                if (model.isLoading)
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: isTablet ? 630 : 510,
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColor.primary1.withOpacity(.24),
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 20.w,
+                        horizontal: 20.w,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColor.primary1.withOpacity(.24),
+                      ),
+                      child: RefreshIndicator(
+                        onRefresh: model.viewDoctorsPrescriptionReload,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...List.generate(10, (i) => shimmerPresView()),
+                              // if (model.isLoading)
+                              //   ...List.generate(10, (i) => shimmerPresView())
+                              // else
+                              //  if (model.viewDoctorsPrescriptionModel !=
+                              //         null &&
+                              //     model
+                              //         .viewDoctorsPrescriptionModel!
+                              //         .viewDoctorsPrescriptionModelList!
+                              //         .isEmpty)
+                              //   Container(
+                              //     width: double.infinity,
+                              //     padding: EdgeInsets.symmetric(
+                              //       vertical: 20.w,
+                              //       horizontal: 20.w,
+                              //     ),
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(10),
+                              //       color: AppColor.white,
+                              //     ),
+                              //     child: Center(
+                              //       child: TextView(
+                              //         text: 'No Prescriptions',
+                              //         textStyle: GoogleFonts.gabarito(
+                              //           color: AppColor.darkindgrey,
+                              //           fontSize: 16.10.sp,
+                              //           fontWeight: FontWeight.w500,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   )
+                              // else if (model.viewDoctorsPrescriptionModel !=
+                              //         null &&
+                              //     model
+                              //         .viewDoctorsPrescriptionModel!
+                              //         .viewDoctorsPrescriptionModelList!
+                              //         .isNotEmpty)
+                              //   if (model.query != '')
+                              //     ...model
+                              //         .viewDoctorsPrescriptionModel!
+                              //         .viewDoctorsPrescriptionModelList!
+                              //         .reversed
+                              //         .where(
+                              //           (w) =>
+                              //               w.doctor!.firstName!
+                              //                   .toLowerCase()
+                              //                   .contains(
+                              //                     model.query.toLowerCase(),
+                              //                   ) ||
+                              //               w.doctor!.lastName!
+                              //                   .toLowerCase()
+                              //                   .contains(
+                              //                     model.query.toLowerCase(),
+                              //                   ),
+                              //         )
+                              //         .map(
+                              //           (o) => GestureDetector(
+                              //             onTap:
+                              //                 () => navigate.navigateTo(
+                              //                   Routes
+                              //                       .userPrescriptionDetailScreen,
+                              //                   arguments:
+                              //                       UserPrescriptionDetailScreenArguments(
+                              //                         view: o,
+                              //                       ),
+                              //                 ),
+                              //             child: Container(
+                              //               width: double.infinity,
+                              //               margin: EdgeInsets.only(bottom: 10.w),
+                              //               padding: EdgeInsets.symmetric(
+                              //                 vertical: 10.w,
+                              //                 horizontal: 12.20.w,
+                              //               ),
+                              //               decoration: BoxDecoration(
+                              //                 borderRadius: BorderRadius.circular(
+                              //                   10,
+                              //                 ),
+                              //                 color: AppColor.white,
+                              //               ),
+                              //               child: Row(
+                              //                 crossAxisAlignment:
+                              //                     CrossAxisAlignment.start,
+                              //                 children: [
+                              //                   o.doctor?.profileImage != null
+                              //                       ? Padding(
+                              //                         padding: EdgeInsets.only(
+                              //                           top: 10.w,
+                              //                         ),
+                              //                         child: ClipOval(
+                              //                           child: SizedBox.fromSize(
+                              //                             size:
+                              //                                 const Size.fromRadius(
+                              //                                   24,
+                              //                                 ),
+                              //                             child: Image.network(
+                              //                               o
+                              //                                       .doctor!
+                              //                                       .profileImage!
+                              //                                       .contains(
+                              //                                         'https',
+                              //                                       )
+                              //                                   ? '${o.doctor?.profileImage}'
+                              //                                   : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${o.doctor?.profileImage}',
+                              //                               fit: BoxFit.cover,
+                              //                               errorBuilder:
+                              //                                   (
+                              //                                     context,
+                              //                                     error,
+                              //                                     stackTrace,
+                              //                                   ) =>
+                              //                                       shimmerViewPharm(),
+                              //                             ),
+                              //                           ),
+                              //                         ),
+                              //                       )
+                              //                       : Container(
+                              //                         padding: EdgeInsets.all(
+                              //                           22.w,
+                              //                         ),
+                              //                         margin: EdgeInsets.only(
+                              //                           top: 10.w,
+                              //                         ),
+                              //                         decoration: BoxDecoration(
+                              //                           shape: BoxShape.circle,
+                              //                           color:
+                              //                               AppColor.oneKindgrey,
+                              //                         ),
+                              //                       ),
+                              //                   SizedBox(width: 10.w),
+                              //                   Column(
+                              //                     crossAxisAlignment:
+                              //                         CrossAxisAlignment.start,
+                              //                     children: [
+                              //                       SizedBox(
+                              //                         width: 130.w,
+                              //                         child: TextView(
+                              //                           text:
+                              //                               '${o.doctor?.firstName?.capitalize() ?? ''} ${o.doctor?.lastName?.capitalize() ?? ''}',
+                              //                           maxLines: 1,
+                              //                           textOverflow:
+                              //                               TextOverflow.ellipsis,
+                              //                           textStyle:
+                              //                               GoogleFonts.gabarito(
+                              //                                 color:
+                              //                                     AppColor
+                              //                                         .darkindgrey,
+                              //                                 fontSize: 15.20.sp,
+                              //                                 fontWeight:
+                              //                                     FontWeight.w500,
+                              //                               ),
+                              //                         ),
+                              //                       ),
+                              //                       SizedBox(height: 4.2.h),
+                              //                       SizedBox(
+                              //                         width: 130.w,
+                              //                         child: TextView(
+                              //                           text:
+                              //                               o.drugs!.isNotEmpty
+                              //                                   ? '${o.drugs![0].medicine?.name ?? ''}.${o.drugs![0].medicine?.volume ?? ''}'
+                              //                                   : 'No Drug',
+                              //                           maxLines: 3,
+                              //                           textOverflow:
+                              //                               TextOverflow.ellipsis,
+                              //                           textStyle:
+                              //                               GoogleFonts.gabarito(
+                              //                                 color:
+                              //                                     AppColor.grey,
+                              //                                 fontSize: 12.0.sp,
+                              //                                 fontWeight:
+                              //                                     FontWeight.w300,
+                              //                               ),
+                              //                         ),
+                              //                       ),
+                              //                       SizedBox(height: 4.2.h),
+
+                              //                       o.drugs!.isEmpty
+                              //                           ? SizedBox.shrink()
+                              //                           : SizedBox(
+                              //                             width: 130.w,
+                              //                             child: TextView(
+                              //                               text:
+                              //                                   o
+                              //                                       .drugs![0]
+                              //                                       .dosage ??
+                              //                                   '',
+
+                              //                               maxLines: 3,
+                              //                               textOverflow:
+                              //                                   TextOverflow
+                              //                                       .ellipsis,
+                              //                               textStyle:
+                              //                                   GoogleFonts.gabarito(
+                              //                                     color:
+                              //                                         AppColor
+                              //                                             .grey,
+                              //                                     fontSize:
+                              //                                         12.0.sp,
+                              //                                     fontWeight:
+                              //                                         FontWeight
+                              //                                             .w300,
+                              //                                   ),
+                              //                             ),
+                              //                           ),
+                              //                       SizedBox(height: 4.2.h),
+                              //                       TextView(
+                              //                         text: DateFormat(
+                              //                           'MMM dd, yyyy',
+                              //                         ).format(
+                              //                           DateTime.parse(
+                              //                             o.updatedAt.toString(),
+                              //                           ).toLocal(),
+                              //                         ),
+                              //                         textStyle:
+                              //                             GoogleFonts.gabarito(
+                              //                               color:
+                              //                                   AppColor
+                              //                                       .darkindgrey,
+                              //                               fontSize: 12.0.sp,
+                              //                               fontWeight:
+                              //                                   FontWeight.w300,
+                              //                             ),
+                              //                       ),
+                              //                     ],
+                              //                   ),
+                              //                   Spacer(),
+                              //                   TextView(
+                              //                     text:
+                              //                         '${o.status?.capitalize()}',
+                              //                     textStyle: GoogleFonts.gabarito(
+                              //                       color: AppColor.darkindgrey,
+                              //                       fontSize: 12.40.sp,
+                              //                       fontWeight: FontWeight.w500,
+                              //                     ),
+                              //                   ),
+                              //                 ],
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         )
+                              //   else
+                              //     ...model.viewDoctorsPrescriptionModel!.viewDoctorsPrescriptionModelList!.reversed.map(
+                              //       (o) => GestureDetector(
+                              //         onTap:
+                              //             () => navigate.navigateTo(
+                              //               Routes.userPrescriptionDetailScreen,
+                              //               arguments:
+                              //                   UserPrescriptionDetailScreenArguments(
+                              //                     view: o,
+                              //                   ),
+                              //             ),
+                              //         child: Container(
+                              //           width: double.infinity,
+                              //           margin: EdgeInsets.only(bottom: 10.w),
+                              //           padding: EdgeInsets.symmetric(
+                              //             vertical: 10.w,
+                              //             horizontal: 12.20.w,
+                              //           ),
+                              //           decoration: BoxDecoration(
+                              //             borderRadius: BorderRadius.circular(10),
+                              //             color: AppColor.white,
+                              //           ),
+                              //           child: Row(
+                              //             crossAxisAlignment:
+                              //                 CrossAxisAlignment.start,
+                              //             children: [
+                              //               o.doctor?.profileImage != null
+                              //                   ? Padding(
+                              //                     padding: EdgeInsets.only(
+                              //                       top: 10.w,
+                              //                     ),
+                              //                     child: ClipOval(
+                              //                       child: SizedBox.fromSize(
+                              //                         size: const Size.fromRadius(
+                              //                           24,
+                              //                         ),
+                              //                         child: Image.network(
+                              //                           o.doctor!.profileImage!
+                              //                                   .contains('https')
+                              //                               ? '${o.doctor?.profileImage}'
+                              //                               : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${o.doctor?.profileImage}',
+                              //                           fit: BoxFit.cover,
+                              //                           errorBuilder:
+                              //                               (
+                              //                                 context,
+                              //                                 error,
+                              //                                 stackTrace,
+                              //                               ) =>
+                              //                                   shimmerViewPharm(),
+                              //                         ),
+                              //                       ),
+                              //                     ),
+                              //                   )
+                              //                   : Container(
+                              //                     padding: EdgeInsets.all(22.w),
+                              //                     margin: EdgeInsets.only(
+                              //                       top: 10.w,
+                              //                     ),
+                              //                     decoration: BoxDecoration(
+                              //                       shape: BoxShape.circle,
+                              //                       color: AppColor.oneKindgrey,
+                              //                     ),
+                              //                   ),
+                              //               SizedBox(width: 10.w),
+                              //               Column(
+                              //                 crossAxisAlignment:
+                              //                     CrossAxisAlignment.start,
+                              //                 children: [
+                              //                   SizedBox(
+                              //                     width: 130.w,
+                              //                     child: TextView(
+                              //                       text:
+                              //                           '${o.doctor?.firstName?.capitalize() ?? ''} ${o.doctor?.lastName?.capitalize() ?? ''}',
+                              //                       maxLines: 1,
+                              //                       textOverflow:
+                              //                           TextOverflow.ellipsis,
+                              //                       textStyle:
+                              //                           GoogleFonts.gabarito(
+                              //                             color:
+                              //                                 AppColor
+                              //                                     .darkindgrey,
+                              //                             fontSize: 15.20.sp,
+                              //                             fontWeight:
+                              //                                 FontWeight.w500,
+                              //                           ),
+                              //                     ),
+                              //                   ),
+                              //                   SizedBox(height: 4.2.h),
+                              //                   SizedBox(
+                              //                     width: 130.w,
+                              //                     child: TextView(
+                              //                       text:
+                              //                           o.drugs!.isNotEmpty
+                              //                               ? '${o.drugs![0].medicine?.name ?? ''}.${o.drugs![0].medicine?.volume ?? ''}'
+                              //                               : 'No Drug',
+                              //                       maxLines: 3,
+                              //                       textOverflow:
+                              //                           TextOverflow.ellipsis,
+                              //                       textStyle:
+                              //                           GoogleFonts.gabarito(
+                              //                             color: AppColor.grey,
+                              //                             fontSize: 12.0.sp,
+                              //                             fontWeight:
+                              //                                 FontWeight.w300,
+                              //                           ),
+                              //                     ),
+                              //                   ),
+                              //                   SizedBox(height: 4.2.h),
+
+                              //                   o.drugs!.isEmpty
+                              //                       ? SizedBox.shrink()
+                              //                       : SizedBox(
+                              //                         width: 130.w,
+                              //                         child: TextView(
+                              //                           text:
+                              //                               o.drugs![0].dosage ??
+                              //                               '',
+
+                              //                           maxLines: 3,
+                              //                           textOverflow:
+                              //                               TextOverflow.ellipsis,
+                              //                           textStyle:
+                              //                               GoogleFonts.gabarito(
+                              //                                 color:
+                              //                                     AppColor.grey,
+                              //                                 fontSize: 12.0.sp,
+                              //                                 fontWeight:
+                              //                                     FontWeight.w300,
+                              //                               ),
+                              //                         ),
+                              //                       ),
+                              //                   SizedBox(height: 4.2.h),
+                              //                   TextView(
+                              //                     text: DateFormat(
+                              //                       'MMM dd, yyyy',
+                              //                     ).format(
+                              //                       DateTime.parse(
+                              //                         o.updatedAt.toString(),
+                              //                       ).toLocal(),
+                              //                     ),
+                              //                     textStyle: GoogleFonts.gabarito(
+                              //                       color: AppColor.darkindgrey,
+                              //                       fontSize: 12.0.sp,
+                              //                       fontWeight: FontWeight.w300,
+                              //                     ),
+                              //                   ),
+                              //                 ],
+                              //               ),
+                              //               Spacer(),
+                              //               TextView(
+                              //                 text: '${o.status?.capitalize()}',
+                              //                 textStyle: GoogleFonts.gabarito(
+                              //                   color: AppColor.darkindgrey,
+                              //                   fontSize: 12.40.sp,
+                              //                   fontWeight: FontWeight.w500,
+                              //                 ),
+                              //               ),
+
+                              //               // Column(
+                              //               //   mainAxisAlignment:
+                              //               //       MainAxisAlignment.end,
+                              //               //   children: [
+                              //               //     SizedBox(height: 10.h),
+                              //               //     PopupMenuButton<String>(
+                              //               //       onSelected: (String item) {
+                              //               //         // Handle the selected menu item
+                              //               //       },
+                              //               //       itemBuilder: (
+                              //               //         BuildContext context,
+                              //               //       ) {
+                              //               //         return [
+                              //               //           PopupMenuItem<String>(
+                              //               //             value: 'add',
+                              //               //             child: TextView(
+                              //               //               text: 'Add Prescription',
+                              //               //               textStyle:
+                              //               //                   GoogleFonts.gabarito(
+                              //               //                     color:
+                              //               //                         AppColor
+                              //               //                             .darkindgrey,
+                              //               //                     fontSize: 12.40.sp,
+                              //               //                     fontWeight:
+                              //               //                         FontWeight.w600,
+                              //               //                   ),
+                              //               //             ),
+                              //               //             onTap:
+                              //               //                 () => model
+                              //               //                     .modalBottomSheetAddMedsPrescription(
+                              //               //                       context,
+                              //               //                       id: o.id.toString(),
+                              //               //                     ),
+                              //               //           ),
+                              //               //           PopupMenuItem<String>(
+                              //               //             value: 'view',
+                              //               //             child: TextView(
+                              //               //               text: 'View Prescription',
+                              //               //               textStyle:
+                              //               //                   GoogleFonts.gabarito(
+                              //               //                     color:
+                              //               //                         AppColor
+                              //               //                             .darkindgrey,
+                              //               //                     fontSize: 12.40.sp,
+                              //               //                     fontWeight:
+                              //               //                         FontWeight.w600,
+                              //               //                   ),
+                              //               //             ),
+                              //               //             onTap:
+                              //               //                 () => navigate.navigateTo(
+                              //               //                   Routes
+                              //               //                       .prescriptionDetailScreen,
+                              //               //                   arguments:
+                              //               //                       PrescriptionDetailScreenArguments(
+                              //               //                         id:
+                              //               //                             o.id.toString(),
+                              //               //                       ),
+                              //               //                 ),
+                              //               //           ),
+                              //               //         ];
+                              //               //       },
+                              //               //       child: Icon(
+                              //               //         Icons.more_vert,
+                              //               //       ), // Optional: Customize the button's icon
+                              //               //     ),
+                              //               //     SizedBox(height: 20.h),
+                              //               //     TextView(
+                              //               //       text: '${o.status?.capitalize()}',
+                              //               //       textStyle: GoogleFonts.gabarito(
+                              //               //         color: AppColor.darkindgrey,
+                              //               //         fontSize: 12.40.sp,
+                              //               //         fontWeight: FontWeight.w500,
+                              //               //       ),
+                              //               //     ),
+                              //               //   ],
+                              //               // ),
+                              //             ],
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    child: RefreshIndicator(
-                      onRefresh: model.viewDoctorsPrescriptionReload,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (model.isLoading)
-                              ...List.generate(10, (i) => shimmerPresView())
-                            else if (model.viewDoctorsPrescriptionModel !=
-                                    null &&
-                                model
-                                    .viewDoctorsPrescriptionModel!
-                                    .viewDoctorsPrescriptionModelList!
-                                    .isEmpty)
-                              Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 20.w,
-                                  horizontal: 20.w,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: AppColor.white,
-                                ),
-                                child: Center(
-                                  child: TextView(
-                                    text: 'No Prescriptions',
-                                    textStyle: GoogleFonts.gabarito(
-                                      color: AppColor.darkindgrey,
-                                      fontSize: 16.10.sp,
-                                      fontWeight: FontWeight.w500,
+                  )
+                else
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: isTablet ? 720 : 620,
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 20.w,
+                        horizontal: 20.w,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColor.primary1.withOpacity(.24),
+                      ),
+                      child: RefreshIndicator(
+                        onRefresh: model.viewDoctorsPrescriptionReload,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // if (model.isLoading)
+                              //   ...List.generate(10, (i) => shimmerPresView())
+                              // else
+                              if (model.viewDoctorsPrescriptionModel != null &&
+                                  model
+                                      .viewDoctorsPrescriptionModel!
+                                      .viewDoctorsPrescriptionModelList!
+                                      .isEmpty)
+                                Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 20.w,
+                                    horizontal: 20.w,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColor.white,
+                                  ),
+                                  child: Center(
+                                    child: TextView(
+                                      text: 'No Prescriptions',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey,
+                                        fontSize: 16.10.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            else if (model.viewDoctorsPrescriptionModel !=
-                                    null &&
-                                model
-                                    .viewDoctorsPrescriptionModel!
-                                    .viewDoctorsPrescriptionModelList!
-                                    .isNotEmpty)
-                              if (model.query != '')
-                                ...model
-                                    .viewDoctorsPrescriptionModel!
-                                    .viewDoctorsPrescriptionModelList!
-                                    .reversed
-                                    .where(
-                                      (w) =>
-                                          w.doctor!.firstName!
-                                              .toLowerCase()
-                                              .contains(
-                                                model.query.toLowerCase(),
-                                              ) ||
-                                          w.doctor!.lastName!
-                                              .toLowerCase()
-                                              .contains(
-                                                model.query.toLowerCase(),
-                                              ),
-                                    )
-                                    .map(
-                                      (o) => GestureDetector(
-                                        onTap:
-                                            () => navigate.navigateTo(
-                                              Routes
-                                                  .userPrescriptionDetailScreen,
-                                              arguments:
-                                                  UserPrescriptionDetailScreenArguments(
-                                                    view: o,
-                                                  ),
-                                            ),
-                                        child: Container(
-                                          width: double.infinity,
-                                          margin: EdgeInsets.only(bottom: 10.w),
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 10.w,
-                                            horizontal: 12.20.w,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                            color: AppColor.white,
-                                          ),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              o.doctor?.profileImage != null
-                                                  ? Padding(
-                                                    padding: EdgeInsets.only(
-                                                      top: 10.w,
+                                )
+                              else if (model.viewDoctorsPrescriptionModel !=
+                                      null &&
+                                  model
+                                      .viewDoctorsPrescriptionModel!
+                                      .viewDoctorsPrescriptionModelList!
+                                      .isNotEmpty)
+                                if (model.query != '')
+                                  ...model
+                                      .viewDoctorsPrescriptionModel!
+                                      .viewDoctorsPrescriptionModelList!
+                                      .reversed
+                                      .where(
+                                        (w) =>
+                                            w.doctor!.firstName!
+                                                .toLowerCase()
+                                                .contains(
+                                                  model.query.toLowerCase(),
+                                                ) ||
+                                            w.doctor!.lastName!
+                                                .toLowerCase()
+                                                .contains(
+                                                  model.query.toLowerCase(),
+                                                ),
+                                      )
+                                      .map(
+                                        (o) => GestureDetector(
+                                          onTap:
+                                              () => navigate.navigateTo(
+                                                Routes
+                                                    .userPrescriptionDetailScreen,
+                                                arguments:
+                                                    UserPrescriptionDetailScreenArguments(
+                                                      view: o,
                                                     ),
-                                                    child: ClipOval(
-                                                      child: SizedBox.fromSize(
-                                                        size:
-                                                            const Size.fromRadius(
-                                                              24,
-                                                            ),
-                                                        child: Image.network(
-                                                          o
-                                                                  .doctor!
-                                                                  .profileImage!
-                                                                  .contains(
-                                                                    'https',
-                                                                  )
-                                                              ? '${o.doctor?.profileImage}'
-                                                              : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${o.doctor?.profileImage}',
-                                                          fit: BoxFit.cover,
-                                                          errorBuilder:
-                                                              (
-                                                                context,
-                                                                error,
-                                                                stackTrace,
-                                                              ) =>
-                                                                  shimmerViewPharm(),
+                                              ),
+                                          child: Container(
+                                            width: double.infinity,
+                                            margin: EdgeInsets.only(
+                                              bottom: 10.w,
+                                            ),
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 10.w,
+                                              horizontal: 12.20.w,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: AppColor.white,
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                o.doctor?.profileImage != null
+                                                    ? Padding(
+                                                      padding: EdgeInsets.only(
+                                                        top: 10.w,
+                                                      ),
+                                                      child: ClipOval(
+                                                        child: SizedBox.fromSize(
+                                                          size:
+                                                              const Size.fromRadius(
+                                                                24,
+                                                              ),
+                                                          child: Image.network(
+                                                            o
+                                                                    .doctor!
+                                                                    .profileImage!
+                                                                    .contains(
+                                                                      'https',
+                                                                    )
+                                                                ? '${o.doctor?.profileImage}'
+                                                                : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${o.doctor?.profileImage}',
+                                                            fit: BoxFit.cover,
+                                                            errorBuilder:
+                                                                (
+                                                                  context,
+                                                                  error,
+                                                                  stackTrace,
+                                                                ) =>
+                                                                    shimmerViewPharm(),
+                                                          ),
                                                         ),
                                                       ),
+                                                    )
+                                                    : Container(
+                                                      padding: EdgeInsets.all(
+                                                        22.w,
+                                                      ),
+                                                      margin: EdgeInsets.only(
+                                                        top: 10.w,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color:
+                                                            AppColor
+                                                                .oneKindgrey,
+                                                      ),
                                                     ),
-                                                  )
-                                                  : Container(
-                                                    padding: EdgeInsets.all(
-                                                      22.w,
+                                                SizedBox(width: 10.w),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 130.w,
+                                                      child: TextView(
+                                                        text:
+                                                            '${o.doctor?.firstName?.capitalize() ?? ''} ${o.doctor?.lastName?.capitalize() ?? ''}',
+                                                        maxLines: 1,
+                                                        textOverflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor
+                                                                      .darkindgrey,
+                                                              fontSize:
+                                                                  15.20.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                      ),
                                                     ),
-                                                    margin: EdgeInsets.only(
-                                                      top: 10.w,
+                                                    SizedBox(height: 4.2.h),
+                                                    SizedBox(
+                                                      width: 130.w,
+                                                      child: TextView(
+                                                        text:
+                                                            o.drugs!.isNotEmpty
+                                                                ? '${o.drugs![0].medicine?.name ?? ''}.${o.drugs![0].medicine?.volume ?? ''}'
+                                                                : 'No Drug',
+                                                        maxLines: 3,
+                                                        textOverflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor.grey,
+                                                              fontSize: 12.0.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                            ),
+                                                      ),
                                                     ),
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color:
-                                                          AppColor.oneKindgrey,
-                                                    ),
-                                                  ),
-                                              SizedBox(width: 10.w),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 130.w,
-                                                    child: TextView(
-                                                      text:
-                                                          '${o.doctor?.firstName?.capitalize() ?? ''} ${o.doctor?.lastName?.capitalize() ?? ''}',
-                                                      maxLines: 1,
-                                                      textOverflow:
-                                                          TextOverflow.ellipsis,
+                                                    SizedBox(height: 4.2.h),
+
+                                                    o.drugs!.isEmpty
+                                                        ? SizedBox.shrink()
+                                                        : SizedBox(
+                                                          width: 130.w,
+                                                          child: TextView(
+                                                            text:
+                                                                o
+                                                                    .drugs![0]
+                                                                    .dosage ??
+                                                                '',
+
+                                                            maxLines: 3,
+                                                            textOverflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            textStyle:
+                                                                GoogleFonts.gabarito(
+                                                                  color:
+                                                                      AppColor
+                                                                          .grey,
+                                                                  fontSize:
+                                                                      12.0.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                    SizedBox(height: 4.2.h),
+                                                    TextView(
+                                                      text: DateFormat(
+                                                        'MMM dd, yyyy',
+                                                      ).format(
+                                                        DateTime.parse(
+                                                          o.updatedAt
+                                                              .toString(),
+                                                        ).toLocal(),
+                                                      ),
                                                       textStyle:
                                                           GoogleFonts.gabarito(
                                                             color:
                                                                 AppColor
                                                                     .darkindgrey,
-                                                            fontSize: 15.20.sp,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 4.2.h),
-                                                  SizedBox(
-                                                    width: 130.w,
-                                                    child: TextView(
-                                                      text:
-                                                          o.drugs!.isNotEmpty
-                                                              ? '${o.drugs![0].medicine?.name ?? ''}.${o.drugs![0].medicine?.volume ?? ''}'
-                                                              : 'No Drug',
-                                                      maxLines: 3,
-                                                      textOverflow:
-                                                          TextOverflow.ellipsis,
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color:
-                                                                AppColor.grey,
                                                             fontSize: 12.0.sp,
                                                             fontWeight:
                                                                 FontWeight.w300,
                                                           ),
                                                     ),
-                                                  ),
-                                                  SizedBox(height: 4.2.h),
-
-                                                  o.drugs!.isEmpty
-                                                      ? SizedBox.shrink()
-                                                      : SizedBox(
-                                                        width: 130.w,
-                                                        child: TextView(
-                                                          text:
-                                                              o
-                                                                  .drugs![0]
-                                                                  .dosage ??
-                                                              '',
-
-                                                          maxLines: 3,
-                                                          textOverflow:
-                                                              TextOverflow
-                                                                  .ellipsis,
-                                                          textStyle:
-                                                              GoogleFonts.gabarito(
-                                                                color:
-                                                                    AppColor
-                                                                        .grey,
-                                                                fontSize:
-                                                                    12.0.sp,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w300,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                  SizedBox(height: 4.2.h),
-                                                  TextView(
-                                                    text: DateFormat(
-                                                      'MMM dd, yyyy',
-                                                    ).format(
-                                                      DateTime.parse(
-                                                        o.updatedAt.toString(),
-                                                      ).toLocal(),
-                                                    ),
-                                                    textStyle:
-                                                        GoogleFonts.gabarito(
-                                                          color:
-                                                              AppColor
-                                                                  .darkindgrey,
-                                                          fontSize: 12.0.sp,
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Spacer(),
-                                              TextView(
-                                                text:
-                                                    '${o.status?.capitalize()}',
-                                                textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.darkindgrey,
-                                                  fontSize: 12.40.sp,
-                                                  fontWeight: FontWeight.w500,
+                                                  ],
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                              else
-                                ...model.viewDoctorsPrescriptionModel!.viewDoctorsPrescriptionModelList!.reversed.map(
-                                  (o) => GestureDetector(
-                                    onTap:
-                                        () => navigate.navigateTo(
-                                          Routes.userPrescriptionDetailScreen,
-                                          arguments:
-                                              UserPrescriptionDetailScreenArguments(
-                                                view: o,
-                                              ),
-                                        ),
-                                    child: Container(
-                                      width: double.infinity,
-                                      margin: EdgeInsets.only(bottom: 10.w),
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 10.w,
-                                        horizontal: 12.20.w,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: AppColor.white,
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          o.doctor?.profileImage != null
-                                              ? Padding(
-                                                padding: EdgeInsets.only(
-                                                  top: 10.w,
-                                                ),
-                                                child: ClipOval(
-                                                  child: SizedBox.fromSize(
-                                                    size: const Size.fromRadius(
-                                                      24,
-                                                    ),
-                                                    child: Image.network(
-                                                      o.doctor!.profileImage!
-                                                              .contains('https')
-                                                          ? '${o.doctor?.profileImage}'
-                                                          : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${o.doctor?.profileImage}',
-                                                      fit: BoxFit.cover,
-                                                      errorBuilder:
-                                                          (
-                                                            context,
-                                                            error,
-                                                            stackTrace,
-                                                          ) =>
-                                                              shimmerViewPharm(),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                              : Container(
-                                                padding: EdgeInsets.all(22.w),
-                                                margin: EdgeInsets.only(
-                                                  top: 10.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: AppColor.oneKindgrey,
-                                                ),
-                                              ),
-                                          SizedBox(width: 10.w),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                width: 130.w,
-                                                child: TextView(
+                                                Spacer(),
+                                                TextView(
                                                   text:
-                                                      '${o.doctor?.firstName?.capitalize() ?? ''} ${o.doctor?.lastName?.capitalize() ?? ''}',
-                                                  maxLines: 1,
-                                                  textOverflow:
-                                                      TextOverflow.ellipsis,
+                                                      '${o.status?.capitalize()}',
                                                   textStyle:
                                                       GoogleFonts.gabarito(
                                                         color:
                                                             AppColor
                                                                 .darkindgrey,
-                                                        fontSize: 15.20.sp,
+                                                        fontSize: 12.40.sp,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                       ),
                                                 ),
-                                              ),
-                                              SizedBox(height: 4.2.h),
-                                              SizedBox(
-                                                width: 130.w,
-                                                child: TextView(
-                                                  text:
-                                                      o.drugs!.isNotEmpty
-                                                          ? '${o.drugs![0].medicine?.name ?? ''}.${o.drugs![0].medicine?.volume ?? ''}'
-                                                          : 'No Drug',
-                                                  maxLines: 3,
-                                                  textOverflow:
-                                                      TextOverflow.ellipsis,
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                else
+                                  ...model.viewDoctorsPrescriptionModel!.viewDoctorsPrescriptionModelList!.reversed.map(
+                                    (o) => GestureDetector(
+                                      onTap:
+                                          () => navigate.navigateTo(
+                                            Routes.userPrescriptionDetailScreen,
+                                            arguments:
+                                                UserPrescriptionDetailScreenArguments(
+                                                  view: o,
+                                                ),
+                                          ),
+                                      child: Container(
+                                        width: double.infinity,
+                                        margin: EdgeInsets.only(bottom: 10.w),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 10.w,
+                                          horizontal: 12.20.w,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: AppColor.white,
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            o.doctor?.profileImage != null
+                                                ? Padding(
+                                                  padding: EdgeInsets.only(
+                                                    top: 10.w,
+                                                  ),
+                                                  child: ClipOval(
+                                                    child: SizedBox.fromSize(
+                                                      size:
+                                                          const Size.fromRadius(
+                                                            24,
+                                                          ),
+                                                      child: Image.network(
+                                                        o.doctor!.profileImage!
+                                                                .contains(
+                                                                  'https',
+                                                                )
+                                                            ? '${o.doctor?.profileImage}'
+                                                            : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${o.doctor?.profileImage}',
+                                                        fit: BoxFit.cover,
+                                                        errorBuilder:
+                                                            (
+                                                              context,
+                                                              error,
+                                                              stackTrace,
+                                                            ) =>
+                                                                shimmerViewPharm(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                                : Container(
+                                                  padding: EdgeInsets.all(22.w),
+                                                  margin: EdgeInsets.only(
+                                                    top: 10.w,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: AppColor.oneKindgrey,
+                                                  ),
+                                                ),
+                                            SizedBox(width: 10.w),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  width: 130.w,
+                                                  child: TextView(
+                                                    text:
+                                                        '${o.doctor?.firstName?.capitalize() ?? ''} ${o.doctor?.lastName?.capitalize() ?? ''}',
+                                                    maxLines: 1,
+                                                    textOverflow:
+                                                        TextOverflow.ellipsis,
+                                                    textStyle:
+                                                        GoogleFonts.gabarito(
+                                                          color:
+                                                              AppColor
+                                                                  .darkindgrey,
+                                                          fontSize: 15.20.sp,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 4.2.h),
+                                                SizedBox(
+                                                  width: 130.w,
+                                                  child: TextView(
+                                                    text:
+                                                        o.drugs!.isNotEmpty
+                                                            ? '${o.drugs![0].medicine?.name ?? ''}.${o.drugs![0].medicine?.volume ?? ''}'
+                                                            : 'No Drug',
+                                                    maxLines: 3,
+                                                    textOverflow:
+                                                        TextOverflow.ellipsis,
+                                                    textStyle:
+                                                        GoogleFonts.gabarito(
+                                                          color: AppColor.grey,
+                                                          fontSize: 12.0.sp,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                        ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 4.2.h),
+
+                                                o.drugs!.isEmpty
+                                                    ? SizedBox.shrink()
+                                                    : SizedBox(
+                                                      width: 130.w,
+                                                      child: TextView(
+                                                        text:
+                                                            o
+                                                                .drugs![0]
+                                                                .dosage ??
+                                                            '',
+
+                                                        maxLines: 3,
+                                                        textOverflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor.grey,
+                                                              fontSize: 12.0.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                SizedBox(height: 4.2.h),
+                                                TextView(
+                                                  text: DateFormat(
+                                                    'MMM dd, yyyy',
+                                                  ).format(
+                                                    DateTime.parse(
+                                                      o.updatedAt.toString(),
+                                                    ).toLocal(),
+                                                  ),
                                                   textStyle:
                                                       GoogleFonts.gabarito(
-                                                        color: AppColor.grey,
+                                                        color:
+                                                            AppColor
+                                                                .darkindgrey,
                                                         fontSize: 12.0.sp,
                                                         fontWeight:
                                                             FontWeight.w300,
                                                       ),
                                                 ),
-                                              ),
-                                              SizedBox(height: 4.2.h),
-
-                                              o.drugs!.isEmpty
-                                                  ? SizedBox.shrink()
-                                                  : SizedBox(
-                                                    width: 130.w,
-                                                    child: TextView(
-                                                      text:
-                                                          o.drugs![0].dosage ??
-                                                          '',
-
-                                                      maxLines: 3,
-                                                      textOverflow:
-                                                          TextOverflow.ellipsis,
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color:
-                                                                AppColor.grey,
-                                                            fontSize: 12.0.sp,
-                                                            fontWeight:
-                                                                FontWeight.w300,
-                                                          ),
-                                                    ),
-                                                  ),
-                                              SizedBox(height: 4.2.h),
-                                              TextView(
-                                                text: DateFormat(
-                                                  'MMM dd, yyyy',
-                                                ).format(
-                                                  DateTime.parse(
-                                                    o.updatedAt.toString(),
-                                                  ).toLocal(),
-                                                ),
-                                                textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.darkindgrey,
-                                                  fontSize: 12.0.sp,
-                                                  fontWeight: FontWeight.w300,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Spacer(),
-                                          TextView(
-                                            text: '${o.status?.capitalize()}',
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.darkindgrey,
-                                              fontSize: 12.40.sp,
-                                              fontWeight: FontWeight.w500,
+                                              ],
                                             ),
-                                          ),
+                                            Spacer(),
+                                            TextView(
+                                              text: '${o.status?.capitalize()}',
+                                              textStyle: GoogleFonts.gabarito(
+                                                color: AppColor.darkindgrey,
+                                                fontSize: 12.40.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
 
-                                          // Column(
-                                          //   mainAxisAlignment:
-                                          //       MainAxisAlignment.end,
-                                          //   children: [
-                                          //     SizedBox(height: 10.h),
-                                          //     PopupMenuButton<String>(
-                                          //       onSelected: (String item) {
-                                          //         // Handle the selected menu item
-                                          //       },
-                                          //       itemBuilder: (
-                                          //         BuildContext context,
-                                          //       ) {
-                                          //         return [
-                                          //           PopupMenuItem<String>(
-                                          //             value: 'add',
-                                          //             child: TextView(
-                                          //               text: 'Add Prescription',
-                                          //               textStyle:
-                                          //                   GoogleFonts.gabarito(
-                                          //                     color:
-                                          //                         AppColor
-                                          //                             .darkindgrey,
-                                          //                     fontSize: 12.40.sp,
-                                          //                     fontWeight:
-                                          //                         FontWeight.w600,
-                                          //                   ),
-                                          //             ),
-                                          //             onTap:
-                                          //                 () => model
-                                          //                     .modalBottomSheetAddMedsPrescription(
-                                          //                       context,
-                                          //                       id: o.id.toString(),
-                                          //                     ),
-                                          //           ),
-                                          //           PopupMenuItem<String>(
-                                          //             value: 'view',
-                                          //             child: TextView(
-                                          //               text: 'View Prescription',
-                                          //               textStyle:
-                                          //                   GoogleFonts.gabarito(
-                                          //                     color:
-                                          //                         AppColor
-                                          //                             .darkindgrey,
-                                          //                     fontSize: 12.40.sp,
-                                          //                     fontWeight:
-                                          //                         FontWeight.w600,
-                                          //                   ),
-                                          //             ),
-                                          //             onTap:
-                                          //                 () => navigate.navigateTo(
-                                          //                   Routes
-                                          //                       .prescriptionDetailScreen,
-                                          //                   arguments:
-                                          //                       PrescriptionDetailScreenArguments(
-                                          //                         id:
-                                          //                             o.id.toString(),
-                                          //                       ),
-                                          //                 ),
-                                          //           ),
-                                          //         ];
-                                          //       },
-                                          //       child: Icon(
-                                          //         Icons.more_vert,
-                                          //       ), // Optional: Customize the button's icon
-                                          //     ),
-                                          //     SizedBox(height: 20.h),
-                                          //     TextView(
-                                          //       text: '${o.status?.capitalize()}',
-                                          //       textStyle: GoogleFonts.gabarito(
-                                          //         color: AppColor.darkindgrey,
-                                          //         fontSize: 12.40.sp,
-                                          //         fontWeight: FontWeight.w500,
-                                          //       ),
-                                          //     ),
-                                          //   ],
-                                          // ),
-                                        ],
+                                            // Column(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment.end,
+                                            //   children: [
+                                            //     SizedBox(height: 10.h),
+                                            //     PopupMenuButton<String>(
+                                            //       onSelected: (String item) {
+                                            //         // Handle the selected menu item
+                                            //       },
+                                            //       itemBuilder: (
+                                            //         BuildContext context,
+                                            //       ) {
+                                            //         return [
+                                            //           PopupMenuItem<String>(
+                                            //             value: 'add',
+                                            //             child: TextView(
+                                            //               text: 'Add Prescription',
+                                            //               textStyle:
+                                            //                   GoogleFonts.gabarito(
+                                            //                     color:
+                                            //                         AppColor
+                                            //                             .darkindgrey,
+                                            //                     fontSize: 12.40.sp,
+                                            //                     fontWeight:
+                                            //                         FontWeight.w600,
+                                            //                   ),
+                                            //             ),
+                                            //             onTap:
+                                            //                 () => model
+                                            //                     .modalBottomSheetAddMedsPrescription(
+                                            //                       context,
+                                            //                       id: o.id.toString(),
+                                            //                     ),
+                                            //           ),
+                                            //           PopupMenuItem<String>(
+                                            //             value: 'view',
+                                            //             child: TextView(
+                                            //               text: 'View Prescription',
+                                            //               textStyle:
+                                            //                   GoogleFonts.gabarito(
+                                            //                     color:
+                                            //                         AppColor
+                                            //                             .darkindgrey,
+                                            //                     fontSize: 12.40.sp,
+                                            //                     fontWeight:
+                                            //                         FontWeight.w600,
+                                            //                   ),
+                                            //             ),
+                                            //             onTap:
+                                            //                 () => navigate.navigateTo(
+                                            //                   Routes
+                                            //                       .prescriptionDetailScreen,
+                                            //                   arguments:
+                                            //                       PrescriptionDetailScreenArguments(
+                                            //                         id:
+                                            //                             o.id.toString(),
+                                            //                       ),
+                                            //                 ),
+                                            //           ),
+                                            //         ];
+                                            //       },
+                                            //       child: Icon(
+                                            //         Icons.more_vert,
+                                            //       ), // Optional: Customize the button's icon
+                                            //     ),
+                                            //     SizedBox(height: 20.h),
+                                            //     TextView(
+                                            //       text: '${o.status?.capitalize()}',
+                                            //       textStyle: GoogleFonts.gabarito(
+                                            //         color: AppColor.darkindgrey,
+                                            //         fontSize: 12.40.sp,
+                                            //         fontWeight: FontWeight.w500,
+                                            //       ),
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
