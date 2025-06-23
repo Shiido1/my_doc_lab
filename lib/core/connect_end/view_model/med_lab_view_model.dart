@@ -72,6 +72,7 @@ class LabTechViewModel extends BaseViewModel {
   DateTime now = DateTime.now();
   final debouncer = Debouncer();
   String query = '';
+  String queryBank = '';
 
   TextEditingController accountNumberTextController = TextEditingController();
   TextEditingController bankCodeTextController = TextEditingController();
@@ -172,6 +173,15 @@ class LabTechViewModel extends BaseViewModel {
 
   bool localUserJoined = false;
   List<SendMessageEntityModel> sendList = [];
+
+  bool get isTogglePassword => _isTogglePassword;
+  bool _isTogglePassword = false;
+
+  bool isOnTogglePassword() {
+    _isTogglePassword = !_isTogglePassword;
+    notifyListeners();
+    return _isTogglePassword;
+  }
 
   ScrollController scrollController1 = ScrollController();
 
@@ -1668,8 +1678,19 @@ class LabTechViewModel extends BaseViewModel {
       AppUtils.snackbar(context, message: _bankSaveResponseModel?.message);
     } catch (e) {
       _isLoading = false;
-
-      AppUtils.snackbar(context, message: e.toString(), error: true);
+      if (e.toString().contains('The bank account name') ||
+          e.toString().contains(
+            'doesn\'t appear to match your profile name.',
+          )) {
+        AppUtils.snackbar(
+          context,
+          message:
+              "The bank account name doesn't appear to match your profile name.",
+          error: true,
+        );
+      } else {
+        AppUtils.snackbar(context, message: e.toString(), error: true);
+      }
       logger.d(e);
     }
     notifyListeners();
@@ -2152,38 +2173,157 @@ class LabTechViewModel extends BaseViewModel {
                                 isFilled: true,
                                 fillColor: AppColor.white,
                                 controller: bankCodeTextController,
-                                validator: AppValidator.validateInt(),
-                              ),
-                              SizedBox(height: 20.h),
-                              ...BankCodes().bank_code["data"]!.map(
-                                (i) => Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        bankCode = i['code'];
-                                        model.notifyListeners();
-                                      },
-                                      child: Container(
-                                        width: 250.w,
-                                        child: TextView(
-                                          text: i['name'] ?? '',
-                                          maxLines: 1,
-                                          textOverflow: TextOverflow.ellipsis,
-                                          textStyle: TextStyle(
-                                            color: AppColor.black,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ),
+                                validator: AppValidator.validateString(),
+                                suffixWidget: Padding(
+                                  padding: EdgeInsets.all(9.2.w),
+                                  child: GestureDetector(
+                                    onTap: model.isOnTogglePassword,
+                                    child: Icon(
+                                      !model.isTogglePassword
+                                          ? Icons.arrow_drop_down_sharp
+                                          : Icons.arrow_drop_up_sharp,
+                                      size: 30.sp,
                                     ),
-                                    Divider(
-                                      color: AppColor.greyIt.withOpacity(.2),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
+                              SizedBox(height: 20.h),
+                              if (model.isTogglePassword)
+                                Container(
+                                  height: 300.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColor.friendlyPrimary,
+                                    borderRadius: BorderRadius.circular(10.r),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    padding: EdgeInsets.only(
+                                      left: 14.w,
+                                      top: 12.w,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 12.w),
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            child: TextFormWidget(
+                                              label: 'Search Bank',
+                                              labelStyle: TextStyle(
+                                                fontSize: 20.sp,
+                                                fontWeight: FontWeight.w500,
+                                                color: AppColor.primary1,
+                                              ),
+                                              border: 10,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              isFilled: true,
+                                              fillColor: AppColor.white,
+                                              prefixIcon: Icons.search,
+                                              prefixIconColor: AppColor.grey1,
+                                              onChange: (p0) {
+                                                model.queryBank = p0;
+                                                model.notifyListeners();
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 20.h),
+                                        if (model.queryBank != '')
+                                          ...BankCodes().bank_code["data"]!
+                                              .where(
+                                                (w) => w['name']!
+                                                    .toLowerCase()
+                                                    .contains(
+                                                      model.queryBank
+                                                          .toLowerCase(),
+                                                    ),
+                                              )
+                                              .map(
+                                                (i) => Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        bankCode = i['code'];
+                                                        bankCodeTextController
+                                                            .text = i['name']!;
+                                                        model
+                                                            .isOnTogglePassword();
+                                                        model.notifyListeners();
+                                                      },
+                                                      child: Container(
+                                                        width: 250.w,
+                                                        child: TextView(
+                                                          text: i['name'] ?? '',
+                                                          maxLines: 1,
+                                                          textOverflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                          textStyle: TextStyle(
+                                                            color:
+                                                                AppColor.black,
+                                                            fontSize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Divider(
+                                                      color: AppColor.greyIt
+                                                          .withOpacity(.2),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                        else
+                                          ...BankCodes().bank_code["data"]!.map(
+                                            (i) => Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    bankCode = i['code'];
+                                                    bankCodeTextController
+                                                        .text = i['name']!;
+                                                    model.isOnTogglePassword();
+                                                    model.notifyListeners();
+                                                  },
+                                                  child: SizedBox(
+                                                    width: 250.w,
+                                                    child: TextView(
+                                                      text: i['name'] ?? '',
+                                                      maxLines: 1,
+                                                      textOverflow:
+                                                          TextOverflow.ellipsis,
+                                                      textStyle: TextStyle(
+                                                        color: AppColor.black,
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  color: AppColor.greyIt
+                                                      .withOpacity(.2),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              else
+                                SizedBox.shrink(),
+
                               SizedBox(height: 35.0.h),
                               !model.isLoading
                                   ? Row(
@@ -2225,7 +2365,8 @@ class LabTechViewModel extends BaseViewModel {
                                           if (formKeySave.currentState!
                                               .validate()) {
                                             model.saveBankAccount(
-                                              BankSaveEntityModel(
+                                              context,
+                                              bankEntity: BankSaveEntityModel(
                                                 accountNumber:
                                                     accountNumberTextController
                                                         .text

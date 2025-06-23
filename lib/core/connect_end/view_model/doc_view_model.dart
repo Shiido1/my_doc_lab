@@ -159,6 +159,7 @@ class DocViewModel extends BaseViewModel {
 
   String query = '';
   String queryPatient = '';
+  String queryBank = '';
 
   DocViewModel({this.context});
 
@@ -2405,7 +2406,6 @@ class DocViewModel extends BaseViewModel {
         },
       );
 
-  String queryBank = '';
   void modalBottomSheetSaveAccount(context) {
     showModalBottomSheet(
       context: context,
