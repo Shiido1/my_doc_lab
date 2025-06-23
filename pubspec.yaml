@@ -76,12 +76,12 @@ dependencies:
 flutter_native_splash:
   android: true
   ios: true
-  image: assets/image/launch_splash.png
+  image: assets/image/la_hands.png
   color: "#FFFFFF"
   android_12:
-    image: assets/image/launch_splash.png
+    image: assets/image/la_hands.png
     color: "#FFFFFF"
-  image_ios: assets/image/launch_splash.png
+  image_ios: assets/image/la_hands.png
 
 
 

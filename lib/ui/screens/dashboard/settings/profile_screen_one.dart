@@ -47,10 +47,6 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.keyboard_arrow_left, size: 30.sp),
-                ),
                 SizedBox(height: 10.h),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

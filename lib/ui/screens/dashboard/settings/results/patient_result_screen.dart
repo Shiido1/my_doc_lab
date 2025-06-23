@@ -24,10 +24,6 @@ class PatientResultsScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.keyboard_arrow_left, size: 30.sp),
-                ),
                 TextView(
                   text: 'Results',
                   textStyle: GoogleFonts.dmSans(

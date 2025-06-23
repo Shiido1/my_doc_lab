@@ -33,10 +33,6 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.keyboard_arrow_left, size: 30.sp),
-                ),
                 TextView(
                   text: 'Help & Support',
                   textStyle: GoogleFonts.gabarito(

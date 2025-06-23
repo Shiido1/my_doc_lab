@@ -46,10 +46,6 @@ class ConsultationScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.keyboard_arrow_left, size: 30.sp),
-                ),
                 SizedBox(height: 20.h),
                 TextView(
                   text: 'How do you wish to book?',
@@ -60,6 +56,15 @@ class ConsultationScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20.h),
+                if (model.isLoading)
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.w),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.primary1,
+                      ),
+                    ),
+                  ),
                 if (model.getAllConsultantResponseModelList != null &&
                     model
                         .getAllConsultantResponseModelList!

@@ -1094,9 +1094,9 @@ class DocViewModel extends BaseViewModel {
       _isLoading = false;
       Future.delayed(Duration(seconds: 2), () {
         if (hasLoadedConversation) receiveConversation(id);
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(Duration(seconds: 3), () {
           session.chatsData = {'chat': []};
-          // sendList.clear();
+          sendList.clear();
         });
       });
     } catch (e) {

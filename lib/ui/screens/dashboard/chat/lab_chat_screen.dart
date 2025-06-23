@@ -32,10 +32,6 @@ class _LabChatScreenState extends State<LabChatScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.keyboard_arrow_left, size: 32.sp),
-                    ),
                     SizedBox(width: 20.w),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

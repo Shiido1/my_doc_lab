@@ -41,10 +41,6 @@ class _CartScreenState extends State<CartScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.keyboard_arrow_left, size: 30.sp),
-                    ),
                     TextView(
                       text: 'Cart',
                       textStyle: GoogleFonts.dmSans(

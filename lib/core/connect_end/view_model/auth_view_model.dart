@@ -638,7 +638,6 @@ class AuthViewModel extends BaseViewModel {
     SearchDoctorEntityModel? searchEntity,
   }) async {
     try {
-      // _isLoading = true;
       _searchedPharmResponseModelList = await runBusyFuture(
         repositoryImply.getSearchedPharmacists(searchEntity!),
         throwException: true,
@@ -648,14 +647,12 @@ class AuthViewModel extends BaseViewModel {
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
 
   void generateToken(context, {CallTokenGenerateEntityModel? calltoken}) async {
     try {
-      // _isLoading = true;
       _callTokenGenerateResponseModel = await runBusyFuture(
         repositoryImply.generateToken(calltoken!),
         throwException: true,
@@ -667,13 +664,10 @@ class AuthViewModel extends BaseViewModel {
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
-  //006e18babecb1eb4a889feefcbbf60e5a5aIABQD9s1G6es/M/kbWiKi/dkNJI4CuvRV1fNvkIgJLIkVDJFnOkAAAAAIgDnmr0D/9g2aAQAAQCPlTVoAwCPlTVoAgCPlTVoBACPlTVo
 
-  // Set up the Agora RTC engine instance
   Future<void> initializeAgoraVoiceSDK() async {
     await [Permission.microphone, Permission.camera].request();
     engine = createAgoraRtcEngine();
@@ -741,7 +735,6 @@ class AuthViewModel extends BaseViewModel {
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           debugPrint("Remote user $remoteUid joined");
           remoteUidGlobal = remoteUid;
-          print('uuuuuuu000000000dD:${remoteUidGlobal.toString()}');
           notifyListeners();
         },
         onUserOffline: (
@@ -1308,6 +1301,10 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = false;
       Future.delayed(Duration(seconds: 1), () {
         if (hasLoadedConversation) receiveConversation(id);
+        Future.delayed(Duration(seconds: 3), () {
+          session.chatsData = {'chat': []};
+          sendList.clear();
+        });
       });
     } catch (e) {
       _isLoading = false;
@@ -1316,12 +1313,12 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void receiveConversationOnce(String id) {
+  Future<void> receiveConversationOnce(String id) async {
     if (hasLoadedConversation == false) {
       return;
     } else {
       hasLoadedConversation = true;
-      receiveConversation(id);
+      await receiveConversation(id);
       scrollToBottom(); // existing method
     }
     notifyListeners();
