@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "891787785661",
+    "project_id": "doclabpharm",
+    "storage_bucket": "doclabpharm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891787785661:android:1749908f4bcb1dd45bced4",
+        "android_client_info": {
+          "package_name": "com.doclabpharm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcUzDErYUDlN13pb1fuIyG-EgCTkVDHGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

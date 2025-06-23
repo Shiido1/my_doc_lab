@@ -203,6 +203,22 @@ class DocMoreSettingsScreen extends StatelessWidget {
                   image: AppImage.history,
                   borderColor: AppColor.lightgrey,
                   color: AppColor.black,
+                  text: 'Save Account',
+                  onTap: () => model.modalBottomSheetSaveAccount(context),
+                ),
+                SizedBox(height: 20.h),
+                moreContainerWidget(
+                  image: AppImage.wallet,
+                  borderColor: AppColor.lightgrey,
+                  color: AppColor.black,
+                  text: 'Withdraw',
+                  onTap: () => model.modalBottomSheetWithdrawFunds(context),
+                ),
+                SizedBox(height: 20.h),
+                moreContainerWidget(
+                  image: AppImage.history,
+                  borderColor: AppColor.lightgrey,
+                  color: AppColor.black,
                   text: 'Order History',
                   onTap:
                       () => Navigator.of(context).push(

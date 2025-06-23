@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,6 +32,9 @@ Future<void> main() async {
     locator<SharedPreferencesService>().initilize(),
     Hive.initFlutter(),
   ]);
+  if (Platform.isAndroid) {
+    await Firebase.initializeApp();
+  } else {}
 
   Hive.registerAdapter(CheckoutEntityModelAdapter());
   box = await Hive.openBox<CheckoutEntityModel>('checkout');

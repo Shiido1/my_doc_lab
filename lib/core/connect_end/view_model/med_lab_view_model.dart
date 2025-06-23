@@ -16,6 +16,7 @@ import '../../../ui/app_assets/app_color.dart';
 import '../../../ui/app_assets/app_image.dart';
 import '../../../ui/app_assets/app_utils.dart';
 import '../../../ui/app_assets/app_validatiion.dart';
+import '../../../ui/app_assets/bank_codes.dart';
 import '../../../ui/app_assets/image_picker.dart';
 import '../../../ui/widget/text_form_widget.dart';
 import '../../../ui/widget/text_widget.dart';
@@ -26,6 +27,8 @@ import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
 import '../model/add_diagnosis_entity_model.dart';
 import '../model/add_report_entity_model.dart';
+import '../model/bank_save_entity_model.dart';
+import '../model/bank_save_response_model/bank_save_response_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_response_model.dart';
@@ -67,6 +70,12 @@ class LabTechViewModel extends BaseViewModel {
   final debouncer = Debouncer();
   String query = '';
 
+  TextEditingController accountNumberTextController = TextEditingController();
+  TextEditingController bankCodeTextController = TextEditingController();
+  TextEditingController amountTextController = TextEditingController();
+
+  String? bankCode;
+
   LabTechViewModel({this.context});
 
   GetLabTechDetailResponseModel? _getLabTechDetailResponseModel;
@@ -103,6 +112,8 @@ class LabTechViewModel extends BaseViewModel {
   LabTechCategoryListResponseModel? onEditGetLabCategories;
 
   GlobalKey<FormState> diaFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeySave = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyWithdraw = GlobalKey<FormState>();
 
   TextEditingController serviceNameTextController = TextEditingController();
   TextEditingController servicePriceTextController = TextEditingController();
@@ -133,6 +144,8 @@ class LabTechViewModel extends BaseViewModel {
       _callTokenGenerateResponseModel;
 
   TextEditingController sendtextController = TextEditingController(text: '');
+  BankSaveResponseModel? get bankSaveResponseModel => _bankSaveResponseModel;
+  BankSaveResponseModel? _bankSaveResponseModel;
 
   RtcEngine? engine;
   bool onSwitch = false;
@@ -1566,6 +1579,46 @@ class LabTechViewModel extends BaseViewModel {
     return AppColor.primary1;
   }
 
+  Future<void> saveBankAccount(
+    context, {
+    BankSaveEntityModel? bankEntity,
+  }) async {
+    try {
+      _isLoading = true;
+      _bankSaveResponseModel = await runBusyFuture(
+        repositoryImply.bankSaveAccount(bankEntity!),
+        throwException: true,
+      );
+      _isLoading = false;
+
+      AppUtils.snackbar(context, message: _bankSaveResponseModel?.message);
+    } catch (e) {
+      _isLoading = false;
+
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> withdrawFundsToAccount(context, {num? amount}) async {
+    try {
+      _isLoading = true;
+      var v = await runBusyFuture(
+        repositoryImply.withdrawToAccount(amount!),
+        throwException: true,
+      );
+      _isLoading = false;
+
+      AppUtils.snackbar(context, message: v['message']);
+    } catch (e) {
+      _isLoading = false;
+
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+      logger.d(e);
+    }
+    notifyListeners();
+  }
   // chat stuffs
 
   Future<void> getChatIndex() async {
@@ -1935,5 +1988,385 @@ class LabTechViewModel extends BaseViewModel {
         );
       }
     } else {}
+  }
+
+  void modalBottomSheetSaveAccount(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+        return ViewModelBuilder<LabTechViewModel>.reactive(
+          viewModelBuilder: () => LabTechViewModel(),
+          onViewModelReady: (model) {},
+          onDispose: (viewModel) {
+            accountNumberTextController.clear();
+            bankCodeTextController.clear();
+          },
+          builder: (_, LabTechViewModel model, __) {
+            return StatefulBuilder(
+              builder: (_, StateSetter setState) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: DraggableScrollableSheet(
+                    expand: false,
+                    initialChildSize: 0.5, // 50% of screen height
+                    minChildSize: 0.3, // Can be dragged to 30% of screen height
+                    maxChildSize: 0.7, // Can be dragged to 90% of screen height
+                    builder: (__, scrollController) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Form(
+                          key: formKeySave,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 6.0.h),
+                              Center(
+                                child: Container(
+                                  width: 30.w,
+                                  height: 3.5.h,
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey2.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.0.h),
+                              TextView(
+                                text: 'Save Bank Account',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Account Number',
+                                labelStyle: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                keyboardType: TextInputType.number,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: accountNumberTextController,
+                                validator: AppValidator.validateInt(),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Bank Code',
+                                labelStyle: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                keyboardType: TextInputType.number,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: bankCodeTextController,
+                                validator: AppValidator.validateInt(),
+                              ),
+                              SizedBox(height: 20.h),
+                              ...BankCodes().bank_code["data"]!.map(
+                                (i) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        bankCode = i['code'];
+                                        model.notifyListeners();
+                                      },
+                                      child: Container(
+                                        width: 250.w,
+                                        child: TextView(
+                                          text: i['name'] ?? '',
+                                          maxLines: 1,
+                                          textOverflow: TextOverflow.ellipsis,
+                                          textStyle: TextStyle(
+                                            color: AppColor.black,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Divider(
+                                      color: AppColor.greyIt.withOpacity(.2),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 35.0.h),
+                              !model.isLoading
+                                  ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Navigator.pop(context),
+                                        child: Container(
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(12.0.w)
+                                                  : EdgeInsets.all(20.0.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: const Color.fromARGB(
+                                              255,
+                                              208,
+                                              234,
+                                              222,
+                                            ),
+                                          ),
+                                          width: 140.w,
+                                          alignment: Alignment.center,
+                                          child: TextView(
+                                            text: 'Cancel',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.primary1,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (formKeySave.currentState!
+                                              .validate()) {
+                                            model.saveBankAccount(
+                                              BankSaveEntityModel(
+                                                accountNumber:
+                                                    accountNumberTextController
+                                                        .text
+                                                        .trim(),
+                                                bankCode: bankCode,
+                                              ),
+                                            );
+                                          }
+                                          model.notifyListeners();
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(10.w)
+                                                  : EdgeInsets.all(20.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: AppColor.primary1,
+                                          ),
+                                          child: TextView(
+                                            text: 'Save Account',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.white,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                  : SpinKitCircle(
+                                    color: AppColor.primary1,
+                                    size: 34.sp,
+                                  ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void modalBottomSheetWithdrawFunds(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+        return ViewModelBuilder<LabTechViewModel>.reactive(
+          viewModelBuilder: () => LabTechViewModel(),
+          onViewModelReady: (model) {},
+          onDispose: (viewModel) {
+            amountTextController.clear();
+          },
+          builder: (_, LabTechViewModel model, __) {
+            return StatefulBuilder(
+              builder: (_, StateSetter setState) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: DraggableScrollableSheet(
+                    expand: false,
+                    initialChildSize: 0.35, // 50% of screen height
+                    minChildSize: 0.3, // Can be dragged to 30% of screen height
+                    maxChildSize:
+                        0.45, // Can be dragged to 90% of screen height
+                    builder: (__, scrollController) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Form(
+                          key: formKeyWithdraw,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 6.0.h),
+                              Center(
+                                child: Container(
+                                  width: 30.w,
+                                  height: 3.5.h,
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey2.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.0.h),
+                              TextView(
+                                text: 'Withdraw Funds To Account',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Amount',
+                                labelStyle: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                keyboardType: TextInputType.number,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: amountTextController,
+                                validator: AppValidator.validateInt(),
+                              ),
+
+                              SizedBox(height: 35.0.h),
+                              !model.isLoading
+                                  ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Navigator.pop(context),
+                                        child: Container(
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(12.0.w)
+                                                  : EdgeInsets.all(20.0.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: const Color.fromARGB(
+                                              255,
+                                              208,
+                                              234,
+                                              222,
+                                            ),
+                                          ),
+                                          width: 140.w,
+                                          alignment: Alignment.center,
+                                          child: TextView(
+                                            text: 'Cancel',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.primary1,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (formKeyWithdraw.currentState!
+                                              .validate()) {
+                                            model.withdrawFundsToAccount(
+                                              amountTextController.text.trim(),
+                                            );
+                                          }
+                                          model.notifyListeners();
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(10.w)
+                                                  : EdgeInsets.all(20.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: AppColor.primary1,
+                                          ),
+                                          child: TextView(
+                                            text: 'Withdraw Funds',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.white,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                  : SpinKitCircle(
+                                    color: AppColor.primary1,
+                                    size: 34.sp,
+                                  ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 }

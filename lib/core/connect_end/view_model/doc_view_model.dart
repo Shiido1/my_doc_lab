@@ -18,6 +18,7 @@ import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/repo/doc_repo_impl.dart';
+import 'package:my_doc_lab/ui/app_assets/bank_codes.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
@@ -75,6 +76,8 @@ class DocViewModel extends BaseViewModel {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> presFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> presMedsFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeySave = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyWithdraw = GlobalKey<FormState>();
 
   GetDocDetailResponseModel? _getDocDetailResponseModel;
   GetDocDetailResponseModel? get getDocDetailResponseModel =>
@@ -168,6 +171,7 @@ class DocViewModel extends BaseViewModel {
 
   TimeOfDay? selectedTime;
   TextEditingController sendtextController = TextEditingController(text: '');
+  TextEditingController amountTextController = TextEditingController();
 
   bool hasLoadedConversation = false;
   bool hasLoadedIndexConversation = false;
@@ -187,9 +191,21 @@ class DocViewModel extends BaseViewModel {
   TextEditingController dosageTextController = TextEditingController();
   TextEditingController frequencyTextController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
+  TextEditingController accountNumberTextController = TextEditingController();
+  TextEditingController bankCodeTextController = TextEditingController();
   UserSearchResponseModel? _searchedUser;
   SearchedMedicineResponseModel? _searchedMeds;
   String presFrequency = '';
+  String? bankCode;
+
+  bool get isTogglePassword => _isTogglePassword;
+  bool _isTogglePassword = false;
+
+  bool isOnTogglePassword() {
+    _isTogglePassword = !_isTogglePassword;
+    notifyListeners();
+    return _isTogglePassword;
+  }
 
   onToggleMicrophone() {
     if (onToggleMic == false) {
@@ -257,7 +273,7 @@ class DocViewModel extends BaseViewModel {
     );
 
     return {
-      '12Hour': DateFormat.jm().format(dateTime), // e.g. "8:45 AM"
+      '24Hour': DateFormat.jm().format(dateTime), // e.g. "8:45 AM"
     };
   }
 
@@ -849,31 +865,53 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> saveBankAccount(BankSaveEntityModel bankEntity) async {
+  Future<void> saveBankAccount(
+    context, {
+    BankSaveEntityModel? bankEntity,
+  }) async {
     try {
       _isLoading = true;
       _bankSaveResponseModel = await runBusyFuture(
-        repositoryImply.bankSaveAccount(bankEntity),
+        repositoryImply.bankSaveAccount(bankEntity!),
         throwException: true,
       );
       _isLoading = false;
+
+      AppUtils.snackbar(context, message: _bankSaveResponseModel?.message);
     } catch (e) {
       _isLoading = false;
+      if (e.toString().contains('The bank account name') ||
+          e.toString().contains(
+            'doesn\'t appear to match your profile name.',
+          )) {
+        AppUtils.snackbar(
+          context,
+          message:
+              "The bank account name doesn't appear to match your profile name.",
+          error: true,
+        );
+      } else {
+        AppUtils.snackbar(context, message: e.toString(), error: true);
+      }
       logger.d(e);
     }
     notifyListeners();
   }
 
-  Future<void> withdrawFundsToAccount(num amount) async {
+  Future<void> withdrawFundsToAccount(context, {num? amount}) async {
     try {
       _isLoading = true;
       var v = await runBusyFuture(
-        repositoryImply.withdrawToAccount(amount),
+        repositoryImply.withdrawToAccount(amount!),
         throwException: true,
       );
       _isLoading = false;
+
+      AppUtils.snackbar(context, message: v['message']);
     } catch (e) {
       _isLoading = false;
+
+      AppUtils.snackbar(context, message: e.toString(), error: true);
       logger.d(e);
     }
     notifyListeners();
@@ -2366,4 +2404,510 @@ class DocViewModel extends BaseViewModel {
           );
         },
       );
+
+  String queryBank = '';
+  void modalBottomSheetSaveAccount(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+        return ViewModelBuilder<DocViewModel>.reactive(
+          viewModelBuilder: () => DocViewModel(),
+          onViewModelReady: (model) {},
+          onDispose: (viewModel) {
+            accountNumberTextController.clear();
+            bankCodeTextController.clear();
+          },
+          builder: (_, DocViewModel model, __) {
+            return StatefulBuilder(
+              builder: (_, StateSetter setState) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: DraggableScrollableSheet(
+                    expand: false,
+                    initialChildSize: 0.5, // 50% of screen height
+                    minChildSize: 0.3, // Can be dragged to 30% of screen height
+                    maxChildSize: 0.7, // Can be dragged to 90% of screen height
+                    builder: (__, scrollController) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Form(
+                          key: formKeySave,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 6.0.h),
+                              Center(
+                                child: Container(
+                                  width: 30.w,
+                                  height: 3.5.h,
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey2.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.0.h),
+                              TextView(
+                                text: 'Save Bank Account',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Account Number',
+                                labelStyle: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                keyboardType: TextInputType.number,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: accountNumberTextController,
+                                validator: AppValidator.validateInt(),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Bank Code',
+                                labelStyle: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                keyboardType: TextInputType.number,
+                                isFilled: true,
+                                readOnly: true,
+                                fillColor: AppColor.white,
+                                controller: bankCodeTextController,
+                                validator: AppValidator.validateString(),
+                                suffixWidget: Padding(
+                                  padding: EdgeInsets.all(9.2.w),
+                                  child: GestureDetector(
+                                    onTap: model.isOnTogglePassword,
+                                    child: Icon(
+                                      !model.isTogglePassword
+                                          ? Icons.arrow_drop_down_sharp
+                                          : Icons.arrow_drop_up_sharp,
+                                      size: 30.sp,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              if (model.isTogglePassword)
+                                Container(
+                                  height: 300.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColor.friendlyPrimary,
+                                    borderRadius: BorderRadius.circular(10.r),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    padding: EdgeInsets.only(
+                                      left: 14.w,
+                                      top: 12.w,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 12.w),
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            child: TextFormWidget(
+                                              label: 'Search Bank',
+                                              labelStyle: TextStyle(
+                                                fontSize: 20.sp,
+                                                fontWeight: FontWeight.w500,
+                                                color: AppColor.primary1,
+                                              ),
+                                              border: 10,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              isFilled: true,
+                                              fillColor: AppColor.white,
+                                              prefixIcon: Icons.search,
+                                              prefixIconColor: AppColor.grey1,
+                                              onChange: (p0) {
+                                                model.queryBank = p0;
+                                                model.notifyListeners();
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 20.h),
+                                        if (model.queryBank != '')
+                                          ...BankCodes().bank_code["data"]!
+                                              .where(
+                                                (w) => w['name']!
+                                                    .toLowerCase()
+                                                    .contains(
+                                                      model.queryBank
+                                                          .toLowerCase(),
+                                                    ),
+                                              )
+                                              .map(
+                                                (i) => Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        bankCode = i['code'];
+                                                        bankCodeTextController
+                                                            .text = i['name']!;
+                                                        model
+                                                            .isOnTogglePassword();
+                                                        model.notifyListeners();
+                                                      },
+                                                      child: Container(
+                                                        width: 250.w,
+                                                        child: TextView(
+                                                          text: i['name'] ?? '',
+                                                          maxLines: 1,
+                                                          textOverflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                          textStyle: TextStyle(
+                                                            color:
+                                                                AppColor.black,
+                                                            fontSize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Divider(
+                                                      color: AppColor.greyIt
+                                                          .withOpacity(.2),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                        else
+                                          ...BankCodes().bank_code["data"]!.map(
+                                            (i) => Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    bankCode = i['code'];
+                                                    bankCodeTextController
+                                                        .text = i['name']!;
+                                                    model.isOnTogglePassword();
+                                                    model.notifyListeners();
+                                                  },
+                                                  child: Container(
+                                                    width: 250.w,
+                                                    child: TextView(
+                                                      text: i['name'] ?? '',
+                                                      maxLines: 1,
+                                                      textOverflow:
+                                                          TextOverflow.ellipsis,
+                                                      textStyle: TextStyle(
+                                                        color: AppColor.black,
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  color: AppColor.greyIt
+                                                      .withOpacity(.2),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              else
+                                SizedBox.shrink(),
+
+                              SizedBox(height: 35.0.h),
+                              !model.isLoading
+                                  ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Navigator.pop(context),
+                                        child: Container(
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(12.0.w)
+                                                  : EdgeInsets.all(20.0.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: const Color.fromARGB(
+                                              255,
+                                              208,
+                                              234,
+                                              222,
+                                            ),
+                                          ),
+                                          width: 140.w,
+                                          alignment: Alignment.center,
+                                          child: TextView(
+                                            text: 'Cancel',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.primary1,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (formKeySave.currentState!
+                                              .validate()) {
+                                            model.saveBankAccount(
+                                              context,
+                                              bankEntity: BankSaveEntityModel(
+                                                accountNumber:
+                                                    accountNumberTextController
+                                                        .text
+                                                        .trim(),
+                                                bankCode: bankCode,
+                                              ),
+                                            );
+                                          }
+                                          model.notifyListeners();
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(10.w)
+                                                  : EdgeInsets.all(20.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: AppColor.primary1,
+                                          ),
+                                          child: TextView(
+                                            text: 'Save Account',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.white,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                  : SpinKitCircle(
+                                    color: AppColor.primary1,
+                                    size: 34.sp,
+                                  ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void modalBottomSheetWithdrawFunds(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+        return ViewModelBuilder<DocViewModel>.reactive(
+          viewModelBuilder: () => DocViewModel(),
+          onViewModelReady: (model) {},
+          onDispose: (viewModel) {
+            amountTextController.clear();
+          },
+          builder: (_, DocViewModel model, __) {
+            return StatefulBuilder(
+              builder: (_, StateSetter setState) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: DraggableScrollableSheet(
+                    expand: false,
+                    initialChildSize: 0.35, // 50% of screen height
+                    minChildSize: 0.3, // Can be dragged to 30% of screen height
+                    maxChildSize:
+                        0.45, // Can be dragged to 90% of screen height
+                    builder: (__, scrollController) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Form(
+                          key: formKeyWithdraw,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 6.0.h),
+                              Center(
+                                child: Container(
+                                  width: 30.w,
+                                  height: 3.5.h,
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey2.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.0.h),
+                              TextView(
+                                text: 'Withdraw Funds To Account',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextFormWidget(
+                                label: 'Amount',
+                                labelStyle: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.primary1,
+                                ),
+                                border: 10,
+                                keyboardType: TextInputType.number,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: amountTextController,
+                                validator: AppValidator.validateInt(),
+                              ),
+
+                              SizedBox(height: 35.0.h),
+                              !model.isLoading
+                                  ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Navigator.pop(context),
+                                        child: Container(
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(12.0.w)
+                                                  : EdgeInsets.all(20.0.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: const Color.fromARGB(
+                                              255,
+                                              208,
+                                              234,
+                                              222,
+                                            ),
+                                          ),
+                                          width: 140.w,
+                                          alignment: Alignment.center,
+                                          child: TextView(
+                                            text: 'Cancel',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.primary1,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (formKeyWithdraw.currentState!
+                                              .validate()) {
+                                            model.withdrawFundsToAccount(
+                                              context,
+                                              amount: int.parse(
+                                                amountTextController.text
+                                                    .trim(),
+                                              ),
+                                            );
+                                          }
+                                          model.notifyListeners();
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding:
+                                              isTablet
+                                                  ? EdgeInsets.all(10.w)
+                                                  : EdgeInsets.all(20.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            color: AppColor.primary1,
+                                          ),
+                                          child: TextView(
+                                            text: 'Withdraw Funds',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.white,
+                                              fontSize: 18.0.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                  : SpinKitCircle(
+                                    color: AppColor.primary1,
+                                    size: 34.sp,
+                                  ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
 }

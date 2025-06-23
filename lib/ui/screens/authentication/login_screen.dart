@@ -1,5 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,6 +35,44 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController roleTextController = TextEditingController();
   TextEditingController emailTextController = TextEditingController();
   GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
+
+  String? deviceToken;
+
+  Future<void> getDeviceToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    setState(() {
+      deviceToken = token;
+    });
+    print('FCM Token: $deviceToken');
+  }
+
+  Future<void> _requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  @override
+  void initState() {
+    _requestPermission();
+    getDeviceToken();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,6 +215,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 email: emailTextController.text.trim(),
                                 password: passwordTextController.text.trim(),
                                 role: model.selectedRole,
+                                deviceToken: deviceToken,
+                                deviceType:
+                                    Platform.isAndroid ? 'android' : 'ios',
                               ),
                             )
                             : model.loginUser(
@@ -181,6 +225,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               loginEntity: LoginEntityModel(
                                 email: emailTextController.text.trim(),
                                 password: passwordTextController.text.trim(),
+                                deviceToken: deviceToken,
+                                deviceType:
+                                    Platform.isAndroid ? 'android' : 'ios',
                               ),
                             );
                       }

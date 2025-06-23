@@ -170,6 +170,53 @@ class DocEditProfileScreen extends StatelessWidget {
 
                   SizedBox(height: 20.h),
 
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: [
+                  //     GestureDetector(
+                  //       onTap: () => model.saveBankAccount(context),
+                  //       child: Container(
+                  //         alignment: Alignment.center,
+                  //         padding: EdgeInsets.all(10.w),
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           color: AppColor.primary1,
+                  //         ),
+                  //         child: TextView(
+                  //           text: 'Save Account',
+                  //           textStyle: GoogleFonts.gabarito(
+                  //             color: AppColor.white,
+                  //             fontSize: 17.22.sp,
+                  //             fontWeight: FontWeight.w500,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 30.w),
+                  //     GestureDetector(
+                  //       onTap: () => model.withdrawFundsToAccount(context),
+                  //       child: Container(
+                  //         alignment: Alignment.center,
+                  //         padding: EdgeInsets.all(10.w),
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           color: AppColor.white,
+                  //           border: Border.all(color: AppColor.primary1),
+                  //         ),
+                  //         child: TextView(
+                  //           text: 'Withdraw',
+                  //           textStyle: GoogleFonts.gabarito(
+                  //             color: AppColor.primary1,
+                  //             fontSize: 17.22.sp,
+                  //             fontWeight: FontWeight.w500,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(height: 20.h),
                   TextFormWidget(
                     hint: 'First name',
                     border: 10,

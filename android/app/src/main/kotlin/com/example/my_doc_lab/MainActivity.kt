@@ -1,4 +1,4 @@
-package com.example.my_doc_lab
+package com.doclabpharm
 
 import io.flutter.embedding.android.FlutterActivity
 
