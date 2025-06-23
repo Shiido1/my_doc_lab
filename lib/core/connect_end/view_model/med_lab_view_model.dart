@@ -35,6 +35,9 @@ import '../model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_re
 import '../model/get_category_by_id_response_model/get_category_by_id_response_model.dart';
 import '../model/get_lab_tech_detail_response_model/get_lab_tech_detail_response_model.dart';
 import '../model/get_lab_tech_dia_book_list_model/get_lab_tech_dia_book_list_model.dart';
+import '../model/get_lab_tech_report_response_model/get_lab_tech_report_response_model.dart';
+import '../model/get_lab_tech_sta_response_model/get_lab_tech_sta_response_model.dart';
+import '../model/get_lab_texh_all_patients_response_model/get_lab_texh_all_patients_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../model/get_single_dia_response_model/get_single_dia_response_model.dart';
@@ -138,6 +141,20 @@ class LabTechViewModel extends BaseViewModel {
   SendMessageResponseModel? _sendMessageResponseModel;
   SendMessageResponseModel? get sendMessageResponseModel =>
       _sendMessageResponseModel;
+
+  GetLabTexhAllPatientsResponseModelList?
+  _getLabTechAllPatientsResponseModelList;
+  GetLabTexhAllPatientsResponseModelList?
+  get getLabTechAllPatientsResponseModelList =>
+      _getLabTechAllPatientsResponseModelList;
+
+  GetLabTechStaResponseModel? _getLabTechStaResponseModel;
+  GetLabTechStaResponseModel? get getLabTechStaResponseModel =>
+      _getLabTechStaResponseModel;
+
+  GetLabTechReportResponseModel? _getLabTechReportResponseModel;
+  GetLabTechReportResponseModel? get getLabTechReportResponseModel =>
+      _getLabTechReportResponseModel;
 
   CallTokenGenerateResponseModel? _callTokenGenerateResponseModel;
   CallTokenGenerateResponseModel? get callTokenGenerateResponseModel =>
@@ -399,6 +416,54 @@ class LabTechViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> getLabTechReport() async {
+    try {
+      _isLoading = true;
+      _getLabTechReportResponseModel = await runBusyFuture(
+        repositoryImply.getLabTechReport(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getLabTechStats() async {
+    try {
+      _isLoading = true;
+      _getLabTechStaResponseModel = await runBusyFuture(
+        repositoryImply.getLabTechStats(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getLabTechPatients() async {
+    try {
+      _isLoading = true;
+      _getLabTechAllPatientsResponseModelList = await runBusyFuture(
+        repositoryImply.getLabTechPatients(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
   Future<void> labTechDetailReport(context, {String? id}) async {
     try {
       _isLoading = true;
@@ -625,6 +690,15 @@ class LabTechViewModel extends BaseViewModel {
   Color statusValueColor(status) {
     if (status == 'inactive') {
       return AppColor.grey2;
+    }
+    return AppColor.primary1;
+  }
+
+  Color statusValuePatientsColor(status) {
+    if (status == 'critical') {
+      return AppColor.red;
+    } else if (status == 'abnormal') {
+      return AppColor.brown;
     }
     return AppColor.primary1;
   }

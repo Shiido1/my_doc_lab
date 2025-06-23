@@ -25,7 +25,7 @@ class _LaboratoryDashboardState extends State<LaboratoryDashboard> {
 
   final List<Widget> _body = [
     LaboratoryHomeScreen(),
-    LaboratoryAppointmentScreen(),
+    LaboratoryPatientScreen(),
     LaboratoryOrderScreen(),
     LabSettingsScreen(),
   ];

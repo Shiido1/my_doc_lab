@@ -95,21 +95,54 @@ class Routes {
 
 class StackedRouter extends _i1.RouterBase {
   final _routes = <_i1.RouteDef>[
-    _i1.RouteDef(Routes.firstOnboardingScreen, page: _i2.FirstOnboardingScreen),
-    _i1.RouteDef(Routes.dashboard, page: _i3.Dashboard),
-    _i1.RouteDef(Routes.docDashboard, page: _i4.DocDashboard),
-    _i1.RouteDef(Routes.laboratoryDashboard, page: _i5.LaboratoryDashboard),
-    _i1.RouteDef(Routes.pharmacyDashboard, page: _i6.PharmacyDashboard),
-    _i1.RouteDef(Routes.loginScreen, page: _i7.LoginScreen),
-    _i1.RouteDef(Routes.profileScreen, page: _i8.ProfileScreen),
-    _i1.RouteDef(Routes.doctorChatScreen, page: _i9.DoctorChatScreen),
-    _i1.RouteDef(Routes.chatScreen, page: _i10.ChatScreen),
+    _i1.RouteDef(
+      Routes.firstOnboardingScreen,
+      page: _i2.FirstOnboardingScreen,
+    ),
+    _i1.RouteDef(
+      Routes.dashboard,
+      page: _i3.Dashboard,
+    ),
+    _i1.RouteDef(
+      Routes.docDashboard,
+      page: _i4.DocDashboard,
+    ),
+    _i1.RouteDef(
+      Routes.laboratoryDashboard,
+      page: _i5.LaboratoryDashboard,
+    ),
+    _i1.RouteDef(
+      Routes.pharmacyDashboard,
+      page: _i6.PharmacyDashboard,
+    ),
+    _i1.RouteDef(
+      Routes.loginScreen,
+      page: _i7.LoginScreen,
+    ),
+    _i1.RouteDef(
+      Routes.profileScreen,
+      page: _i8.ProfileScreen,
+    ),
+    _i1.RouteDef(
+      Routes.doctorChatScreen,
+      page: _i9.DoctorChatScreen,
+    ),
+    _i1.RouteDef(
+      Routes.chatScreen,
+      page: _i10.ChatScreen,
+    ),
     _i1.RouteDef(
       Routes.doctorAppointmentDetailSceen,
       page: _i11.DoctorAppointmentDetailSceen,
     ),
-    _i1.RouteDef(Routes.patientDetailSceen, page: _i12.PatientDetailSceen),
-    _i1.RouteDef(Routes.pharmChatScreen, page: _i13.PharmChatScreen),
+    _i1.RouteDef(
+      Routes.patientDetailSceen,
+      page: _i12.PatientDetailSceen,
+    ),
+    _i1.RouteDef(
+      Routes.pharmChatScreen,
+      page: _i13.PharmChatScreen,
+    ),
     _i1.RouteDef(
       Routes.prescriptionDetailScreen,
       page: _i14.PrescriptionDetailScreen,
@@ -154,9 +187,8 @@ class StackedRouter extends _i1.RouterBase {
     _i7.LoginScreen: (data) {
       final args = data.getArgs<LoginScreenArguments>(nullOk: false);
       return _i16.MaterialPageRoute<dynamic>(
-        builder:
-            (context) =>
-                _i7.LoginScreen(key: args.key, userType: args.userType),
+        builder: (context) =>
+            _i7.LoginScreen(key: args.key, userType: args.userType),
         settings: data,
       );
     },
@@ -170,26 +202,20 @@ class StackedRouter extends _i1.RouterBase {
     _i9.DoctorChatScreen: (data) {
       final args = data.getArgs<DoctorChatScreenArguments>(nullOk: false);
       return _i16.MaterialPageRoute<dynamic>(
-        builder:
-            (context) => _i9.DoctorChatScreen(
-              key: args.key,
-              id: args.id,
-              messageModel: args.messageModel,
-              app: args.app,
-              data: args.data,
-            ),
+        builder: (context) => _i9.DoctorChatScreen(
+            key: args.key,
+            id: args.id,
+            messageModel: args.messageModel,
+            app: args.app,
+            data: args.data),
         settings: data,
       );
     },
     _i10.ChatScreen: (data) {
       final args = data.getArgs<ChatScreenArguments>(nullOk: false);
       return _i16.MaterialPageRoute<dynamic>(
-        builder:
-            (context) => _i10.ChatScreen(
-              key: args.key,
-              id: args.id,
-              messageModel: args.messageModel,
-            ),
+        builder: (context) => _i10.ChatScreen(
+            key: args.key, id: args.id, messageModel: args.messageModel),
         settings: data,
       );
     },
@@ -198,11 +224,8 @@ class StackedRouter extends _i1.RouterBase {
         orElse: () => const DoctorAppointmentDetailSceenArguments(),
       );
       return _i16.MaterialPageRoute<dynamic>(
-        builder:
-            (context) => _i11.DoctorAppointmentDetailSceen(
-              key: args.key,
-              appointment: args.appointment,
-            ),
+        builder: (context) => _i11.DoctorAppointmentDetailSceen(
+            key: args.key, appointment: args.appointment),
         settings: data,
       );
     },
@@ -211,49 +234,37 @@ class StackedRouter extends _i1.RouterBase {
         orElse: () => const PatientDetailSceenArguments(),
       );
       return _i16.MaterialPageRoute<dynamic>(
-        builder:
-            (context) => _i12.PatientDetailSceen(
-              key: args.key,
-              order: args.order,
-              item: args.item,
-            ),
+        builder: (context) => _i12.PatientDetailSceen(
+            key: args.key, order: args.order, item: args.item),
         settings: data,
       );
     },
     _i13.PharmChatScreen: (data) {
       final args = data.getArgs<PharmChatScreenArguments>(nullOk: false);
       return _i16.MaterialPageRoute<dynamic>(
-        builder:
-            (context) => _i13.PharmChatScreen(
-              key: args.key,
-              id: args.id,
-              messageModel: args.messageModel,
-              appOrder: args.appOrder,
-            ),
+        builder: (context) => _i13.PharmChatScreen(
+            key: args.key,
+            id: args.id,
+            messageModel: args.messageModel,
+            appOrder: args.appOrder),
         settings: data,
       );
     },
     _i14.PrescriptionDetailScreen: (data) {
-      final args = data.getArgs<PrescriptionDetailScreenArguments>(
-        nullOk: false,
-      );
+      final args =
+          data.getArgs<PrescriptionDetailScreenArguments>(nullOk: false);
       return _i16.MaterialPageRoute<dynamic>(
-        builder:
-            (context) =>
-                _i14.PrescriptionDetailScreen(key: args.key, id: args.id),
+        builder: (context) =>
+            _i14.PrescriptionDetailScreen(key: args.key, id: args.id),
         settings: data,
       );
     },
     _i15.UserPrescriptionDetailScreen: (data) {
-      final args = data.getArgs<UserPrescriptionDetailScreenArguments>(
-        nullOk: false,
-      );
+      final args =
+          data.getArgs<UserPrescriptionDetailScreenArguments>(nullOk: false);
       return _i16.MaterialPageRoute<dynamic>(
-        builder:
-            (context) => _i15.UserPrescriptionDetailScreen(
-              key: args.key,
-              view: args.view,
-            ),
+        builder: (context) =>
+            _i15.UserPrescriptionDetailScreen(key: args.key, view: args.view),
         settings: data,
       );
     },
@@ -267,7 +278,10 @@ class StackedRouter extends _i1.RouterBase {
 }
 
 class LoginScreenArguments {
-  const LoginScreenArguments({this.key, required this.userType});
+  const LoginScreenArguments({
+    this.key,
+    required this.userType,
+  });
 
   final _i16.Key? key;
 
@@ -291,7 +305,10 @@ class LoginScreenArguments {
 }
 
 class ProfileScreenArguments {
-  const ProfileScreenArguments({this.key, required this.id});
+  const ProfileScreenArguments({
+    this.key,
+    required this.id,
+  });
 
   final _i16.Key? key;
 
@@ -391,7 +408,10 @@ class ChatScreenArguments {
 }
 
 class DoctorAppointmentDetailSceenArguments {
-  const DoctorAppointmentDetailSceenArguments({this.key, this.appointment});
+  const DoctorAppointmentDetailSceenArguments({
+    this.key,
+    this.appointment,
+  });
 
   final _i16.Key? key;
 
@@ -415,7 +435,11 @@ class DoctorAppointmentDetailSceenArguments {
 }
 
 class PatientDetailSceenArguments {
-  const PatientDetailSceenArguments({this.key, this.order, this.item});
+  const PatientDetailSceenArguments({
+    this.key,
+    this.order,
+    this.item,
+  });
 
   final _i16.Key? key;
 
@@ -480,7 +504,10 @@ class PharmChatScreenArguments {
 }
 
 class PrescriptionDetailScreenArguments {
-  const PrescriptionDetailScreenArguments({this.key, required this.id});
+  const PrescriptionDetailScreenArguments({
+    this.key,
+    required this.id,
+  });
 
   final _i16.Key? key;
 
@@ -504,7 +531,10 @@ class PrescriptionDetailScreenArguments {
 }
 
 class UserPrescriptionDetailScreenArguments {
-  const UserPrescriptionDetailScreenArguments({this.key, required this.view});
+  const UserPrescriptionDetailScreenArguments({
+    this.key,
+    required this.view,
+  });
 
   final _i16.Key? key;
 
@@ -533,15 +563,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.firstOnboardingScreen,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.firstOnboardingScreen,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToDashboard([
@@ -549,15 +577,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.dashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.dashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToDocDashboard([
@@ -565,15 +591,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.docDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.docDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToLaboratoryDashboard([
@@ -581,15 +605,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.laboratoryDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.laboratoryDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToPharmacyDashboard([
@@ -597,15 +619,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return navigateTo<dynamic>(
-      Routes.pharmacyDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.pharmacyDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToLoginScreen({
@@ -615,16 +635,14 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.loginScreen,
-      arguments: LoginScreenArguments(key: key, userType: userType),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.loginScreen,
+        arguments: LoginScreenArguments(key: key, userType: userType),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToProfileScreen({
@@ -634,16 +652,14 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.profileScreen,
-      arguments: ProfileScreenArguments(key: key, id: id),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.profileScreen,
+        arguments: ProfileScreenArguments(key: key, id: id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToDoctorChatScreen({
@@ -656,22 +672,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.doctorChatScreen,
-      arguments: DoctorChatScreenArguments(
-        key: key,
-        id: id,
-        messageModel: messageModel,
-        app: app,
-        data: data,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.doctorChatScreen,
+        arguments: DoctorChatScreenArguments(
+            key: key, id: id, messageModel: messageModel, app: app, data: data),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToChatScreen({
@@ -682,20 +691,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.chatScreen,
-      arguments: ChatScreenArguments(
-        key: key,
-        id: id,
-        messageModel: messageModel,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.chatScreen,
+        arguments:
+            ChatScreenArguments(key: key, id: id, messageModel: messageModel),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToDoctorAppointmentDetailSceen({
@@ -705,19 +709,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.doctorAppointmentDetailSceen,
-      arguments: DoctorAppointmentDetailSceenArguments(
-        key: key,
-        appointment: appointment,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.doctorAppointmentDetailSceen,
+        arguments: DoctorAppointmentDetailSceenArguments(
+            key: key, appointment: appointment),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToPatientDetailSceen({
@@ -728,20 +728,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.patientDetailSceen,
-      arguments: PatientDetailSceenArguments(
-        key: key,
-        order: order,
-        item: item,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.patientDetailSceen,
+        arguments:
+            PatientDetailSceenArguments(key: key, order: order, item: item),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToPharmChatScreen({
@@ -753,21 +748,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.pharmChatScreen,
-      arguments: PharmChatScreenArguments(
-        key: key,
-        id: id,
-        messageModel: messageModel,
-        appOrder: appOrder,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.pharmChatScreen,
+        arguments: PharmChatScreenArguments(
+            key: key, id: id, messageModel: messageModel, appOrder: appOrder),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToPrescriptionDetailScreen({
@@ -777,16 +766,14 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.prescriptionDetailScreen,
-      arguments: PrescriptionDetailScreenArguments(key: key, id: id),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.prescriptionDetailScreen,
+        arguments: PrescriptionDetailScreenArguments(key: key, id: id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> navigateToUserPrescriptionDetailScreen({
@@ -796,16 +783,14 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return navigateTo<dynamic>(
-      Routes.userPrescriptionDetailScreen,
-      arguments: UserPrescriptionDetailScreenArguments(key: key, view: view),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return navigateTo<dynamic>(Routes.userPrescriptionDetailScreen,
+        arguments: UserPrescriptionDetailScreenArguments(key: key, view: view),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithFirstOnboardingScreen([
@@ -813,15 +798,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.firstOnboardingScreen,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.firstOnboardingScreen,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithDashboard([
@@ -829,15 +812,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.dashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.dashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithDocDashboard([
@@ -845,15 +826,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.docDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.docDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithLaboratoryDashboard([
@@ -861,15 +840,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.laboratoryDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.laboratoryDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithPharmacyDashboard([
@@ -877,15 +854,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   ]) async {
-    return replaceWith<dynamic>(
-      Routes.pharmacyDashboard,
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.pharmacyDashboard,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithLoginScreen({
@@ -895,16 +870,14 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.loginScreen,
-      arguments: LoginScreenArguments(key: key, userType: userType),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.loginScreen,
+        arguments: LoginScreenArguments(key: key, userType: userType),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithProfileScreen({
@@ -914,16 +887,14 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.profileScreen,
-      arguments: ProfileScreenArguments(key: key, id: id),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.profileScreen,
+        arguments: ProfileScreenArguments(key: key, id: id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithDoctorChatScreen({
@@ -936,22 +907,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.doctorChatScreen,
-      arguments: DoctorChatScreenArguments(
-        key: key,
-        id: id,
-        messageModel: messageModel,
-        app: app,
-        data: data,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.doctorChatScreen,
+        arguments: DoctorChatScreenArguments(
+            key: key, id: id, messageModel: messageModel, app: app, data: data),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithChatScreen({
@@ -962,20 +926,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.chatScreen,
-      arguments: ChatScreenArguments(
-        key: key,
-        id: id,
-        messageModel: messageModel,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.chatScreen,
+        arguments:
+            ChatScreenArguments(key: key, id: id, messageModel: messageModel),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithDoctorAppointmentDetailSceen({
@@ -985,19 +944,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.doctorAppointmentDetailSceen,
-      arguments: DoctorAppointmentDetailSceenArguments(
-        key: key,
-        appointment: appointment,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.doctorAppointmentDetailSceen,
+        arguments: DoctorAppointmentDetailSceenArguments(
+            key: key, appointment: appointment),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithPatientDetailSceen({
@@ -1008,20 +963,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.patientDetailSceen,
-      arguments: PatientDetailSceenArguments(
-        key: key,
-        order: order,
-        item: item,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.patientDetailSceen,
+        arguments:
+            PatientDetailSceenArguments(key: key, order: order, item: item),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithPharmChatScreen({
@@ -1033,21 +983,15 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.pharmChatScreen,
-      arguments: PharmChatScreenArguments(
-        key: key,
-        id: id,
-        messageModel: messageModel,
-        appOrder: appOrder,
-      ),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.pharmChatScreen,
+        arguments: PharmChatScreenArguments(
+            key: key, id: id, messageModel: messageModel, appOrder: appOrder),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithPrescriptionDetailScreen({
@@ -1057,16 +1001,14 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.prescriptionDetailScreen,
-      arguments: PrescriptionDetailScreenArguments(key: key, id: id),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.prescriptionDetailScreen,
+        arguments: PrescriptionDetailScreenArguments(key: key, id: id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 
   Future<dynamic> replaceWithUserPrescriptionDetailScreen({
@@ -1076,15 +1018,13 @@ extension NavigatorStateExtension on _i22.NavigationService {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-    transition,
+        transition,
   }) async {
-    return replaceWith<dynamic>(
-      Routes.userPrescriptionDetailScreen,
-      arguments: UserPrescriptionDetailScreenArguments(key: key, view: view),
-      id: routerId,
-      preventDuplicates: preventDuplicates,
-      parameters: parameters,
-      transition: transition,
-    );
+    return replaceWith<dynamic>(Routes.userPrescriptionDetailScreen,
+        arguments: UserPrescriptionDetailScreenArguments(key: key, view: view),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
   }
 }

@@ -31,6 +31,7 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getLabTechDetail(context);
           model.getChatIndex();
+          model.getLabTechStats();
         });
       },
       disposeViewModel: false,
@@ -156,7 +157,8 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                         context,
                         image: AppImage.thick_appoint,
                         text1: 'Appointments',
-                        text2: '50',
+                        text2:
+                            '${model.getLabTechStaResponseModel?.appointment ?? '0'}',
                         color: AppColor.primary1,
                       ),
                     ),
@@ -167,8 +169,9 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                       child: pharmContainer(
                         context,
                         image: AppImage.consultancy,
-                        text1: 'Consultancy',
-                        text2: '70',
+                        text1: 'Patients',
+                        text2:
+                            '${model.getLabTechStaResponseModel?.patients ?? '0'}',
                         color: AppColor.darkindgrey,
                       ),
                     ),
@@ -178,8 +181,9 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                 pharmContainer(
                   context,
                   image: AppImage.carty,
-                  text1: 'Order',
-                  text2: '10',
+                  text1: 'Total Diagnosis',
+                  text2:
+                      '${model.getLabTechStaResponseModel?.totalDiagnosis ?? '0'}',
                   color: AppColor.primary1,
                 ),
                 SizedBox(height: 20.h),

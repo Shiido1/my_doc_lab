@@ -3,6 +3,9 @@ import 'package:injectable/injectable.dart';
 import 'package:my_doc_lab/core/connect_end/model/add_diagnosis_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/add_report_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_lab_tech_report_response_model/get_lab_tech_report_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_lab_tech_sta_response_model/get_lab_tech_sta_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_lab_texh_all_patients_response_model/get_lab_texh_all_patients_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_single_dia_response_model/get_single_dia_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
@@ -150,7 +153,7 @@ class LabTechAuthApi {
   }) async {
     try {
       final response = await _service.call(
-        '${UrlConfig.labt_tech_update_report}$id',
+        '${UrlConfig.labt_tech_update_report}/$id',
         RequestMethod.post,
         data: report?.toJson(),
       );
@@ -165,7 +168,7 @@ class LabTechAuthApi {
   Future<LabTechDetailResponseModel> labTechDetailReport(String id) async {
     try {
       final response = await _service.call(
-        '${UrlConfig.labt_tech_update_report}$id',
+        '${UrlConfig.labt_tech_update_report}/$id',
         RequestMethod.get,
       );
       logger.d(response.data);
@@ -179,7 +182,7 @@ class LabTechAuthApi {
   Future<dynamic> deleteLabTechDetailReport(String id) async {
     try {
       final response = await _service.call(
-        '${UrlConfig.labt_tech_update_report}$id',
+        '${UrlConfig.labt_tech_update_report}/$id',
         RequestMethod.delete,
       );
       logger.d(response.data);
@@ -427,6 +430,48 @@ class LabTechAuthApi {
       );
       logger.d(response.data);
       return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetLabTechStaResponseModel> getLabTechStats() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_stat,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetLabTechStaResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetLabTechReportResponseModel> getLabTechReport() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_update_report,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetLabTechReportResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetLabTexhAllPatientsResponseModelList> getLabTechPatients() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.labt_tech_all_patients,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetLabTexhAllPatientsResponseModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

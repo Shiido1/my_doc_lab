@@ -12,6 +12,9 @@ import '../model/get_all_diagnosis_list_response_model/get_all_diagnosis_list_re
 import '../model/get_category_by_id_response_model/get_category_by_id_response_model.dart';
 import '../model/get_lab_tech_detail_response_model/get_lab_tech_detail_response_model.dart';
 import '../model/get_lab_tech_dia_book_list_model/get_lab_tech_dia_book_list_model.dart';
+import '../model/get_lab_tech_report_response_model/get_lab_tech_report_response_model.dart';
+import '../model/get_lab_tech_sta_response_model/get_lab_tech_sta_response_model.dart';
+import '../model/get_lab_texh_all_patients_response_model/get_lab_texh_all_patients_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_single_dia_response_model/get_single_dia_response_model.dart';
 import '../model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
@@ -114,7 +117,12 @@ class LabTechContractsImpl {
   Future<BankSaveResponseModel> bankSaveAccount(
     BankSaveEntityModel bankEntity,
   ) async => await _api.bankSaveAccount(bankEntity);
-
   Future<dynamic> withFundsToAccount(num amount) async =>
       await _api.withFundToAccount(amount);
+  Future<GetLabTechStaResponseModel> getLabTechStats() async =>
+      await _api.getLabTechStats();
+  Future<GetLabTechReportResponseModel> getLabTechReport() async =>
+      await _api.getLabTechReport();
+  Future<GetLabTexhAllPatientsResponseModelList> getLabTechPatients() async =>
+      await _api.getLabTechPatients();
 }
