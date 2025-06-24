@@ -38,6 +38,7 @@ class _CartScreenState extends State<CartScreen> {
             padding: EdgeInsets.symmetric(vertical: 50.w, horizontal: 20.w),
             child: Column(
               children: [
+                SizedBox(height: 10.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -52,6 +53,8 @@ class _CartScreenState extends State<CartScreen> {
                     SizedBox(height: 20.h, width: 20.w),
                   ],
                 ),
+
+                Divider(color: AppColor.friendlyPrimary),
                 SizedBox(height: 30.h),
                 ...List.generate(box.length, (index) {
                   return CartItemWidget(
@@ -88,20 +91,22 @@ class _CartScreenState extends State<CartScreen> {
                 ),
 
                 SizedBox(height: 140.h),
-                ButtonWidget(
-                  buttonText: 'Proceed to Checkout',
-                  buttonColor: AppColor.primary1,
-                  buttonBorderColor: AppColor.transparent,
-                  textStyle: GoogleFonts.dmSans(
-                    color: AppColor.white,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  onPressed: () {
-                    model.clickCheckout();
-                    model.showCheckoutModal(context);
-                  },
-                ),
+                box.isEmpty
+                    ? SizedBox.shrink()
+                    : ButtonWidget(
+                      buttonText: 'Proceed to Checkout',
+                      buttonColor: AppColor.primary1,
+                      buttonBorderColor: AppColor.transparent,
+                      textStyle: GoogleFonts.dmSans(
+                        color: AppColor.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      onPressed: () {
+                        model.clickCheckout();
+                        model.showCheckoutModal(context);
+                      },
+                    ),
               ],
             ),
           ),

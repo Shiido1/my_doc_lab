@@ -55,8 +55,9 @@ class ConsultationScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                Divider(color: AppColor.friendlyPrimary),
                 SizedBox(height: 20.h),
-                if (model.isLoading)
+                if (model.isLoadingConsult)
                   Padding(
                     padding: EdgeInsets.only(top: 10.w),
                     child: Center(

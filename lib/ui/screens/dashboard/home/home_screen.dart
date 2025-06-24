@@ -256,14 +256,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                Row(
-                  children: [
-                    fourthContainer(context),
-                    SizedBox(width: 10.w),
+                fourthContainer(context),
+                // Row(
+                //   children: [
 
-                    secondContainer(context),
-                  ],
-                ),
+                //     SizedBox(width: 10.w),
+
+                //     // secondContainer(context),
+                //   ],
+                // ),
                 SizedBox(height: 10.h),
                 Row(
                   children: [
@@ -313,15 +314,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SizedBox(
                   height:
-                      model.getAllDoctorsResponseModelList != null &&
-                              model
-                                  .getAllDoctorsResponseModelList!
-                                  .getAllDoctorsResponseModelList!
-                                  .isNotEmpty
+                      model.getAllDoctorsResponseModelList == null ||
+                              model.getAllDoctorsResponseModelList != null &&
+                                  model
+                                      .getAllDoctorsResponseModelList!
+                                      .getAllDoctorsResponseModelList!
+                                      .isNotEmpty
                           ? 370.h
                           : 100.h,
                   child:
-                      model.isLoading
+                      model.isLoadingAllDoctors
                           ? GridView.builder(
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -448,12 +450,11 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // SizedBox(height: 6.0.h),
                 TextView(
                   text: 'Medicine',
                   textStyle: GoogleFonts.dmSans(
                     color: AppColor.darkindgrey,
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -601,7 +602,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   text: 'Laboratories',
                   textStyle: GoogleFonts.dmSans(
                     color: AppColor.white,
-                    fontSize: 13.60.sp,
+                    fontSize: 16.60.sp,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -650,79 +651,79 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   );
 
-  fourthContainer(context) => Expanded(
-    child: Stack(
-      children: [
-        GestureDetector(
-          onTap:
-              () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DoctorTestScreen(tap: true),
+  fourthContainer(context) => Stack(
+    children: [
+      GestureDetector(
+        onTap:
+            () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => DoctorTestScreen(tap: true),
+              ),
+            ),
+        child: Container(
+          alignment: Alignment.centerRight,
+          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 12.w),
+          decoration: BoxDecoration(
+            color: AppColor.blue,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextView(
+                text: 'Book Appointment',
+                textStyle: GoogleFonts.dmSans(
+                  color: AppColor.white,
+                  fontSize: 22.30.sp,
+                  fontWeight: FontWeight.w900,
                 ),
               ),
-          child: Container(
-            alignment: Alignment.centerRight,
-            padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 12.w),
-            decoration: BoxDecoration(
-              color: AppColor.blue,
-              borderRadius: BorderRadius.circular(10),
-              // border: Border.all(color: AppColor.white),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                SizedBox(height: 10.h),
-                TextView(
-                  text: 'Book Appointment',
-                  textStyle: GoogleFonts.dmSans(
-                    color: AppColor.white,
-                    fontSize: 13.30.sp,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                TextView(
+              SizedBox(height: 10.h),
+              SizedBox(
+                width: 250.w,
+                child: TextView(
                   text:
                       'Connect with top doctors and get expert care at your convenience.',
                   textAlign: TextAlign.end,
+                  maxLines: 2,
                   textStyle: GoogleFonts.dmSans(
                     color: AppColor.white,
-                    fontSize: 11.6.sp,
+                    fontSize: 12.6.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 10.h),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 4.8.w,
-                    horizontal: 10.0.w,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColor.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TextView(
-                    text: 'Book Now',
-                    textStyle: GoogleFonts.dmSans(
-                      color: AppColor.blue,
-                      fontSize: 12.20.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
+              ),
+              SizedBox(height: 20.h),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 4.8.w,
+                  horizontal: 10.0.w,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColor.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TextView(
+                  text: 'Book Now',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.blue,
+                    fontSize: 12.20.sp,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 10.h),
-              ],
-            ),
+              ),
+              SizedBox(height: 10.h),
+            ],
           ),
         ),
+      ),
 
-        Positioned(
-          bottom: 1.7,
-          left: -1.2,
-          child: Image.asset(AppImage.doc, height: 80.h, width: 100.w),
-        ),
-      ],
-    ),
+      Positioned(
+        bottom: 1.7,
+        left: 2,
+        child: Image.asset(AppImage.doc, height: 120.h, width: 130.w),
+      ),
+    ],
   );
 
   void modalBottomSheetFilter(contxt) {

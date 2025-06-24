@@ -143,7 +143,7 @@ class WalletScreen extends StatelessWidget {
                         width: double.infinity,
                         padding: EdgeInsets.symmetric(
                           vertical: 14.w,
-                          horizontal: 18.w,
+                          horizontal: 10.w,
                         ),
                         margin: EdgeInsets.only(bottom: 10.w),
                         decoration: BoxDecoration(
@@ -158,14 +158,17 @@ class WalletScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  TextView(
-                                    text: o.reference ?? "",
-                                    maxLines: 2,
-                                    textOverflow: TextOverflow.ellipsis,
-                                    textStyle: GoogleFonts.gabarito(
-                                      color: AppColor.black,
-                                      fontSize: 18.20.sp,
-                                      fontWeight: FontWeight.w500,
+                                  SizedBox(
+                                    width: 140.w,
+                                    child: TextView(
+                                      text: o.reference ?? "",
+                                      maxLines: 1,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.black,
+                                        fontSize: 18.20.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                   TextView(
@@ -195,13 +198,20 @@ class WalletScreen extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                TextView(
-                                  text:
-                                      '${getCurrency()}${oCcy.format(double.parse('${o.amount ?? 0}'))}',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: model.trnsType(o.type),
-                                    fontSize: 22.20.sp,
-                                    fontWeight: FontWeight.w600,
+                                SizedBox(
+                                  width: 150.w,
+                                  child: TextView(
+                                    text:
+                                        '${getCurrency()}${oCcy.format(double.parse('${o.amount ?? 0}'))}',
+
+                                    maxLines: 1,
+                                    textOverflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.end,
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: model.trnsType(o.type),
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(height: 10.h),

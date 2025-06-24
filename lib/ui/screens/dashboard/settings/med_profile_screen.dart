@@ -227,6 +227,7 @@ class _MedProfileScreenState extends State<MedProfileScreen> {
                             doctor: 'Pharmacist',
                             productId: model.getMedDetailResponseModel!.id!,
                             qty: 1,
+                            name: model.getMedDetailResponseModel!.name!,
                           ),
                         );
                         AppUtils.snackbar(

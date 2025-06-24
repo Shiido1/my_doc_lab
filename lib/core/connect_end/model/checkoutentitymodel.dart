@@ -26,6 +26,8 @@ class CheckoutEntityModel {
   num productId;
   @HiveField(10)
   num qty;
+  @HiveField(11)
+  String name;
 
   CheckoutEntityModel({
     required this.serviceType,
@@ -39,5 +41,6 @@ class CheckoutEntityModel {
     required this.doctor,
     required this.productId,
     required this.qty,
+    required this.name,
   });
 }

@@ -1301,7 +1301,6 @@ class DocViewModel extends BaseViewModel {
   }
 
   Future<void> _setupLocalVideo() async {
-    // The video module and preview are disabled by default.
     await engine?.enableVideo();
     await engine?.startPreview();
   }

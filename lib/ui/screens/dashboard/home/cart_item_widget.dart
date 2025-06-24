@@ -94,11 +94,13 @@ class _CartItemWidgetState extends State<CartItemWidget> {
               children: [
                 _row('Service:', getServiceName(model.serviceType)),
                 _divider(),
+                _row('Item:', model.name),
+                _divider(),
                 _row('Date:', model.date.substring(0, 10)),
                 _divider(),
                 _row('Time:', model.time),
                 _divider(),
-                _row('Prescribed by:', 'Dr ${model.doctor}'),
+                _row('Caregiver:', 'Dr ${model.doctor}'),
                 model.qty != 0 ? _divider() : SizedBox.shrink(),
                 model.qty != 0
                     ? _rowQuantity(
@@ -302,6 +304,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
         doctor: model.doctor,
         productId: model.productId,
         qty: model.qty,
+        name: model.name,
       ),
     );
   }

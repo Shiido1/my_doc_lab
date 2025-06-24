@@ -205,13 +205,13 @@ class ImagePickerHandler {
       sourcePath: imageFile.path,
       uiSettings: [
         AndroidUiSettings(
-          toolbarTitle: 'Daalupay',
+          toolbarTitle: 'Doclabpharm',
           toolbarColor: AppColor.primary,
           toolbarWidgetColor: Colors.white,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false,
         ),
-        IOSUiSettings(title: 'Daalupay'),
+        IOSUiSettings(title: 'Doclabpharm'),
       ],
     );
 

@@ -26,7 +26,6 @@ import 'package:my_doc_lab/core/connect_end/model/searched_doctor_response_model
 import 'package:my_doc_lab/core/connect_end/model/send_message_response_model/send_message_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_user_response_model/update_user_response_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../ui/app_assets/app_validatiion.dart';
@@ -74,6 +73,10 @@ class AuthViewModel extends BaseViewModel {
   final session = locator<SharedPreferencesService>();
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _isLoadingAllDoctors = false;
+  bool get isLoadingAllDoctors => _isLoadingAllDoctors;
+  bool _isLoadingConsult = false;
+  bool get isLoadingConsult => _isLoadingConsult;
   LoginResponseModel? _loginResponseModel;
   LoginResponseModel? get loginResponseModel => _loginResponseModel;
   CareGiverResponseModel? _careGiverResponseModel;
@@ -476,15 +479,15 @@ class AuthViewModel extends BaseViewModel {
 
   void getAllDoctors(context) async {
     try {
-      _isLoading = true;
+      _isLoadingAllDoctors = true;
       _getAllDoctorsResponseModelList = await runBusyFuture(
         repositoryImply.getAllDoctorDetail(),
         throwException: true,
       );
 
-      _isLoading = false;
+      _isLoadingAllDoctors = false;
     } catch (e) {
-      _isLoading = false;
+      _isLoadingAllDoctors = false;
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }
@@ -812,19 +815,14 @@ class AuthViewModel extends BaseViewModel {
 
   void getAllConsultants(context) async {
     try {
-      _isLoading = true;
+      _isLoadingConsult = true;
       _getAllConsultantResponseModelList = await runBusyFuture(
         repositoryImply.getAllConsultants(),
         throwException: true,
       );
-      logger.d(
-        _getAllConsultantResponseModelList!.getAllConsultantResponseModelList,
-      );
-      logger.d(AppImage.aid_box);
-
-      _isLoading = false;
+      _isLoadingConsult = false;
     } catch (e) {
-      _isLoading = false;
+      _isLoadingConsult = false;
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }

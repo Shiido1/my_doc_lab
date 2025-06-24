@@ -170,6 +170,7 @@ class _PatientDetailComplaintScreenState
                                     doctor: widget.doctor!,
                                     productId: 0,
                                     qty: 0,
+                                    name: 'Book Doctor',
                                   ),
                                 );
                                 AppUtils.snackbar(

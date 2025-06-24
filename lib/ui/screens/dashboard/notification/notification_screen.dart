@@ -18,6 +18,7 @@ class NotificationScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 20.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -44,6 +45,7 @@ class NotificationScreen extends StatelessWidget {
                 ),
               ],
             ),
+            Divider(color: AppColor.friendlyPrimary),
             SizedBox(height: 20.h),
             TextView(
               text: 'Today',
