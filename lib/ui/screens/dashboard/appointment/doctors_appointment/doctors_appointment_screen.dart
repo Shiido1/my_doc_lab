@@ -286,7 +286,7 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
   Color getAppColor(String app) {
     if (app == 'Upcoming') {
       return AppColor.grey;
-    } else if (app == 'Canceled') {
+    } else if (app == 'Cancelled') {
       return AppColor.red;
     }
     return AppColor.darkindgrey;
@@ -389,7 +389,7 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                                 onTap:
                                     () => doc!.doctorsAppointmentCompleteUpdate(
                                       context,
-                                      id: appointment!.id.toString(),
+                                      id: appointment!.orderId.toString(),
                                       update: UpdateStatusReasonEntityModel(
                                         reason:
                                             'Appointment Completed Succesfully',
@@ -510,7 +510,7 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                           () => doc?.rescheduleAppointmentDialogBox(
                             context,
                             id: appointment.id.toString(),
-                            slotId: appointment.slot!.id.toString(),
+                            slotId: '278',
                           ),
                       child: Container(
                         padding: EdgeInsets.symmetric(

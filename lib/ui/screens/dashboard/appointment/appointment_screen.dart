@@ -273,7 +273,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   Color getAppColor(String app) {
     if (app == 'Upcoming') {
       return AppColor.grey;
-    } else if (app == 'Canceled') {
+    } else if (app == 'Cancelled') {
       return AppColor.red;
     }
     return AppColor.darkindgrey;

@@ -152,11 +152,9 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                       children: [
                         TextFormWidget(
                           label: 'Search for doctors, specialties, or tests...',
-                          // hint: 'Email Address',
                           border: 10,
                           isFilled: true,
                           fillColor: AppColor.transparent,
-                          // controller: fullnameTextController,
                           prefixWidget: Padding(
                             padding: EdgeInsets.all(14.w),
                             child: SvgPicture.asset(AppImage.search),
@@ -183,7 +181,7 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                         SizedBox(
                           height: 500.h,
                           child:
-                              model.isLoading
+                              model.isLoadingAllDoctors
                                   ? GridView.builder(
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
@@ -215,16 +213,13 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                             Expanded(
                               child: TextFormWidget(
                                 label: 'Search for tests...',
-                                // hint: 'Email Address',
                                 border: 10,
                                 isFilled: true,
                                 fillColor: AppColor.transparent,
-                                // controller: fullnameTextController,
                                 prefixWidget: Padding(
                                   padding: EdgeInsets.all(14.w),
                                   child: SvgPicture.asset(AppImage.search),
                                 ),
-                                // validator: AppValidator.validateEmail(),
                               ),
                             ),
                             SizedBox(width: 20.w),

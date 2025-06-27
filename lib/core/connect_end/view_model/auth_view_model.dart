@@ -46,9 +46,11 @@ import '../model/add_booking_entity_model.dart';
 import '../model/checkout_entity_model/item.dart';
 import '../model/checkoutentitymodel.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
+import '../model/get_all_lab_tech_response_model/get_all_lab_tech_response_model.dart';
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
+import '../model/get_list_of_lab_diagnosis_model/get_list_of_lab_diagnosis_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -75,6 +77,8 @@ class AuthViewModel extends BaseViewModel {
   bool get isLoading => _isLoading;
   bool _isLoadingAllDoctors = false;
   bool get isLoadingAllDoctors => _isLoadingAllDoctors;
+  bool _isLoadingAllLabTech = false;
+  bool get isLoadingAllLabTech => _isLoadingAllLabTech;
   bool _isLoadingConsult = false;
   bool get isLoadingConsult => _isLoadingConsult;
   LoginResponseModel? _loginResponseModel;
@@ -160,6 +164,7 @@ class AuthViewModel extends BaseViewModel {
   String query = '';
   String queryPharm = '';
   String queryMed = '';
+  String queryLab = '';
 
   PostUserVerificationCloudResponse? _postUserVerificationCloudResponse;
   PostUserVerificationCloudResponse? get postUserVerificationCloudResponse =>
@@ -187,6 +192,12 @@ class AuthViewModel extends BaseViewModel {
   ViewDoctorsPrescriptionModelList? _viewDoctorsPrescriptionModel;
   ViewDoctorsPrescriptionModelList? get viewDoctorsPrescriptionModel =>
       _viewDoctorsPrescriptionModel;
+  GetAllLabTechResponseModelList? _getAllLabTechResponseModelList;
+  GetAllLabTechResponseModelList? get getAllLabTechResponseModelList =>
+      _getAllLabTechResponseModelList;
+  GetListOfLabDiagnosisModelList? _getListOfLabDiagnosisModelList;
+  GetListOfLabDiagnosisModelList? get getListOfLabDiagnosisModelList =>
+      _getListOfLabDiagnosisModelList;
   RtcEngine? engine;
 
   dynamic remoteUidGlobal;
@@ -494,6 +505,40 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void getAllLabTech(context) async {
+    try {
+      _isLoadingAllLabTech = true;
+      _getAllLabTechResponseModelList = await runBusyFuture(
+        repositoryImply.getAllLabTech(),
+        throwException: true,
+      );
+
+      _isLoadingAllLabTech = false;
+    } catch (e) {
+      _isLoadingAllLabTech = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getAllDiagnosisList(context, {String? id}) async {
+    try {
+      _isLoadingAllLabTech = true;
+      _getListOfLabDiagnosisModelList = await runBusyFuture(
+        repositoryImply.getDiagnosisList(id!),
+        throwException: true,
+      );
+
+      _isLoadingAllLabTech = false;
+    } catch (e) {
+      _isLoadingAllLabTech = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
   void getAllPharmacies(context) async {
     try {
       _isLoading = true;
@@ -593,7 +638,6 @@ class AuthViewModel extends BaseViewModel {
     SearchDoctorEntityModel? searchEntity,
   }) async {
     try {
-      // _isLoading = true;
       _searchedDoctorResponseModelList = await runBusyFuture(
         repositoryImply.getSearchDoctor(searchEntity!),
         throwException: true,
@@ -603,7 +647,6 @@ class AuthViewModel extends BaseViewModel {
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }

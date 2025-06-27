@@ -111,11 +111,9 @@ class DocHomeScreen extends StatelessWidget {
                 SizedBox(height: 20.w),
                 TextFormWidget(
                   label: 'Search for Patients or Appointment',
-                  // hint: 'Email Address',
                   border: 10,
                   isFilled: true,
                   fillColor: AppColor.transparent,
-                  // controller: fullnameTextController,
                   prefixWidget: Padding(
                     padding: EdgeInsets.all(14.w),
                     child: SvgPicture.asset(
@@ -132,7 +130,6 @@ class DocHomeScreen extends StatelessWidget {
                       width: 20.w,
                     ),
                   ),
-                  // validator: AppValidator.validateEmail(),
                 ),
                 SizedBox(height: 20.h),
                 Row(

@@ -673,6 +673,9 @@ class DocViewModel extends BaseViewModel {
         if (o.status?.toLowerCase() == 'scheduled') {
           getListOfScheduledAppointmentModelList!.add(o);
         }
+        if (o.status?.toLowerCase() == 'rescheduled') {
+          getListOfScheduledAppointmentModelList!.add(o);
+        }
       });
       notifyListeners();
       _isLoading = false;
@@ -709,6 +712,9 @@ class DocViewModel extends BaseViewModel {
           getListOfCompletedAppointmentModelList!.add(o);
         }
         if (o.status?.toLowerCase() == 'scheduled') {
+          getListOfScheduledAppointmentModelList!.add(o);
+        }
+        if (o.status?.toLowerCase() == 'rescheduled') {
           getListOfScheduledAppointmentModelList!.add(o);
         }
       });
@@ -797,7 +803,8 @@ class DocViewModel extends BaseViewModel {
       _isLoading = false;
       reasonController.clear();
       await AppUtils.snackbar(context, message: '${v['message']}');
-      getDoctorsAppointment();
+      await getDoctorsAppointment();
+      Navigator.of(context).pop();
     } catch (e) {
       _isLoading = false;
       await AppUtils.snackbar(context, message: e.toString(), error: true);
@@ -2298,112 +2305,211 @@ class DocViewModel extends BaseViewModel {
     },
   );
 
-  void rescheduleAppointmentDialogBox(context, {String? id, String? slotId}) =>
-      showDialog(
-        context: context,
-        builder: (context) {
-          return ViewModelBuilder<DocViewModel>.reactive(
-            viewModelBuilder: () => DocViewModel(),
-            onViewModelReady: (model) {},
-            disposeViewModel: false,
-            onDispose: (viewModel) {
-              reasonController.clear();
-            },
-            builder: (_, DocViewModel model, __) {
-              return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                insetPadding: EdgeInsets.symmetric(
-                  horizontal: 20.w,
-                ), // Adjust margin here
-                child: Container(
-                  width:
-                      MediaQuery.of(context).size.width * 0.9, // 90% of screen
-                  padding: EdgeInsets.all(16.w),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextView(
-                        text: 'Reschedule Appointment',
-                        textStyle: GoogleFonts.dmSans(
-                          color: AppColor.fineRed,
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-                      SizedBox(
-                        height: 200.h,
-                        child: Form(
-                          key: _formKey,
-                          child: TextFormWidget(
-                            label: 'Reason for rescheduling appointment',
-                            border: 10,
-                            isFilled: true,
-                            maxline: 4,
-                            alignLabelWithHint: true,
-                            fillColor: AppColor.transparent,
+  AvailableSlots? _slot;
 
-                            controller: reasonController,
-                            validator: AppValidator.validateString(),
-                          ),
+  void rescheduleAppointmentDialogBox(
+    context, {
+    String? id,
+    String? slotId,
+  }) => showDialog(
+    context: context,
+    builder: (context) {
+      return ViewModelBuilder<DocViewModel>.reactive(
+        viewModelBuilder: () => DocViewModel(),
+        onViewModelReady: (model) {
+          model.getDoctorsDetail(context);
+        },
+        disposeViewModel: false,
+        onDispose: (viewModel) {
+          reasonController.clear();
+        },
+        builder: (_, DocViewModel model, __) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: 20.w,
+            ), // Adjust margin here
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9, // 90% of screen
+              padding: EdgeInsets.all(16.w),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextView(
+                      text: 'Reschedule Appointment',
+                      textStyle: GoogleFonts.dmSans(
+                        color: AppColor.fineRed,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    SizedBox(
+                      height: 150.h,
+                      child: Form(
+                        key: _formKey,
+                        child: TextFormWidget(
+                          label: 'Reason for rescheduling appointment',
+                          border: 10,
+                          isFilled: true,
+                          maxline: 3,
+                          alignLabelWithHint: true,
+                          fillColor: AppColor.transparent,
+
+                          controller: reasonController,
+                          validator: AppValidator.validateString(),
                         ),
                       ),
-                      SizedBox(height: 16.h),
-                      model.isLoading
-                          ? SpinKitCircle(color: AppColor.grey1, size: 30.sp)
-                          : Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  reasonController.clear();
-                                  Navigator.of(context).pop();
-                                },
-                                child: TextView(
-                                  text: 'Cancel',
-                                  textStyle: GoogleFonts.dmSans(
-                                    color: AppColor.fineRed,
-                                    fontSize: 16.20.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    model.doctorsAppointmentReschedule(
-                                      context,
-                                      id: id,
-                                      reschedule: RescheduleBookingEntityModel(
-                                        reason: reasonController.text,
-                                        slotId: int.parse(slotId!),
+                    ),
+
+                    if (model.getDocDetailResponseModel != null &&
+                        model
+                            .getDocDetailResponseModel!
+                            .original!
+                            .availableSlots!
+                            .isNotEmpty)
+                      Wrap(
+                        spacing: 6.20,
+                        runSpacing: 10,
+                        alignment: WrapAlignment.start,
+                        children: [
+                          if (model.getDocDetailResponseModel != null &&
+                              model
+                                  .getDocDetailResponseModel!
+                                  .original!
+                                  .availableSlots!
+                                  .isNotEmpty)
+                            ...model
+                                .getDocDetailResponseModel!
+                                .original!
+                                .availableSlots!
+                                .where((w) => w.isBooked == false)
+                                .map(
+                                  (o) => GestureDetector(
+                                    onTap:
+                                        o.isBooked == true
+                                            ? () {}
+                                            : () {
+                                              _slot = o;
+                                              print(_slot);
+                                              model.notifyListeners();
+                                            },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 5.4.w,
+                                        horizontal: 10.w,
                                       ),
-                                    );
-                                    model.notifyListeners();
-                                  }
-                                },
-                                child: TextView(
-                                  text: 'OK',
-                                  textStyle: GoogleFonts.dmSans(
-                                    color: AppColor.green,
-                                    fontSize: 16.20.sp,
-                                    fontWeight: FontWeight.w500,
+                                      width: 100.w,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color:
+                                            _slot == o
+                                                ? AppColor.primary1
+                                                : AppColor.transparent,
+                                        border: Border.all(
+                                          color:
+                                              _slot == o
+                                                  ? AppColor.white
+                                                  : AppColor.black,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            TextView(
+                                              text: DateFormat(
+                                                'dd/MM/yyyy',
+                                              ).format(
+                                                DateTime.parse(
+                                                  o.availableDate!.toString(),
+                                                ).toLocal(),
+                                              ),
+                                              textStyle: GoogleFonts.dmSans(
+                                                color:
+                                                    _slot == o
+                                                        ? AppColor.white
+                                                        : AppColor.black,
+                                                fontSize: 12.2.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            TextView(
+                                              text: o.availableTime ?? '',
+                                              textStyle: GoogleFonts.dmSans(
+                                                color:
+                                                    _slot == o
+                                                        ? AppColor.white
+                                                        : AppColor.black,
+                                                fontSize: 12.2.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
+                        ],
+                      ),
+                    SizedBox(height: 16.h),
+                    model.isLoading
+                        ? SpinKitCircle(color: AppColor.grey1, size: 30.sp)
+                        : Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                reasonController.clear();
+                                Navigator.of(context).pop();
+                              },
+                              child: TextView(
+                                text: 'Cancel',
+                                textStyle: GoogleFonts.dmSans(
+                                  color: AppColor.fineRed,
+                                  fontSize: 16.20.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ],
-                          ),
-                    ],
-                  ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  model.doctorsAppointmentReschedule(
+                                    context,
+                                    id: id,
+                                    reschedule: RescheduleBookingEntityModel(
+                                      reason: reasonController.text,
+                                      slotId: _slot!.id,
+                                    ),
+                                  );
+                                  model.notifyListeners();
+                                }
+                              },
+                              child: TextView(
+                                text: 'OK',
+                                textStyle: GoogleFonts.dmSans(
+                                  color: AppColor.green,
+                                  fontSize: 16.20.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                  ],
                 ),
-              );
-            },
+              ),
+            ),
           );
         },
       );
+    },
+  );
 
   void modalBottomSheetSaveAccount(context) {
     showModalBottomSheet(

@@ -515,7 +515,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
                                       vertical: 5.4.w,
-                                      // horizontal: 14.w,
                                     ),
                                     width: 80.w,
                                     decoration: BoxDecoration(
