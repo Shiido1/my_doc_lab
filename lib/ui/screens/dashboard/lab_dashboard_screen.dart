@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/laboratory/lab_appointment_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/lab_settings/lab_settings_screen.dart';
-
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';

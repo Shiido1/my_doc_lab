@@ -7,7 +7,6 @@ import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/screens/authentication/doc_edit_profile_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/appointment/doctors_appointment/doctors_appointment_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
@@ -215,19 +214,19 @@ class DocMoreSettingsScreen extends StatelessWidget {
                   onTap: () => model.modalBottomSheetWithdrawFunds(context),
                 ),
                 SizedBox(height: 20.h),
-                moreContainerWidget(
-                  image: AppImage.history,
-                  borderColor: AppColor.lightgrey,
-                  color: AppColor.black,
-                  text: 'Order History',
-                  onTap:
-                      () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => OrderHistoryScreen(),
-                        ),
-                      ),
-                ),
-                SizedBox(height: 20.h),
+                // moreContainerWidget(
+                //   image: AppImage.history,
+                //   borderColor: AppColor.lightgrey,
+                //   color: AppColor.black,
+                //   text: 'Order History',
+                //   onTap:
+                //       () => Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (context) => OrderHistoryScreen(),
+                //         ),
+                //       ),
+                // ),
+                // SizedBox(height: 20.h),
                 moreContainerWidget(
                   image: AppImage.help,
                   borderColor: AppColor.lightgrey,

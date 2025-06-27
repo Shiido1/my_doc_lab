@@ -207,7 +207,6 @@ class _MedProfileScreenState extends State<MedProfileScreen> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        print(model.getMedDetailResponseModel!.id!);
                         await box.add(
                           CheckoutEntityModel(
                             serviceType: 'med',

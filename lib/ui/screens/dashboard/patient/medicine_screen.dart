@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,11 +64,9 @@ class _MedicineScreenState extends State<MedicineScreen> {
                   children: [
                     TextFormWidget(
                       label: 'Search for Medicine',
-                      // hint: 'Email Address',
                       border: 10,
                       isFilled: true,
                       fillColor: AppColor.transparent,
-                      // controller: fullnameTextController,
                       prefixWidget: Padding(
                         padding: EdgeInsets.all(14.w),
                         child: SvgPicture.asset(AppImage.search),
@@ -232,7 +232,7 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                                                     .searchedPharmResponseModelList!
                                                                     .searchedPharmacyResponseModelList!
                                                                     .isNotEmpty
-                                                            ? 'Dr ${model.searchedPharmResponseModelList!.searchedPharmacyResponseModelList![index].firstName ?? ''} ${model.searchedPharmResponseModelList!.searchedPharmacyResponseModelList![index].lastName ?? ''}'
+                                                            ? 'Dr ${model.searchedPharmResponseModelList!.searchedPharmacyResponseModelList![index].firstName?.capitalize() ?? ''} ${model.searchedPharmResponseModelList!.searchedPharmacyResponseModelList![index].lastName ?? ''}'
                                                             : model.getAllPharmaciesResponseModelList !=
                                                                 null
                                                             ? 'Dr ${model.getAllPharmaciesResponseModelList!.getAllPharmaciesResponseModelList![index].firstName ?? ''}'
@@ -304,31 +304,31 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                                         ],
                                                       ),
                                                     ),
-                                                    SizedBox(width: 20.h),
-                                                    Row(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          AppImage.location,
-                                                          height: 15.2.h,
-                                                          width: 16.2.w,
-                                                        ),
-                                                        SizedBox(width: 2.w),
-                                                        TextView(
-                                                          text: '800m away',
-                                                          textStyle:
-                                                              GoogleFonts.gabarito(
-                                                                color:
-                                                                    AppColor
-                                                                        .black,
-                                                                fontSize:
-                                                                    12.0.sp,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                              ),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                    // SizedBox(width: 20.h),
+                                                    // Row(
+                                                    //   children: [
+                                                    //     SvgPicture.asset(
+                                                    //       AppImage.location,
+                                                    //       height: 15.2.h,
+                                                    //       width: 16.2.w,
+                                                    //     ),
+                                                    //     SizedBox(width: 2.w),
+                                                    //     TextView(
+                                                    //       text: '800m away',
+                                                    //       textStyle:
+                                                    //           GoogleFonts.gabarito(
+                                                    //             color:
+                                                    //                 AppColor
+                                                    //                     .black,
+                                                    //             fontSize:
+                                                    //                 12.0.sp,
+                                                    //             fontWeight:
+                                                    //                 FontWeight
+                                                    //                     .w500,
+                                                    //           ),
+                                                    //     ),
+                                                    //   ],
+                                                    // ),
                                                   ],
                                                 ),
                                               ],

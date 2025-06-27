@@ -529,7 +529,6 @@ class AuthViewModel extends BaseViewModel {
         repositoryImply.getDiagnosisList(id!),
         throwException: true,
       );
-
       _isLoadingAllLabTech = false;
     } catch (e) {
       _isLoadingAllLabTech = false;
@@ -1088,13 +1087,14 @@ class AuthViewModel extends BaseViewModel {
             crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
-            mainAxisExtent: Platform.isIOS ? mainAxisExtent : 200,
+            mainAxisExtent: Platform.isIOS ? mainAxisExtent : 210,
           ),
           itemCount: doctorsList.length,
           itemBuilder: (context, index) {
             dynamic doctor = doctorsList[index];
             final doctorName =
-                'Dr ${doctor.firstName ?? ''} ${doctor.lastName ?? ''}';
+                '${doctor.firstName ?? ''} ${doctor.lastName ?? ''}'
+                    .capitalize();
             final speciality = doctor.speciality ?? '';
 
             return GestureDetector(
@@ -1132,12 +1132,17 @@ class AuthViewModel extends BaseViewModel {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextView(
-                            text: doctorName,
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.black,
-                              fontSize: 16.0.sp,
-                              fontWeight: FontWeight.w500,
+                          SizedBox(
+                            width: 120.w,
+                            child: TextView(
+                              text: 'Dr. $doctorName',
+                              maxLines: 1,
+                              textOverflow: TextOverflow.ellipsis,
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.black,
+                                fontSize: 16.0.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                           TextView(
@@ -1537,7 +1542,13 @@ class AuthViewModel extends BaseViewModel {
         );
       } else {
         items.add(
-          Item(serviceType: element.serviceType, serviceId: element.serviceId),
+          Item(
+            serviceType: element.serviceType,
+            serviceId: element.serviceId,
+            labTechnicianId: element.doctorId,
+            date: element.date,
+            time: element.time,
+          ),
         );
       }
     }
@@ -1802,5 +1813,57 @@ class AuthViewModel extends BaseViewModel {
       return AppColor.red;
     }
     return AppColor.primary1;
+  }
+
+  String selectLabDate = '';
+  void openCalendarDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        DateTime? selectedDate;
+        return ViewModelBuilder<AuthViewModel>.reactive(
+          viewModelBuilder: () => locator<AuthViewModel>(),
+          onViewModelReady: (model) {
+            selectedDate = DateTime.now();
+          },
+          disposeViewModel: false,
+          builder: (_, AuthViewModel model, __) {
+            return AlertDialog(
+              title: Text("Select a Date for Test"),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Card(
+                        elevation: 2,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: CalendarDatePicker(
+                            initialDate: selectedDate,
+                            firstDate: selectedDate!,
+                            lastDate: DateTime(2100),
+                            onDateChanged: (DateTime date) {
+                              selectLabDate = DateFormat(
+                                'yyyy/MM/dd',
+                              ).format(date);
+                              Navigator.pop(context);
+                              notifyListeners();
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
