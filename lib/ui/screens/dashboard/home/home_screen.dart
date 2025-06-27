@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
           model.getAllDoctors(context);
           model.getChatIndex();
           model.getUsersAppointment(context);
+          model.getAllReport(context);
         });
       },
       disposeViewModel: false,
@@ -257,14 +258,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SizedBox(height: 20.h),
                 fourthContainer(context),
-                // Row(
-                //   children: [
-
-                //     SizedBox(width: 10.w),
-
-                //     // secondContainer(context),
-                //   ],
-                // ),
                 SizedBox(height: 10.h),
                 Row(
                   children: [
@@ -374,52 +367,79 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 SizedBox(height: 20.h),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(16.w),
-                      decoration: BoxDecoration(
-                        color: AppColor.primary1.withOpacity(.7),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: SvgPicture.asset(
-                        AppImage.blood,
-                        height: 40.h,
-                        width: 50.w,
-                      ),
-                    ),
-                    SizedBox(width: 20.w),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextView(
-                          text: 'Blood Test',
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.primary1,
-                            fontSize: 18.20.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 10.w),
-                        SizedBox(
-                          width: 240.w,
-                          child: TextView(
-                            text:
-                                'A blood test helps assess your overall health and detect a wide range of conditions, such as infections, anemia, and more. Common tests include Complete Blood Count (CBC) and Blood Sugar Analysis.',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.black.withOpacity(.7),
-                              fontSize: 15.20.sp,
-                              fontWeight: FontWeight.w500,
+                if (model.getReportResponseModel != null &&
+                    model.getReportResponseModel!.data!.reports!.isNotEmpty)
+                  ...model.getReportResponseModel!.data!.reports!
+                      .take(5)
+                      .map(
+                        (o) => Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(10),
+                                  ),
+                                  child: Image.network(
+                                    o.imageUrl ?? '',
+                                    height: 40.h,
+                                    width: 50.w,
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Container(
+                                              padding: EdgeInsets.all(16.w),
+                                              decoration: BoxDecoration(
+                                                color: AppColor.primary1
+                                                    .withOpacity(.7),
+                                                borderRadius:
+                                                    BorderRadius.circular(14),
+                                              ),
+                                              child: SvgPicture.asset(
+                                                AppImage.blood,
+                                                height: 40.h,
+                                                width: 50.w,
+                                              ),
+                                            ),
+                                  ),
+                                ),
+
+                                SizedBox(width: 20.w),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextView(
+                                      text: o.diagnosis ?? "",
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.primary1,
+                                        fontSize: 18.20.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.w),
+                                    SizedBox(
+                                      width: 240.w,
+                                      child: TextView(
+                                        text: o.summary ?? '',
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.black.withOpacity(.7),
+                                          fontSize: 15.20.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textOverflow: TextOverflow.ellipsis,
+                                        maxLines: 6,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            textOverflow: TextOverflow.ellipsis,
-                            maxLines: 6,
-                          ),
+
+                            Divider(color: AppColor.greylight),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
               ],
             ),
           ),
@@ -525,7 +545,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // SizedBox(height: 10.h),
                 TextView(
                   text: 'Schedule Home Test',
                   textStyle: GoogleFonts.dmSans(

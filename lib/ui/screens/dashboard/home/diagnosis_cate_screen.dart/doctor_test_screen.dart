@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/test_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
 
@@ -35,6 +34,7 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           model.getAllDoctors(context);
+          model.getAllReport(context);
         });
       },
       disposeViewModel: false,
@@ -159,10 +159,10 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                             padding: EdgeInsets.all(14.w),
                             child: SvgPicture.asset(AppImage.search),
                           ),
-                          suffixWidget: Padding(
-                            padding: EdgeInsets.all(14.w),
-                            child: SvgPicture.asset(AppImage.filter),
-                          ),
+                          // suffixWidget: Padding(
+                          //   padding: EdgeInsets.all(14.w),
+                          //   child: SvgPicture.asset(AppImage.filter),
+                          // ),
                           onChange: (p0) {
                             if (p0.length > 1) {
                               model.debouncer.run(() {
@@ -208,87 +208,187 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                     )
                     : Column(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormWidget(
-                                label: 'Search for tests...',
-                                border: 10,
-                                isFilled: true,
-                                fillColor: AppColor.transparent,
-                                prefixWidget: Padding(
-                                  padding: EdgeInsets.all(14.w),
-                                  child: SvgPicture.asset(AppImage.search),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 20.w),
-                            Container(
-                              padding: EdgeInsets.all(16.w),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: AppColor.funnyLookingGrey,
-                                ),
-                              ),
-                              child: SvgPicture.asset(AppImage.filter),
-                            ),
-                          ],
+                        TextFormWidget(
+                          label: 'Search for tests...',
+                          border: 10,
+                          isFilled: true,
+                          fillColor: AppColor.transparent,
+                          prefixWidget: Padding(
+                            padding: EdgeInsets.all(14.w),
+                            child: SvgPicture.asset(AppImage.search),
+                          ),
+                          onChange: (p0) {
+                            model.query = p0;
+                            model.notifyListeners();
+                          },
                         ),
                         SizedBox(height: 20.h),
-                        GestureDetector(
-                          onTap:
-                              () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => TestScreen(),
+                        if (model.getReportResponseModel != null &&
+                            model
+                                .getReportResponseModel!
+                                .data!
+                                .reports!
+                                .isNotEmpty)
+                          ...model.getReportResponseModel!.data!.reports!
+                              .where(
+                                (w) => w.diagnosis!.toLowerCase().contains(
+                                  model.query.toLowerCase(),
                                 ),
-                              ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(16.w),
-                                decoration: BoxDecoration(
-                                  color: AppColor.primary1.withOpacity(.7),
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: SvgPicture.asset(
-                                  AppImage.blood,
-                                  height: 40.h,
-                                  width: 50.w,
-                                ),
-                              ),
-                              SizedBox(width: 20.w),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextView(
-                                    text: 'Blood Test',
-                                    textStyle: GoogleFonts.gabarito(
-                                      color: AppColor.primary1,
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w500,
+                              )
+                              .map(
+                                (o) => Column(
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              const BorderRadius.vertical(
+                                                top: Radius.circular(10),
+                                              ),
+                                          child: Image.network(
+                                            o.imageUrl ?? '',
+                                            height: 40.h,
+                                            width: 50.w,
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (
+                                                  context,
+                                                  error,
+                                                  stackTrace,
+                                                ) => Container(
+                                                  padding: EdgeInsets.all(16.w),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.primary1
+                                                        .withOpacity(.7),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          14,
+                                                        ),
+                                                  ),
+                                                  child: SvgPicture.asset(
+                                                    AppImage.blood,
+                                                    height: 40.h,
+                                                    width: 50.w,
+                                                  ),
+                                                ),
+                                          ),
+                                        ),
+
+                                        SizedBox(width: 20.w),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            TextView(
+                                              text: o.diagnosis ?? "",
+                                              textStyle: GoogleFonts.gabarito(
+                                                color: AppColor.primary1,
+                                                fontSize: 18.20.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10.w),
+                                            SizedBox(
+                                              width: 240.w,
+                                              child: TextView(
+                                                text: o.summary ?? '',
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.black
+                                                      .withOpacity(.7),
+                                                  fontSize: 15.20.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                textOverflow:
+                                                    TextOverflow.ellipsis,
+                                                maxLines: 6,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 10.w),
-                                  SizedBox(
-                                    width: 260.w,
-                                    child: TextView(
-                                      text:
-                                          'A blood test helps assess your overall health and detect a wide range of conditions, such as infections, anemia, and more. Common tests include Complete Blood Count (CBC) and Blood Sugar Analysis.',
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.black.withOpacity(.7),
-                                        fontSize: 13.0.sp,
-                                        fontWeight: FontWeight.w500,
+
+                                    Divider(color: AppColor.greylight),
+                                  ],
+                                ),
+                              )
+                        else
+                          ...model.getReportResponseModel!.data!.reports!.map(
+                            (o) => Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(10),
                                       ),
-                                      maxLines: 6,
+                                      child: Image.network(
+                                        o.imageUrl ?? '',
+                                        height: 40.h,
+                                        width: 50.w,
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                Container(
+                                                  padding: EdgeInsets.all(16.w),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.primary1
+                                                        .withOpacity(.7),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          14,
+                                                        ),
+                                                  ),
+                                                  child: SvgPicture.asset(
+                                                    AppImage.blood,
+                                                    height: 40.h,
+                                                    width: 50.w,
+                                                  ),
+                                                ),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+
+                                    SizedBox(width: 20.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextView(
+                                          text: o.diagnosis ?? "",
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.primary1,
+                                            fontSize: 18.20.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        SizedBox(height: 10.w),
+                                        SizedBox(
+                                          width: 240.w,
+                                          child: TextView(
+                                            text: o.summary ?? '',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.black.withOpacity(
+                                                .7,
+                                              ),
+                                              fontSize: 15.20.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            textOverflow: TextOverflow.ellipsis,
+                                            maxLines: 6,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+
+                                Divider(color: AppColor.greylight),
+                              ],
+                            ),
                           ),
-                        ),
                       ],
                     ),
                 SizedBox(height: 40.h),

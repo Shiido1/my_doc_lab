@@ -54,6 +54,7 @@ import '../model/get_list_of_lab_diagnosis_model/get_list_of_lab_diagnosis_model
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import '../model/get_report_response_model/get_report_response_model.dart';
 import '../model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../model/pay_stack_payment_model/pay_stack_payment_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
@@ -76,6 +77,8 @@ class AuthViewModel extends BaseViewModel {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   bool _isLoadingAllDoctors = false;
+  bool get isLoadingReport => _isLoadingReport;
+  bool _isLoadingReport = false;
   bool get isLoadingAllDoctors => _isLoadingAllDoctors;
   bool _isLoadingAllLabTech = false;
   bool get isLoadingAllLabTech => _isLoadingAllLabTech;
@@ -198,6 +201,8 @@ class AuthViewModel extends BaseViewModel {
   GetListOfLabDiagnosisModelList? _getListOfLabDiagnosisModelList;
   GetListOfLabDiagnosisModelList? get getListOfLabDiagnosisModelList =>
       _getListOfLabDiagnosisModelList;
+  GetReportResponseModel? _getReportResponseModel;
+  GetReportResponseModel? get getReportResponseModel => _getReportResponseModel;
   RtcEngine? engine;
 
   dynamic remoteUidGlobal;
@@ -532,6 +537,22 @@ class AuthViewModel extends BaseViewModel {
       _isLoadingAllLabTech = false;
     } catch (e) {
       _isLoadingAllLabTech = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void getAllReport(context) async {
+    try {
+      _isLoadingReport = true;
+      _getReportResponseModel = await runBusyFuture(
+        repositoryImply.getReport(),
+        throwException: true,
+      );
+      _isLoadingReport = false;
+    } catch (e) {
+      _isLoadingReport = false;
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }
@@ -1185,24 +1206,6 @@ class AuthViewModel extends BaseViewModel {
                                   ],
                                 ),
                               ),
-                              // Row(
-                              //   children: [
-                              //     SvgPicture.asset(
-                              //       AppImage.location,
-                              //       height: 15.2.h,
-                              //       width: 16.2.w,
-                              //     ),
-                              //     SizedBox(width: 2.w),
-                              //     TextView(
-                              //       text: '800m away',
-                              //       textStyle: GoogleFonts.gabarito(
-                              //         color: AppColor.black,
-                              //         fontSize: 12.0.sp,
-                              //         fontWeight: FontWeight.w500,
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
                             ],
                           ),
                         ],

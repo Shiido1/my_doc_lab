@@ -23,6 +23,7 @@ import '../model/get_list_of_lab_diagnosis_model/get_list_of_lab_diagnosis_model
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import '../model/get_report_response_model/get_report_response_model.dart';
 import '../model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../model/login_entity.dart';
 import '../model/login_response_model/login_response_model.dart';
@@ -230,6 +231,11 @@ class AuthRepoImpl {
 
   Future<GetListOfLabDiagnosisModelList> getDiagnosisList(String id) async {
     final response = await _contract.getDiagnosisList(id);
+    return response;
+  }
+
+  Future<GetReportResponseModel> getReport() async {
+    final response = await _contract.getReport();
     return response;
   }
 

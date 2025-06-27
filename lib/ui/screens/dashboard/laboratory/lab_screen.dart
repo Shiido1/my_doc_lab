@@ -107,6 +107,189 @@ class _LaboratoryScreenState extends State<LaboratoryScreen> {
                                 },
                                 itemCount: 10,
                               )
+                              : model.queryLab != ''
+                              ? GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      crossAxisCount: 2,
+                                      mainAxisExtent:
+                                          Platform.isIOS
+                                              ? 230
+                                              : 200, // Number of columns
+                                    ),
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap:
+                                        () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder:
+                                                (
+                                                  context,
+                                                ) => LaboratoryDetailScreen(
+                                                  getAllLabTechResponseModel:
+                                                      model
+                                                          .getAllLabTechResponseModelList!
+                                                          .getAllLabTechResponseModelList![index],
+                                                ),
+                                          ),
+                                        ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: AppColor.funnyLookingGrey
+                                              .withOpacity(.3),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.vertical(
+                                                  top: Radius.circular(10),
+                                                ),
+                                            child: Image.network(
+                                              model
+                                                      .getAllLabTechResponseModelList!
+                                                      .getAllLabTechResponseModelList![index]
+                                                      .profileImage ??
+                                                  '',
+                                              height: 110.h,
+                                              width: double.infinity,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) => shimmerViewPharm(),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(8.w),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                SizedBox(
+                                                  width: 120.w,
+                                                  child: TextView(
+                                                    text:
+                                                        'Dr ${model.getAllLabTechResponseModelList!.getAllLabTechResponseModelList![index].firstName?.capitalize() ?? ''} ${model.getAllLabTechResponseModelList!.getAllLabTechResponseModelList![index].lastName?.capitalize() ?? ''}',
+                                                    maxLines: 1,
+                                                    textOverflow:
+                                                        TextOverflow.ellipsis,
+                                                    textStyle:
+                                                        GoogleFonts.gabarito(
+                                                          color:
+                                                              AppColor
+                                                                  .darkindgrey,
+                                                          fontSize: 16.0.sp,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 120.w,
+                                                  child: TextView(
+                                                    text:
+                                                        '${model.getAllLabTechResponseModelList!.getAllLabTechResponseModelList![index].businessName ?? ''}'
+                                                            .capitalize(),
+                                                    maxLines: 1,
+                                                    textOverflow:
+                                                        TextOverflow.ellipsis,
+                                                    textStyle:
+                                                        GoogleFonts.gabarito(
+                                                          color: AppColor.grey,
+                                                          fontSize: 12.0.sp,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 14.0.h),
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                            vertical: 1.w,
+                                                            horizontal: 4.w,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              4,
+                                                            ),
+                                                        color: AppColor.primary,
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.star,
+                                                            color:
+                                                                AppColor.white,
+                                                            size: 15.0.sp,
+                                                          ),
+                                                          SizedBox(width: 2.w),
+                                                          TextView(
+                                                            text: '4.8',
+                                                            textStyle:
+                                                                GoogleFonts.dmSans(
+                                                                  color:
+                                                                      AppColor
+                                                                          .white,
+                                                                  fontSize:
+                                                                      12.0.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 20.h),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                itemCount:
+                                    model.getAllLabTechResponseModelList != null
+                                        ? model
+                                            .getAllLabTechResponseModelList!
+                                            .getAllLabTechResponseModelList!
+                                            .where(
+                                              (w) =>
+                                                  w.firstName!
+                                                      .toLowerCase()
+                                                      .contains(
+                                                        model.queryLab
+                                                            .toLowerCase(),
+                                                      ) ||
+                                                  w.lastName!
+                                                      .toLowerCase()
+                                                      .contains(
+                                                        model.queryLab
+                                                            .toLowerCase(),
+                                                      ),
+                                            )
+                                            .length
+                                        : 0, // Number of items in the grid
+                              )
                               : GridView.builder(
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
