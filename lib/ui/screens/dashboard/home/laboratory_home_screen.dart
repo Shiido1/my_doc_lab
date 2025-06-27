@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,11 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
-import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/med_lab_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
+import '../../../widget/text_form_widget.dart';
 import '../../../widget/text_widget.dart';
 
 class LaboratoryHomeScreen extends StatefulWidget {
@@ -32,6 +31,7 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
           model.getLabTechDetail(context);
           model.getChatIndex();
           model.getLabTechStats();
+          model.getAppointmentList();
         });
       },
       disposeViewModel: false,
@@ -100,12 +100,6 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                       ],
                     ),
                     Spacer(),
-                    SvgPicture.asset(
-                      AppImage.lab_message,
-                      width: 24.w,
-                      height: 24.w,
-                    ),
-                    SizedBox(width: 20.w),
                     GestureDetector(
                       onTap:
                           () => Navigator.of(context).push(
@@ -123,12 +117,9 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                 ),
                 SizedBox(height: 20.w),
                 TextFormWidget(
-                  label: 'Search for Patient or Appointments',
-                  // hint: 'Email Address',
-                  border: 10,
+                  label: 'Search for Appointments with name',
                   isFilled: true,
                   fillColor: AppColor.transparent,
-                  // controller: fullnameTextController,
                   prefixWidget: Padding(
                     padding: EdgeInsets.all(14.w),
                     child: SvgPicture.asset(
@@ -145,7 +136,10 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                       width: 20.w,
                     ),
                   ),
-                  // validator: AppValidator.validateEmail(),
+                  onChange: (p0) {
+                    model.queryAppointment = p0;
+                    model.notifyListeners();
+                  },
                 ),
                 SizedBox(height: 20.h),
                 Row(
@@ -187,165 +181,437 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                   color: AppColor.primary1,
                 ),
                 SizedBox(height: 20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextView(
-                      text: 'Appointments',
-                      textAlign: TextAlign.start,
-                      textStyle: GoogleFonts.gabarito(
-                        color: AppColor.darkindgrey,
-                        fontSize: 16.30.sp,
-                        letterSpacing: -1,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        TextView(
-                          text: 'View all',
-                          textAlign: TextAlign.start,
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.darkindgrey,
-                            fontSize: 12.30.sp,
-                            letterSpacing: -1,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(width: 8.0.w),
-                        Icon(
-                          Icons.keyboard_arrow_right_rounded,
-                          size: 16.sp,
-                          color: AppColor.darkindgrey,
-                        ),
-                      ],
-                    ),
-                  ],
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     TextView(
+                //       text: 'Appointments',
+                //       textAlign: TextAlign.start,
+                //       textStyle: GoogleFonts.gabarito(
+                //         color: AppColor.darkindgrey,
+                //         fontSize: 16.30.sp,
+                //         letterSpacing: -1,
+                //         fontWeight: FontWeight.w700,
+                //       ),
+                //     ),
+                //     Row(
+                //       children: [
+                //         TextView(
+                //           text: 'View all',
+                //           textAlign: TextAlign.start,
+                //           textStyle: GoogleFonts.gabarito(
+                //             color: AppColor.darkindgrey,
+                //             fontSize: 12.30.sp,
+                //             letterSpacing: -1,
+                //             fontWeight: FontWeight.w400,
+                //           ),
+                //         ),
+                //         SizedBox(width: 8.0.w),
+                //         Icon(
+                //           Icons.keyboard_arrow_right_rounded,
+                //           size: 16.sp,
+                //           color: AppColor.darkindgrey,
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
+                TextView(
+                  text: 'Appointments',
+                  textAlign: TextAlign.start,
+                  textStyle: GoogleFonts.gabarito(
+                    color: AppColor.darkindgrey,
+                    fontSize: 16.30.sp,
+                    letterSpacing: -1,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 SizedBox(height: 20.h),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      ...[1, 2, 3, 4, 5].map(
-                        (o) => Container(
-                          width: 240.w,
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8.w,
-                            horizontal: 10.w,
-                          ),
-                          margin: EdgeInsets.only(right: 10.w),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColor.primary1,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(17.2.w),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColor.white,
+                      if (model.labTechRecentAppointmentModel != null &&
+                          model
+                              .labTechRecentAppointmentModel!
+                              .labTechRecentAppointmentModelList!
+                              .isNotEmpty)
+                        if (model.queryAppointment != '')
+                          ...model
+                              .labTechRecentAppointmentModel!
+                              .labTechRecentAppointmentModelList!
+                              .where(
+                                (w) =>
+                                    w.user!.firstName!.toLowerCase().contains(
+                                      model.queryAppointment.toLowerCase(),
+                                    ) ||
+                                    w.user!.lastName!.toLowerCase().contains(
+                                      model.queryAppointment.toLowerCase(),
                                     ),
+                              )
+                              .map(
+                                (o) => Container(
+                                  width: 240.w,
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 8.w,
+                                    horizontal: 10.w,
                                   ),
-                                  SizedBox(width: 10.w),
-                                  Column(
+                                  margin: EdgeInsets.only(right: 10.w),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColor.primary1,
+                                  ),
+                                  child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      TextView(
-                                        text: 'Daniel Wood',
-                                        textAlign: TextAlign.start,
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.white,
-                                          fontSize: 16.30.sp,
-                                          letterSpacing: -1,
-                                          fontWeight: FontWeight.w600,
+                                      Row(
+                                        children: [
+                                          o.user?.profileImage != null
+                                              ? ClipOval(
+                                                child: SizedBox.fromSize(
+                                                  size: const Size.fromRadius(
+                                                    24,
+                                                  ),
+                                                  child: Image.network(
+                                                    o.user!.profileImage!
+                                                            .contains('https')
+                                                        ? '${o.user?.profileImage}'
+                                                        : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${o.user?.profileImage}',
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) => shimmerViewPharm(),
+                                                  ),
+                                                ),
+                                              )
+                                              : Container(
+                                                padding: EdgeInsets.all(17.2.w),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: AppColor.white,
+                                                ),
+                                              ),
+                                          SizedBox(width: 10.w),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 160.w,
+                                                child: TextView(
+                                                  text:
+                                                      '${o.user?.firstName?.capitalize() ?? ''} ${o.user?.lastName?.capitalize() ?? ''}',
+                                                  textAlign: TextAlign.start,
+                                                  maxLines: 1,
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis,
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color: AppColor.white,
+                                                        fontSize: 16.30.sp,
+                                                        letterSpacing: -1,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                ),
+                                              ),
+                                              TextView(
+                                                text: o.time ?? '',
+                                                textAlign: TextAlign.start,
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.white,
+                                                  fontSize: 12.30.sp,
+                                                  letterSpacing: -1,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 20.h),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 40.w),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            TextView(
+                                              text:
+                                                  o.diagnosis?.name
+                                                      ?.capitalize() ??
+                                                  '',
+                                              textAlign: TextAlign.start,
+                                              textStyle: GoogleFonts.gabarito(
+                                                color: AppColor.white,
+                                                fontSize: 16.30.sp,
+                                                letterSpacing: -1,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 1.4.w,
+                                                    horizontal: 8.w,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.darkindgrey,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          22,
+                                                        ),
+                                                  ),
+                                                  child: TextView(
+                                                    text: 'Sample',
+                                                    textAlign: TextAlign.center,
+                                                    textStyle:
+                                                        GoogleFonts.gabarito(
+                                                          color: AppColor.white,
+                                                          fontSize: 11.30.sp,
+                                                          letterSpacing: 0,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 1.4.w,
+                                                    horizontal: 8.w,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: model
+                                                        .statusAppColor(
+                                                          o.status,
+                                                        )
+                                                        .withOpacity(.2),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          22,
+                                                        ),
+                                                  ),
+                                                  child: TextView(
+                                                    text: model.statusValue(
+                                                      o.status,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                    textStyle:
+                                                        GoogleFonts.gabarito(
+                                                          color: model
+                                                              .statusAppColor(
+                                                                o.status,
+                                                              ),
+                                                          fontSize: 11.30.sp,
+                                                          letterSpacing: 0,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      TextView(
-                                        text: '10:00 am',
-                                        textAlign: TextAlign.start,
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.white,
-                                          fontSize: 12.30.sp,
-                                          letterSpacing: -1,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
+
+                                      SizedBox(height: 10.h),
                                     ],
                                   ),
-                                  Spacer(),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 1.4.w,
-                                      horizontal: 8.w,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColor.yellow.withOpacity(.2),
-                                      borderRadius: BorderRadius.circular(22),
-                                    ),
-                                    child: TextView(
-                                      text: 'Pending',
-                                      textAlign: TextAlign.center,
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.yellow,
-                                        fontSize: 11.30.sp,
-                                        letterSpacing: 0,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
+                                ),
+                              )
+                        else
+                          ...model
+                              .labTechRecentAppointmentModel!
+                              .labTechRecentAppointmentModelList!
+                              .map(
+                                (o) => Container(
+                                  width: 240.w,
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 8.w,
+                                    horizontal: 10.w,
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 20.h),
-                              Padding(
-                                padding: EdgeInsets.only(left: 40.w),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextView(
-                                      text: 'Blood Test',
-                                      textAlign: TextAlign.start,
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.white,
-                                        fontSize: 16.30.sp,
-                                        letterSpacing: -1,
-                                        fontWeight: FontWeight.w600,
+                                  margin: EdgeInsets.only(right: 10.w),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColor.primary1,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          o.user?.profileImage != null
+                                              ? ClipOval(
+                                                child: SizedBox.fromSize(
+                                                  size: const Size.fromRadius(
+                                                    24,
+                                                  ),
+                                                  child: Image.network(
+                                                    o.user!.profileImage!
+                                                            .contains('https')
+                                                        ? '${o.user?.profileImage}'
+                                                        : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${o.user?.profileImage}',
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) => shimmerViewPharm(),
+                                                  ),
+                                                ),
+                                              )
+                                              : Container(
+                                                padding: EdgeInsets.all(17.2.w),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: AppColor.white,
+                                                ),
+                                              ),
+                                          SizedBox(width: 10.w),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 160.w,
+                                                child: TextView(
+                                                  text:
+                                                      '${o.user?.firstName?.capitalize() ?? ''} ${o.user?.lastName?.capitalize() ?? ''}',
+                                                  textAlign: TextAlign.start,
+                                                  maxLines: 1,
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis,
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color: AppColor.white,
+                                                        fontSize: 16.30.sp,
+                                                        letterSpacing: -1,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                ),
+                                              ),
+                                              TextView(
+                                                text: o.time ?? '',
+                                                textAlign: TextAlign.start,
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.white,
+                                                  fontSize: 12.30.sp,
+                                                  letterSpacing: -1,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 1.4.w,
-                                        horizontal: 8.w,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: AppColor.darkindgrey,
-                                        borderRadius: BorderRadius.circular(22),
-                                      ),
-                                      child: TextView(
-                                        text: 'Sample',
-                                        textAlign: TextAlign.center,
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.white,
-                                          fontSize: 11.30.sp,
-                                          letterSpacing: 0,
-                                          fontWeight: FontWeight.w400,
+                                      SizedBox(height: 20.h),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 40.w),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            TextView(
+                                              text:
+                                                  o.diagnosis?.name
+                                                      ?.capitalize() ??
+                                                  '',
+                                              textAlign: TextAlign.start,
+                                              textStyle: GoogleFonts.gabarito(
+                                                color: AppColor.white,
+                                                fontSize: 16.30.sp,
+                                                letterSpacing: -1,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 1.4.w,
+                                                    horizontal: 8.w,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.darkindgrey,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          22,
+                                                        ),
+                                                  ),
+                                                  child: TextView(
+                                                    text: 'Sample',
+                                                    textAlign: TextAlign.center,
+                                                    textStyle:
+                                                        GoogleFonts.gabarito(
+                                                          color: AppColor.white,
+                                                          fontSize: 11.30.sp,
+                                                          letterSpacing: 0,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 1.4.w,
+                                                    horizontal: 8.w,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: model
+                                                        .statusAppColor(
+                                                          o.status,
+                                                        )
+                                                        .withOpacity(.2),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          22,
+                                                        ),
+                                                  ),
+                                                  child: TextView(
+                                                    text: model.statusValue(
+                                                      o.status,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                    textStyle:
+                                                        GoogleFonts.gabarito(
+                                                          color: model
+                                                              .statusAppColor(
+                                                                o.status,
+                                                              ),
+                                                          fontSize: 11.30.sp,
+                                                          letterSpacing: 0,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                  ],
+
+                                      SizedBox(height: 10.h),
+                                    ],
+                                  ),
                                 ),
                               ),
-
-                              SizedBox(height: 10.h),
-                            ],
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),

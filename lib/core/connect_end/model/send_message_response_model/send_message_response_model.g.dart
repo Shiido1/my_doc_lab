@@ -7,17 +7,15 @@ part of 'send_message_response_model.dart';
 // **************************************************************************
 
 SendMessageResponseModel _$SendMessageResponseModelFromJson(
-        Map<String, dynamic> json) =>
-    SendMessageResponseModel(
-      success: json['success'] as bool?,
-      data: json['data'] == null
+  Map<String, dynamic> json,
+) => SendMessageResponseModel(
+  success: json['success'] as bool?,
+  data:
+      json['data'] == null
           ? null
           : Data.fromJson(json['data'] as Map<String, dynamic>),
-    );
+);
 
 Map<String, dynamic> _$SendMessageResponseModelToJson(
-        SendMessageResponseModel instance) =>
-    <String, dynamic>{
-      'success': instance.success,
-      'data': instance.data,
-    };
+  SendMessageResponseModel instance,
+) => <String, dynamic>{'success': instance.success, 'data': instance.data};

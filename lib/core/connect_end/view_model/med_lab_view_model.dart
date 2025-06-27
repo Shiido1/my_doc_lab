@@ -43,6 +43,7 @@ import '../model/get_pharm_order_model/get_pharm_order_model.dart';
 import '../model/get_single_dia_response_model/get_single_dia_response_model.dart';
 import '../model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
 import '../model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
+import '../model/lab_tech_recent_appointment_model/lab_tech_recent_appointment_model.dart';
 import '../model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -73,6 +74,7 @@ class LabTechViewModel extends BaseViewModel {
   final debouncer = Debouncer();
   String query = '';
   String queryBank = '';
+  String queryAppointment = '';
 
   TextEditingController accountNumberTextController = TextEditingController();
   TextEditingController bankCodeTextController = TextEditingController();
@@ -164,6 +166,9 @@ class LabTechViewModel extends BaseViewModel {
   TextEditingController sendtextController = TextEditingController(text: '');
   BankSaveResponseModel? get bankSaveResponseModel => _bankSaveResponseModel;
   BankSaveResponseModel? _bankSaveResponseModel;
+  LabTechRecentAppointmentModelList? get labTechRecentAppointmentModel =>
+      _labTechRecentAppointmentModel;
+  LabTechRecentAppointmentModelList? _labTechRecentAppointmentModel;
 
   RtcEngine? engine;
   bool onSwitch = false;
@@ -309,7 +314,7 @@ class LabTechViewModel extends BaseViewModel {
         repositoryImply.updateLabTechDetail(id: id, update: update),
         throwException: true,
       );
-      if (v['message'] == 'Account updated successfully!') {
+      if (v['message'] == 'Account Updated Successfully!') {
         Navigator.pop(context);
         AppUtils.snackbar(context, message: v['message']);
         navigate.navigateTo(Routes.laboratoryDashboard);
@@ -447,6 +452,22 @@ class LabTechViewModel extends BaseViewModel {
       _isLoading = true;
       _getLabTechStaResponseModel = await runBusyFuture(
         repositoryImply.getLabTechStats(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getAppointmentList() async {
+    try {
+      _isLoading = true;
+      _labTechRecentAppointmentModel = await runBusyFuture(
+        repositoryImply.mostAppointmentList(),
         throwException: true,
       );
       _isLoading = false;
@@ -2583,5 +2604,25 @@ class LabTechViewModel extends BaseViewModel {
         );
       },
     );
+  }
+
+  String statusValue(status) {
+    if (status == 'cancelled') {
+      return 'Failed';
+    }
+    if (status == 'scheduled') {
+      return 'Pending';
+    }
+    return 'Completed';
+  }
+
+  Color statusAppColor(status) {
+    if (status == 'cancelled') {
+      return AppColor.fineRed;
+    }
+    if (status == 'scheduled') {
+      return AppColor.yellow;
+    }
+    return AppColor.white;
   }
 }

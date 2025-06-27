@@ -4,6 +4,7 @@ class UpdateLabTechEntityModel {
   String? phoneNumber;
   String? email;
   String? certifications;
+  String? businessName;
   String? experience;
   String? profileImage;
   String? about;
@@ -17,6 +18,7 @@ class UpdateLabTechEntityModel {
     this.phoneNumber,
     this.email,
     this.certifications,
+    this.businessName,
     this.experience,
     this.profileImage,
     this.about,
@@ -32,6 +34,7 @@ class UpdateLabTechEntityModel {
       phoneNumber: json['phoneNumber']?.toString(),
       email: json['email']?.toString(),
       certifications: json['certifications']?.toString(),
+      businessName: json['business_name']?.toString(),
       experience: json['experience']?.toString(),
       profileImage: json['profile_image']?.toString(),
       about: json['about']?.toString(),
@@ -47,6 +50,7 @@ class UpdateLabTechEntityModel {
     if (phoneNumber != null) 'phoneNumber': phoneNumber,
     if (email != null) 'email': email,
     if (certifications != null) 'certifications': certifications,
+    if (businessName != null) 'business_name': businessName,
     if (experience != null) 'experience': experience,
     if (profileImage != null) 'profile_image': profileImage,
     if (about != null) 'about': about,

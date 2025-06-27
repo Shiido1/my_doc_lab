@@ -15,9 +15,11 @@ import '../model/care_giver_resiter_entity_model.dart';
 import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
+import '../model/get_all_lab_tech_response_model/get_all_lab_tech_response_model.dart';
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
+import '../model/get_list_of_lab_diagnosis_model/get_list_of_lab_diagnosis_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -218,6 +220,16 @@ class AuthRepoImpl {
 
   Future<GetUsersAppointmentModelList> getUserAppointment() async {
     final response = await _contract.getUsersAppointment();
+    return response;
+  }
+
+  Future<GetAllLabTechResponseModelList> getAllLabTech() async {
+    final response = await _contract.getAllLabTech();
+    return response;
+  }
+
+  Future<GetListOfLabDiagnosisModelList> getDiagnosisList(String id) async {
+    final response = await _contract.getDiagnosisList(id);
     return response;
   }
 

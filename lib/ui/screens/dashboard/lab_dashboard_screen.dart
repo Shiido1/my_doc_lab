@@ -130,7 +130,7 @@ class _LaboratoryDashboardState extends State<LaboratoryDashboard> {
                     height: 30.0.h,
                     width: 30.w,
                   ),
-                  label: 'Appointment',
+                  label: 'Patients',
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(

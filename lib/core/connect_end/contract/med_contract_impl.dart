@@ -19,6 +19,7 @@ import '../model/get_message_index_response_model/get_message_index_response_mod
 import '../model/get_single_dia_response_model/get_single_dia_response_model.dart';
 import '../model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
 import '../model/lab_tech_detail_response_model/lab_tech_detail_response_model.dart';
+import '../model/lab_tech_recent_appointment_model/lab_tech_recent_appointment_model.dart';
 import '../model/lab_tech_wallet_response_model/lab_tech_wallet_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -125,4 +126,6 @@ class LabTechContractsImpl {
       await _api.getLabTechReport();
   Future<GetLabTexhAllPatientsResponseModelList> getLabTechPatients() async =>
       await _api.getLabTechPatients();
+  Future<LabTechRecentAppointmentModelList> mostAppointmentList() async =>
+      await _api.mostAppointmentList();
 }

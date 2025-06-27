@@ -24,6 +24,7 @@ class LabEditProfileScreen extends StatelessWidget {
   TextEditingController aboutController = TextEditingController();
   TextEditingController expController = TextEditingController();
   TextEditingController certificationController = TextEditingController();
+  TextEditingController businessNameController = TextEditingController();
   TextEditingController roleController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailTextController = TextEditingController();
@@ -50,6 +51,8 @@ class LabEditProfileScreen extends StatelessWidget {
               '';
           expController.text =
               model.getLabTechDetailResponseModel?.original?.experience ?? '';
+          businessNameController.text =
+              model.getLabTechDetailResponseModel?.original?.businessName ?? '';
           phoneController.text =
               model.getLabTechDetailResponseModel?.original?.phone ?? '';
           emailTextController.text =
@@ -198,14 +201,6 @@ class LabEditProfileScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20.h),
                   TextFormWidget(
-                    hint: 'Age',
-                    border: 10,
-                    isFilled: true,
-                    fillColor: AppColor.oneKindgrey,
-                    borderColor: AppColor.transparent,
-                  ),
-                  SizedBox(height: 20.h),
-                  TextFormWidget(
                     hint: 'Email Address',
                     border: 10,
                     isFilled: true,
@@ -232,6 +227,16 @@ class LabEditProfileScreen extends StatelessWidget {
                     fillColor: AppColor.oneKindgrey,
                     borderColor: AppColor.transparent,
                     controller: certificationController,
+                    validator: AppValidator.validateString(),
+                  ),
+                  SizedBox(height: 20.h),
+                  TextFormWidget(
+                    hint: 'Business Name',
+                    border: 10,
+                    isFilled: true,
+                    fillColor: AppColor.oneKindgrey,
+                    borderColor: AppColor.transparent,
+                    controller: businessNameController,
                     validator: AppValidator.validateString(),
                   ),
                   SizedBox(height: 20.h),
@@ -314,6 +319,7 @@ class LabEditProfileScreen extends StatelessWidget {
                             phoneNumber: phoneController.text.trim(),
                             email: emailTextController.text.trim(),
                             certifications: certificationController.text.trim(),
+                            businessName: businessNameController.text.trim(),
                             experience: expController.text.trim(),
                             profileImage:
                                 model

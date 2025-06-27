@@ -47,6 +47,7 @@ class Original {
   String? status;
   String? emailVerifiedAt;
   String? certifications;
+  String? businessName;
   String? experience;
   String? profileImage;
   String? city;
@@ -67,6 +68,7 @@ class Original {
     this.about,
     this.status,
     this.emailVerifiedAt,
+    this.businessName,
     this.certifications,
     this.experience,
     this.profileImage,
@@ -90,6 +92,7 @@ class Original {
     status = json['status'];
     emailVerifiedAt = json['email_verified_at'];
     certifications = json['certifications'];
+    businessName = json['business_name'];
     experience = json['experience'];
     profileImage = json['profile_image'];
     city = json['city'];
@@ -113,6 +116,7 @@ class Original {
     data['status'] = status;
     data['email_verified_at'] = emailVerifiedAt;
     data['certifications'] = certifications;
+    data['business_name'] = businessName;
     data['experience'] = experience;
     data['profile_image'] = profileImage;
     data['city'] = city;

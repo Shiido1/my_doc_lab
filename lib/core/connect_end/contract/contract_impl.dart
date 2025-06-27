@@ -15,9 +15,11 @@ import '../model/add_booking_entity_model.dart';
 import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
+import '../model/get_all_lab_tech_response_model/get_all_lab_tech_response_model.dart';
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
 import '../model/get_all_pharmacies_response_model/get_all_pharmacies_response_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
+import '../model/get_list_of_lab_diagnosis_model/get_list_of_lab_diagnosis_model.dart';
 import '../model/get_medicine_detail_response_model/get_medicine_detail_response_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
@@ -141,4 +143,8 @@ class AuthContractsImpl {
       await _api.userWallet();
   Future<PayStackPaymentModel> paymentTopUp(String amount) async =>
       await _api.paymentTopUp(amount);
+  Future<GetListOfLabDiagnosisModelList> getDiagnosisList(String id) async =>
+      await _api.getDiagnosisList(id);
+  Future<GetAllLabTechResponseModelList> getAllLabTech() async =>
+      await _api.getAllLabTech();
 }

@@ -31,6 +31,8 @@ class UrlConfig {
   static const String forgot_password = 'forgot-password';
   static const String update_password = 'reset-password';
   static const String labt_tech = 'lab-technician';
+  static const String user_lab_tech = 'user/lab_technician';
+  static const String lab_tech_diagnosis = 'user/lab/diagnosis/';
   static const String labt_tech_stat = 'lab-technician/stats';
   static const String labt_tech_all_patients = 'lab-technician/all_patients';
   static const String labt_tech_wallet = 'lab-technician/wallet';
@@ -47,6 +49,8 @@ class UrlConfig {
   static const String labt_tech_category_by_id = 'lab-technician/categories/';
   static const String labt_tech_category_add = 'lab-technician/categories/add';
   static const String labt_tech_update_report = 'lab-technician/reports';
+  static const String lab_tech_recent_appointment =
+      'lab-technician/quick_recent_appointment';
   static const String login = 'login';
   static const String user = 'user';
   static const String user_detail = 'user/details';

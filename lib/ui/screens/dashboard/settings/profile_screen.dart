@@ -317,16 +317,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20.w),
                 surround_padding(
                   value: 20.w,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SvgPicture.asset(
-                        AppImage.gradcap,
-                        height: 20.h,
-                        width: 20.w,
+                      Padding(
+                        padding: EdgeInsets.only(top: 12.8.w),
+                        child: SvgPicture.asset(
+                          AppImage.gradcap,
+                          height: 20.h,
+                          width: 20.w,
+                        ),
                       ),
                       SizedBox(width: 18.20.w),
                       SizedBox(
@@ -356,30 +358,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20.w),
                 surround_padding(
                   value: 20.w,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SvgPicture.asset(AppImage.exp, height: 20.h, width: 20.w),
+                      Padding(
+                        padding: EdgeInsets.only(top: 14.0.w),
+                        child: SvgPicture.asset(
+                          AppImage.exp,
+                          height: 20.h,
+                          width: 20.w,
+                        ),
+                      ),
                       SizedBox(width: 18.20.w),
                       SizedBox(
                         width: 300.w,
-                        child: TextView(
-                          text:
+                        child: Html(
+                          data:
                               model
                                   .getDocDetailResponseModel
                                   ?.original
                                   ?.experience ??
                               '',
-                          maxLines: 4,
-                          textOverflow: TextOverflow.ellipsis,
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.black,
-                            fontSize: 14.60.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          shrinkWrap: true,
                         ),
                       ),
                     ],
@@ -478,7 +480,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: 10.h),
                 surround_padding(
-                  value: 4.w,
+                  value: 15.10.w,
                   child: Wrap(
                     spacing: 6.20,
                     runSpacing: 10,

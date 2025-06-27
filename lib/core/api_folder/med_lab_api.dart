@@ -8,6 +8,7 @@ import 'package:my_doc_lab/core/connect_end/model/get_lab_tech_sta_response_mode
 import 'package:my_doc_lab/core/connect_end/model/get_lab_texh_all_patients_response_model/get_lab_texh_all_patients_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_single_dia_response_model/get_single_dia_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/lab_tech_category_list_response_model/lab_tech_category_list_response_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/lab_tech_recent_appointment_model/lab_tech_recent_appointment_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
 import '../connect_end/model/bank_save_entity_model.dart';
 import '../connect_end/model/bank_save_response_model/bank_save_response_model.dart';
@@ -472,6 +473,20 @@ class LabTechAuthApi {
       );
       logger.d(response.data);
       return GetLabTexhAllPatientsResponseModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<LabTechRecentAppointmentModelList> mostAppointmentList() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.lab_tech_recent_appointment,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return LabTechRecentAppointmentModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;
