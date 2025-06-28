@@ -29,140 +29,133 @@ class ProductStatusFailed extends StatelessWidget {
       },
       disposeViewModel: false,
       builder: (_, PharmViewModel model, __) {
-        return GestureDetector(
-          // onTap:
-          //     () => navigate.navigateTo(
-          //       Routes.patientDetailSceen,
-          //       arguments: PatientDetailSceenArguments(item: item),
-          //     ),
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 8.w),
-            margin: EdgeInsets.only(bottom: 14.w),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColor.oneKindgrey),
-            ),
-            child: Row(
-              children: [
-                model
-                            .orderByIdResponseModel
-                            ?.original
-                            ?.orders?[0]
-                            .user
-                            ?.profileImage !=
-                        null
-                    ? Padding(
-                      padding: EdgeInsets.only(top: 8.w),
-                      child: ClipOval(
-                        child: SizedBox.fromSize(
-                          size: const Size.fromRadius(30),
-                          child: Image.network(
-                            model
-                                    .orderByIdResponseModel!
-                                    .original!
-                                    .orders![0]
-                                    .user!
-                                    .profileImage!
-                                    .contains('https')
-                                ? '${model.orderByIdResponseModel?.original?.orders?[0].user?.profileImage}'
-                                : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.orderByIdResponseModel?.original?.orders?[0].user?.profileImage}',
-                            fit: BoxFit.cover,
-                            errorBuilder:
-                                (context, error, stackTrace) =>
-                                    shimmerViewPharm(),
-                          ),
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 8.w),
+          margin: EdgeInsets.only(bottom: 14.w),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColor.oneKindgrey),
+          ),
+          child: Row(
+            children: [
+              model
+                          .orderByIdResponseModel
+                          ?.original
+                          ?.orders?[0]
+                          .user
+                          ?.profileImage !=
+                      null
+                  ? Padding(
+                    padding: EdgeInsets.only(top: 8.w),
+                    child: ClipOval(
+                      child: SizedBox.fromSize(
+                        size: const Size.fromRadius(30),
+                        child: Image.network(
+                          model
+                                  .orderByIdResponseModel!
+                                  .original!
+                                  .orders![0]
+                                  .user!
+                                  .profileImage!
+                                  .contains('https')
+                              ? '${model.orderByIdResponseModel?.original?.orders?[0].user?.profileImage}'
+                              : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${model.orderByIdResponseModel?.original?.orders?[0].user?.profileImage}',
+                          fit: BoxFit.cover,
+                          errorBuilder:
+                              (context, error, stackTrace) =>
+                                  shimmerViewPharm(),
                         ),
                       ),
-                    )
-                    : shimmerVieRound(),
+                    ),
+                  )
+                  : shimmerVieRound(),
 
-                SizedBox(width: 20.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    model.isLoading || model.orderByIdResponseModel == null
-                        ? Shimmer.fromColors(
-                          baseColor: AppColor.friendlyPrimary,
-                          highlightColor: AppColor.primary1.withOpacity(.5),
-                          child: Container(
-                            height: 10.h,
-                            width: 80.w,
-                            decoration: BoxDecoration(
-                              color: AppColor.white,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                          ),
-                        )
-                        : TextView(
-                          text:
-                              '${model.orderByIdResponseModel?.original?.orders?[0].user?.firstName?.capitalize() ?? ''} ${model.orderByIdResponseModel?.original?.orders?[0].user?.lastName?.capitalize() ?? ''}',
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.darkindgrey,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
+              SizedBox(width: 20.w),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  model.isLoading || model.orderByIdResponseModel == null
+                      ? Shimmer.fromColors(
+                        baseColor: AppColor.friendlyPrimary,
+                        highlightColor: AppColor.primary1.withOpacity(.5),
+                        child: Container(
+                          height: 10.h,
+                          width: 80.w,
+                          decoration: BoxDecoration(
+                            color: AppColor.white,
+                            borderRadius: BorderRadius.circular(10.r),
                           ),
                         ),
-                    SizedBox(height: 4.w),
-                    model.isLoading || model.orderByIdResponseModel == null
-                        ? Shimmer.fromColors(
-                          baseColor: AppColor.friendlyPrimary,
-                          highlightColor: AppColor.primary1.withOpacity(.5),
-                          child: Container(
-                            height: 10.h,
-                            width: 120.w,
-                            decoration: BoxDecoration(
-                              color: AppColor.white,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
+                      )
+                      : TextView(
+                        text:
+                            '${model.orderByIdResponseModel?.original?.orders?[0].user?.firstName?.capitalize() ?? ''} ${model.orderByIdResponseModel?.original?.orders?[0].user?.lastName?.capitalize() ?? ''}',
+                        textStyle: GoogleFonts.gabarito(
+                          color: AppColor.darkindgrey,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                  SizedBox(height: 4.w),
+                  model.isLoading || model.orderByIdResponseModel == null
+                      ? Shimmer.fromColors(
+                        baseColor: AppColor.friendlyPrimary,
+                        highlightColor: AppColor.primary1.withOpacity(.5),
+                        child: Container(
+                          height: 10.h,
+                          width: 120.w,
+                          decoration: BoxDecoration(
+                            color: AppColor.white,
+                            borderRadius: BorderRadius.circular(10.r),
                           ),
-                        )
-                        : TextView(
-                          text:
-                              'Order No: ${model.orderByIdResponseModel?.original?.orders?[0].orderTrx ?? ''}',
+                        ),
+                      )
+                      : TextView(
+                        text:
+                            'Order No: ${model.orderByIdResponseModel?.original?.orders?[0].orderTrx ?? ''}',
+                        textStyle: GoogleFonts.gabarito(
+                          color: AppColor.greyIt,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                  SizedBox(height: 10.w),
+                  model.isLoading || model.orderByIdResponseModel == null
+                      ? Shimmer.fromColors(
+                        baseColor: AppColor.friendlyPrimary,
+                        highlightColor: AppColor.primary1.withOpacity(.5),
+                        child: Container(
+                          height: 10.h,
+                          width: 80.w,
+                          decoration: BoxDecoration(
+                            color: AppColor.white,
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                        ),
+                      )
+                      : Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 2.w,
+                          horizontal: 6.w,
+                        ),
+                        decoration: BoxDecoration(
+                          color: model
+                              .statusValueColor(item?.status)
+                              .withOpacity(.2),
+                          borderRadius: BorderRadius.circular(22),
+                        ),
+                        child: TextView(
+                          text: model.statusValue(item?.status),
                           textStyle: GoogleFonts.gabarito(
-                            color: AppColor.greyIt,
-                            fontSize: 13.sp,
+                            color: model.statusValueColor(item?.status),
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                    SizedBox(height: 10.w),
-                    model.isLoading || model.orderByIdResponseModel == null
-                        ? Shimmer.fromColors(
-                          baseColor: AppColor.friendlyPrimary,
-                          highlightColor: AppColor.primary1.withOpacity(.5),
-                          child: Container(
-                            height: 10.h,
-                            width: 80.w,
-                            decoration: BoxDecoration(
-                              color: AppColor.white,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                          ),
-                        )
-                        : Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 2.w,
-                            horizontal: 6.w,
-                          ),
-                          decoration: BoxDecoration(
-                            color: model
-                                .statusValueColor(item?.status)
-                                .withOpacity(.2),
-                            borderRadius: BorderRadius.circular(22),
-                          ),
-                          child: TextView(
-                            text: model.statusValue(item?.status),
-                            textStyle: GoogleFonts.gabarito(
-                              color: model.statusValueColor(item?.status),
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                  ],
-                ),
-              ],
-            ),
+                      ),
+                ],
+              ),
+            ],
           ),
         );
       },

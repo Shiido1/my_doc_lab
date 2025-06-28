@@ -96,7 +96,7 @@ class MessageListScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 2.h),
-                          if (model.isLoading)
+                          if (model.isLoadingMessageIndex)
                             ...List.generate(10, (i) => shimmerChatView())
                           else if (model.getMessageIndexResponseModelList !=
                                   null &&

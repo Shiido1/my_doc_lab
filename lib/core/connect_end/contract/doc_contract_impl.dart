@@ -3,7 +3,6 @@ import 'package:my_doc_lab/core/api_folder/doc_api.dart';
 import 'package:my_doc_lab/core/connect_end/model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
-
 import '../../core_folder/app/app.locator.dart';
 import '../model/bank_save_entity_model.dart';
 import '../model/bank_save_response_model/bank_save_response_model.dart';
@@ -12,6 +11,7 @@ import '../model/call_token_generate_response_model/call_token_generate_response
 import '../model/create_add_medicine_entity_model.dart';
 import '../model/create_prescription_entity_model.dart';
 import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
+import '../model/get_doctors_analysis_model/get_doctors_analysis_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
@@ -22,8 +22,7 @@ import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/prescription_view_response/prescription_view_response.dart';
 import '../model/received_message_response_model/received_message_response_model.dart';
-import '../model/recent_appointment_response_model/recent_appointment_response_model.dart'
-    show RecentAppointmentResponseModelList;
+import '../model/recent_appointment_response_model/recent_appointment_response_model.dart';
 import '../model/reschedule_booking_entity_model.dart';
 import '../model/search_doctor_entity_model.dart';
 import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
@@ -117,4 +116,7 @@ class DocContractsImpl {
 
   Future<dynamic> withFundsToAccount(num amount) async =>
       await _api.withFundToAccount(amount);
+
+  Future<GetDoctorsAnalysisModel> doctorsAnalytics() async =>
+      await _api.doctorsAnalytics();
 }

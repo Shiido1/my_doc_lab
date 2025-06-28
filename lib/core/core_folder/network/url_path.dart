@@ -92,5 +92,6 @@ class UrlConfig {
   static const String payment = 'user/payment/generate';
   static const String bank_save = 'bank/save';
   static const String bank_withdraw = 'bank/withdraw';
+  static const String doctor_analytics = 'doctor/analytics';
   static const String user_report = 'user/report';
 }

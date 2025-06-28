@@ -738,7 +738,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       Positioned(
-        bottom: 1.7,
+        bottom: -3.8,
         left: 2,
         child: Image.asset(AppImage.doc, height: 120.h, width: 130.w),
       ),

@@ -76,6 +76,8 @@ class AuthViewModel extends BaseViewModel {
   final session = locator<SharedPreferencesService>();
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _isLoadingMessageIndex = false;
+  bool get isLoadingMessageIndex => _isLoadingMessageIndex;
   bool _isLoadingAllDoctors = false;
   bool get isLoadingReport => _isLoadingReport;
   bool _isLoadingReport = false;
@@ -213,12 +215,14 @@ class AuthViewModel extends BaseViewModel {
 
   onToggleMicrophone() {
     if (onToggleMic == false) {
+      onToggleMic = true;
       engine?.muteLocalAudioStream(false);
       engine?.muteRemoteAudioStream(
         uid: int.parse(remoteUidGlobal.toString()),
         mute: false,
       );
     } else {
+      onToggleMic = false;
       engine?.muteLocalAudioStream(true);
       engine?.muteRemoteAudioStream(
         uid: int.parse(remoteUidGlobal.toString()),
@@ -1315,14 +1319,14 @@ class AuthViewModel extends BaseViewModel {
 
   Future<void> getChatIndex() async {
     try {
-      _isLoading = true;
+      _isLoadingMessageIndex = true;
       _getMessageIndexResponseModelList = await runBusyFuture(
         repositoryImply.chatIndex(),
         throwException: true,
       );
-      _isLoading = false;
+      _isLoadingMessageIndex = false;
     } catch (e) {
-      _isLoading = false;
+      _isLoadingMessageIndex = false;
       logger.d(e);
     }
     notifyListeners();

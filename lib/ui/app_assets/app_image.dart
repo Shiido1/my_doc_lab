@@ -5,6 +5,7 @@ class AppImage {
   static const String appoint = 'assets/svg/appoint.svg';
   static const String thick_appoint = 'assets/svg/thick_appoint.svg';
   static const String carty = 'assets/svg/carty.svg';
+  static const String analysis = 'assets/svg/analysis.svg';
   static const String lab_message = 'assets/svg/lab_message.svg';
   static const String consultancy = 'assets/svg/consultancy.svg';
   static const String order = 'assets/svg/order.svg';

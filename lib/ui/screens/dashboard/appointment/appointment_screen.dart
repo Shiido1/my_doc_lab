@@ -55,7 +55,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 SizedBox(height: 20.h),
                 TextFormWidget(
                   label: 'Search for appointments by name or date sort',
-                  // hint: 'Email Address',
                   border: 10,
                   isFilled: true,
                   fillColor: AppColor.transparent,

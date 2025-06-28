@@ -12,6 +12,7 @@ import '../model/call_token_generate_response_model/call_token_generate_response
 import '../model/create_add_medicine_entity_model.dart';
 import '../model/create_prescription_entity_model.dart';
 import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
+import '../model/get_doctors_analysis_model/get_doctors_analysis_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
@@ -199,6 +200,11 @@ class DocRepoImpl {
 
   Future<dynamic> withdrawToAccount(num amount) async {
     final response = await _contract.withFundsToAccount(amount);
+    return response;
+  }
+
+  Future<GetDoctorsAnalysisModel> doctorsAnalytics() async {
+    final response = await _contract.doctorsAnalytics();
     return response;
   }
 }

@@ -43,6 +43,7 @@ import '../model/create_prescription_entity_model.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
 import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
+import '../model/get_doctors_analysis_model/get_doctors_analysis_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
@@ -68,12 +69,15 @@ class DocViewModel extends BaseViewModel {
   final session = locator<SharedPreferencesService>();
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _isLoadingMessageIndex = false;
+  bool get isLoadingMessageIndex => _isLoadingMessageIndex;
   bool _isLoadingUserSearch = false;
   bool get isLoadingUserSearch => _isLoadingUserSearch;
   bool _isLoadingMedSearch = false;
   bool get isLoadingMedSearch => _isLoadingMedSearch;
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyReschedule = GlobalKey<FormState>();
   GlobalKey<FormState> presFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> presMedsFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> formKeySave = GlobalKey<FormState>();
@@ -156,6 +160,9 @@ class DocViewModel extends BaseViewModel {
   SearchedMedicineResponseModelList? _searchedMedResponseModelList;
   SearchedMedicineResponseModelList? get searchedMedResponseModelList =>
       _searchedMedResponseModelList;
+  GetDoctorsAnalysisModel? _getDoctorsAnalysisModel;
+  GetDoctorsAnalysisModel? get getDoctorsAnalysisModel =>
+      _getDoctorsAnalysisModel;
 
   String query = '';
   String queryPatient = '';
@@ -201,6 +208,37 @@ class DocViewModel extends BaseViewModel {
 
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
+
+  returnMonthText(text) {
+    switch (text) {
+      case 'January':
+        return 'Jan';
+      case 'February':
+        return 'Feb';
+      case 'March':
+        return 'Mar';
+      case 'April':
+        return 'Apr';
+      case 'May':
+        return 'May';
+      case 'June':
+        return 'Jun';
+      case 'July':
+        return 'Jul';
+      case 'August':
+        return 'Aug';
+      case 'September':
+        return 'Sep';
+      case 'October':
+        return 'Oct';
+      case 'November':
+        return 'Nov';
+      case 'December':
+        return 'Dec';
+      default:
+        return text; // or throw an error if you prefer
+    }
+  }
 
   bool isOnTogglePassword() {
     _isTogglePassword = !_isTogglePassword;
@@ -534,6 +572,23 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> getDoctorsAnalysis(context) async {
+    try {
+      _isLoading = true;
+      _getDoctorsAnalysisModel = await runBusyFuture(
+        repositoryImply.doctorsAnalytics(),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
   void updateDoctorsDetail(
     context, {
     UpdateDoctorEntityModel? update,
@@ -729,14 +784,14 @@ class DocViewModel extends BaseViewModel {
 
   Future<void> getChatIndex() async {
     try {
-      _isLoading = true;
+      _isLoadingMessageIndex = true;
       _getMessageIndexResponseModelList = await runBusyFuture(
         repositoryImply.chatIndex(),
         throwException: true,
       );
-      _isLoading = false;
+      _isLoadingMessageIndex = false;
     } catch (e) {
-      _isLoading = false;
+      _isLoadingMessageIndex = false;
       logger.d(e);
     }
     notifyListeners();
@@ -2237,7 +2292,7 @@ class DocViewModel extends BaseViewModel {
                   SizedBox(
                     height: 200.h,
                     child: Form(
-                      key: _formKey,
+                      key: formKey,
                       child: TextFormWidget(
                         label: 'Reason for cancelling appointment',
                         border: 10,
@@ -2273,7 +2328,7 @@ class DocViewModel extends BaseViewModel {
                           ),
                           TextButton(
                             onPressed: () {
-                              if (_formKey.currentState!.validate()) {
+                              if (formKey.currentState!.validate()) {
                                 model.doctorsAppointmentUpdate(
                                   context,
                                   id: id,
@@ -2351,7 +2406,7 @@ class DocViewModel extends BaseViewModel {
                     SizedBox(
                       height: 150.h,
                       child: Form(
-                        key: _formKey,
+                        key: formKeyReschedule,
                         child: TextFormWidget(
                           label: 'Reason for rescheduling appointment',
                           border: 10,
@@ -2478,7 +2533,8 @@ class DocViewModel extends BaseViewModel {
                             ),
                             TextButton(
                               onPressed: () {
-                                if (_formKey.currentState!.validate()) {
+                                if (formKeyReschedule.currentState!
+                                    .validate()) {
                                   model.doctorsAppointmentReschedule(
                                     context,
                                     id: id,

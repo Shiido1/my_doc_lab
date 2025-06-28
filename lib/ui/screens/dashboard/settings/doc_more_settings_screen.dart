@@ -12,6 +12,7 @@ import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/constant.dart';
+import '../appointment/doctors_appointment/doctors_analysis_screen.dart';
 import '../appointment/doctors_appointment/doctors_availabilty_screen.dart';
 import '../appointment/prescription_screen.dart';
 import 'help_and_support_screen.dart';
@@ -181,6 +182,19 @@ class DocMoreSettingsScreen extends StatelessWidget {
                       () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => PrescriptionScreen(),
+                        ),
+                      ),
+                ),
+                SizedBox(height: 20.h),
+                moreContainerWidget(
+                  image: AppImage.analysis,
+                  text: 'Analysis',
+                  borderColor: AppColor.lightgrey,
+                  color: AppColor.black,
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DoctorsAnalysisScreen(),
                         ),
                       ),
                 ),

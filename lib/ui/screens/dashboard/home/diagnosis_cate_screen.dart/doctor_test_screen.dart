@@ -229,166 +229,174 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                 .data!
                                 .reports!
                                 .isNotEmpty)
-                          ...model.getReportResponseModel!.data!.reports!
-                              .where(
-                                (w) => w.diagnosis!.toLowerCase().contains(
-                                  model.query.toLowerCase(),
-                                ),
-                              )
-                              .map(
-                                (o) => Column(
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              const BorderRadius.vertical(
-                                                top: Radius.circular(10),
-                                              ),
-                                          child: Image.network(
-                                            o.imageUrl ?? '',
-                                            height: 40.h,
-                                            width: 50.w,
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (
-                                                  context,
-                                                  error,
-                                                  stackTrace,
-                                                ) => Container(
-                                                  padding: EdgeInsets.all(16.w),
-                                                  decoration: BoxDecoration(
-                                                    color: AppColor.primary1
-                                                        .withOpacity(.7),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          14,
-                                                        ),
-                                                  ),
-                                                  child: SvgPicture.asset(
-                                                    AppImage.blood,
-                                                    height: 40.h,
-                                                    width: 50.w,
-                                                  ),
+                          if (model.query != '')
+                            ...model.getReportResponseModel!.data!.reports!
+                                .where(
+                                  (w) => w.diagnosis!.toLowerCase().contains(
+                                    model.query.toLowerCase(),
+                                  ),
+                                )
+                                .map(
+                                  (o) => Column(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.vertical(
+                                                  top: Radius.circular(10),
                                                 ),
-                                          ),
-                                        ),
-
-                                        SizedBox(width: 20.w),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextView(
-                                              text: o.diagnosis ?? "",
-                                              textStyle: GoogleFonts.gabarito(
-                                                color: AppColor.primary1,
-                                                fontSize: 18.20.sp,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                            child: Image.network(
+                                              o.imageUrl ?? '',
+                                              height: 40.h,
+                                              width: 50.w,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) => Container(
+                                                    padding: EdgeInsets.all(
+                                                      16.w,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      color: AppColor.primary1
+                                                          .withOpacity(.7),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            14,
+                                                          ),
+                                                    ),
+                                                    child: SvgPicture.asset(
+                                                      AppImage.blood,
+                                                      height: 40.h,
+                                                      width: 50.w,
+                                                    ),
+                                                  ),
                                             ),
-                                            SizedBox(height: 10.w),
-                                            SizedBox(
-                                              width: 240.w,
-                                              child: TextView(
-                                                text: o.summary ?? '',
+                                          ),
+
+                                          SizedBox(width: 20.w),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextView(
+                                                text: o.diagnosis ?? "",
                                                 textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.black
-                                                      .withOpacity(.7),
-                                                  fontSize: 15.20.sp,
+                                                  color: AppColor.primary1,
+                                                  fontSize: 18.20.sp,
                                                   fontWeight: FontWeight.w500,
                                                 ),
-                                                textOverflow:
-                                                    TextOverflow.ellipsis,
-                                                maxLines: 6,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-
-                                    Divider(color: AppColor.greylight),
-                                  ],
-                                ),
-                              )
-                        else
-                          ...model.getReportResponseModel!.data!.reports!.map(
-                            (o) => Column(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.vertical(
-                                        top: Radius.circular(10),
-                                      ),
-                                      child: Image.network(
-                                        o.imageUrl ?? '',
-                                        height: 40.h,
-                                        width: 50.w,
-                                        fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                                Container(
-                                                  padding: EdgeInsets.all(16.w),
-                                                  decoration: BoxDecoration(
-                                                    color: AppColor.primary1
-                                                        .withOpacity(.7),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          14,
-                                                        ),
-                                                  ),
-                                                  child: SvgPicture.asset(
-                                                    AppImage.blood,
-                                                    height: 40.h,
-                                                    width: 50.w,
-                                                  ),
+                                              SizedBox(height: 10.w),
+                                              SizedBox(
+                                                width: 240.w,
+                                                child: TextView(
+                                                  text: o.summary ?? '',
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color: AppColor.black
+                                                            .withOpacity(.7),
+                                                        fontSize: 15.20.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 6,
                                                 ),
-                                      ),
-                                    ),
-
-                                    SizedBox(width: 20.w),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextView(
-                                          text: o.diagnosis ?? "",
-                                          textStyle: GoogleFonts.gabarito(
-                                            color: AppColor.primary1,
-                                            fontSize: 18.20.sp,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10.w),
-                                        SizedBox(
-                                          width: 240.w,
-                                          child: TextView(
-                                            text: o.summary ?? '',
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.black.withOpacity(
-                                                .7,
                                               ),
-                                              fontSize: 15.20.sp,
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+
+                                      Divider(color: AppColor.greylight),
+                                    ],
+                                  ),
+                                )
+                          else
+                            ...model.getReportResponseModel!.data!.reports!.map(
+                              (o) => Column(
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                              top: Radius.circular(10),
+                                            ),
+                                        child: Image.network(
+                                          o.imageUrl ?? '',
+                                          height: 40.h,
+                                          width: 50.w,
+                                          fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (
+                                                context,
+                                                error,
+                                                stackTrace,
+                                              ) => Container(
+                                                padding: EdgeInsets.all(16.w),
+                                                decoration: BoxDecoration(
+                                                  color: AppColor.primary1
+                                                      .withOpacity(.7),
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
+                                                ),
+                                                child: SvgPicture.asset(
+                                                  AppImage.blood,
+                                                  height: 40.h,
+                                                  width: 50.w,
+                                                ),
+                                              ),
+                                        ),
+                                      ),
+
+                                      SizedBox(width: 20.w),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextView(
+                                            text: o.diagnosis ?? "",
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.primary1,
+                                              fontSize: 18.20.sp,
                                               fontWeight: FontWeight.w500,
                                             ),
-                                            textOverflow: TextOverflow.ellipsis,
-                                            maxLines: 6,
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                          SizedBox(height: 10.w),
+                                          SizedBox(
+                                            width: 240.w,
+                                            child: TextView(
+                                              text: o.summary ?? '',
+                                              textStyle: GoogleFonts.gabarito(
+                                                color: AppColor.black
+                                                    .withOpacity(.7),
+                                                fontSize: 15.20.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              textOverflow:
+                                                  TextOverflow.ellipsis,
+                                              maxLines: 6,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
 
-                                Divider(color: AppColor.greylight),
-                              ],
+                                  Divider(color: AppColor.greylight),
+                                ],
+                              ),
                             ),
-                          ),
                       ],
                     ),
                 SizedBox(height: 40.h),
