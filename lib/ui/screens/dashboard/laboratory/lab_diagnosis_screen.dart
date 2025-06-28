@@ -57,11 +57,9 @@ class _LaboratoryDiagnosisScreenState extends State<LaboratoryDiagnosisScreen> {
                     Expanded(
                       child: TextFormWidget(
                         label: 'Search for Diagnosis...',
-                        // hint: 'Email Address',
                         border: 10,
                         isFilled: true,
                         fillColor: AppColor.transparent,
-                        // controller: fullnameTextController,
                         prefixWidget: Padding(
                           padding: EdgeInsets.all(14.w),
                           child: SvgPicture.asset(
@@ -74,8 +72,6 @@ class _LaboratoryDiagnosisScreenState extends State<LaboratoryDiagnosisScreen> {
                           query = p0;
                           setState(() {});
                         },
-
-                        // validator: AppValidator.validateEmail(),
                       ),
                     ),
                     SizedBox(width: 2.w),
@@ -129,452 +125,489 @@ class _LaboratoryDiagnosisScreenState extends State<LaboratoryDiagnosisScreen> {
                 ),
                 SizedBox(height: 20.h),
 
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      if (model.getAllDiagnosisListResponseModel != null &&
-                          model
-                              .getAllDiagnosisListResponseModel!
-                              .getAllDiagnosisListResponseModelList!
-                              .isNotEmpty)
-                        if (query != '')
-                          ...model
-                              .getAllDiagnosisListResponseModel!
-                              .getAllDiagnosisListResponseModelList!
-                              .where(
-                                (o) => o.name!.toLowerCase().contains(
-                                  query.toLowerCase(),
-                                ),
-                              )
-                              .map(
-                                (i) => GestureDetector(
-                                  onTap:
-                                      () => Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder:
-                                              (context) =>
-                                                  LabOrderPatientDetailSceen(),
-                                        ),
-                                      ),
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 8.w,
-                                      horizontal: 12.w,
-                                    ),
-                                    margin: EdgeInsets.only(bottom: 14.w),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: AppColor.oneKindgrey,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                              width: 250.w,
-                                              child: TextView(
-                                                maxLines: 1,
-                                                textOverflow:
-                                                    TextOverflow.ellipsis,
-                                                text:
-                                                    'Diagnosis: ${i.name ?? ''}',
-                                                textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.darkindgrey,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                vertical: 2.w,
-                                                horizontal: 6.w,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: AppColor.primary1
-                                                    .withOpacity(.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(22),
-                                              ),
-                                              child: TextView(
-                                                text:
-                                                    i.status?.capitalize() ??
-                                                    '',
-                                                textStyle: GoogleFonts.gabarito(
-                                                  color: model.statusValueColor(
-                                                    i.status,
-                                                  ),
-                                                  fontSize: 12.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 4.h),
-                                        SizedBox(
-                                          width: 400.w,
-                                          child: TextView(
-                                            text: 'Detail: ${i.details ?? ''}',
-
-                                            maxLines: 5,
-                                            textOverflow: TextOverflow.ellipsis,
-
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.greyIt,
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w400,
-                                            ),
+                SizedBox(
+                  height: 550.h,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        if (model.getAllDiagnosisListResponseModel != null &&
+                            model
+                                .getAllDiagnosisListResponseModel!
+                                .getAllDiagnosisListResponseModelList!
+                                .isNotEmpty)
+                          if (query != '')
+                            ...model
+                                .getAllDiagnosisListResponseModel!
+                                .getAllDiagnosisListResponseModelList!
+                                .where(
+                                  (o) => o.name!.toLowerCase().contains(
+                                    query.toLowerCase(),
+                                  ),
+                                )
+                                .map(
+                                  (i) => GestureDetector(
+                                    onTap:
+                                        () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) =>
+                                                    LabOrderPatientDetailSceen(),
                                           ),
                                         ),
-                                        SizedBox(height: 6.h),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextView(
-                                              text:
-                                                  '${getCurrency()}${oCcy.format(double.parse('${i.price}'))}',
-                                              textStyle: TextStyle(
-                                                color: AppColor.darkindgrey,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w600,
+                                    child: Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 8.w,
+                                        horizontal: 12.w,
+                                      ),
+                                      margin: EdgeInsets.only(bottom: 14.w),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: AppColor.oneKindgrey,
+                                        ),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                width: 250.w,
+                                                child: TextView(
+                                                  maxLines: 1,
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis,
+                                                  text:
+                                                      'Diagnosis: ${i.name ?? ''}',
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color:
+                                                            AppColor
+                                                                .darkindgrey,
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                ),
                                               ),
-                                            ),
-                                            TextView(
+
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 2.w,
+                                                  horizontal: 6.w,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: AppColor.primary1
+                                                      .withOpacity(.2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(22),
+                                                ),
+                                                child: TextView(
+                                                  text:
+                                                      i.status?.capitalize() ??
+                                                      '',
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color: model
+                                                            .statusValueColor(
+                                                              i.status,
+                                                            ),
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 4.h),
+                                          SizedBox(
+                                            width: 400.w,
+                                            child: TextView(
                                               text:
-                                                  'Turnaround: ${i.turnaround ?? ''}',
+                                                  'Detail: ${i.details ?? ''}',
+
+                                              maxLines: 5,
+                                              textOverflow:
+                                                  TextOverflow.ellipsis,
+
                                               textStyle: GoogleFonts.gabarito(
                                                 color: AppColor.greyIt,
-                                                fontSize: 15.8.sp,
+                                                fontSize: 13.sp,
                                                 fontWeight: FontWeight.w400,
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                model
-                                                    .modalBottomSheetLabDiagnosis(
-                                                      context,
-                                                      update: true,
-                                                      id: i.id.toString(),
-                                                    );
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 4.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  border: Border.all(
-                                                    color: AppColor.grey,
-                                                  ),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.edit_square,
-                                                      color:
-                                                          AppColor.darkindgrey,
-                                                      size: 14.20.sp,
-                                                    ),
-                                                    SizedBox(width: 2.4.w),
-                                                    TextView(
-                                                      text: 'Edit',
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color:
-                                                                AppColor
-                                                                    .darkindgrey,
-                                                            fontSize: 14.8.sp,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap:
-                                                  () => model
-                                                      .deleteProductMedDialogBox(
-                                                        context,
-                                                        id: i.id.toString(),
-                                                      ),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 4.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  border: Border.all(
-                                                    color: AppColor.grey,
-                                                  ),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .delete_outline_rounded,
-                                                      color: AppColor.red,
-                                                      size: 14.20.sp,
-                                                    ),
-                                                    SizedBox(width: 2.4.w),
-                                                    TextView(
-                                                      text: 'Delete',
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color: AppColor.red,
-                                                            fontSize: 14.8.sp,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )
-                        else
-                          ...model
-                              .getAllDiagnosisListResponseModel!
-                              .getAllDiagnosisListResponseModelList!
-                              .map(
-                                (i) => GestureDetector(
-                                  onTap:
-                                      () => Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder:
-                                              (context) =>
-                                                  LabOrderPatientDetailSceen(),
-                                        ),
-                                      ),
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 8.w,
-                                      horizontal: 12.w,
-                                    ),
-                                    margin: EdgeInsets.only(bottom: 14.w),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: AppColor.oneKindgrey,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                              width: 250.w,
-                                              child: TextView(
-                                                maxLines: 1,
-                                                textOverflow:
-                                                    TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(height: 6.h),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextView(
                                                 text:
-                                                    'Diagnosis: ${i.name ?? ''}',
-                                                textStyle: GoogleFonts.gabarito(
+                                                    '${getCurrency()}${oCcy.format(double.parse('${i.price}'))}',
+                                                textStyle: TextStyle(
                                                   color: AppColor.darkindgrey,
                                                   fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w500,
+                                                  fontWeight: FontWeight.w600,
                                                 ),
                                               ),
-                                            ),
-
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                vertical: 2.w,
-                                                horizontal: 6.w,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: AppColor.primary1
-                                                    .withOpacity(.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(22),
-                                              ),
-                                              child: TextView(
+                                              TextView(
                                                 text:
-                                                    i.status?.capitalize() ??
-                                                    '',
+                                                    'Turnaround: ${i.turnaround ?? ''}',
                                                 textStyle: GoogleFonts.gabarito(
-                                                  color: model.statusValueColor(
-                                                    i.status,
-                                                  ),
-                                                  fontSize: 12.sp,
+                                                  color: AppColor.greyIt,
+                                                  fontSize: 15.8.sp,
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 4.h),
-                                        SizedBox(
-                                          width: 400.w,
-                                          child: TextView(
-                                            text: 'Detail: ${i.details ?? ''}',
-
-                                            maxLines: 5,
-                                            textOverflow: TextOverflow.ellipsis,
-
-                                            textStyle: GoogleFonts.gabarito(
-                                              color: AppColor.greyIt,
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w400,
-                                            ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10.w),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  model
+                                                      .modalBottomSheetLabDiagnosis(
+                                                        context,
+                                                        update: true,
+                                                        id: i.id.toString(),
+                                                      );
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 4.w,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          4,
+                                                        ),
+                                                    border: Border.all(
+                                                      color: AppColor.grey,
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.edit_square,
+                                                        color:
+                                                            AppColor
+                                                                .darkindgrey,
+                                                        size: 14.20.sp,
+                                                      ),
+                                                      SizedBox(width: 2.4.w),
+                                                      TextView(
+                                                        text: 'Edit',
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor
+                                                                      .darkindgrey,
+                                                              fontSize: 14.8.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap:
+                                                    () => model
+                                                        .deleteProductMedDialogBox(
+                                                          context,
+                                                          id: i.id.toString(),
+                                                        ),
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 4.w,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          4,
+                                                        ),
+                                                    border: Border.all(
+                                                      color: AppColor.grey,
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .delete_outline_rounded,
+                                                        color: AppColor.red,
+                                                        size: 14.20.sp,
+                                                      ),
+                                                      SizedBox(width: 2.4.w),
+                                                      TextView(
+                                                        text: 'Delete',
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor.red,
+                                                              fontSize: 14.8.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                          else
+                            ...model
+                                .getAllDiagnosisListResponseModel!
+                                .getAllDiagnosisListResponseModelList!
+                                .map(
+                                  (i) => GestureDetector(
+                                    onTap:
+                                        () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) =>
+                                                    LabOrderPatientDetailSceen(),
                                           ),
                                         ),
-                                        SizedBox(height: 6.h),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextView(
-                                              text:
-                                                  '${getCurrency()}${oCcy.format(double.parse('${i.price}'))}',
-                                              textStyle: TextStyle(
-                                                color: AppColor.darkindgrey,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w600,
+                                    child: Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 8.w,
+                                        horizontal: 12.w,
+                                      ),
+                                      margin: EdgeInsets.only(bottom: 14.w),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: AppColor.oneKindgrey,
+                                        ),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                width: 250.w,
+                                                child: TextView(
+                                                  maxLines: 1,
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis,
+                                                  text:
+                                                      'Diagnosis: ${i.name ?? ''}',
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color:
+                                                            AppColor
+                                                                .darkindgrey,
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                ),
                                               ),
-                                            ),
-                                            TextView(
+
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 2.w,
+                                                  horizontal: 6.w,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: AppColor.primary1
+                                                      .withOpacity(.2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(22),
+                                                ),
+                                                child: TextView(
+                                                  text:
+                                                      i.status?.capitalize() ??
+                                                      '',
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color: model
+                                                            .statusValueColor(
+                                                              i.status,
+                                                            ),
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 4.h),
+                                          SizedBox(
+                                            width: 400.w,
+                                            child: TextView(
                                               text:
-                                                  'Turnaround: ${i.turnaround ?? ''}',
+                                                  'Detail: ${i.details ?? ''}',
+
+                                              maxLines: 5,
+                                              textOverflow:
+                                                  TextOverflow.ellipsis,
+
                                               textStyle: GoogleFonts.gabarito(
                                                 color: AppColor.greyIt,
-                                                fontSize: 15.8.sp,
+                                                fontSize: 13.sp,
                                                 fontWeight: FontWeight.w400,
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                model
-                                                    .modalBottomSheetLabDiagnosis(
-                                                      context,
-                                                      update: true,
-                                                      id: i.id.toString(),
-                                                    );
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 4.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  border: Border.all(
-                                                    color: AppColor.grey,
-                                                  ),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.edit_square,
-                                                      color:
-                                                          AppColor.darkindgrey,
-                                                      size: 14.20.sp,
-                                                    ),
-                                                    SizedBox(width: 2.4.w),
-                                                    TextView(
-                                                      text: 'Edit',
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color:
-                                                                AppColor
-                                                                    .darkindgrey,
-                                                            fontSize: 14.8.sp,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                    ),
-                                                  ],
+                                          ),
+                                          SizedBox(height: 6.h),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextView(
+                                                text:
+                                                    '${getCurrency()}${oCcy.format(double.parse('${i.price}'))}',
+                                                textStyle: TextStyle(
+                                                  color: AppColor.darkindgrey,
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w600,
                                                 ),
                                               ),
-                                            ),
-                                            GestureDetector(
-                                              onTap:
-                                                  () => model
-                                                      .deleteProductMedDialogBox(
+                                              TextView(
+                                                text:
+                                                    'Turnaround: ${i.turnaround ?? ''}',
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.greyIt,
+                                                  fontSize: 15.8.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10.w),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  model
+                                                      .modalBottomSheetLabDiagnosis(
                                                         context,
+                                                        update: true,
                                                         id: i.id.toString(),
+                                                      );
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 4.w,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          4,
+                                                        ),
+                                                    border: Border.all(
+                                                      color: AppColor.grey,
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.edit_square,
+                                                        color:
+                                                            AppColor
+                                                                .darkindgrey,
+                                                        size: 14.20.sp,
                                                       ),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 4.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  border: Border.all(
-                                                    color: AppColor.grey,
+                                                      SizedBox(width: 2.4.w),
+                                                      TextView(
+                                                        text: 'Edit',
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor
+                                                                      .darkindgrey,
+                                                              fontSize: 14.8.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .delete_outline_rounded,
-                                                      color: AppColor.red,
-                                                      size: 14.20.sp,
+                                              ),
+                                              GestureDetector(
+                                                onTap:
+                                                    () => model
+                                                        .deleteProductMedDialogBox(
+                                                          context,
+                                                          id: i.id.toString(),
+                                                        ),
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 4.w,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          4,
+                                                        ),
+                                                    border: Border.all(
+                                                      color: AppColor.grey,
                                                     ),
-                                                    SizedBox(width: 2.4.w),
-                                                    TextView(
-                                                      text: 'Delete',
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color: AppColor.red,
-                                                            fontSize: 14.8.sp,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                    ),
-                                                  ],
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .delete_outline_rounded,
+                                                        color: AppColor.red,
+                                                        size: 14.20.sp,
+                                                      ),
+                                                      SizedBox(width: 2.4.w),
+                                                      TextView(
+                                                        text: 'Delete',
+                                                        textStyle:
+                                                            GoogleFonts.gabarito(
+                                                              color:
+                                                                  AppColor.red,
+                                                              fontSize: 14.8.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

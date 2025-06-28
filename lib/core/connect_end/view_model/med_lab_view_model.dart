@@ -17,6 +17,7 @@ import '../../../ui/app_assets/app_image.dart';
 import '../../../ui/app_assets/app_utils.dart';
 import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/app_assets/bank_codes.dart';
+import '../../../ui/app_assets/constant.dart';
 import '../../../ui/app_assets/image_picker.dart';
 import '../../../ui/widget/text_form_widget.dart';
 import '../../../ui/widget/text_widget.dart';
@@ -390,7 +391,6 @@ class LabTechViewModel extends BaseViewModel {
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -1676,6 +1676,213 @@ class LabTechViewModel extends BaseViewModel {
       );
     },
   );
+
+  void showPatientDialogBox(
+    context, {
+    GetLabTexhAllPatientsResponseModel? patients,
+  }) => showDialog(
+    context: context,
+    builder: (_) {
+      return ViewModelBuilder<LabTechViewModel>.reactive(
+        viewModelBuilder: () => LabTechViewModel(),
+        onViewModelReady: (model) {},
+        disposeViewModel: false,
+        builder: (_, LabTechViewModel model, __) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextView(
+                  text: 'Patient\'s Details',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.darkindgrey,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                patients?.user?.profileImage != null
+                    ? ClipOval(
+                      child: SizedBox.fromSize(
+                        size: const Size.fromRadius(28),
+                        child: Image.network(
+                          patients!.user!.profileImage!.contains('https')
+                              ? '${patients.user?.profileImage}'
+                              : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${patients.user?.profileImage}',
+                          fit: BoxFit.cover,
+                          errorBuilder:
+                              (context, error, stackTrace) =>
+                                  shimmerViewPharm(),
+                        ),
+                      ),
+                    )
+                    : Container(
+                      padding: EdgeInsets.all(28.w),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColor.oneKindgrey,
+                      ),
+                    ),
+              ],
+            ),
+            insetPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
+            content: SizedBox(
+              width: double.maxFinite,
+              height: 260.h,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextView(
+                          text:
+                              '${patients?.user?.firstName?.capitalize()} ${patients?.user?.lastName?.capitalize()}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text:
+                              'Gender: ${patients?.user?.gender?.capitalize() ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.greyIt,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text:
+                              'Age: ${calculateAge(patients?.user?.dob ?? '')}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.greyIt,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text: 'Email Address: ${patients?.user?.email ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.grey,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text:
+                              'Home Address: ${patients?.user?.address ?? ''} ${patients?.user?.city ?? ''}, ${patients?.user?.state ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text: 'Phone Number: ${patients?.user?.phone ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text: 'Summary: ${patients?.summary ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.black,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 10.w),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 2.w,
+                            horizontal: 6.w,
+                          ),
+                          decoration: BoxDecoration(
+                            color: model
+                                .statusValuePatientsColor(patients?.status)
+                                .withOpacity(.2),
+                            borderRadius: BorderRadius.circular(22),
+                          ),
+                          child: TextView(
+                            text: '${patients?.status?.capitalize()}',
+                            textStyle: GoogleFonts.gabarito(
+                              color: model.statusValuePatientsColor(
+                                patients?.status,
+                              ),
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            patients?.imageUrl ?? '',
+                            height: 140.h,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) =>
+                                    shimmerViewLabPatient(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                },
+                child: TextView(
+                  text: 'OK',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.green,
+                    fontSize: 16.20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+
+  int calculateAge(String dobString) {
+    // Parse the string to a DateTime
+    DateTime dob = DateTime.parse(dobString);
+
+    // Get today’s date
+    DateTime today = DateTime.now();
+
+    // Calculate age
+    int age = today.year - dob.year;
+
+    // Adjust if birthday hasn’t occurred yet this year
+    if (today.month < dob.month ||
+        (today.month == dob.month && today.day < dob.day)) {
+      age--;
+    }
+
+    return age;
+  }
 
   Color trnsType(status) {
     if (status.toLowerCase() == 'debit') {

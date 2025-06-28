@@ -32,7 +32,7 @@ class DoctorsAnalysisScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20.h),
+                SizedBox(height: 30.h),
                 TextView(
                   text: 'Patient\'s Appoinment Analysis',
                   textStyle: GoogleFonts.gabarito(
@@ -77,15 +77,17 @@ class DoctorsAnalysisScreen extends StatelessWidget {
                                                 .getDoctorsAnalysisModel!
                                                 .patientsVist!
                                                 .length) {
-                                          return Text(
-                                            model.returnMonthText(
+                                          return TextView(
+                                            text: model.returnMonthText(
                                               model
                                                   .getDoctorsAnalysisModel!
                                                   .patientsVist![index]
                                                   .month,
                                             ),
-                                            style: const TextStyle(
-                                              fontSize: 12,
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.black,
+                                              fontSize: 13.20.sp,
+                                              fontWeight: FontWeight.w300,
                                             ),
                                           );
                                         }
@@ -186,15 +188,17 @@ class DoctorsAnalysisScreen extends StatelessWidget {
                                                     .getDoctorsAnalysisModel!
                                                     .patientsVist!
                                                     .length) {
-                                          return Text(
-                                            model.returnMonthText(
+                                          return TextView(
+                                            text: model.returnMonthText(
                                               model
                                                   .getDoctorsAnalysisModel!
                                                   .patientsVist![index]
-                                                  .month!,
+                                                  .month,
                                             ),
-                                            style: const TextStyle(
-                                              fontSize: 12,
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.black,
+                                              fontSize: 13.20.sp,
+                                              fontWeight: FontWeight.w300,
                                             ),
                                           );
                                         }

@@ -109,6 +109,23 @@ shimmerViewPharm() => SizedBox(
   ),
 );
 
+shimmerViewLabPatient() => SizedBox(
+  width: double.infinity,
+  height: 120.0,
+  child: Shimmer.fromColors(
+    baseColor: AppColor.friendlyPrimary,
+    highlightColor: AppColor.primary1,
+    child: Container(
+      height: 180.h,
+      width: 80.w,
+      decoration: BoxDecoration(
+        color: AppColor.white,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+    ),
+  ),
+);
+
 shimmerVieRound() => Shimmer.fromColors(
   baseColor: AppColor.friendlyPrimary,
   highlightColor: AppColor.primary1,

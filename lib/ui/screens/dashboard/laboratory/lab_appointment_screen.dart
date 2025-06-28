@@ -21,8 +21,6 @@ class LaboratoryPatientScreen extends StatefulWidget {
 }
 
 class _LaboratoryPatientScreenState extends State<LaboratoryPatientScreen> {
-  String tab = 'All';
-
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
@@ -97,100 +95,112 @@ class _LaboratoryPatientScreenState extends State<LaboratoryPatientScreen> {
                                       ),
                                 )
                                 .map(
-                                  (e) => Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 8.w,
-                                      horizontal: 8.w,
-                                    ),
-                                    margin: EdgeInsets.only(bottom: 14.w),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: AppColor.oneKindgrey,
+                                  (e) => GestureDetector(
+                                    onTap:
+                                        () => model.showPatientDialogBox(
+                                          context,
+                                          patients: e,
+                                        ),
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 8.w,
+                                        horizontal: 8.w,
                                       ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        e.user?.profileImage != null
-                                            ? ClipOval(
-                                              child: SizedBox.fromSize(
-                                                size: const Size.fromRadius(24),
-                                                child: Image.network(
-                                                  e.user!.profileImage!
-                                                          .contains('https')
-                                                      ? '${e.user?.profileImage}'
-                                                      : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${e.user?.profileImage}',
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder:
-                                                      (
-                                                        context,
-                                                        error,
-                                                        stackTrace,
-                                                      ) => shimmerViewPharm(),
+                                      margin: EdgeInsets.only(bottom: 14.w),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: AppColor.oneKindgrey,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          e.user?.profileImage != null
+                                              ? ClipOval(
+                                                child: SizedBox.fromSize(
+                                                  size: const Size.fromRadius(
+                                                    24,
+                                                  ),
+                                                  child: Image.network(
+                                                    e.user!.profileImage!
+                                                            .contains('https')
+                                                        ? '${e.user?.profileImage}'
+                                                        : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${e.user?.profileImage}',
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) => shimmerViewPharm(),
+                                                  ),
+                                                ),
+                                              )
+                                              : Container(
+                                                padding: EdgeInsets.all(28.8.w),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: AppColor.oneKindgrey,
                                                 ),
                                               ),
-                                            )
-                                            : Container(
-                                              padding: EdgeInsets.all(28.8.w),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: AppColor.oneKindgrey,
-                                              ),
-                                            ),
-                                        SizedBox(width: 20.w),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextView(
-                                              text:
-                                                  '${e.user?.firstName?.capitalize()} ${e.user?.lastName?.capitalize()}',
-                                              textStyle: GoogleFonts.gabarito(
-                                                color: AppColor.darkindgrey,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            SizedBox(height: 4.w),
-                                            TextView(
-                                              text:
-                                                  'Gender: ${e.user?.gender?.capitalize() ?? ''}',
-                                              textStyle: GoogleFonts.gabarito(
-                                                color: AppColor.greyIt,
-                                                fontSize: 13.sp,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            SizedBox(height: 10.w),
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                vertical: 2.w,
-                                                horizontal: 6.w,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: model
-                                                    .statusValuePatientsColor(
-                                                      e.status,
-                                                    )
-                                                    .withOpacity(.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(22),
-                                              ),
-                                              child: TextView(
+                                          SizedBox(width: 20.w),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextView(
                                                 text:
-                                                    '${e.status?.capitalize()}',
+                                                    '${e.user?.firstName?.capitalize()} ${e.user?.lastName?.capitalize()}',
                                                 textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.primary1,
-                                                  fontSize: 12.sp,
+                                                  color: AppColor.darkindgrey,
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              SizedBox(height: 4.w),
+                                              TextView(
+                                                text:
+                                                    'Gender: ${e.user?.gender?.capitalize() ?? ''}',
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.greyIt,
+                                                  fontSize: 13.sp,
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                              SizedBox(height: 10.w),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 2.w,
+                                                  horizontal: 6.w,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: model
+                                                      .statusValuePatientsColor(
+                                                        e.status,
+                                                      )
+                                                      .withOpacity(.2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(22),
+                                                ),
+                                                child: TextView(
+                                                  text:
+                                                      '${e.status?.capitalize()}',
+                                                  textStyle: GoogleFonts.gabarito(
+                                                    color: model
+                                                        .statusValuePatientsColor(
+                                                          e.status,
+                                                        ),
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 )
@@ -199,100 +209,112 @@ class _LaboratoryPatientScreenState extends State<LaboratoryPatientScreen> {
                                 .getLabTechAllPatientsResponseModelList!
                                 .getLabTexhAllPatientsResponseModelList!
                                 .map(
-                                  (e) => Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 8.w,
-                                      horizontal: 8.w,
-                                    ),
-                                    margin: EdgeInsets.only(bottom: 14.w),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: AppColor.oneKindgrey,
+                                  (e) => GestureDetector(
+                                    onTap:
+                                        () => model.showPatientDialogBox(
+                                          context,
+                                          patients: e,
+                                        ),
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 8.w,
+                                        horizontal: 8.w,
                                       ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        e.user?.profileImage != null
-                                            ? ClipOval(
-                                              child: SizedBox.fromSize(
-                                                size: const Size.fromRadius(24),
-                                                child: Image.network(
-                                                  e.user!.profileImage!
-                                                          .contains('https')
-                                                      ? '${e.user?.profileImage}'
-                                                      : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${e.user?.profileImage}',
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder:
-                                                      (
-                                                        context,
-                                                        error,
-                                                        stackTrace,
-                                                      ) => shimmerViewPharm(),
+                                      margin: EdgeInsets.only(bottom: 14.w),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: AppColor.oneKindgrey,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          e.user?.profileImage != null
+                                              ? ClipOval(
+                                                child: SizedBox.fromSize(
+                                                  size: const Size.fromRadius(
+                                                    24,
+                                                  ),
+                                                  child: Image.network(
+                                                    e.user!.profileImage!
+                                                            .contains('https')
+                                                        ? '${e.user?.profileImage}'
+                                                        : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${e.user?.profileImage}',
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) => shimmerViewPharm(),
+                                                  ),
+                                                ),
+                                              )
+                                              : Container(
+                                                padding: EdgeInsets.all(28.8.w),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: AppColor.oneKindgrey,
                                                 ),
                                               ),
-                                            )
-                                            : Container(
-                                              padding: EdgeInsets.all(28.8.w),
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: AppColor.oneKindgrey,
-                                              ),
-                                            ),
-                                        SizedBox(width: 20.w),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextView(
-                                              text:
-                                                  '${e.user?.firstName?.capitalize()} ${e.user?.lastName?.capitalize()}',
-                                              textStyle: GoogleFonts.gabarito(
-                                                color: AppColor.darkindgrey,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            SizedBox(height: 4.w),
-                                            TextView(
-                                              text:
-                                                  'Gender: ${e.user?.gender?.capitalize() ?? ''}',
-                                              textStyle: GoogleFonts.gabarito(
-                                                color: AppColor.greyIt,
-                                                fontSize: 13.sp,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            SizedBox(height: 10.w),
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                vertical: 2.w,
-                                                horizontal: 6.w,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: model
-                                                    .statusValuePatientsColor(
-                                                      e.status,
-                                                    )
-                                                    .withOpacity(.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(22),
-                                              ),
-                                              child: TextView(
+                                          SizedBox(width: 20.w),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextView(
                                                 text:
-                                                    '${e.status?.capitalize()}',
+                                                    '${e.user?.firstName?.capitalize()} ${e.user?.lastName?.capitalize()}',
                                                 textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.primary1,
-                                                  fontSize: 12.sp,
+                                                  color: AppColor.darkindgrey,
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              SizedBox(height: 4.w),
+                                              TextView(
+                                                text:
+                                                    'Gender: ${e.user?.gender?.capitalize() ?? ''}',
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.greyIt,
+                                                  fontSize: 13.sp,
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                              SizedBox(height: 10.w),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 2.w,
+                                                  horizontal: 6.w,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: model
+                                                      .statusValuePatientsColor(
+                                                        e.status,
+                                                      )
+                                                      .withOpacity(.2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(22),
+                                                ),
+                                                child: TextView(
+                                                  text:
+                                                      '${e.status?.capitalize()}',
+                                                  textStyle: GoogleFonts.gabarito(
+                                                    color: model
+                                                        .statusValuePatientsColor(
+                                                          e.status,
+                                                        ),
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
