@@ -378,13 +378,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(10),
-                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+
                                   child: Image.network(
                                     o.imageUrl ?? '',
-                                    height: 40.h,
-                                    width: 50.w,
+                                    height: 70.h,
+                                    width: 70.w,
                                     fit: BoxFit.cover,
                                     errorBuilder:
                                         (context, error, stackTrace) =>
