@@ -321,7 +321,7 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 200,
+                    width: 160,
                     child: TextView(
                       text:
                           '${appointment?.user?.firstName?.capitalize() ?? ''} ${appointment?.user?.lastName?.capitalize() ?? ''}',

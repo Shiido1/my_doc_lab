@@ -111,7 +111,7 @@ class PrescriptionScreen extends StatelessWidget {
                 if (model.isLoading)
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: isTablet ? 630 : 510,
+                      maxHeight: isTablet ? 630 : 460,
                     ),
                     child: Container(
                       width: double.infinity,
@@ -140,7 +140,7 @@ class PrescriptionScreen extends StatelessWidget {
                 else
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: isTablet ? 630 : 510,
+                      maxHeight: isTablet ? 630 : 460,
                     ),
                     child: Container(
                       width: double.infinity,

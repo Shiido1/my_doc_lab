@@ -6,13 +6,12 @@ import 'package:my_doc_lab/core/core_folder/manager/shared_preference.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/results/results_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/user_prescription/user_prescription_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/wallet_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
-
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../authentication/edit_profile_screen.dart';
@@ -156,7 +155,7 @@ class MoreSettingsScreen extends StatelessWidget {
                   onTap:
                       () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ResultsScreen(),
+                          builder: (context) => DoctorTestScreen(tap: false),
                         ),
                       ),
                 ),
