@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/laboratory/lab_appointment_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/laboratory/lab_patients_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/lab_settings/lab_settings_screen.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
-import 'laboratory/lab_order_screen.dart';
+import 'laboratory/lab_report_screen.dart';
 import 'home/laboratory_home_screen.dart';
 
 // ignore: must_be_immutable
@@ -25,7 +25,7 @@ class _LaboratoryDashboardState extends State<LaboratoryDashboard> {
   final List<Widget> _body = [
     LaboratoryHomeScreen(),
     LaboratoryPatientScreen(),
-    LaboratoryOrderScreen(),
+    LaboratoryReportScreen(),
     LabSettingsScreen(),
   ];
 

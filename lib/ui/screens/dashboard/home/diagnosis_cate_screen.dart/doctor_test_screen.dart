@@ -247,7 +247,6 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                             borderRadius: BorderRadius.circular(
                                               10,
                                             ),
-
                                             child: Image.network(
                                               o.imageUrl ?? '',
                                               height: 70.h,
@@ -329,7 +328,6 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-
                                         child: Image.network(
                                           o.imageUrl ?? '',
                                           height: 70.h,

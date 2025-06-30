@@ -23,13 +23,11 @@ class LaboratoryHomeScreen extends StatefulWidget {
 class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return ViewModelBuilder<LabTechViewModel>.reactive(
       viewModelBuilder: () => locator<LabTechViewModel>(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getLabTechDetail(context);
-          model.getChatIndex();
           model.getLabTechStats();
           model.getAppointmentList();
         });
@@ -616,184 +614,185 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextView(
-                      text: 'Appointment Request',
-                      textAlign: TextAlign.start,
-                      textStyle: GoogleFonts.gabarito(
-                        color: AppColor.darkindgrey,
-                        fontSize: 16.30.sp,
-                        letterSpacing: -1,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        TextView(
-                          text: 'View all',
-                          textAlign: TextAlign.start,
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.darkindgrey,
-                            fontSize: 12.30.sp,
-                            letterSpacing: -1,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        // SizedBox(width: 8.0.w),
-                        Icon(
-                          Icons.keyboard_arrow_right_rounded,
-                          size: 16.sp,
-                          color: AppColor.darkindgrey,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
 
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.w,
-                    horizontal: 16.80.w,
-                  ),
-                  margin: EdgeInsets.only(right: 10.w),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColor.primary1.withOpacity(.15),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextView(
-                            text: 'Patient Name',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.primary1,
-                              fontSize: 12.30.sp,
-                              letterSpacing: -1,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          TextView(
-                            text: 'Dates',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.primary1,
-                              fontSize: 12.30.sp,
-                              letterSpacing: -1,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          TextView(
-                            text: 'Time',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.primary1,
-                              fontSize: 12.30.sp,
-                              letterSpacing: -1,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          TextView(
-                            text: 'Action',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.primary1,
-                              fontSize: 12.30.sp,
-                              letterSpacing: -1,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                      ...[1, 2, 3, 4, 5].map(
-                        (o) => Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     TextView(
+                //       text: 'Appointment Request',
+                //       textAlign: TextAlign.start,
+                //       textStyle: GoogleFonts.gabarito(
+                //         color: AppColor.darkindgrey,
+                //         fontSize: 16.30.sp,
+                //         letterSpacing: -1,
+                //         fontWeight: FontWeight.w700,
+                //       ),
+                //     ),
+                //     Row(
+                //       children: [
+                //         TextView(
+                //           text: 'View all',
+                //           textAlign: TextAlign.start,
+                //           textStyle: GoogleFonts.gabarito(
+                //             color: AppColor.darkindgrey,
+                //             fontSize: 12.30.sp,
+                //             letterSpacing: -1,
+                //             fontWeight: FontWeight.w400,
+                //           ),
+                //         ),
+                //         // SizedBox(width: 8.0.w),
+                //         Icon(
+                //           Icons.keyboard_arrow_right_rounded,
+                //           size: 16.sp,
+                //           color: AppColor.darkindgrey,
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(height: 20.h),
 
-                          children: [
-                            SizedBox(
-                              width: isTablet ? 200 : 100,
-                              child: TextView(
-                                text: 'Daniel Woods',
-                                textAlign: TextAlign.start,
-                                textOverflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.primary1,
-                                  fontSize: 12.30.sp,
-                                  letterSpacing: -1,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 80.w,
-                              child: TextView(
-                                text: '12 Dec, 2025',
-                                textAlign: TextAlign.start,
-                                textOverflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.primary1,
-                                  fontSize: 12.30.sp,
-                                  letterSpacing: -1,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 50.w,
-                              child: TextView(
-                                text: '10:00 AM',
-                                textAlign: TextAlign.start,
+                // Container(
+                //   padding: EdgeInsets.symmetric(
+                //     vertical: 16.w,
+                //     horizontal: 16.80.w,
+                //   ),
+                //   margin: EdgeInsets.only(right: 10.w),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(10),
+                //     color: AppColor.primary1.withOpacity(.15),
+                //   ),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                //           TextView(
+                //             text: 'Patient Name',
+                //             textStyle: GoogleFonts.gabarito(
+                //               color: AppColor.primary1,
+                //               fontSize: 12.30.sp,
+                //               letterSpacing: -1,
+                //               fontWeight: FontWeight.w700,
+                //             ),
+                //           ),
+                //           TextView(
+                //             text: 'Dates',
+                //             textStyle: GoogleFonts.gabarito(
+                //               color: AppColor.primary1,
+                //               fontSize: 12.30.sp,
+                //               letterSpacing: -1,
+                //               fontWeight: FontWeight.w700,
+                //             ),
+                //           ),
+                //           TextView(
+                //             text: 'Time',
+                //             textStyle: GoogleFonts.gabarito(
+                //               color: AppColor.primary1,
+                //               fontSize: 12.30.sp,
+                //               letterSpacing: -1,
+                //               fontWeight: FontWeight.w700,
+                //             ),
+                //           ),
+                //           TextView(
+                //             text: 'Action',
+                //             textStyle: GoogleFonts.gabarito(
+                //               color: AppColor.primary1,
+                //               fontSize: 12.30.sp,
+                //               letterSpacing: -1,
+                //               fontWeight: FontWeight.w700,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //       ...[1, 2, 3, 4, 5].map(
+                //         (o) => Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                                textOverflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                textStyle: GoogleFonts.gabarito(
-                                  color: AppColor.primary1,
-                                  fontSize: 12.30.sp,
-                                  letterSpacing: -1,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
+                //           children: [
+                //             SizedBox(
+                //               width: isTablet ? 200 : 100,
+                //               child: TextView(
+                //                 text: 'Daniel Woods',
+                //                 textAlign: TextAlign.start,
+                //                 textOverflow: TextOverflow.ellipsis,
+                //                 maxLines: 1,
+                //                 textStyle: GoogleFonts.gabarito(
+                //                   color: AppColor.primary1,
+                //                   fontSize: 12.30.sp,
+                //                   letterSpacing: -1,
+                //                   fontWeight: FontWeight.w400,
+                //                 ),
+                //               ),
+                //             ),
+                //             SizedBox(
+                //               width: 80.w,
+                //               child: TextView(
+                //                 text: '12 Dec, 2025',
+                //                 textAlign: TextAlign.start,
+                //                 textOverflow: TextOverflow.ellipsis,
+                //                 maxLines: 1,
+                //                 textStyle: GoogleFonts.gabarito(
+                //                   color: AppColor.primary1,
+                //                   fontSize: 12.30.sp,
+                //                   letterSpacing: -1,
+                //                   fontWeight: FontWeight.w400,
+                //                 ),
+                //               ),
+                //             ),
+                //             SizedBox(
+                //               width: 50.w,
+                //               child: TextView(
+                //                 text: '10:00 AM',
+                //                 textAlign: TextAlign.start,
 
-                            SizedBox(width: 4.0.w),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                SizedBox(
-                                  width: 20.w,
-                                  child: Checkbox(
-                                    value: true,
-                                    onChanged: (isChecked) {
-                                      // setState(() {
-                                      //   if (isChecked!) {
-                                      //     selectedOptions.add('Blood Sugar');
-                                      //   } else {
-                                      //     selectedOptions.remove('Blood Sugar');
-                                      //   }
-                                      // });
-                                    },
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.cancel_outlined,
-                                    color: AppColor.fineRed,
-                                    size: 20.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                //                 textOverflow: TextOverflow.ellipsis,
+                //                 maxLines: 1,
+                //                 textStyle: GoogleFonts.gabarito(
+                //                   color: AppColor.primary1,
+                //                   fontSize: 12.30.sp,
+                //                   letterSpacing: -1,
+                //                   fontWeight: FontWeight.w400,
+                //                 ),
+                //               ),
+                //             ),
+
+                //             SizedBox(width: 4.0.w),
+                //             Row(
+                //               mainAxisAlignment: MainAxisAlignment.end,
+                //               children: [
+                //                 SizedBox(
+                //                   width: 20.w,
+                //                   child: Checkbox(
+                //                     value: true,
+                //                     onChanged: (isChecked) {
+                //                       // setState(() {
+                //                       //   if (isChecked!) {
+                //                       //     selectedOptions.add('Blood Sugar');
+                //                       //   } else {
+                //                       //     selectedOptions.remove('Blood Sugar');
+                //                       //   }
+                //                       // });
+                //                     },
+                //                   ),
+                //                 ),
+                //                 IconButton(
+                //                   onPressed: () {},
+                //                   icon: Icon(
+                //                     Icons.cancel_outlined,
+                //                     color: AppColor.fineRed,
+                //                     size: 20.sp,
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),

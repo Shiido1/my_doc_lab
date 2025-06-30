@@ -1,10 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:stacked/stacked.dart';
-
 import '../../../../core/connect_end/view_model/med_lab_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
@@ -150,13 +151,23 @@ class _LaboratoryPatientScreenState extends State<LaboratoryPatientScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              TextView(
-                                                text:
-                                                    '${e.user?.firstName?.capitalize()} ${e.user?.lastName?.capitalize()}',
-                                                textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.darkindgrey,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w500,
+                                              SizedBox(
+                                                width: 280.w,
+                                                child: TextView(
+                                                  text:
+                                                      '${e.user?.firstName?.capitalize()} ${e.user?.lastName?.capitalize()}',
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color:
+                                                            AppColor
+                                                                .darkindgrey,
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                  maxLines: 1,
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
                                               SizedBox(height: 4.w),
@@ -170,32 +181,78 @@ class _LaboratoryPatientScreenState extends State<LaboratoryPatientScreen> {
                                                 ),
                                               ),
                                               SizedBox(height: 10.w),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  vertical: 2.w,
-                                                  horizontal: 6.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: model
-                                                      .statusValuePatientsColor(
-                                                        e.status,
-                                                      )
-                                                      .withOpacity(.2),
-                                                  borderRadius:
-                                                      BorderRadius.circular(22),
-                                                ),
-                                                child: TextView(
-                                                  text:
-                                                      '${e.status?.capitalize()}',
-                                                  textStyle: GoogleFonts.gabarito(
-                                                    color: model
-                                                        .statusValuePatientsColor(
-                                                          e.status,
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                          vertical: 2.w,
+                                                          horizontal: 6.w,
                                                         ),
-                                                    fontSize: 12.sp,
-                                                    fontWeight: FontWeight.w400,
+                                                    decoration: BoxDecoration(
+                                                      color: model
+                                                          .statusValuePatientsColor(
+                                                            e.status,
+                                                          )
+                                                          .withOpacity(.2),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            6.2,
+                                                          ),
+                                                    ),
+                                                    child: TextView(
+                                                      text:
+                                                          '${e.status?.capitalize()}',
+                                                      textStyle:
+                                                          GoogleFonts.gabarito(
+                                                            color: model
+                                                                .statusValuePatientsColor(
+                                                                  e.status,
+                                                                ),
+                                                            fontSize: 12.sp,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
+                                                  SizedBox(width: 104.w),
+
+                                                  GestureDetector(
+                                                    onTap:
+                                                        () => model
+                                                            .modalBottomSheetReport(
+                                                              context,
+                                                              report: e,
+                                                            ),
+                                                    child: Container(
+                                                      width: 90.w,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                            horizontal: 4.w,
+                                                            vertical: 4.w,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              6.r,
+                                                            ),
+                                                        color: AppColor.fineRed
+                                                            .withOpacity(.6),
+                                                      ),
+                                                      child: TextView(
+                                                        text: 'Add Report',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        textStyle: TextStyle(
+                                                          color: AppColor.white,
+                                                          fontSize: 12.20.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
@@ -228,8 +285,8 @@ class _LaboratoryPatientScreenState extends State<LaboratoryPatientScreen> {
                                         ),
                                       ),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           e.user?.profileImage != null
                                               ? ClipOval(
@@ -264,13 +321,23 @@ class _LaboratoryPatientScreenState extends State<LaboratoryPatientScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              TextView(
-                                                text:
-                                                    '${e.user?.firstName?.capitalize()} ${e.user?.lastName?.capitalize()}',
-                                                textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.darkindgrey,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w500,
+                                              SizedBox(
+                                                width: 240.w,
+                                                child: TextView(
+                                                  text:
+                                                      '${e.user?.firstName?.capitalize()} ${e.user?.lastName?.capitalize()}',
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color:
+                                                            AppColor
+                                                                .darkindgrey,
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                  maxLines: 1,
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
                                               SizedBox(height: 4.w),
@@ -284,32 +351,87 @@ class _LaboratoryPatientScreenState extends State<LaboratoryPatientScreen> {
                                                 ),
                                               ),
                                               SizedBox(height: 10.w),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  vertical: 2.w,
-                                                  horizontal: 6.w,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: model
-                                                      .statusValuePatientsColor(
-                                                        e.status,
-                                                      )
-                                                      .withOpacity(.2),
-                                                  borderRadius:
-                                                      BorderRadius.circular(22),
-                                                ),
-                                                child: TextView(
-                                                  text:
-                                                      '${e.status?.capitalize()}',
-                                                  textStyle: GoogleFonts.gabarito(
-                                                    color: model
-                                                        .statusValuePatientsColor(
-                                                          e.status,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                          vertical: 2.w,
+                                                          horizontal: 6.w,
                                                         ),
-                                                    fontSize: 12.sp,
-                                                    fontWeight: FontWeight.w400,
+                                                    decoration: BoxDecoration(
+                                                      color: model
+                                                          .statusValuePatientsColor(
+                                                            e.status,
+                                                          )
+                                                          .withOpacity(.2),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            6.2,
+                                                          ),
+                                                    ),
+                                                    child: TextView(
+                                                      text:
+                                                          '${e.status?.capitalize()}',
+                                                      textStyle:
+                                                          GoogleFonts.gabarito(
+                                                            color: model
+                                                                .statusValuePatientsColor(
+                                                                  e.status,
+                                                                ),
+                                                            fontSize: 12.sp,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
+                                                  SizedBox(
+                                                    width:
+                                                        e.status?.toLowerCase() ==
+                                                                'abnormal'
+                                                            ? 104.w
+                                                            : 116.w,
+                                                  ),
+
+                                                  GestureDetector(
+                                                    onTap:
+                                                        () => model
+                                                            .modalBottomSheetReport(
+                                                              context,
+                                                              report: e,
+                                                            ),
+                                                    child: Container(
+                                                      width: 90.w,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                            horizontal: 4.w,
+                                                            vertical: 4.w,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              6.r,
+                                                            ),
+                                                        color: AppColor.fineRed
+                                                            .withOpacity(.6),
+                                                      ),
+                                                      child: TextView(
+                                                        text: 'Add Report',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        textStyle: TextStyle(
+                                                          color: AppColor.white,
+                                                          fontSize: 12.20.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),

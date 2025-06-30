@@ -8,6 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:my_doc_lab/core/connect_end/model/get_lab_tech_report_response_model/datum.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 
@@ -74,6 +75,7 @@ class LabTechViewModel extends BaseViewModel {
   DateTime now = DateTime.now();
   final debouncer = Debouncer();
   String query = '';
+  String queryReport = '';
   String queryBank = '';
   String queryAppointment = '';
 
@@ -182,6 +184,10 @@ class LabTechViewModel extends BaseViewModel {
 
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
+
+  TextEditingController statusReportController = TextEditingController();
+  TextEditingController summaryReportController = TextEditingController();
+  List<String> statusList = ['Normal', 'Critical', 'Abnormal'];
 
   bool isOnTogglePassword() {
     _isTogglePassword = !_isTogglePassword;
@@ -339,7 +345,6 @@ class LabTechViewModel extends BaseViewModel {
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -398,15 +403,20 @@ class LabTechViewModel extends BaseViewModel {
   Future<void> addReport(context, {AddReportEntityModel? report}) async {
     try {
       _isLoading = true;
-      await runBusyFuture(
+      var v = await runBusyFuture(
         repositoryImply.addReport(report!),
         throwException: true,
       );
       _isLoading = false;
+      Navigator.pop(context);
+      Future.delayed(Duration(seconds: 2), () {
+        AppUtils.snackbar(context, message: v['message']);
+      });
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -418,8 +428,30 @@ class LabTechViewModel extends BaseViewModel {
   }) async {
     try {
       _isLoading = true;
-      await runBusyFuture(
+      var v = await runBusyFuture(
         repositoryImply.updateReport(report: report, id: id),
+        throwException: true,
+      );
+      _isLoading = false;
+      Navigator.pop(context);
+      Future.delayed(Duration(seconds: 2), () async {
+        await AppUtils.snackbar(context, message: v['message']);
+        getLabTechReport();
+      });
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getLabTechReport() async {
+    try {
+      _isLoading = true;
+      _getLabTechReportResponseModel = await runBusyFuture(
+        repositoryImply.getLabTechReport(),
         throwException: true,
       );
       _isLoading = false;
@@ -431,9 +463,8 @@ class LabTechViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> getLabTechReport() async {
+  Future<void> getLabTechReportReload() async {
     try {
-      _isLoading = true;
       _getLabTechReportResponseModel = await runBusyFuture(
         repositoryImply.getLabTechReport(),
         throwException: true,
@@ -514,15 +545,19 @@ class LabTechViewModel extends BaseViewModel {
   Future<void> deleteLabTechDetailReport(context, {String? id}) async {
     try {
       _isLoading = true;
-      await runBusyFuture(
+      var v = await runBusyFuture(
         repositoryImply.deleteLabTechDetailReport(id!),
         throwException: true,
       );
       _isLoading = false;
+      Future.delayed(Duration(seconds: 2), () {
+        AppUtils.snackbar(context, message: v['message']);
+      });
+      Navigator.pop(context);
     } catch (e) {
       _isLoading = false;
       logger.d(e);
-      // AppUtils.snackbar(context, message: e.toString(), error: true);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
     }
     notifyListeners();
   }
@@ -1606,6 +1641,380 @@ class LabTechViewModel extends BaseViewModel {
     );
   }
 
+  void modalBottomSheetReport(
+    context, {
+    GetLabTexhAllPatientsResponseModel? report,
+    bool onEdit = false,
+    Datum? dtReport,
+    String? reportId,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+        return ViewModelBuilder<LabTechViewModel>.reactive(
+          viewModelBuilder: () => LabTechViewModel(),
+          onViewModelReady: (model) {
+            if (onEdit == true) {
+              statusReportController.text = dtReport?.status ?? '';
+            }
+          },
+          onDispose: (viewModel) {
+            statusReportController.clear();
+            viewModel.image == null;
+            summaryReportController.clear();
+          },
+          builder: (_, LabTechViewModel model, __) {
+            return StatefulBuilder(
+              builder: (_, StateSetter setState) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: DraggableScrollableSheet(
+                    expand: false,
+                    initialChildSize: 0.5, // 50% of screen height
+                    minChildSize: 0.3, // Can be dragged to 30% of screen height
+                    maxChildSize: 0.7, // Can be dragged to 90% of screen height
+                    builder: (__, scrollController) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 6.0.h),
+                            Center(
+                              child: Container(
+                                width: 30.w,
+                                height: 3.5.h,
+                                margin: EdgeInsets.only(top: 10.w),
+                                decoration: BoxDecoration(
+                                  color: AppColor.grey2.withOpacity(.4),
+                                  borderRadius: BorderRadius.circular(22),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 16.0.h),
+                            TextView(
+                              text: onEdit ? 'Edit Report' : 'Add Report',
+                              textStyle: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            TextFormWidget(
+                              label: 'Status',
+                              labelStyle: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.primary1,
+                              ),
+                              border: 10,
+                              isFilled: true,
+                              readOnly: true,
+                              fillColor: AppColor.white,
+                              controller: statusReportController,
+                              validator: AppValidator.validateString(),
+                              suffixWidget: PopupMenuButton<String>(
+                                onSelected: (String item) {
+                                  // Handle the selected menu item
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return [
+                                    ...statusList.map(
+                                      (s) => PopupMenuItem<String>(
+                                        value: s,
+                                        child: TextView(
+                                          text: s,
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.darkindgrey,
+                                            fontSize: 15.40.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          statusReportController.text =
+                                              s.toLowerCase();
+                                          model.notifyListeners();
+                                        },
+                                      ),
+                                    ),
+                                  ];
+                                },
+                                child: Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                  size: 20.sp,
+                                  color: AppColor.darkindgrey,
+                                ), // Optional: Customize the button's icon
+                              ),
+                            ),
+
+                            SizedBox(height: 20.h),
+                            model.image != null
+                                ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.file(
+                                    model.image!,
+                                    width: double.infinity,
+                                    height: 130,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                                : dtReport!.imageUrl!.contains(
+                                  'https://res.cloudinary.com',
+                                )
+                                ? GestureDetector(
+                                  onTap: () => model.pickImage(context),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      dtReport.imageUrl!,
+                                      width: double.infinity,
+                                      height: 130,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                                : TextFormWidget(
+                                  label: 'Select Image',
+                                  labelStyle: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColor.primary1,
+                                  ),
+                                  border: 10,
+                                  isFilled: true,
+                                  readOnly: true,
+                                  fillColor: AppColor.white,
+                                  suffixWidget: IconButton(
+                                    onPressed: () => model.pickImage(context),
+                                    icon: Icon(
+                                      Icons.arrow_drop_down_sharp,
+                                      size: 20.sp,
+                                      color: AppColor.darkindgrey,
+                                    ),
+                                  ),
+                                ),
+
+                            SizedBox(height: 20.h),
+                            TextFormWidget(
+                              label: 'Summary',
+                              labelStyle: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.primary1,
+                              ),
+                              border: 10,
+                              isFilled: true,
+                              keyboardType: TextInputType.multiline,
+                              alignLabelWithHint: true,
+                              maxline: 4,
+                              fillColor: AppColor.white,
+                              controller: summaryReportController,
+                              validator: AppValidator.validateString(),
+                            ),
+                            SizedBox(height: 35.0.h),
+                            !model.isLoading
+                                ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      child: Container(
+                                        padding:
+                                            isTablet
+                                                ? EdgeInsets.all(12.0.w)
+                                                : EdgeInsets.all(20.0.w),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: const Color.fromARGB(
+                                            255,
+                                            208,
+                                            234,
+                                            222,
+                                          ),
+                                        ),
+                                        width: 140.w,
+                                        alignment: Alignment.center,
+                                        child: TextView(
+                                          text: 'Cancel',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.primary1,
+                                            fontSize: 18.0.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        onEdit
+                                            ? model.updateReport(
+                                              context,
+                                              id: reportId,
+                                              report: AddReportEntityModel(
+                                                userId: dtReport!.userId,
+                                                diagnosisId:
+                                                    dtReport.diagnosisId,
+                                                bookingId: dtReport.bookingId,
+                                                status:
+                                                    statusReportController.text
+                                                        .trim(),
+                                                imageUrl:
+                                                    model
+                                                        .postUserVerificationCloudResponse
+                                                        ?.secureUrl ??
+                                                    dtReport.imageUrl,
+                                                summary:
+                                                    summaryReportController.text
+                                                        .trim(),
+                                              ),
+                                            )
+                                            : model.addReport(
+                                              context,
+                                              report: AddReportEntityModel(
+                                                userId: report!.userId,
+                                                diagnosisId: report.diagnosisId,
+                                                bookingId: report.bookingId,
+                                                status:
+                                                    statusReportController.text
+                                                        .trim(),
+                                                imageUrl:
+                                                    model
+                                                        .postUserVerificationCloudResponse
+                                                        ?.secureUrl,
+                                                summary:
+                                                    summaryReportController.text
+                                                        .trim(),
+                                              ),
+                                            );
+
+                                        model.notifyListeners();
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        padding:
+                                            isTablet
+                                                ? EdgeInsets.all(10.w)
+                                                : EdgeInsets.all(20.w),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          color: AppColor.primary1,
+                                        ),
+                                        child: TextView(
+                                          text:
+                                              onEdit
+                                                  ? 'Update Report'
+                                                  : 'Add Report',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.white,
+                                            fontSize: 18.0.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                                : SpinKitCircle(
+                                  color: AppColor.primary1,
+                                  size: 34.sp,
+                                ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void deleteReportDialogBox(context, {String? reportId}) => showDialog(
+    context: context,
+    builder: (_) {
+      return ViewModelBuilder<LabTechViewModel>.reactive(
+        viewModelBuilder: () => LabTechViewModel(),
+        onViewModelReady: (model) {},
+        disposeViewModel: false,
+        builder: (_, LabTechViewModel model, __) {
+          return AlertDialog(
+            title: TextView(
+              text: 'Delete Report',
+              textStyle: GoogleFonts.dmSans(
+                color: AppColor.fineRed,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            content: TextView(
+              text:
+                  'Do you want to delete this report? Clicking OK will permanently delete it.',
+              textStyle: GoogleFonts.dmSans(
+                color: AppColor.black,
+                fontSize: 15.0.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            actions:
+                model.isLoading
+                    ? [SpinKitCircle(color: AppColor.primary1, size: 34.sp)]
+                    : [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: TextView(
+                          text: 'Cancel',
+                          textStyle: GoogleFonts.dmSans(
+                            color: AppColor.fineRed,
+                            fontSize: 16.20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await model.deleteLabTechDetailReport(
+                            context,
+                            id: reportId!,
+                          );
+                          model.notifyListeners();
+                        },
+                        child: TextView(
+                          text: 'OK',
+                          textStyle: GoogleFonts.dmSans(
+                            color: AppColor.green,
+                            fontSize: 16.20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+          );
+        },
+      );
+    },
+  );
+
   void deleteServiceCategoryDialogBox(
     context, {
     String? serviceId,
@@ -1865,17 +2274,143 @@ class LabTechViewModel extends BaseViewModel {
     },
   );
 
+  void showPatientReportDialogBox(context, {Datum? patients}) => showDialog(
+    context: context,
+    builder: (_) {
+      return ViewModelBuilder<LabTechViewModel>.reactive(
+        viewModelBuilder: () => LabTechViewModel(),
+        onViewModelReady: (model) {},
+        disposeViewModel: false,
+        builder: (_, LabTechViewModel model, __) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextView(
+                  text: 'Patient\'s Report Details',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.darkindgrey,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            insetPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
+            content: SizedBox(
+              width: double.maxFinite,
+              height: 260.h,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextView(
+                          text:
+                              '${patients?.user?.firstName?.capitalize()} ${patients?.user?.lastName?.capitalize()}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.darkindgrey,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text: 'Age: ${patients?.user?.age ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.greyIt,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text: 'Diagnosis: ${patients?.diagnosis?.name ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.grey,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+
+                        SizedBox(height: 4.w),
+                        TextView(
+                          text: 'Summary: ${patients?.summary ?? ''}',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.black,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: 10.w),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 2.w,
+                            horizontal: 6.w,
+                          ),
+                          decoration: BoxDecoration(
+                            color: model
+                                .statusValuePatientsColor(patients?.status)
+                                .withOpacity(.2),
+                            borderRadius: BorderRadius.circular(22),
+                          ),
+                          child: TextView(
+                            text: '${patients?.status?.capitalize()}',
+                            textStyle: GoogleFonts.gabarito(
+                              color: model.statusValuePatientsColor(
+                                patients?.status,
+                              ),
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            patients?.imageUrl ?? '',
+                            height: 140.h,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) =>
+                                    shimmerViewLabPatient(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                },
+                child: TextView(
+                  text: 'OK',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.green,
+                    fontSize: 16.20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+
   int calculateAge(String dobString) {
-    // Parse the string to a DateTime
     DateTime dob = DateTime.parse(dobString);
-
-    // Get today’s date
     DateTime today = DateTime.now();
-
-    // Calculate age
     int age = today.year - dob.year;
-
-    // Adjust if birthday hasn’t occurred yet this year
     if (today.month < dob.month ||
         (today.month == dob.month && today.day < dob.day)) {
       age--;
