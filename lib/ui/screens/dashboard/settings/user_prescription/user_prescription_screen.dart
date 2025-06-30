@@ -577,7 +577,10 @@ class UserPrescriptionScreen extends StatelessWidget {
                 else
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: isTablet ? 620 : 500,
+                      maxHeight:
+                          isTablet
+                              ? 620
+                              : MediaQuery.of(context).size.height * .66,
                     ),
                     child: Container(
                       width: double.infinity,

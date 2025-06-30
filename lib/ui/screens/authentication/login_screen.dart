@@ -267,93 +267,94 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   SizedBox(height: 30.h),
-                  GestureDetector(
-                    onTap:
-                        () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder:
-                                (context) =>
-                                    SignUpScreen(userType: widget.userType),
-                          ),
-                        ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 12.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.r),
-                        border: Border.all(color: AppColor.lightgrey),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SvgPicture.asset(AppImage.google),
-                          TextView(
-                            text: 'Sign in with Google',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.darkindgrey,
-                              fontSize: 16.4.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 20.h, width: 20.w),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20.h),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 12.w,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      border: Border.all(color: AppColor.lightgrey),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SvgPicture.asset(AppImage.apple),
-                        TextView(
-                          text: 'Sign in with Apple',
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.darkindgrey,
-                            fontSize: 16.4.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 20.h, width: 20.w),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 30.h),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 12.w,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      border: Border.all(color: AppColor.lightgrey),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SvgPicture.asset(AppImage.facebook),
-                        TextView(
-                          text: 'Sign in with Facebook',
-                          textStyle: GoogleFonts.gabarito(
-                            color: AppColor.darkindgrey,
-                            fontSize: 16.4.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 20.h, width: 20.w),
-                      ],
-                    ),
-                  ),
+
+                  // GestureDetector(
+                  //   onTap:
+                  //       () => Navigator.of(context).push(
+                  //         MaterialPageRoute(
+                  //           builder:
+                  //               (context) =>
+                  //                   SignUpScreen(userType: widget.userType),
+                  //         ),
+                  //       ),
+                  //   child: Container(
+                  //     padding: EdgeInsets.symmetric(
+                  //       horizontal: 12.w,
+                  //       vertical: 12.w,
+                  //     ),
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(10.r),
+                  //       border: Border.all(color: AppColor.lightgrey),
+                  //     ),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         SvgPicture.asset(AppImage.google),
+                  //         TextView(
+                  //           text: 'Sign in with Google',
+                  //           textStyle: GoogleFonts.gabarito(
+                  //             color: AppColor.darkindgrey,
+                  //             fontSize: 16.4.sp,
+                  //             fontWeight: FontWeight.w500,
+                  //           ),
+                  //         ),
+                  //         SizedBox(height: 20.h, width: 20.w),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 20.h),
+                  // Container(
+                  //   padding: EdgeInsets.symmetric(
+                  //     horizontal: 12.w,
+                  //     vertical: 12.w,
+                  //   ),
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(10.r),
+                  //     border: Border.all(color: AppColor.lightgrey),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       SvgPicture.asset(AppImage.apple),
+                  //       TextView(
+                  //         text: 'Sign in with Apple',
+                  //         textStyle: GoogleFonts.gabarito(
+                  //           color: AppColor.darkindgrey,
+                  //           fontSize: 16.4.sp,
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //       SizedBox(height: 20.h, width: 20.w),
+                  //     ],
+                  //   ),
+                  // ),
+                  // SizedBox(height: 30.h),
+                  // Container(
+                  //   padding: EdgeInsets.symmetric(
+                  //     horizontal: 12.w,
+                  //     vertical: 12.w,
+                  //   ),
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(10.r),
+                  //     border: Border.all(color: AppColor.lightgrey),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       SvgPicture.asset(AppImage.facebook),
+                  //       TextView(
+                  //         text: 'Sign in with Facebook',
+                  //         textStyle: GoogleFonts.gabarito(
+                  //           color: AppColor.darkindgrey,
+                  //           fontSize: 16.4.sp,
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //       SizedBox(height: 20.h, width: 20.w),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),

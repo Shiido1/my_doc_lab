@@ -665,7 +665,6 @@ class _LaboratoryHomeScreenState extends State<LaboratoryHomeScreen> {
                       right: 10.w,
                       top: 16.w,
                     ),
-                    // margin: EdgeInsets.only(right: 10.w),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: AppColor.primary1.withOpacity(.15),

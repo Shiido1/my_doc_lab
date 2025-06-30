@@ -8,7 +8,6 @@ import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/patient/medicine_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
@@ -16,6 +15,7 @@ import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_widget.dart';
 import '../laboratory/lab_screen.dart';
+import '../notification/patient_notification_screen.dart';
 import 'cart_screen.dart';
 
 double _value = 350;
@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap:
                           () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => NotificationScreen(),
+                              builder: (context) => PatientNotificationScreen(),
                             ),
                           ),
                       child: SvgPicture.asset(

@@ -55,6 +55,7 @@ import '../model/get_medicine_detail_response_model/get_medicine_detail_response
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../model/get_report_response_model/get_report_response_model.dart';
+import '../model/get_user_notitfication_model/get_user_notitfication_model.dart';
 import '../model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../model/pay_stack_payment_model/pay_stack_payment_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
@@ -206,6 +207,9 @@ class AuthViewModel extends BaseViewModel {
   GetReportResponseModel? _getReportResponseModel;
   GetReportResponseModel? get getReportResponseModel => _getReportResponseModel;
   RtcEngine? engine;
+  GetUserNotitficationModelList? _getNotificationResponse;
+  GetUserNotitficationModelList? get getNotificationResponse =>
+      _getNotificationResponse;
 
   dynamic remoteUidGlobal;
   dynamic remoteUidGlobalLocal;
@@ -1332,6 +1336,21 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> notification() async {
+    try {
+      _isLoading = true;
+      _getNotificationResponse = await runBusyFuture(
+        repositoryImply.notification(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   Future<void> getChatIndexReload() async {
     try {
       _getMessageIndexResponseModelList = await runBusyFuture(
@@ -1872,5 +1891,14 @@ class AuthViewModel extends BaseViewModel {
         );
       },
     );
+  }
+
+  Color statusValuePatientsColor(status) {
+    if (status == 'critical') {
+      return AppColor.red;
+    } else if (status == 'abnormal') {
+      return AppColor.brown;
+    }
+    return AppColor.primary1;
   }
 }
