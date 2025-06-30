@@ -121,7 +121,7 @@ class LabTechAuthApi {
   }) async {
     try {
       final response = await _service.call(
-        UrlConfig.labt_tech_update_order,
+        '${UrlConfig.labt_tech_update_order}$id',
         RequestMethod.post,
         data: update?.toJson(),
       );
@@ -480,6 +480,20 @@ class LabTechAuthApi {
   }
 
   Future<LabTechRecentAppointmentModelList> mostAppointmentList() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.lab_tech_most_recent_appointment,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return LabTechRecentAppointmentModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<LabTechRecentAppointmentModelList> recentAppointmentList() async {
     try {
       final response = await _service.call(
         UrlConfig.lab_tech_recent_appointment,

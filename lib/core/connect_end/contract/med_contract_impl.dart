@@ -128,4 +128,6 @@ class LabTechContractsImpl {
       await _api.getLabTechPatients();
   Future<LabTechRecentAppointmentModelList> mostAppointmentList() async =>
       await _api.mostAppointmentList();
+  Future<LabTechRecentAppointmentModelList> recentAppointmentList() async =>
+      await _api.recentAppointmentList();
 }

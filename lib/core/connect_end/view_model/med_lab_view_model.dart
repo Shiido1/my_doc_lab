@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_lab_tech_report_response_model/datum.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
-
+import "package:collection/collection.dart";
 import '../../../main.dart';
 import '../../../ui/app_assets/app_color.dart';
 import '../../../ui/app_assets/app_image.dart';
@@ -82,6 +82,7 @@ class LabTechViewModel extends BaseViewModel {
   TextEditingController accountNumberTextController = TextEditingController();
   TextEditingController bankCodeTextController = TextEditingController();
   TextEditingController amountTextController = TextEditingController();
+  TextEditingController reasonController = TextEditingController();
 
   String? bankCode;
 
@@ -122,6 +123,7 @@ class LabTechViewModel extends BaseViewModel {
 
   GlobalKey<FormState> diaFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> formKeySave = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   GlobalKey<FormState> formKeyWithdraw = GlobalKey<FormState>();
 
   TextEditingController serviceNameTextController = TextEditingController();
@@ -172,6 +174,16 @@ class LabTechViewModel extends BaseViewModel {
   LabTechRecentAppointmentModelList? get labTechRecentAppointmentModel =>
       _labTechRecentAppointmentModel;
   LabTechRecentAppointmentModelList? _labTechRecentAppointmentModel;
+  LabTechRecentAppointmentModelList? get labTechMostRecentAppointmentModel =>
+      _labTechMostRecentAppointmentModel;
+  LabTechRecentAppointmentModelList? _labTechMostRecentAppointmentModel;
+
+  List<LabTechRecentAppointmentModel> getListOfCompletedAppointmentModelList =
+      [];
+  List<LabTechRecentAppointmentModel> getListOfCancelledAppointmentModelList =
+      [];
+  List<LabTechRecentAppointmentModel> getListOfScheduledAppointmentModelList =
+      [];
 
   RtcEngine? engine;
   bool onSwitch = false;
@@ -388,10 +400,16 @@ class LabTechViewModel extends BaseViewModel {
   }) async {
     try {
       _isLoading = true;
-      await runBusyFuture(
+      var v = await runBusyFuture(
         repositoryImply.updateOrderStatus(id: id, update: update),
         throwException: true,
       );
+
+      _isLoading = false;
+      if (v['success'] == true) {
+        await AppUtils.snackbarTop(context, message: v['message']);
+        Navigator.pop(context);
+      }
       _isLoading = false;
     } catch (e) {
       _isLoading = false;
@@ -494,11 +512,55 @@ class LabTechViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> getAppointmentList() async {
+  Future<void> getMostRecentAppointmentList() async {
+    try {
+      _isLoading = true;
+      _labTechMostRecentAppointmentModel = await runBusyFuture(
+        repositoryImply.mostAppointmentList(),
+        throwException: true,
+      );
+
+      getListOfCancelledAppointmentModelList.clear();
+      getListOfCompletedAppointmentModelList.clear();
+      getListOfScheduledAppointmentModelList.clear();
+
+      List<LabTechRecentAppointmentModel>? appointmentList = [];
+      for (var element
+          in _labTechMostRecentAppointmentModel!
+              .labTechRecentAppointmentModelList!) {
+        appointmentList.add(element);
+        notifyListeners();
+      }
+
+      groupBy(appointmentList, (LabTechRecentAppointmentModel o) {
+        if (o.status?.toLowerCase() == 'cancelled') {
+          getListOfCancelledAppointmentModelList.add(o);
+        }
+        if (o.status?.toLowerCase() == 'completed') {
+          getListOfCompletedAppointmentModelList.add(o);
+        }
+        if (o.status?.toLowerCase() == 'scheduled') {
+          getListOfScheduledAppointmentModelList.add(o);
+        }
+        if (o.status?.toLowerCase() == 'rescheduled') {
+          getListOfScheduledAppointmentModelList.add(o);
+        }
+      });
+      notifyListeners();
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getRecentAppointmentList() async {
     try {
       _isLoading = true;
       _labTechRecentAppointmentModel = await runBusyFuture(
-        repositoryImply.mostAppointmentList(),
+        repositoryImply.recentAppointmentList(),
         throwException: true,
       );
       _isLoading = false;
@@ -1641,6 +1703,194 @@ class LabTechViewModel extends BaseViewModel {
     );
   }
 
+  void cancelAppointmentDialogBox(context, {String? id}) => showDialog(
+    context: context,
+    builder: (context) {
+      return ViewModelBuilder<LabTechViewModel>.reactive(
+        viewModelBuilder: () => LabTechViewModel(),
+        onViewModelReady: (model) {},
+        disposeViewModel: false,
+        onDispose: (viewModel) {
+          reasonController.clear();
+        },
+        builder: (_, LabTechViewModel model, __) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: 20.w,
+            ), // Adjust margin here
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9, // 90% of screen
+              padding: EdgeInsets.all(16.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextView(
+                    text: 'Cancel Appointment',
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.fineRed,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  SizedBox(
+                    height: 200.h,
+                    child: Form(
+                      key: formKey,
+                      child: TextFormWidget(
+                        label: 'Reason for cancelling appointment',
+                        border: 10,
+                        isFilled: true,
+                        maxline: 4,
+                        alignLabelWithHint: true,
+                        fillColor: AppColor.transparent,
+
+                        controller: reasonController,
+                        validator: AppValidator.validateString(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  model.isLoading
+                      ? SpinKitCircle(color: AppColor.grey1, size: 30.sp)
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              reasonController.clear();
+                              Navigator.of(context).pop();
+                            },
+                            child: TextView(
+                              text: 'Cancel',
+                              textStyle: GoogleFonts.dmSans(
+                                color: AppColor.fineRed,
+                                fontSize: 16.20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                model.updateOrderStatus(
+                                  context,
+                                  id: id,
+                                  update: UpdateStatusReasonEntityModel(
+                                    reason: reasonController.text,
+                                    status: 'cancelled',
+                                  ),
+                                );
+                                model.notifyListeners();
+                              }
+                            },
+                            child: TextView(
+                              text: 'OK',
+                              textStyle: GoogleFonts.dmSans(
+                                color: AppColor.green,
+                                fontSize: 16.20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+
+  void completeAppointmentDialogBox(context, {String? id}) => showDialog(
+    context: context,
+    builder: (context) {
+      return ViewModelBuilder<LabTechViewModel>.reactive(
+        viewModelBuilder: () => LabTechViewModel(),
+        onViewModelReady: (model) {},
+        disposeViewModel: false,
+        onDispose: (viewModel) {},
+        builder: (_, LabTechViewModel model, __) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: 20.w,
+            ), // Adjust margin here
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9, // 90% of screen
+              padding: EdgeInsets.all(16.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextView(
+                    text: 'Complete Appointment',
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.primary,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  model.isLoading
+                      ? SpinKitCircle(color: AppColor.grey1, size: 30.sp)
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              reasonController.clear();
+                              Navigator.of(context).pop();
+                            },
+                            child: TextView(
+                              text: 'Cancel',
+                              textStyle: GoogleFonts.dmSans(
+                                color: AppColor.fineRed,
+                                fontSize: 16.20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              model.updateOrderStatus(
+                                context,
+                                id: id,
+                                update: UpdateStatusReasonEntityModel(
+                                  reason: 'Completed this appointment',
+                                  status: 'completed',
+                                ),
+                              );
+                              model.notifyListeners();
+                            },
+                            child: TextView(
+                              text: 'OK',
+                              textStyle: GoogleFonts.dmSans(
+                                color: AppColor.green,
+                                fontSize: 16.20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+
   void modalBottomSheetReport(
     context, {
     GetLabTexhAllPatientsResponseModel? report,
@@ -1663,6 +1913,7 @@ class LabTechViewModel extends BaseViewModel {
           onViewModelReady: (model) {
             if (onEdit == true) {
               statusReportController.text = dtReport?.status ?? '';
+              summaryReportController.text = dtReport?.summary ?? '';
             }
           },
           onDispose: (viewModel) {

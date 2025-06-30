@@ -215,4 +215,9 @@ class LabTechRepoImpl {
     final response = await _contract.mostAppointmentList();
     return response;
   }
+
+  Future<LabTechRecentAppointmentModelList> recentAppointmentList() async {
+    final response = await _contract.recentAppointmentList();
+    return response;
+  }
 }

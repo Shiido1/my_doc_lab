@@ -49,8 +49,10 @@ class UrlConfig {
   static const String labt_tech_category_by_id = 'lab-technician/categories/';
   static const String labt_tech_category_add = 'lab-technician/categories/add';
   static const String labt_tech_update_report = 'lab-technician/reports';
-  static const String lab_tech_recent_appointment =
+  static const String lab_tech_most_recent_appointment =
       'lab-technician/quick_recent_appointment';
+  static const String lab_tech_recent_appointment =
+      'lab-technician/recent_appointment';
   static const String login = 'login';
   static const String user = 'user';
   static const String user_detail = 'user/details';
