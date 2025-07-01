@@ -139,7 +139,7 @@ class OrderHistoryScreen extends StatelessWidget {
                                         child: TextView(
                                           text:
                                               '${getCurrency()}${oCcy.format(double.parse('${o.totalAmount}'))}',
-                                          textStyle: GoogleFonts.gabarito(
+                                          textStyle: TextStyle(
                                             color:
                                                 o.status?.toLowerCase() ==
                                                         'paid'
@@ -216,7 +216,7 @@ class OrderHistoryScreen extends StatelessWidget {
                                                     TextView(
                                                       text:
                                                           '${getCurrency()}${oCcy.format(double.parse('${item.price}'))}',
-                                                      textStyle: GoogleFonts.gabarito(
+                                                      textStyle: TextStyle(
                                                         color:
                                                             item.status?.toLowerCase() ==
                                                                     'processed'

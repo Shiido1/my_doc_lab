@@ -174,7 +174,7 @@ class DoctorWalletScreen extends StatelessWidget {
                                 TextView(
                                   text:
                                       '${getCurrency()}${oCcy.format(double.parse('${o.amount ?? 0}'))}',
-                                  textStyle: GoogleFonts.gabarito(
+                                  textStyle: TextStyle(
                                     color: model.trnsType(o.type),
                                     fontSize: 22.20.sp,
                                     fontWeight: FontWeight.w600,

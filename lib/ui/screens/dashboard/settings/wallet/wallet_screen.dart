@@ -207,7 +207,7 @@ class WalletScreen extends StatelessWidget {
                                     maxLines: 1,
                                     textOverflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.end,
-                                    textStyle: GoogleFonts.gabarito(
+                                    textStyle: TextStyle(
                                       color: model.trnsType(o.type),
                                       fontSize: 20.sp,
                                       fontWeight: FontWeight.w500,

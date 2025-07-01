@@ -78,6 +78,10 @@ class AuthViewModel extends BaseViewModel {
   final session = locator<SharedPreferencesService>();
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _isLoadingOrder = false;
+  bool get isLoadingOrder => _isLoadingOrder;
+  bool _isLoadingNotification = false;
+  bool get isLoadingNotification => _isLoadingNotification;
   bool _isLoadingDoctorSearch = false;
   bool get isLoadingDoctorSearch => _isLoadingDoctorSearch;
   bool _isLoadingMessageIndex = false;
@@ -1345,14 +1349,14 @@ class AuthViewModel extends BaseViewModel {
 
   Future<void> orderHistory() async {
     try {
-      _isLoading = true;
+      _isLoadingOrder = true;
       _getOrderHistoryResponse = await runBusyFuture(
         repositoryImply.orderHistory(),
         throwException: true,
       );
-      _isLoading = false;
+      _isLoadingOrder = false;
     } catch (e) {
-      _isLoading = false;
+      _isLoadingOrder = false;
       logger.d(e);
     }
     notifyListeners();
@@ -1360,14 +1364,14 @@ class AuthViewModel extends BaseViewModel {
 
   Future<void> notification() async {
     try {
-      _isLoading = true;
+      _isLoadingNotification = true;
       _getUserNotificationModel = await runBusyFuture(
         repositoryImply.notification(),
         throwException: true,
       );
-      _isLoading = false;
+      _isLoadingNotification = false;
     } catch (e) {
-      _isLoading = false;
+      _isLoadingNotification = false;
       logger.d(e);
     }
     notifyListeners();

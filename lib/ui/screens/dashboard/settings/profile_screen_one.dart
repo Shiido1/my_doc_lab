@@ -550,7 +550,7 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                                                             null
                                                         ? '${getCurrency()}${oCcy.format(double.parse('${model.getAllMedicineResponseModelList!.getAllMedicineResponseModelList![index].price}'))}'
                                                         : '',
-                                                textStyle: GoogleFonts.gabarito(
+                                                textStyle: TextStyle(
                                                   color: AppColor.darkindgrey,
                                                   fontSize: 15.0.sp,
                                                   fontWeight: FontWeight.w500,

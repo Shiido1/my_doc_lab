@@ -497,7 +497,7 @@ class _PatientDetailSceenState extends State<PatientDetailSceen> {
                                             TextView(
                                               text:
                                                   'Price: ${getCurrency()}${oCcy.format(double.parse(o.medicine!.price.toString()))}',
-                                              textStyle: GoogleFonts.gabarito(
+                                              textStyle: TextStyle(
                                                 color: AppColor.darkindgrey,
                                                 fontSize: 15.0.sp,
                                                 fontWeight: FontWeight.w400,

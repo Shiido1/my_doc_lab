@@ -500,7 +500,7 @@ class DocHomeScreen extends StatelessWidget {
             SizedBox(height: 10.h),
             TextView(
               text: thirdText,
-              textStyle: GoogleFonts.gabarito(
+              textStyle: TextStyle(
                 color: AppColor.white,
                 fontSize: 24.20.sp,
                 fontWeight: FontWeight.w700,
