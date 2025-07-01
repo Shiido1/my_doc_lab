@@ -26,6 +26,7 @@ class ReportScreen extends StatefulWidget {
 class _ReportScreenState extends State<ReportScreen> {
   int progress = 0;
   late StreamSubscription progressStream;
+  bool isLoadingDownload = false;
 
   @override
   void initState() {
@@ -34,14 +35,19 @@ class _ReportScreenState extends State<ReportScreen> {
       if (event.status == DownloadStatus.successful) {
         setState(() {
           progress = event.progress;
+          isLoadingDownload = false;
         });
         FlDownloader.openFile(filePath: event.filePath);
       } else if (event.status == DownloadStatus.running) {
         setState(() {
           progress = event.progress;
+          isLoadingDownload = true;
         });
       } else if (event.status == DownloadStatus.failed) {
-        // do some
+        setState(() {
+          progress = event.progress;
+          isLoadingDownload = false;
+        });
       }
     });
     super.initState();
@@ -50,6 +56,8 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   void dispose() {
     progressStream.cancel();
+    progress = 0;
+    isLoadingDownload = false;
     super.dispose();
   }
 
@@ -67,7 +75,7 @@ class _ReportScreenState extends State<ReportScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20.h),
+                SizedBox(height: 10.h),
                 TextView(
                   text: 'Report',
                   textStyle: GoogleFonts.gabarito(
@@ -89,15 +97,6 @@ class _ReportScreenState extends State<ReportScreen> {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                TextView(
-                  text: 'Dr: ${widget.report?.doctor ?? ''}',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.black,
-                    fontSize: 20.0.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                SizedBox(height: 10.h),
                 TextView(
                   text: 'Diagnosis: ${widget.report?.diagnosis ?? ''}',
                   textStyle: GoogleFonts.gabarito(
@@ -145,57 +144,88 @@ class _ReportScreenState extends State<ReportScreen> {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                GestureDetector(
-                  onTap: () async {
-                    if (widget.report!.imageUrl!.contains(
-                      'https://res.cloudinary.com',
-                    )) {
-                      print('oooo');
-                      var permission = FlDownloader.requestPermission();
-                      if (permission == StoragePermissionStatus.granted) {
-                        await FlDownloader.download(
-                          widget.report!.imageUrl!,
-                          fileName: 'Doclabpharm Lab Report',
-                        );
-                      }
-                    } else {
-                      AppUtils.snackbarTop(
-                        context,
-                        message: 'File Erro Can\'t download.',
-                        error: true,
-                      );
-                    }
-                  },
-                  child: Container(
-                    width: 130.w,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 6.w,
-                      horizontal: 6.w,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColor.primary,
-                      borderRadius: BorderRadius.circular(6.2),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.download_outlined,
-                          color: AppColor.white,
-                          size: 30.sp,
+                !isLoadingDownload
+                    ? GestureDetector(
+                      onTap: () async {
+                        if (widget.report!.imageUrl!.contains(
+                          'https://res.cloudinary.com',
+                        )) {
+                          var permission =
+                              await FlDownloader.requestPermission();
+                          if (permission == StoragePermissionStatus.granted) {
+                            await FlDownloader.download(
+                              widget.report!.imageUrl!,
+                              fileName: 'Doclabpharm Lab Report',
+                            );
+                          }
+                        } else {
+                          AppUtils.snackbarTop(
+                            context,
+                            message: 'File Error Can\'t download.',
+                            error: true,
+                          );
+                        }
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: 130.w,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 6.w,
+                          horizontal: 6.w,
                         ),
-                        TextView(
-                          text: 'Download',
+                        decoration: BoxDecoration(
+                          color: AppColor.primary,
+                          borderRadius: BorderRadius.circular(6.2),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.download_outlined,
+                              color: AppColor.white,
+                              size: 30.sp,
+                            ),
+                            TextView(
+                              text: 'Download',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.white,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                    : SizedBox(
+                      height: 20.h,
+                      width: 20.w,
+                      child: CircularProgressIndicator(
+                        color: AppColor.primary1,
+                      ),
+                    ),
+
+                SizedBox(height: 40.h),
+                progress == 0
+                    ? SizedBox.shrink()
+                    : Center(
+                      child: Container(
+                        padding: EdgeInsets.all(6.w),
+                        decoration: BoxDecoration(
+                          color: AppColor.lightgrey.withOpacity(.5),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextView(
+                          text: 'Downloading Progress: $progress',
                           textStyle: GoogleFonts.gabarito(
                             color: AppColor.white,
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
+                SizedBox(height: 40.h),
               ],
             ),
           );
