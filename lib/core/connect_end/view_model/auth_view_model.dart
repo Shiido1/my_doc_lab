@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison
 import "package:collection/collection.dart";
+import 'package:my_doc_lab/core/connect_end/model/get_user_notification_model/get_user_notification_model.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/web_view_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
@@ -55,7 +56,7 @@ import '../model/get_medicine_detail_response_model/get_medicine_detail_response
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../model/get_report_response_model/get_report_response_model.dart';
-import '../model/get_user_notitfication_model/get_user_notitfication_model.dart';
+import '../model/get_user_order_history_model/get_user_order_history_model.dart';
 import '../model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../model/pay_stack_payment_model/pay_stack_payment_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
@@ -77,6 +78,8 @@ class AuthViewModel extends BaseViewModel {
   final session = locator<SharedPreferencesService>();
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _isLoadingDoctorSearch = false;
+  bool get isLoadingDoctorSearch => _isLoadingDoctorSearch;
   bool _isLoadingMessageIndex = false;
   bool get isLoadingMessageIndex => _isLoadingMessageIndex;
   bool _isLoadingAllDoctors = false;
@@ -207,9 +210,12 @@ class AuthViewModel extends BaseViewModel {
   GetReportResponseModel? _getReportResponseModel;
   GetReportResponseModel? get getReportResponseModel => _getReportResponseModel;
   RtcEngine? engine;
-  GetUserNotitficationModelList? _getNotificationResponse;
-  GetUserNotitficationModelList? get getNotificationResponse =>
-      _getNotificationResponse;
+  GetUserOrderHistoryModelList? _getOrderHistoryResponse;
+  GetUserOrderHistoryModelList? get getOrderHistoryResponse =>
+      _getOrderHistoryResponse;
+  GetUserNotificationModelList? _getUserNotificationModel;
+  GetUserNotificationModelList? get getUserNotificationModel =>
+      _getUserNotificationModel;
 
   dynamic remoteUidGlobal;
   dynamic remoteUidGlobalLocal;
@@ -666,14 +672,15 @@ class AuthViewModel extends BaseViewModel {
     SearchDoctorEntityModel? searchEntity,
   }) async {
     try {
+      _isLoadingDoctorSearch = true;
       _searchedDoctorResponseModelList = await runBusyFuture(
         repositoryImply.getSearchDoctor(searchEntity!),
         throwException: true,
       );
 
-      _isLoading = false;
+      _isLoadingDoctorSearch = false;
     } catch (e) {
-      _isLoading = false;
+      _isLoadingDoctorSearch = false;
       logger.d(e);
     }
     notifyListeners();
@@ -1336,10 +1343,25 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> orderHistory() async {
+    try {
+      _isLoading = true;
+      _getOrderHistoryResponse = await runBusyFuture(
+        repositoryImply.orderHistory(),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   Future<void> notification() async {
     try {
       _isLoading = true;
-      _getNotificationResponse = await runBusyFuture(
+      _getUserNotificationModel = await runBusyFuture(
         repositoryImply.notification(),
         throwException: true,
       );

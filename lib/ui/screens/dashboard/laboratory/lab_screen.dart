@@ -58,7 +58,7 @@ class _LaboratoryScreenState extends State<LaboratoryScreen> {
                 Column(
                   children: [
                     TextFormWidget(
-                      label: 'Search here',
+                      label: 'Search Lab attendant name',
                       border: 10,
                       isFilled: true,
                       fillColor: AppColor.transparent,

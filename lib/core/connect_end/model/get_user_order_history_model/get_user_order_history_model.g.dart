@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_user_notitfication_model.dart';
+part of 'get_user_order_history_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GetUserNotitficationModel _$GetUserNotitficationModelFromJson(
+GetUserOrderHistoryModel _$GetUserOrderHistoryModelFromJson(
         Map<String, dynamic> json) =>
-    GetUserNotitficationModel(
+    GetUserOrderHistoryModel(
       id: json['id'] as num?,
       userId: json['user_id'] as num?,
       orderTrx: json['order_trx'] as String?,
@@ -21,10 +21,13 @@ GetUserNotitficationModel _$GetUserNotitficationModelFromJson(
       updatedAt: json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
+      items: (json['items'] as List<dynamic>?)
+          ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
-Map<String, dynamic> _$GetUserNotitficationModelToJson(
-        GetUserNotitficationModel instance) =>
+Map<String, dynamic> _$GetUserOrderHistoryModelToJson(
+        GetUserOrderHistoryModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'user_id': instance.userId,
@@ -34,4 +37,5 @@ Map<String, dynamic> _$GetUserNotitficationModelToJson(
       'payment_method': instance.paymentMethod,
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
+      'items': instance.items,
     };

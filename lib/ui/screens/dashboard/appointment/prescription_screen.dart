@@ -22,7 +22,7 @@ class PrescriptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    // final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return ViewModelBuilder<DocViewModel>.reactive(
       viewModelBuilder: () => locator<DocViewModel>(),
       onViewModelReady: (model) {
@@ -111,7 +111,7 @@ class PrescriptionScreen extends StatelessWidget {
                 if (model.isLoading)
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: isTablet ? 630 : 460,
+                      maxHeight: MediaQuery.of(context).size.height * .62,
                     ),
                     child: Container(
                       width: double.infinity,
@@ -140,7 +140,7 @@ class PrescriptionScreen extends StatelessWidget {
                 else
                   ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxHeight: isTablet ? 630 : 460,
+                      maxHeight: MediaQuery.of(context).size.height * .62,
                     ),
                     child: Container(
                       width: double.infinity,

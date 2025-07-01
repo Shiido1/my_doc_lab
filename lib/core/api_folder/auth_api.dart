@@ -28,7 +28,8 @@ import '../connect_end/model/get_medicine_detail_response_model/get_medicine_det
 import '../connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../connect_end/model/get_report_response_model/get_report_response_model.dart';
-import '../connect_end/model/get_user_notitfication_model/get_user_notitfication_model.dart';
+import '../connect_end/model/get_user_notification_model/get_user_notification_model.dart';
+import '../connect_end/model/get_user_order_history_model/get_user_order_history_model.dart';
 import '../connect_end/model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../connect_end/model/login_entity.dart';
 import '../connect_end/model/login_response_model/login_response_model.dart';
@@ -562,14 +563,28 @@ class AuthApi {
     }
   }
 
-  Future<GetUserNotitficationModelList> notification() async {
+  Future<GetUserOrderHistoryModelList> orderHistory() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.user_order_history,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetUserOrderHistoryModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetUserNotificationModelList> notification() async {
     try {
       final response = await _service.call(
         UrlConfig.user_notification,
         RequestMethod.get,
       );
       logger.d(response.data);
-      return GetUserNotitficationModelList.fromJson(response.data);
+      return GetUserNotificationModelList.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

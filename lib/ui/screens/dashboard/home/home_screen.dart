@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/core/connect_end/model/search_doctor_entity_model.dart';
@@ -218,45 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                TextFormWidget(
-                  label: 'Search for doctors, specialties, or tests...',
-                  border: 10,
-                  isFilled: true,
-                  fillColor: AppColor.transparent,
-                  controller: searchController,
-                  prefixWidget: Padding(
-                    padding: EdgeInsets.all(14.w),
-                    child: SvgPicture.asset(
-                      AppImage.search,
-                      height: 20.h,
-                      width: 20.w,
-                    ),
-                  ),
-                  onChange: (p0) {
-                    if (p0.length > 1) {
-                      model.debouncer.run(() {
-                        model.getSearchedDoctor(
-                          context,
-                          searchEntity: SearchDoctorEntityModel(query: p0),
-                        );
-                      });
-                    }
-                    model.query = p0;
-                    model.notifyListeners();
-                  },
-                  suffixWidget: Padding(
-                    padding: EdgeInsets.all(14.w),
-                    child: GestureDetector(
-                      // onTap: () => modalBottomSheetFilter(context),
-                      child: SvgPicture.asset(
-                        AppImage.filter,
-                        height: 20.h,
-                        width: 20.w,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
+
                 fourthContainer(context),
                 SizedBox(height: 10.h),
                 Row(
@@ -274,6 +237,55 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 16.20.sp,
                     fontWeight: FontWeight.w700,
                   ),
+                ),
+                SizedBox(height: 20.h),
+                TextFormWidget(
+                  label: 'Search for doctors, specialties, or tests...',
+                  border: 10,
+                  isFilled: true,
+                  fillColor: AppColor.transparent,
+                  controller: searchController,
+                  prefixWidget: Padding(
+                    padding: EdgeInsets.all(14.w),
+                    child:
+                        model.isLoadingDoctorSearch
+                            ? SizedBox(
+                              height: 20.h,
+                              width: 20.w,
+                              child: SpinKitFadingCircle(
+                                color: AppColor.primary,
+                                size: 20.w, // same size as icon
+                              ),
+                            )
+                            : SvgPicture.asset(
+                              AppImage.search,
+                              height: 20.h,
+                              width: 20.w,
+                            ),
+                  ),
+                  onChange: (p0) {
+                    if (p0.length > 1) {
+                      model.debouncer.run(() {
+                        model.getSearchedDoctor(
+                          context,
+                          searchEntity: SearchDoctorEntityModel(query: p0),
+                        );
+                      });
+                    }
+                    model.query = p0;
+                    model.notifyListeners();
+                  },
+                  // suffixWidget: Padding(
+                  //   padding: EdgeInsets.all(14.w),
+                  //   child: GestureDetector(
+                  //     // onTap: () => modalBottomSheetFilter(context),
+                  //     child: SvgPicture.asset(
+                  //       AppImage.filter,
+                  //       height: 20.h,
+                  //       width: 20.w,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 SizedBox(height: 20.h),
                 Row(

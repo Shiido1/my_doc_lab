@@ -164,6 +164,7 @@ class TextFormWidget extends StatelessWidget {
                       icon: Icon(prefixIcon, color: prefixIconColor),
                     )
                     : null),
+
             suffixIcon: Padding(
               padding: EdgeInsets.all(1.5.w),
               child:
