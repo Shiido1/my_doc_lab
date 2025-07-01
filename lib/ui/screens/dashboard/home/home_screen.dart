@@ -381,7 +381,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 20.h),
                 if (model.getReportResponseModel != null &&
                     model.getReportResponseModel!.data!.reports!.isNotEmpty)
-                  ...model.getReportResponseModel!.data!.reports!
+                  ...model.getReportResponseModel!.data!.reports!.reversed
                       .take(5)
                       .map(
                         (o) => Column(
