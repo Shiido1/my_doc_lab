@@ -72,20 +72,16 @@ dependencies:
   fl_downloader: ^2.0.2
 
 
-
-
-
 flutter_native_splash:
   android: true
   ios: true
-  image: assets/image/la_hands.png
-  color: "#FFFFFF"
+  color: "#3A966C"
+  image: assets/image/doclabpharm.png
+  android_gravity: center
   android_12:
-    image: assets/image/la_hands.png
-    color: "#FFFFFF"
-  image_ios: assets/image/la_hands.png
-
-
+    image: assets/image/doclabpharm.png
+    color: "#3A966C"
+  image_ios: assets/image/doclabpharm.png
 
 flutter_launcher_icons:
   android: true
