@@ -104,6 +104,7 @@ class _DoctorAppointmentDetailSceenState
                                 arguments: DoctorChatScreenArguments(
                                   id: '',
                                   messageModel: null,
+                                  sender: null,
                                   app: widget.appointment,
                                   data: null,
                                 ),

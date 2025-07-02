@@ -1462,6 +1462,7 @@ class DocViewModel extends BaseViewModel {
   sendMessageAction({
     GetListOfDoctorsAppointmentModel? app,
     GetMessageIndexResponseModel? messageModel,
+    dynamic sender,
   }) async {
     if (sendtextController.text != '') {
       String msg = sendtextController.text;
@@ -1471,8 +1472,12 @@ class DocViewModel extends BaseViewModel {
       if (app == null) {
         await sendMessage(
           SendMessageEntityModel(
-            conversationId: int.parse(messageModel!.conversationId.toString()),
-            receiverId: int.parse(messageModel.contactId.toString()),
+            conversationId: int.parse(
+              '${messageModel!.conversationId ?? sender['conversation_id']}',
+            ),
+            receiverId: int.parse(
+              '${messageModel.contactId ?? sender['sender_id']}',
+            ),
             receiverType: "MydocLab\\Models\\User",
             message: msg,
           ),

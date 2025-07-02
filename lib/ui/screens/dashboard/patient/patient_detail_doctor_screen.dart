@@ -115,6 +115,7 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
                                   id: '',
                                   messageModel: null,
                                   app: null,
+                                  sender: null,
                                   data: model.getUserResponseModel!.data!,
                                 ),
                               ),

@@ -6,6 +6,8 @@ import '../../../ui/screens/dashboard/appointment/prescription_detail_screen.dar
 import '../../../ui/screens/dashboard/chat/chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/doc_chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/pharm_chat_screen.dart';
+import '../../../ui/screens/dashboard/chat/video_chat_agora/doctor_video_chat_screen.dart';
+import '../../../ui/screens/dashboard/chat/video_chat_agora/video_chat_screen.dart';
 import '../../../ui/screens/dashboard/dashboard_screen.dart';
 import '../../../ui/screens/dashboard/doctor_dashboard_screen.dart';
 import '../../../ui/screens/dashboard/lab_dashboard_screen.dart';
@@ -45,6 +47,8 @@ import '../network/network_service.dart';
     MaterialRoute(page: ProfileScreen),
     MaterialRoute(page: DoctorChatScreen),
     MaterialRoute(page: ChatScreen),
+    MaterialRoute(page: DoctorVideoChatScreen),
+    MaterialRoute(page: VideoChatScreen),
     MaterialRoute(page: DoctorAppointmentDetailSceen),
     MaterialRoute(page: PatientDetailSceen),
     MaterialRoute(page: PharmChatScreen),

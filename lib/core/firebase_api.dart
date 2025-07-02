@@ -1,9 +1,13 @@
+// ignore_for_file: unnecessary_string_escapes
+
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
 
 import '../main.dart';
+import 'connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 
 Future<void> handlerBackgroundMessage(RemoteMessage message) async {
   print("title:${message.notification?.title}");
@@ -32,11 +36,56 @@ class FirebaseApi {
 
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
-    print("normal:$message");
-    print("payload:${message.data}");
-    print("ttttt:${message.from}");
-    print("oooooo:${message.messageType}");
-    // navigate.navigateTo(Routes.welcomeBackPushScreen);
+    // print("normal:${message.data['caller_type']}");
+    // print("payload:${message.data}");
+    // print("ttttt:${message.from}");
+    // print("oooooo:${message.messageType}");
+    if (message.data['message'] != null &&
+        message.data['sender_type'] == 'Doctor') {
+      navigate.navigateTo(
+        Routes.chatScreen,
+        arguments: ChatScreenArguments(
+          id: message.data['conversation_id'].toString(),
+          messageModel: GetMessageIndexResponseModel(),
+          sender: message.data,
+        ),
+      );
+    }
+    if (message.data['message'] != null &&
+        message.data['sender_type'] == 'User') {
+      navigate.navigateTo(
+        Routes.doctorChatScreen,
+        arguments: DoctorChatScreenArguments(
+          id: message.data['conversation_id'].toString(),
+          messageModel: GetMessageIndexResponseModel(),
+          app: null,
+          data: null,
+          sender: message.data,
+        ),
+      );
+    }
+    if (message.data['agora_token'] != null &&
+        message.data['caller_type'] == "MydocLab\Models\Doctor") {
+      navigate.navigateTo(
+        Routes.videoChatScreen,
+        arguments: VideoChatScreenArguments(
+          conversationId: int.parse(message.data['conversation_id'].toString()),
+          receiverId: message.data['caller_id'],
+          receiverType: 'Doctor',
+        ),
+      );
+    }
+    if (message.data['agora_token'] != null &&
+        message.data['caller_type'] == "MydocLab\Models\User") {
+      navigate.navigateTo(
+        Routes.doctorVideoChatScreen,
+        arguments: DoctorVideoChatScreenArguments(
+          conversationId: int.parse(message.data['conversation_id'].toString()),
+          receiverId: message.data['caller_id'],
+          receiverType: 'User',
+        ),
+      );
+    }
 
     // navigation to screens when push notification pops should be implemented here
   }
@@ -58,8 +107,9 @@ class FirebaseApi {
   }
 
   void onDidReceiveNotificationResponse(
-    NotificationResponse notificationResponse,
-  ) async {
+    NotificationResponse notificationResponse, {
+    context,
+  }) async {
     final String? payload = notificationResponse.payload;
     if (notificationResponse.payload != null) {
       print('notification payload: $payload');
@@ -131,7 +181,6 @@ class FirebaseApi {
   Future<void> initNotification() async {
     await _firebaseMessage.requestPermission();
     globalfCMToken = await _firebaseMessage.getToken();
-    print(":jjjj:::::$globalfCMToken");
     initPushNotification();
     initLocalNotification();
     _initNotification();

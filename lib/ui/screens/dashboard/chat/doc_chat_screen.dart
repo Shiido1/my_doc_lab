@@ -23,11 +23,13 @@ class DoctorChatScreen extends StatefulWidget {
     required this.messageModel,
     required this.app,
     required this.data,
+    required this.sender,
   });
   GetMessageIndexResponseModel? messageModel;
   String? id;
   GetListOfDoctorsAppointmentModel? app;
   Data? data;
+  dynamic sender;
 
   @override
   State<DoctorChatScreen> createState() => _DoctorChatScreenState();
@@ -50,7 +52,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
           model.hasLoadedIndexConversation = false;
-          if (widget.messageModel != null) {
+          if (widget.messageModel != null || widget.sender != null) {
             model.receiveConversationOnce(widget.id!);
           } else {
             model.getChatIndex();
@@ -88,7 +90,8 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                     widget.messageModel?.contactName
                                         ?.capitalize() ??
                                     widget.data?.firstName?.capitalize() ??
-                                    '',
+                                    '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.lastName?.capitalize() ?? ''}'
+                                        '',
                                 textStyle: GoogleFonts.dmSans(
                                   color: AppColor.black,
                                   fontSize: 20.0.sp,
@@ -122,7 +125,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                           ],
                         ),
                         Spacer(),
-                        widget.messageModel != null
+                        widget.messageModel != null || widget.sender != null
                             ? Padding(
                               padding: EdgeInsets.only(top: 10.w, right: 20.w),
                               child: GestureDetector(
@@ -132,19 +135,13 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                         builder:
                                             (context) => DoctorVideoChatScreen(
                                               conversationId: int.parse(
-                                                widget
-                                                    .messageModel!
-                                                    .conversationId
-                                                    .toString(),
+                                                '${widget.messageModel!.conversationId ?? widget.id}',
                                               ),
                                               receiverId: int.parse(
-                                                widget.messageModel!.contactId
-                                                    .toString(),
+                                                '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
                                               ),
                                               receiverType:
-                                                  widget
-                                                      .messageModel!
-                                                      .contactType,
+                                                  '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
                                             ),
                                       ),
                                     ),
@@ -373,6 +370,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                           model.sendMessageAction(
                                             app: widget.app,
                                             messageModel: widget.messageModel,
+                                            sender: widget.sender,
                                           );
                                         },
                                       ),

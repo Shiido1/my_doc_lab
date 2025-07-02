@@ -16,9 +16,10 @@ import '../../../../core/connect_end/view_model/auth_view_model.dart';
 
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
-  ChatScreen({super.key, required this.id, required this.messageModel});
+  ChatScreen({super.key, required this.id, required this.messageModel, required this.sender});
   GetMessageIndexResponseModel? messageModel;
   String? id;
+  dynamic sender;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -68,7 +69,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                 text:
                                     widget.messageModel?.contactName
                                         ?.capitalize() ??
-                                    '',
+                                    '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.lastName?.capitalize() ?? ''}'
+                                        '',
                                 textStyle: GoogleFonts.dmSans(
                                   color: AppColor.black,
                                   fontSize: 20.0.sp,
@@ -112,15 +114,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                     builder:
                                         (context) => VideoChatScreen(
                                           conversationId: int.parse(
-                                            widget.messageModel!.conversationId
+                                            widget.id
                                                 .toString(),
                                           ),
                                           receiverId: int.parse(
-                                            widget.messageModel!.contactId
-                                                .toString(),
+                                            '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
                                           ),
                                           receiverType:
-                                              widget.messageModel!.contactType,
+                                              '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
                                         ),
                                   ),
                                 ),
@@ -336,13 +337,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                           SendMessageEntityModel(
                                             conversationId: int.parse(
                                               widget
-                                                  .messageModel!
-                                                  .conversationId
+                                                  .id
                                                   .toString(),
                                             ),
                                             receiverId: int.parse(
-                                              widget.messageModel!.contactId
-                                                  .toString(),
+                                              '${widget.messageModel!.contactId ?? widget.sender['sender_id']}'
                                             ),
                                             receiverType:
                                                 "MydocLab\\Models\\Doctor",
