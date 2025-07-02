@@ -1,10 +1,16 @@
 // ignore_for_file: deprecated_member_use
+import 'dart:async';
+import 'dart:io';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/chat/message_list_screen.dart';
 
+import '../../../core/firebase_api.dart';
+import '../../../firebase_options.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
@@ -22,6 +28,23 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int _currentIndex = 0;
+
+  Future<void> initializeFirebase() async {
+    if (Platform.isAndroid) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      await FirebaseApi().initNotification();
+    } else {
+      await Firebase.initializeApp();
+    }
+  }
+
+  @override
+  void initState() {
+    unawaited(initializeFirebase());
+    super.initState();
+  }
 
   final List<Widget> _body = [
     HomeScreen(),

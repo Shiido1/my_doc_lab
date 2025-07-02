@@ -1,6 +1,4 @@
-import 'dart:io';
-
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +12,7 @@ import 'core/core_folder/app/app.router.dart';
 
 final navigate = locator<NavigationService>();
 late Box box;
+var globalfCMToken;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,13 +31,9 @@ Future<void> main() async {
     locator<SharedPreferencesService>().initilize(),
     Hive.initFlutter(),
   ]);
-  if (Platform.isAndroid) {
-    await Firebase.initializeApp();
-  } else {}
 
   Hive.registerAdapter(CheckoutEntityModelAdapter());
   box = await Hive.openBox<CheckoutEntityModel>('checkout');
-
   debugPrint('Initialization took ${stopwatch.elapsedMilliseconds} ms');
 
   runApp(const MyApp());
