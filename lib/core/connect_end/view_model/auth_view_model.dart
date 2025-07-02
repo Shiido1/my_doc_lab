@@ -1033,46 +1033,46 @@ class AuthViewModel extends BaseViewModel {
                   ),
                 ),
               ),
-              Divider(color: AppColor.primary1),
-              GestureDetector(
-                onTap: () {
-                  selectedRole = 'pharmacy';
+              // Divider(color: AppColor.primary1),
+              // GestureDetector(
+              //   onTap: () {
+              //     selectedRole = 'pharmacy';
 
-                  Navigator.pop(context);
-                  notifyListeners();
-                },
-                child: SizedBox(
-                  width: double.infinity,
-                  child: TextView(
-                    text: 'Pharmacy',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.black,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              Divider(color: AppColor.primary1),
-              GestureDetector(
-                onTap: () {
-                  selectedRole = 'lab_technician';
-                  Navigator.pop(context);
-                  notifyListeners();
-                },
-                child: SizedBox(
-                  width: double.infinity,
-                  child: TextView(
-                    text: 'Lab Technician',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.black,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.h),
+              //     Navigator.pop(context);
+              //     notifyListeners();
+              //   },
+              //   child: SizedBox(
+              //     width: double.infinity,
+              //     child: TextView(
+              //       text: 'Pharmacy',
+              //       textStyle: GoogleFonts.gabarito(
+              //         color: AppColor.black,
+              //         fontSize: 20.sp,
+              //         fontWeight: FontWeight.w400,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Divider(color: AppColor.primary1),
+              // GestureDetector(
+              //   onTap: () {
+              //     selectedRole = 'lab_technician';
+              //     Navigator.pop(context);
+              //     notifyListeners();
+              //   },
+              //   child: SizedBox(
+              //     width: double.infinity,
+              //     child: TextView(
+              //       text: 'Lab Technician',
+              //       textStyle: GoogleFonts.gabarito(
+              //         color: AppColor.black,
+              //         fontSize: 20.sp,
+              //         fontWeight: FontWeight.w400,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 20.h),
             ],
           ),
         ),
