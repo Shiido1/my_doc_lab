@@ -62,269 +62,232 @@ class OrderHistoryScreen extends StatelessWidget {
                           .getUserOrderHistoryModelList!
                           .isNotEmpty)
                     ...model.getOrderHistoryResponse!.getUserOrderHistoryModelList!.map(
-                      (o) => Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              order = o;
-                              model.notifyListeners();
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.symmetric(
-                                vertical: 14.w,
-                                horizontal: 12.w,
-                              ),
-                              margin: EdgeInsets.only(top: 10.w),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColor.greylight.withOpacity(.28),
-                                border: Border.all(
-                                  color: AppColor.greyIt.withOpacity(.4),
+                      (o) => PopupMenuButton<String>(
+                        onSelected: (String item) {
+                          // Handle the selected menu item
+                        },
+                        color: AppColor.finegrey2,
+                        itemBuilder: (BuildContext context) {
+                          return [
+                            if (o.items!.isNotEmpty)
+                              ...o.items!.map(
+                                (item) => PopupMenuItem<String>(
+                                  value: item.serviceName,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 4.w,
+                                      horizontal: 8.w,
+                                    ),
+                                    margin: EdgeInsets.only(
+                                      top: 10.w,
+                                      left: 1.8.w,
+                                      right: 1.2.w,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: AppColor.darkindgrey,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              width: 120.w,
+                                              child: TextView(
+                                                text:
+                                                    item.serviceName
+                                                        ?.capitalize() ??
+                                                    '',
+                                                maxLines: 1,
+                                                textOverflow:
+                                                    TextOverflow.ellipsis,
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.black,
+                                                  fontSize: 14.20.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ),
+                                            TextView(
+                                              text:
+                                                  '${getCurrency()}${oCcyMeds.format(double.parse('${item.price}'))}',
+
+                                              textOverflow:
+                                                  TextOverflow.ellipsis,
+
+                                              textStyle: TextStyle(
+                                                color:
+                                                    item.status?.toLowerCase() ==
+                                                            'processed'
+                                                        ? AppColor.yellow
+                                                        : item.status
+                                                                ?.toLowerCase() ==
+                                                            'completed'
+                                                        ? AppColor.primary1
+                                                        : AppColor.grey,
+                                                fontSize: 15.20.sp,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 4.10.h),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 1.4.w,
+                                                horizontal: 4.w,
+                                              ),
+                                              margin: EdgeInsets.only(
+                                                bottom: 6.w,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    item.status
+                                                                ?.toLowerCase() ==
+                                                            'processed'
+                                                        ? AppColor.yellow
+                                                            .withOpacity(.1)
+                                                        : item.status
+                                                                ?.toLowerCase() ==
+                                                            'completed'
+                                                        ? AppColor.primary1
+                                                            .withOpacity(.1)
+                                                        : AppColor.grey
+                                                            .withOpacity(.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: TextView(
+                                                text: item.status ?? '',
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color:
+                                                      item.status?.toLowerCase() ==
+                                                              'processed'
+                                                          ? AppColor.yellow
+                                                          : item.status
+                                                                  ?.toLowerCase() ==
+                                                              'completed'
+                                                          ? AppColor.primary1
+                                                          : AppColor.grey,
+                                                  fontSize: 12.20.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ),
+                                            TextView(
+                                              text:
+                                                  '${item.serviceType?.capitalize()}',
+                                              textStyle: GoogleFonts.gabarito(
+                                                color:
+                                                    AppColor.funnyLookingGrey,
+                                                fontSize: 16.20.sp,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    order = o;
+                                    model.notifyListeners();
+                                  },
                                 ),
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                          ];
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 14.w,
+                            horizontal: 12.w,
+                          ),
+                          margin: EdgeInsets.only(top: 10.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColor.greylight.withOpacity(.28),
+                            border: Border.all(
+                              color: AppColor.greyIt.withOpacity(.4),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextView(
-                                        text: 'Order ID',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.black,
-                                          fontSize: 18.20.sp,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextView(
-                                        text: o.orderTrx ?? '',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.black,
-                                          fontSize: 18.20.sp,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
+                                  TextView(
+                                    text: 'Order ID',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.black,
+                                      fontSize: 18.20.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      TextView(
-                                        text:
-                                            o.paymentMethod?.capitalize() ?? '',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.black,
-                                          fontSize: 14.20.sp,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10.h),
-                                      Container(
-                                        padding: EdgeInsets.all(4.w),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              o.status?.toLowerCase() == 'paid'
-                                                  ? AppColor.primary1
-                                                      .withOpacity(.2)
-                                                  : AppColor.red.withOpacity(
-                                                    .2,
-                                                  ),
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                        ),
-                                        child: TextView(
-                                          text:
-                                              '${getCurrency()}${oCcy.format(double.parse('${o.totalAmount}'))}',
-                                          textStyle: TextStyle(
-                                            color:
-                                                o.status?.toLowerCase() ==
-                                                        'paid'
-                                                    ? AppColor.primary1
-                                                    : AppColor.red,
-                                            fontSize: 17.20.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  TextView(
+                                    text: o.orderTrx ?? '',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.black,
+                                      fontSize: 18.20.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
-                          order == o
-                              ? SizedBox(
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      if (o.items!.isNotEmpty)
-                                        ...o.items!.map(
-                                          (item) => Container(
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: 4.w,
-                                              horizontal: 8.w,
-                                            ),
-                                            margin: EdgeInsets.only(
-                                              top: 10.w,
-                                              left: 12.w,
-                                              right: 12.w,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: AppColor.darkindgrey,
-                                                width: .4,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 150.w,
-                                                      child: TextView(
-                                                        text:
-                                                            item.serviceName ??
-                                                            '',
-                                                        maxLines: 1,
-                                                        textOverflow:
-                                                            TextOverflow
-                                                                .ellipsis,
-                                                        textStyle:
-                                                            GoogleFonts.gabarito(
-                                                              color:
-                                                                  AppColor
-                                                                      .black,
-                                                              fontSize:
-                                                                  16.20.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    TextView(
-                                                      text:
-                                                          '${getCurrency()}${oCcy.format(double.parse('${item.price}'))}',
-                                                      textStyle: TextStyle(
-                                                        color:
-                                                            item.status?.toLowerCase() ==
-                                                                    'processed'
-                                                                ? AppColor
-                                                                    .yellow
-                                                                : item.status
-                                                                        ?.toLowerCase() ==
-                                                                    'completed'
-                                                                ? AppColor
-                                                                    .primary1
-                                                                : AppColor.grey,
-                                                        fontSize: 16.20.sp,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 4.10.h),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                            vertical: 1.4.w,
-                                                            horizontal: 4.w,
-                                                          ),
-                                                      margin: EdgeInsets.only(
-                                                        bottom: 6.w,
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            item.status
-                                                                        ?.toLowerCase() ==
-                                                                    'processed'
-                                                                ? AppColor
-                                                                    .yellow
-                                                                    .withOpacity(
-                                                                      .2,
-                                                                    )
-                                                                : item.status
-                                                                        ?.toLowerCase() ==
-                                                                    'completed'
-                                                                ? AppColor
-                                                                    .primary1
-                                                                    .withOpacity(
-                                                                      .2,
-                                                                    )
-                                                                : AppColor.grey
-                                                                    .withOpacity(
-                                                                      .2,
-                                                                    ),
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              6,
-                                                            ),
-                                                      ),
-                                                      child: TextView(
-                                                        text: item.status ?? '',
-                                                        textStyle: GoogleFonts.gabarito(
-                                                          color:
-                                                              item.status
-                                                                          ?.toLowerCase() ==
-                                                                      'processed'
-                                                                  ? AppColor
-                                                                      .yellow
-                                                                  : item.status
-                                                                          ?.toLowerCase() ==
-                                                                      'completed'
-                                                                  ? AppColor
-                                                                      .primary1
-                                                                  : AppColor
-                                                                      .grey,
-                                                          fontSize: 12.20.sp,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    TextView(
-                                                      text:
-                                                          '${item.serviceType}',
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color:
-                                                                AppColor
-                                                                    .funnyLookingGrey,
-                                                            fontSize: 16.20.sp,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                    ],
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  TextView(
+                                    text: o.paymentMethod?.capitalize() ?? '',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.black,
+                                      fontSize: 14.20.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
-                                ),
-                              )
-                              : SizedBox.shrink(),
-                        ],
-                      ),
+                                  SizedBox(height: 10.h),
+                                  Container(
+                                    padding: EdgeInsets.all(4.w),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          o.status?.toLowerCase() == 'paid'
+                                              ? AppColor.primary1.withOpacity(
+                                                .2,
+                                              )
+                                              : AppColor.red.withOpacity(.2),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: TextView(
+                                      text:
+                                          '${getCurrency()}${oCcy.format(double.parse('${o.totalAmount}'))}',
+                                      textStyle: TextStyle(
+                                        color:
+                                            o.status?.toLowerCase() == 'paid'
+                                                ? AppColor.primary1
+                                                : AppColor.red,
+                                        fontSize: 17.20.sp,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ), // Optional: Customize the button's icon
                     ),
                 ],
               ),
