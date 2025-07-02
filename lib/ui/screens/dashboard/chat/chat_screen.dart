@@ -16,7 +16,12 @@ import '../../../../core/connect_end/view_model/auth_view_model.dart';
 
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
-  ChatScreen({super.key, required this.id, required this.messageModel, required this.sender});
+  ChatScreen({
+    super.key,
+    required this.id,
+    required this.messageModel,
+    required this.sender,
+  });
   GetMessageIndexResponseModel? messageModel;
   String? id;
   dynamic sender;
@@ -33,7 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    // final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return ViewModelBuilder<AuthViewModel>.reactive(
       viewModelBuilder: () => AuthViewModel(),
       onViewModelReady: (model) {
@@ -114,8 +119,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     builder:
                                         (context) => VideoChatScreen(
                                           conversationId: int.parse(
-                                            widget.id
-                                                .toString(),
+                                            widget.id.toString(),
                                           ),
                                           receiverId: int.parse(
                                             '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
@@ -264,44 +268,44 @@ class _ChatScreenState extends State<ChatScreen> {
                                         ),
                                         filled: true,
                                         fillColor: AppColor.white,
-                                        suffixIcon: Padding(
-                                          padding: EdgeInsets.only(
-                                            top: 13.w,
-                                            right: 16.w,
-                                          ),
-                                          child:
-                                              !isContainedText
-                                                  ? Padding(
-                                                    padding: EdgeInsets.only(
-                                                      bottom:
-                                                          isTablet ? 10.w : 0.w,
-                                                    ),
-                                                    child: Wrap(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          AppImage.clipper,
-                                                          height: 20.h,
-                                                          width: 20.w,
-                                                        ),
+                                        // suffixIcon: Padding(
+                                        //   padding: EdgeInsets.only(
+                                        //     top: 13.w,
+                                        //     right: 16.w,
+                                        //   ),
+                                        //   child:
+                                        //       !isContainedText
+                                        //           ? Padding(
+                                        //             padding: EdgeInsets.only(
+                                        //               bottom:
+                                        //                   isTablet ? 10.w : 0.w,
+                                        //             ),
+                                        //             child: Wrap(
+                                        //               children: [
+                                        //                 SvgPicture.asset(
+                                        //                   AppImage.clipper,
+                                        //                   height: 20.h,
+                                        //                   width: 20.w,
+                                        //                 ),
 
-                                                        SizedBox(width: 16.w),
-                                                        SvgPicture.asset(
-                                                          AppImage.mic,
-                                                          height: 20.h,
-                                                          width: 20.w,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                  : Padding(
-                                                    padding: EdgeInsets.only(
-                                                      bottom: 10.w,
-                                                    ),
-                                                    child: SvgPicture.asset(
-                                                      AppImage.clipper,
-                                                    ),
-                                                  ),
-                                        ),
+                                        //                 SizedBox(width: 16.w),
+                                        //                 SvgPicture.asset(
+                                        //                   AppImage.mic,
+                                        //                   height: 20.h,
+                                        //                   width: 20.w,
+                                        //                 ),
+                                        //               ],
+                                        //             ),
+                                        //           )
+                                        //           : Padding(
+                                        //             padding: EdgeInsets.only(
+                                        //               bottom: 10.w,
+                                        //             ),
+                                        //             child: SvgPicture.asset(
+                                        //               AppImage.clipper,
+                                        //             ),
+                                        //           ),
+                                        // ),
                                       ),
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {
@@ -336,12 +340,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                         await model.sendMessage(
                                           SendMessageEntityModel(
                                             conversationId: int.parse(
-                                              widget
-                                                  .id
-                                                  .toString(),
+                                              widget.id.toString(),
                                             ),
                                             receiverId: int.parse(
-                                              '${widget.messageModel!.contactId ?? widget.sender['sender_id']}'
+                                              '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
                                             ),
                                             receiverType:
                                                 "MydocLab\\Models\\Doctor",

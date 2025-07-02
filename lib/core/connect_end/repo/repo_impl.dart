@@ -5,12 +5,14 @@ import 'package:my_doc_lab/core/connect_end/model/checkout_entity_model/checkout
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/user_registration/user_registration.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../contract/contract_impl.dart';
 import '../model/add_booking_entity_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import '../model/care_giver_registration_model/care_giver_registration_model.dart';
 import '../model/care_giver_resiter_entity_model.dart';
 import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
@@ -51,12 +53,12 @@ class AuthRepoImpl {
   final _session = locator<SharedPreferencesService>();
   final _contract = locator<AuthContractsImpl>();
 
-  Future<dynamic> register(RegistrationEntityModel registerEntity) async {
+  Future<UserRegistration> register(RegistrationEntityModel registerEntity) async {
     final response = await _contract.register(registerEntity);
     return response;
   }
 
-  Future<dynamic> registerCareGiver(
+  Future<CareGiverRegistrationModel> registerCareGiver(
     CareGiverResiterEntityModel registerEntity,
   ) async {
     final response = await _contract.registerCareGiver(registerEntity);
@@ -248,6 +250,11 @@ class AuthRepoImpl {
 
   Future<GetUserNotificationModelList> notification() async {
     final response = await _contract.notification();
+    return response;
+  }
+
+  Future<dynamic> logout() async {
+    final response = await _contract.logout();
     return response;
   }
 

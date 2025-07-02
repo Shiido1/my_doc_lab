@@ -261,6 +261,7 @@ class DocMoreSettingsScreen extends StatelessWidget {
                   text: 'Logout',
                   onTap: () {
                     SharedPreferencesService.instance.logOut('care-giver');
+                    model.logout();
                   },
                 ),
                 SizedBox(height: 20.h),

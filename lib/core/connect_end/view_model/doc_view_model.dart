@@ -1148,6 +1148,16 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void logout() async {
+    try {
+      await runBusyFuture(repositoryImply.logout(), throwException: true);
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   Future<void> receiveConversation(String id) async {
     try {
       _receivedMessageResponseModelList = await runBusyFuture(

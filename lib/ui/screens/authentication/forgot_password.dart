@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/screens/authentication/verification_screen_forgot_password.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
@@ -42,7 +41,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             SizedBox(height: 20.h),
             TextView(
               text:
-                  'Enter your email and phone number,  we will send a confirmation code',
+                  'Enter your email and phone number, we will send a confirmation code',
               textStyle: GoogleFonts.gabarito(
                 color: AppColor.darkindgrey,
                 fontSize: 16.sp,
@@ -144,12 +143,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w500,
               ),
-              onPressed:
-                  () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => VerificationScreenForgotPassword(),
-                    ),
-                  ),
+              onPressed: () {},
             ),
           ],
         ),

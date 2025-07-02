@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 class UrlConfig {
+  static const String logout = 'logout';
   static const String register = 'register';
   static const String doctor = 'doctor';
   static const String doctor_stats = 'doctor/stats';

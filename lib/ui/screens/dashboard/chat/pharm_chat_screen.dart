@@ -40,7 +40,7 @@ class _PharmChatScreenState extends State<PharmChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    // final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return ViewModelBuilder<PharmViewModel>.reactive(
       viewModelBuilder: () => PharmViewModel(),
       onViewModelReady: (model) {
@@ -289,44 +289,44 @@ class _PharmChatScreenState extends State<PharmChatScreen> {
                                         ),
                                         filled: true,
                                         fillColor: AppColor.white,
-                                        suffixIcon: Padding(
-                                          padding: EdgeInsets.only(
-                                            top: 13.w,
-                                            right: 16.w,
-                                          ),
-                                          child:
-                                              !isContainedText
-                                                  ? Padding(
-                                                    padding: EdgeInsets.only(
-                                                      bottom:
-                                                          isTablet ? 10.w : 0.w,
-                                                    ),
-                                                    child: Wrap(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          AppImage.clipper,
-                                                          height: 20.h,
-                                                          width: 20.w,
-                                                        ),
+                                        // suffixIcon: Padding(
+                                        //   padding: EdgeInsets.only(
+                                        //     top: 13.w,
+                                        //     right: 16.w,
+                                        //   ),
+                                        //   child:
+                                        //       !isContainedText
+                                        //           ? Padding(
+                                        //             padding: EdgeInsets.only(
+                                        //               bottom:
+                                        //                   isTablet ? 10.w : 0.w,
+                                        //             ),
+                                        //             child: Wrap(
+                                        //               children: [
+                                        //                 SvgPicture.asset(
+                                        //                   AppImage.clipper,
+                                        //                   height: 20.h,
+                                        //                   width: 20.w,
+                                        //                 ),
 
-                                                        SizedBox(width: 16.w),
-                                                        SvgPicture.asset(
-                                                          AppImage.mic,
-                                                          height: 20.h,
-                                                          width: 20.w,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                  : Padding(
-                                                    padding: EdgeInsets.only(
-                                                      bottom: 10.w,
-                                                    ),
-                                                    child: SvgPicture.asset(
-                                                      AppImage.clipper,
-                                                    ),
-                                                  ),
-                                        ),
+                                        //                 SizedBox(width: 16.w),
+                                        //                 SvgPicture.asset(
+                                        //                   AppImage.mic,
+                                        //                   height: 20.h,
+                                        //                   width: 20.w,
+                                        //                 ),
+                                        //               ],
+                                        //             ),
+                                        //           )
+                                        //           : Padding(
+                                        //             padding: EdgeInsets.only(
+                                        //               bottom: 10.w,
+                                        //             ),
+                                        //             child: SvgPicture.asset(
+                                        //               AppImage.clipper,
+                                        //             ),
+                                        //           ),
+                                        // ),
                                       ),
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {

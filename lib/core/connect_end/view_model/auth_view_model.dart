@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison
 import "package:collection/collection.dart";
 import 'package:my_doc_lab/core/connect_end/model/get_user_notification_model/get_user_notification_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/user_registration/user_registration.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/web_view_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
@@ -33,6 +34,7 @@ import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/screens/dashboard/dashboard_screen.dart';
 import '../../../ui/widget/button_widget.dart';
 import '../../../ui/widget/text_form_widget.dart';
+import '../model/care_giver_registration_model/care_giver_registration_model.dart';
 import '../model/checkout_entity_model/checkout_entity_model.dart' as ch;
 import '../../../main.dart';
 import '../../../ui/app_assets/app_utils.dart';
@@ -67,6 +69,7 @@ import '../model/searched_medicine_response_model/searched_medicine_response_mod
 import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
 import '../model/send_message_entity_model.dart';
 import '../model/update_user_entity_model.dart';
+import '../model/verify_otp_entity_model.dart';
 import '../model/view_doctors_prescription_model/view_doctors_prescription_model.dart';
 import '../repo/repo_impl.dart';
 
@@ -165,6 +168,12 @@ class AuthViewModel extends BaseViewModel {
   List<GetUsersAppointmentModel>? getListOfCompletedAppointmentModelList = [];
   List<GetUsersAppointmentModel>? getListOfCancelledAppointmentModelList = [];
   List<GetUsersAppointmentModel>? getListOfScheduledAppointmentModelList = [];
+
+  UserRegistration? get userRegistration => _userRegistration;
+  UserRegistration? _userRegistration;
+  CareGiverRegistrationModel? get careGiverRegistrationModel =>
+      _careGiverRegistrationModel;
+  CareGiverRegistrationModel? _careGiverRegistrationModel;
 
   final debouncer = Debouncer();
 
@@ -282,18 +291,46 @@ class AuthViewModel extends BaseViewModel {
     return _isTogglePasswordConfirm;
   }
 
-  void registerUser(context, {RegistrationEntityModel? registerEntity}) async {
+  void registerUser(context, {RegistrationEntityModel? registerEntity, String? userType}) async {
     try {
       loadingDialog(context);
-      await runBusyFuture(
+      _userRegistration = await runBusyFuture(
         repositoryImply.register(registerEntity!),
         throwException: true,
       );
+      if (_userRegistration?.status == 'success') {
+        Navigator.pop(context);
+        navigate.navigateTo(
+          Routes.verificationScreenForgotPassword,
+          arguments: VerificationScreenForgotPasswordArguments(
+            email: registerEntity.email,
+          ),
+        );
+      }
+    } catch (e) {
+      logger.d(e);
       Navigator.pop(context);
-      navigate.navigateTo(
-        Routes.loginScreen,
-        arguments: LoginScreenArguments(userType: 'patients'),
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void verifyUser(context, {VerifyOtpEntityModel? verify}) async {
+    try {
+      loadingDialog(context);
+      var v = await runBusyFuture(
+        repositoryImply.verifyOtp(verify!),
+        throwException: true,
       );
+      if (v['status'] == 'success') {
+        Navigator.pop(context);
+        navigate.navigateTo(
+          Routes.loginScreen,
+          arguments: LoginScreenArguments(
+            userType: verify.role!=null?'care-giver':'patient',
+          ),
+        );
+      }
     } catch (e) {
       logger.d(e);
       Navigator.pop(context);
@@ -305,19 +342,23 @@ class AuthViewModel extends BaseViewModel {
   void careRegisterUser(
     context, {
     CareGiverResiterEntityModel? registerEntity,
+    String? userType
   }) async {
     try {
       loadingDialog(context);
-      await runBusyFuture(
+      _careGiverRegistrationModel = await runBusyFuture(
         repositoryImply.registerCareGiver(registerEntity!),
         throwException: true,
       );
-      Navigator.pop(context);
-      navigate.navigateTo(
-        Routes.loginScreen,
-        arguments: LoginScreenArguments(userType: 'care-giver'),
-      );
-      // }
+      if (_careGiverRegistrationModel?.status == 'success') {
+        Navigator.pop(context);
+        navigate.navigateTo(
+          Routes.verificationScreenForgotPassword,
+          arguments: VerificationScreenForgotPasswordArguments(
+            email: registerEntity.email,
+          ),
+        );
+      }
     } catch (e) {
       logger.d(e);
       Navigator.pop(context);
@@ -343,6 +384,16 @@ class AuthViewModel extends BaseViewModel {
       logger.d(e);
       Navigator.pop(context);
       AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void logout() async {
+    try {
+      await runBusyFuture(repositoryImply.logout(), throwException: true);
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
     }
     notifyListeners();
   }

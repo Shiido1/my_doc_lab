@@ -16,6 +16,7 @@ import 'package:my_doc_lab/core/connect_end/model/update_user_response_model/upd
 import 'package:my_doc_lab/core/connect_end/model/verify_otp_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/view_doctors_prescription_model/view_doctors_prescription_model.dart';
 import '../connect_end/model/add_booking_entity_model.dart';
+import '../connect_end/model/care_giver_registration_model/care_giver_registration_model.dart';
 import '../connect_end/model/care_giver_resiter_entity_model.dart';
 import '../connect_end/model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../connect_end/model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
@@ -43,6 +44,7 @@ import '../connect_end/model/searched_pharmacy_response_model/searched_pharmacy_
 import '../connect_end/model/send_message_entity_model.dart';
 import '../connect_end/model/send_message_response_model/send_message_response_model.dart';
 import '../connect_end/model/update_user_entity_model.dart';
+import '../connect_end/model/user_registration/user_registration.dart';
 import '../core_folder/app/app.locator.dart';
 import '../core_folder/app/app.logger.dart';
 import '../core_folder/network/cloudinary_network_service.dart';
@@ -102,7 +104,7 @@ class AuthApi {
     }
   }
 
-  Future<dynamic> register(RegistrationEntityModel registerEntity) async {
+  Future<UserRegistration> register(RegistrationEntityModel registerEntity) async {
     try {
       final response = await _service.call(
         UrlConfig.register,
@@ -110,14 +112,14 @@ class AuthApi {
         data: registerEntity.toJson(),
       );
       logger.d(response.data);
-      return response.data;
+      return UserRegistration.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;
     }
   }
 
-  Future<dynamic> registerCareGiver(
+  Future<CareGiverRegistrationModel> registerCareGiver(
     CareGiverResiterEntityModel registerEntity,
   ) async {
     try {
@@ -127,7 +129,7 @@ class AuthApi {
         data: registerEntity.toJson(),
       );
       logger.d(response.data);
-      return response.data;
+      return CareGiverRegistrationModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;
@@ -585,6 +587,20 @@ class AuthApi {
       );
       logger.d(response.data);
       return GetUserNotificationModelList.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> logout() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.logout,
+        RequestMethod.post,
+      );
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;

@@ -206,6 +206,7 @@ class MoreSettingsScreen extends StatelessWidget {
                   text: 'Logout',
                   onTap: () {
                     SharedPreferencesService.instance.logOut('patients');
+                    model.logout();
                   },
                 ),
                 SizedBox(height: 20.h),

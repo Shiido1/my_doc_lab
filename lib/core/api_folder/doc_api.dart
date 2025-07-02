@@ -442,4 +442,18 @@ class DocAuthApi {
       rethrow;
     }
   }
+
+  Future<dynamic> logout() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.logout,
+        RequestMethod.post,
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
 }

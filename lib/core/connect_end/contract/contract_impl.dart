@@ -9,9 +9,11 @@ import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/
 import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/search_doctor_entity_model.dart';
+import 'package:my_doc_lab/core/connect_end/model/user_registration/user_registration.dart';
 import '../../api_folder/auth_api.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_booking_entity_model.dart';
+import '../model/care_giver_registration_model/care_giver_registration_model.dart';
 import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
@@ -49,10 +51,10 @@ import '../model/view_doctors_prescription_model/view_doctors_prescription_model
 class AuthContractsImpl {
   final _api = locator<AuthApi>();
 
-  Future<dynamic> register(RegistrationEntityModel registerEntity) async =>
+  Future<UserRegistration> register(RegistrationEntityModel registerEntity) async =>
       await _api.register(registerEntity);
 
-  Future<dynamic> registerCareGiver(
+  Future<CareGiverRegistrationModel> registerCareGiver(
     CareGiverResiterEntityModel registerEntity,
   ) async => await _api.registerCareGiver(registerEntity);
 
@@ -155,4 +157,5 @@ class AuthContractsImpl {
       await _api.orderHistory();
   Future<GetUserNotificationModelList> notification() async =>
       await _api.notification();
+  Future<dynamic> logout() async => await _api.logout();
 }

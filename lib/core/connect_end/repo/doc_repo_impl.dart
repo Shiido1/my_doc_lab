@@ -207,4 +207,9 @@ class DocRepoImpl {
     final response = await _contract.doctorsAnalytics();
     return response;
   }
+
+  Future<dynamic> logout() async {
+    final response = await _contract.logout();
+    return response;
+  }
 }
