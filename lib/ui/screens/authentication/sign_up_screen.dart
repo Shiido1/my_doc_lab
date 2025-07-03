@@ -387,8 +387,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     buttonBorderColor: AppColor.transparent,
                     textStyle: GoogleFonts.dmSans(
                       color: AppColor.white,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                     onPressed: () {
                       if (formKey.currentState!.validate() && _onTap) {

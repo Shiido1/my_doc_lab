@@ -1,25 +1,21 @@
 // ignore_for_file: must_be_immutable, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_utils.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/model/checkoutentitymodel.dart';
-import '../../../../core/connect_end/model/get_all_lab_tech_response_model/get_all_lab_tech_response_model.dart';
 import '../../../../core/connect_end/model/get_list_of_lab_diagnosis_model/get_list_of_lab_diagnosis_model.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../main.dart';
-import '../../../app_assets/app_image.dart';
 import '../../../app_assets/constant.dart';
 import '../../../widget/text_widget.dart';
+import '../home/cart_screen.dart';
 
 class LaboratoryDetailScreen extends StatefulWidget {
-  LaboratoryDetailScreen({super.key, required this.getAllLabTechResponseModel});
-  GetAllLabTechResponseModel? getAllLabTechResponseModel;
+  const LaboratoryDetailScreen({super.key});
 
   @override
   State<LaboratoryDetailScreen> createState() => _LaboratoryDetailScreenState();
@@ -61,10 +57,7 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
       body: ViewModelBuilder<AuthViewModel>.reactive(
         viewModelBuilder: () => AuthViewModel(),
         onViewModelReady: (model) {
-          model.getAllDiagnosisList(
-            context,
-            id: widget.getAllLabTechResponseModel?.id.toString(),
-          );
+          model.getAllDiagnosisList(context, id: '1');
         },
         disposeViewModel: false,
         builder: (_, AuthViewModel model, __) {
@@ -73,275 +66,62 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 26.0.h),
+                TextView(
+                  text: 'Available Services',
+                  textStyle: GoogleFonts.gabarito(
+                    color: AppColor.black,
+                    fontSize: 22.sp,
+                    letterSpacing: 0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 SizedBox(height: 20.h),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(10),
-                      ),
-                      child: Image.network(
-                        widget.getAllLabTechResponseModel?.profileImage ?? '',
-                        height: 140.h,
-                        width: 140.w,
-                        fit: BoxFit.cover,
-                        errorBuilder:
-                            (context, error, stackTrace) => shimmerViewPharm(),
-                      ),
-                    ),
-                    SizedBox(width: 15.w),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 160.w,
-                            child: TextView(
-                              text:
-                                  'Dr ${widget.getAllLabTechResponseModel?.firstName?.capitalize() ?? ''} ${widget.getAllLabTechResponseModel?.lastName?.capitalize() ?? ''}',
-                              maxLines: 1,
-                              textOverflow: TextOverflow.ellipsis,
-                              textStyle: GoogleFonts.gabarito(
-                                color: AppColor.black,
-                                fontSize: 20.0.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          SizedBox(
-                            width: 160.w,
-                            child: TextView(
-                              text:
-                                  '${widget.getAllLabTechResponseModel?.businessName ?? ''}',
-                              maxLines: 1,
-                              textOverflow: TextOverflow.ellipsis,
-                              textStyle: GoogleFonts.gabarito(
-                                color: AppColor.grey,
-                                fontSize: 14.0.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-
-                          Container(
-                            width: 50.w,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 2.h,
-                              horizontal: 6.w,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.r),
-                              color: AppColor.primary,
-                            ),
-                            child: Row(
+                Divider(color: AppColor.grey, thickness: .5),
+                if (model.getListOfLabDiagnosisModelList != null &&
+                    model
+                        .getListOfLabDiagnosisModelList!
+                        .getListOfLabDiagnosisModelList!
+                        .isNotEmpty)
+                  ...model
+                      .getListOfLabDiagnosisModelList!
+                      .getListOfLabDiagnosisModelList!
+                      .map(
+                        (o) => Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(
-                                  Icons.star,
-                                  color: AppColor.white,
-                                  size: 14.sp,
-                                ),
-                                SizedBox(width: 3.w),
                                 TextView(
-                                  text: '4.8',
-                                  textStyle: GoogleFonts.dmSans(
-                                    color: AppColor.white,
-                                    fontSize: 12.0.sp,
-                                    fontWeight: FontWeight.w500,
+                                  text: o.name!.capitalize(),
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.black,
+                                    fontSize: 16.sp,
+                                    letterSpacing: 0,
+                                    fontWeight: FontWeight.w400,
                                   ),
+                                ),
+                                Checkbox(
+                                  value: selectedOptions.contains(o),
+                                  onChanged: (isChecked) {
+                                    setState(() {
+                                      if (isChecked!) {
+                                        selectedOptions.add(o);
+                                      } else {
+                                        selectedOptions.remove(o);
+                                      }
+                                    });
+                                  },
                                 ),
                               ],
                             ),
-                          ),
-                          SizedBox(height: 10.w),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SvgPicture.asset(
-                                AppImage.location,
-                                height: 14.h,
-                                width: 14.w,
-                              ),
-                              SizedBox(width: 4.w),
-                              SizedBox(
-                                width: 160.w,
-                                child: TextView(
-                                  text:
-                                      '${widget.getAllLabTechResponseModel?.address?.capitalize() ?? ''} ${widget.getAllLabTechResponseModel?.state?.capitalize() ?? ''}, ${widget.getAllLabTechResponseModel?.city?.capitalize() ?? ''}',
-                                  maxLines: 4,
-                                  textOverflow: TextOverflow.ellipsis,
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.black,
-                                    fontSize: 12.0.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.w),
-                TextView(
-                  text: 'About',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.black,
-                    fontSize: 16.0.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 10.w),
-                !isTapped
-                    ? Wrap(
-                      children: [
-                        SizedBox(
-                          width: 350.w,
-                          child: TextView(
-                            text:
-                                '${widget.getAllLabTechResponseModel?.about?.capitalize() ?? ''}',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.black,
-                              fontSize: 14.60.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            maxLines: 3,
-                            textOverflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isTapped = true;
-                            });
-                          },
-                          child: TextView(
-                            text: 'Read More',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.green,
-                              fontSize: 14.60.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                    : Wrap(
-                      children: [
-                        SizedBox(
-                          child: TextView(
-                            text:
-                                '${widget.getAllLabTechResponseModel?.about?.capitalize() ?? ''}',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.black,
-                              fontSize: 14.60.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isTapped = false;
-                            });
-                          },
-                          child: TextView(
-                            text: 'Read Less',
-                            textStyle: GoogleFonts.gabarito(
-                              color: AppColor.green,
-                              fontSize: 14.60.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
 
-                SizedBox(height: 10.w),
-                TextView(
-                  text: 'Certification',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.black,
-                    fontSize: 16.0.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 10.w),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.w),
-                      child: SvgPicture.asset(
-                        AppImage.gradcap,
-                        height: 20.h,
-                        width: 20.w,
+                            Divider(color: AppColor.grey, thickness: .5),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10.20.w),
-                    SizedBox(
-                      width: 290.w,
-                      child: Html(
-                        data:
-                            '${widget.getAllLabTechResponseModel?.certifications ?? ''}',
-                        shrinkWrap: true,
-                        style: {
-                          "body": Style(
-                            color: Colors.black,
-                            fontSize: FontSize(18.0),
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gabarito',
-                          ),
-                        },
-                      ),
-                    ),
-                  ],
-                ),
                 SizedBox(height: 20.w),
-                TextView(
-                  text: 'Experience',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.black,
-                    fontSize: 16.0.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 6.10.w),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.w),
-                      child: SvgPicture.asset(
-                        AppImage.exp,
-                        height: 20.h,
-                        width: 20.w,
-                      ),
-                    ),
-                    SizedBox(width: 10.20.w),
-                    SizedBox(
-                      width: 300.w,
-                      child: Html(
-                        data:
-                            '${widget.getAllLabTechResponseModel?.experience ?? ''}',
-                        shrinkWrap: true,
-                        style: {
-                          "body": Style(
-                            color: Colors.black,
-                            fontSize: FontSize(18.0),
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gabarito',
-                          ),
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.w),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -430,59 +210,7 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20.w),
-                TextView(
-                  text: 'Available Services',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.black,
-                    fontSize: 16.sp,
-                    letterSpacing: 0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Divider(color: AppColor.grey, thickness: .5),
-                if (model.getListOfLabDiagnosisModelList != null &&
-                    model
-                        .getListOfLabDiagnosisModelList!
-                        .getListOfLabDiagnosisModelList!
-                        .isNotEmpty)
-                  ...model
-                      .getListOfLabDiagnosisModelList!
-                      .getListOfLabDiagnosisModelList!
-                      .map(
-                        (o) => Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextView(
-                                  text: o.name!.capitalize(),
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.black,
-                                    fontSize: 16.sp,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                Checkbox(
-                                  value: selectedOptions.contains(o),
-                                  onChanged: (isChecked) {
-                                    setState(() {
-                                      if (isChecked!) {
-                                        selectedOptions.add(o);
-                                      } else {
-                                        selectedOptions.remove(o);
-                                      }
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
 
-                            Divider(color: AppColor.grey, thickness: .5),
-                          ],
-                        ),
-                      ),
                 SizedBox(height: 40.h),
                 GestureDetector(
                   onTap: () {
@@ -499,27 +227,25 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
                               serviceId: int.parse(
                                 selectedOptions[i].id.toString(),
                               ),
-                              doctorId: int.parse(
-                                widget.getAllLabTechResponseModel!.id
-                                    .toString(),
-                              ),
+                              doctorId: int.parse('1'),
                               slotId: 0,
                               complaint: '',
                               amount: selectedOptions[i].price!.toString(),
                               date: model.selectLabDate,
                               time: t,
-                              doctor:
-                                  widget.getAllLabTechResponseModel!.firstName!
-                                      .capitalize(),
+                              doctor: 'Lab',
                               productId: 0,
                               qty: 0,
                               name: selectedOptions[i].name!,
                             ),
                           );
                         }
-                        AppUtils.snackbar(
+                        await AppUtils.snackbar(
                           context,
                           message: 'Lab test request added to Cart..!',
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => CartScreen()),
                         );
                       },
                     );

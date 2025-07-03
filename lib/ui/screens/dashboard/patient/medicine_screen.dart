@@ -6,10 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen_one.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
-
 import '../../../../core/connect_end/model/search_doctor_entity_model.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
@@ -88,20 +86,6 @@ class _MedicineScreenState extends State<MedicineScreen> {
                         model.notifyListeners();
                       },
                     ),
-                    SizedBox(height: 20.h),
-
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: TextView(
-                        text: 'Top Pharmacist',
-                        textAlign: TextAlign.start,
-                        textStyle: GoogleFonts.gabarito(
-                          color: AppColor.primary1,
-                          fontSize: 18.20.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
                     SizedBox(
                       height: 500.h,
                       child:
@@ -137,32 +121,32 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                 itemBuilder: (context, index) {
                                   // Build each grid item based on the index
                                   return GestureDetector(
-                                    onTap:
-                                        () => Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder:
-                                                (context) => ProfileScreen1(
-                                                  id:
-                                                      model.queryPharm != '' &&
-                                                              model.searchedPharmResponseModelList !=
-                                                                  null &&
-                                                              model
-                                                                  .searchedPharmResponseModelList!
-                                                                  .searchedPharmacyResponseModelList!
-                                                                  .isNotEmpty
-                                                          ? model
-                                                              .searchedPharmResponseModelList!
-                                                              .searchedPharmacyResponseModelList![index]
-                                                              .id
-                                                              .toString()
-                                                          : model
-                                                              .getAllPharmaciesResponseModelList!
-                                                              .getAllPharmaciesResponseModelList![index]
-                                                              .id
-                                                              .toString(),
-                                                ),
-                                          ),
-                                        ),
+                                    // onTap:
+                                    //     () => Navigator.of(context).push(
+                                    //       MaterialPageRoute(
+                                    //         builder:
+                                    //             (context) => ProfileScreen1(
+                                    //               id:
+                                    //                   model.queryPharm != '' &&
+                                    //                           model.searchedPharmResponseModelList !=
+                                    //                               null &&
+                                    //                           model
+                                    //                               .searchedPharmResponseModelList!
+                                    //                               .searchedPharmacyResponseModelList!
+                                    //                               .isNotEmpty
+                                    //                       ? model
+                                    //                           .searchedPharmResponseModelList!
+                                    //                           .searchedPharmacyResponseModelList![index]
+                                    //                           .id
+                                    //                           .toString()
+                                    //                       : model
+                                    //                           .getAllPharmaciesResponseModelList!
+                                    //                           .getAllPharmaciesResponseModelList![index]
+                                    //                           .id
+                                    //                           .toString(),
+                                    //             ),
+                                    //       ),
+                                    //     ),
                                     child: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
@@ -304,31 +288,6 @@ class _MedicineScreenState extends State<MedicineScreen> {
                                                         ],
                                                       ),
                                                     ),
-                                                    // SizedBox(width: 20.h),
-                                                    // Row(
-                                                    //   children: [
-                                                    //     SvgPicture.asset(
-                                                    //       AppImage.location,
-                                                    //       height: 15.2.h,
-                                                    //       width: 16.2.w,
-                                                    //     ),
-                                                    //     SizedBox(width: 2.w),
-                                                    //     TextView(
-                                                    //       text: '800m away',
-                                                    //       textStyle:
-                                                    //           GoogleFonts.gabarito(
-                                                    //             color:
-                                                    //                 AppColor
-                                                    //                     .black,
-                                                    //             fontSize:
-                                                    //                 12.0.sp,
-                                                    //             fontWeight:
-                                                    //                 FontWeight
-                                                    //                     .w500,
-                                                    //           ),
-                                                    //     ),
-                                                    //   ],
-                                                    // ),
                                                   ],
                                                 ),
                                               ],

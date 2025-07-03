@@ -9,7 +9,7 @@ class ButtonWidget extends StatelessWidget {
     this.buttonText,
     this.color,
     this.buttonColor,
-    this.buttonHeight = 50,
+    this.buttonHeight = 54.60,
     this.buttonWidth = double.infinity,
     this.isLight = true,
     this.buttonBorderColor,

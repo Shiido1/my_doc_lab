@@ -8,14 +8,14 @@ import 'package:my_doc_lab/core/connect_end/model/search_doctor_entity_model.dar
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/patient/medicine_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen_one.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_image.dart';
 import '../../../widget/text_widget.dart';
-import '../laboratory/lab_screen.dart';
+import '../laboratory/lab_attendant_detail_profile_screen.dart';
 import '../notification/patient_notification_screen.dart';
 import 'cart_screen.dart';
 
@@ -220,15 +220,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SizedBox(height: 20.h),
 
-                fourthContainer(context),
-                SizedBox(height: 10.h),
                 Row(
                   children: [
+                    fourthContainer(context),
+                    SizedBox(width: 10.h),
                     firstContainer(context),
-                    SizedBox(width: 10.w),
-                    thirdContainer(context),
                   ],
                 ),
+                // Row(
+                //   children: [
+                //     firstContainer(context),
+                //     SizedBox(width: 10.w),
+                //     thirdContainer(context),
+                //   ],
+                // ),
                 SizedBox(height: 20.h),
                 TextView(
                   text: 'Upcoming Appointments',
@@ -467,7 +472,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap:
               () => Navigator.of(
                 context,
-              ).push(MaterialPageRoute(builder: (context) => MedicineScreen())),
+              ).push(MaterialPageRoute(builder: (context) => ProfileScreen1())),
           child: Container(
             alignment: Alignment.centerRight,
             padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 10.w),
@@ -492,7 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 10.h),
                 TextView(
                   text:
-                      'Get in touch with top pharmacists, order Drugs, have them delivered right to your doorstep.',
+                      'Order drugs from trusted pharmacists, delivered to your door.',
                   textAlign: TextAlign.end,
                   textStyle: GoogleFonts.dmSans(
                     color: AppColor.darkindgrey,
@@ -500,7 +505,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: 30.0.h),
                 Container(
                   padding: EdgeInsets.symmetric(
                     vertical: 4.8.w,
@@ -615,7 +620,9 @@ class _HomeScreenState extends State<HomeScreen> {
         GestureDetector(
           onTap:
               () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => LaboratoryScreen()),
+                MaterialPageRoute(
+                  builder: (context) => LaboratoryDetailScreen(),
+                ),
               ),
           child: Container(
             alignment: Alignment.centerRight,
@@ -681,79 +688,78 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   );
 
-  fourthContainer(context) => Stack(
-    children: [
-      GestureDetector(
-        onTap:
-            () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DoctorTestScreen(tap: true),
-              ),
-            ),
-        child: Container(
-          alignment: Alignment.centerRight,
-          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 12.w),
-          decoration: BoxDecoration(
-            color: AppColor.blue,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              TextView(
-                text: 'Book Appointment',
-                textStyle: GoogleFonts.dmSans(
-                  color: AppColor.white,
-                  fontSize: 22.30.sp,
-                  fontWeight: FontWeight.w900,
+  fourthContainer(context) => Expanded(
+    child: Stack(
+      clipBehavior: Clip.hardEdge,
+      children: [
+        GestureDetector(
+          onTap:
+              () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => LaboratoryDetailScreen(),
                 ),
               ),
-              SizedBox(height: 10.h),
-              SizedBox(
-                width: 250.w,
-                child: TextView(
-                  text:
-                      'Connect with top doctors and get expert care at your convenience.',
+          child: Container(
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 10.w),
+            decoration: BoxDecoration(
+              color: AppColor.blue,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SizedBox(height: 6.h),
+                TextView(
+                  text: 'Order Test',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.white,
+                    fontSize: 16.30.sp,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                TextView(
+                  text: 'Connect to top labs and get test results easily.',
                   textAlign: TextAlign.end,
-                  maxLines: 2,
                   textStyle: GoogleFonts.dmSans(
                     color: AppColor.white,
                     fontSize: 12.6.sp,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-              ),
-              SizedBox(height: 20.h),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 4.8.w,
-                  horizontal: 10.0.w,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColor.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextView(
-                  text: 'Book Now',
-                  textStyle: GoogleFonts.dmSans(
-                    color: AppColor.blue,
-                    fontSize: 12.20.sp,
-                    fontWeight: FontWeight.w600,
+                SizedBox(height: 40.h),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 4.8.w,
+                    horizontal: 8.0.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: TextView(
+                    text: 'Order Now',
+                    textStyle: GoogleFonts.dmSans(
+                      color: AppColor.blue,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 10.h),
-            ],
+                SizedBox(height: 10.h),
+              ],
+            ),
           ),
         ),
-      ),
 
-      Positioned(
-        bottom: -3.8,
-        left: 2,
-        child: Image.asset(AppImage.doc, height: 120.h, width: 130.w),
-      ),
-    ],
+        Positioned(
+          bottom: 0,
+          left: -6,
+          child: Image.asset(AppImage.doc, height: 80.h, width: 100.w),
+        ),
+      ],
+    ),
   );
 
   void modalBottomSheetFilter(contxt) {

@@ -80,7 +80,7 @@ class SecondOnboardingScreen extends StatelessWidget {
                 buttonBorderColor: AppColor.transparent,
                 textStyle: GoogleFonts.dmSans(
                   color: AppColor.white,
-                  fontSize: 18.sp,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w600,
                 ),
                 onPressed:
@@ -100,7 +100,7 @@ class SecondOnboardingScreen extends StatelessWidget {
                 buttonBorderColor: AppColor.primary1,
                 textStyle: GoogleFonts.dmSans(
                   color: AppColor.primary1,
-                  fontSize: 18.sp,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w600,
                 ),
 

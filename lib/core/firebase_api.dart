@@ -9,11 +9,7 @@ import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
 import '../main.dart';
 import 'connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 
-Future<void> handlerBackgroundMessage(RemoteMessage message) async {
-  print("title:${message.notification?.title}");
-  print("body:${message.notification?.body}");
-  print("payload:${message.data}");
-}
+Future<void> handlerBackgroundMessage(RemoteMessage message) async {}
 
 class FirebaseApi {
   final _firebaseMessage = FirebaseMessaging.instance;
@@ -36,10 +32,6 @@ class FirebaseApi {
 
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
-    // print("normal:${message.data['caller_type']}");
-    // print("payload:${message.data}");
-    // print("ttttt:${message.from}");
-    // print("oooooo:${message.messageType}");
     if (message.data['message'] != null &&
         message.data['sender_type'] == 'Doctor') {
       navigate.navigateTo(

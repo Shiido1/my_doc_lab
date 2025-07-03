@@ -305,6 +305,10 @@ class AuthViewModel extends BaseViewModel {
       );
       if (_userRegistration?.status == 'success') {
         Navigator.pop(context);
+        await AppUtils.snackbar(
+          context,
+          message: 'Registration Successfully..!',
+        );
         navigate.navigateTo(
           Routes.verificationScreenForgotPassword,
           arguments: VerificationScreenForgotPasswordArguments(
@@ -330,6 +334,7 @@ class AuthViewModel extends BaseViewModel {
       );
       if (v['status'] == 'success') {
         Navigator.pop(context);
+        await AppUtils.snackbar(context, message: v['message']);
         navigate.navigateTo(
           Routes.loginScreen,
           arguments: LoginScreenArguments(userType: 'patient'),
@@ -372,6 +377,8 @@ class AuthViewModel extends BaseViewModel {
       );
       if (v['status'] == 'success') {
         Navigator.pop(context);
+
+        await AppUtils.snackbar(context, message: v['message']);
         navigate.navigateTo(
           Routes.loginScreen,
           arguments: LoginScreenArguments(userType: 'care-giver'),
@@ -421,6 +428,10 @@ class AuthViewModel extends BaseViewModel {
       );
       if (_careGiverRegistrationModel?.status == 'success') {
         Navigator.pop(context);
+        await AppUtils.snackbar(
+          context,
+          message: 'Registration Successfully..!',
+        );
         navigate.navigateTo(
           Routes.verificationScreenForgotPassword,
           arguments: VerificationScreenForgotPasswordArguments(
