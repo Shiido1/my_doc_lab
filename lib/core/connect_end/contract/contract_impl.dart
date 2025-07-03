@@ -51,8 +51,9 @@ import '../model/view_doctors_prescription_model/view_doctors_prescription_model
 class AuthContractsImpl {
   final _api = locator<AuthApi>();
 
-  Future<UserRegistration> register(RegistrationEntityModel registerEntity) async =>
-      await _api.register(registerEntity);
+  Future<UserRegistration> register(
+    RegistrationEntityModel registerEntity,
+  ) async => await _api.register(registerEntity);
 
   Future<CareGiverRegistrationModel> registerCareGiver(
     CareGiverResiterEntityModel registerEntity,
@@ -127,6 +128,12 @@ class AuthContractsImpl {
 
   Future<dynamic> resendOtp(RequestOtpEntityModel requestPassword) async =>
       await _api.resendOtp(requestPassword);
+  Future<dynamic> verifyOtpCareGiver(VerifyOtpEntityModel verifyOtp) async =>
+      await _api.verifyOtpCareGiver(verifyOtp);
+
+  Future<dynamic> resendOtpCareGiver(
+    RequestOtpEntityModel requestPassword,
+  ) async => await _api.resendOtpCareGiver(requestPassword);
 
   Future<PostUserVerificationCloudResponse> postCloudinary(
     PostUserCloudEntityModel postCloudinary,

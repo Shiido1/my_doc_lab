@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
@@ -11,6 +12,7 @@ import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../core/connect_end/model/request_otp_entity_model.dart';
 import '../../../core/connect_end/model/verify_otp_entity_model.dart';
 import '../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../core/core_folder/app/app.locator.dart';
@@ -36,7 +38,6 @@ class _VerificationScreenForgotPasswordState
 
   StreamController<ErrorAnimationType>? errorController;
   bool hasError = false;
-  String currentText = "";
 
   @override
   void initState() {
@@ -46,6 +47,7 @@ class _VerificationScreenForgotPasswordState
 
   @override
   Widget build(BuildContext context) {
+    print(widget.userType);
     return ViewModelBuilder<AuthViewModel>.reactive(
       viewModelBuilder: () => locator<AuthViewModel>(),
       onViewModelReady: (model) {},
@@ -71,7 +73,7 @@ class _VerificationScreenForgotPasswordState
                   ),
                   SizedBox(height: 20.h),
                   TextView(
-                    text: 'Enter the Code we sent to 087681****',
+                    text: 'Enter the Code we sent to ${widget.email}',
                     textStyle: GoogleFonts.gabarito(
                       color: AppColor.darkindgrey,
                       fontSize: 16.sp,
@@ -131,7 +133,7 @@ class _VerificationScreenForgotPasswordState
                       onChanged: (value) {
                         print(value);
                         setState(() {
-                          currentText = value;
+                          textEditingController.text = value;
                         });
                       },
                       beforeTextPaste: (text) {
@@ -154,41 +156,74 @@ class _VerificationScreenForgotPasswordState
                     ),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        model.verifyUser(
-                          context,
-                          verify: VerifyOtpEntityModel(
-                            email: widget.email,
-                            otp: textEditingController.text.trim(),
-                            role: widget.userType != null ? 'doctor' : '',
-                          ),
-                        );
+                        if (widget.userType == 'patient') {
+                          model.verifyUser(
+                            context,
+                            verify: VerifyOtpEntityModel(
+                              email: widget.email,
+                              otp: textEditingController.text.trim(),
+                            ),
+                          );
+                        } else {
+                          model.verifyUserCareGiver(
+                            context,
+                            verify: VerifyOtpEntityModel(
+                              email: widget.email,
+                              otp: textEditingController.text.trim(),
+                              role: 'doctor',
+                            ),
+                          );
+                        }
                       }
                     },
                   ),
                   SizedBox(height: 26.0.h),
                   GestureDetector(
-                    onTap: () {},
-                    child: Center(
-                      child: RichText(
-                        text: TextSpan(
-                          text: 'Didn\'t receive the code? ',
-                          style: GoogleFonts.gabarito(
-                            color: AppColor.black,
-                            fontSize: 16.4.sp,
-                            fontWeight: FontWeight.w500,
+                    onTap: () {
+                      if (widget.userType == 'patient') {
+                        model.resendOtp(
+                          context,
+                          requestEntity: RequestOtpEntityModel(
+                            email: widget.email,
                           ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'Resend',
-                              style: GoogleFonts.gabarito(
+                        );
+                      } else {
+                        model.resendOtpCareGiver(
+                          context,
+                          requestEntity: RequestOtpEntityModel(
+                            email: widget.email,
+                            role: 'doctor',
+                          ),
+                        );
+                      }
+                    },
+                    child: Center(
+                      child:
+                          model.isLoading
+                              ? SpinKitDualRing(
                                 color: AppColor.primary1,
-                                fontSize: 16.4.sp,
-                                fontWeight: FontWeight.w500,
+                                size: 20.sp,
+                              )
+                              : RichText(
+                                text: TextSpan(
+                                  text: 'Didn\'t receive the code? ',
+                                  style: GoogleFonts.gabarito(
+                                    color: AppColor.black,
+                                    fontSize: 16.4.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'Resend',
+                                      style: GoogleFonts.gabarito(
+                                        color: AppColor.primary1,
+                                        fontSize: 16.4.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                   ),
                 ],

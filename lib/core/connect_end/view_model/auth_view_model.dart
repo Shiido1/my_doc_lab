@@ -64,6 +64,7 @@ import '../model/pay_stack_payment_model/pay_stack_payment_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
 import '../model/received_message_response_model/received_message_response_model.dart';
+import '../model/request_otp_entity_model.dart';
 import '../model/search_doctor_entity_model.dart';
 import '../model/searched_medicine_response_model/searched_medicine_response_model.dart';
 import '../model/searched_pharmacy_response_model/searched_pharmacy_response_model.dart';
@@ -291,7 +292,11 @@ class AuthViewModel extends BaseViewModel {
     return _isTogglePasswordConfirm;
   }
 
-  void registerUser(context, {RegistrationEntityModel? registerEntity, String? userType}) async {
+  void registerUser(
+    context, {
+    RegistrationEntityModel? registerEntity,
+    String? userType,
+  }) async {
     try {
       loadingDialog(context);
       _userRegistration = await runBusyFuture(
@@ -304,6 +309,7 @@ class AuthViewModel extends BaseViewModel {
           Routes.verificationScreenForgotPassword,
           arguments: VerificationScreenForgotPasswordArguments(
             email: registerEntity.email,
+            userType: userType,
           ),
         );
       }
@@ -326,9 +332,7 @@ class AuthViewModel extends BaseViewModel {
         Navigator.pop(context);
         navigate.navigateTo(
           Routes.loginScreen,
-          arguments: LoginScreenArguments(
-            userType: verify.role!=null?'care-giver':'patient',
-          ),
+          arguments: LoginScreenArguments(userType: 'patient'),
         );
       }
     } catch (e) {
@@ -339,10 +343,75 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void resendOtp(context, {RequestOtpEntityModel? requestEntity}) async {
+    try {
+      _isLoading = true;
+      var v = await runBusyFuture(
+        repositoryImply.resendOtp(requestEntity!),
+        throwException: true,
+      );
+      if (v['status'] == 'success') {
+        _isLoading = false;
+
+        AppUtils.snackbar(context, message: v['message']);
+      }
+    } catch (e) {
+      logger.d(e);
+      _isLoading = false;
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void verifyUserCareGiver(context, {VerifyOtpEntityModel? verify}) async {
+    try {
+      loadingDialog(context);
+      var v = await runBusyFuture(
+        repositoryImply.verifyOtpCareGiver(verify!),
+        throwException: true,
+      );
+      if (v['status'] == 'success') {
+        Navigator.pop(context);
+        navigate.navigateTo(
+          Routes.loginScreen,
+          arguments: LoginScreenArguments(userType: 'care-giver'),
+        );
+      }
+    } catch (e) {
+      logger.d(e);
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void resendOtpCareGiver(
+    context, {
+    RequestOtpEntityModel? requestEntity,
+  }) async {
+    try {
+      _isLoading = true;
+      var v = await runBusyFuture(
+        repositoryImply.resendOtpCareGiver(requestEntity!),
+        throwException: true,
+      );
+      if (v['status'] == 'success') {
+        _isLoading = false;
+
+        AppUtils.snackbar(context, message: v['message']);
+      }
+    } catch (e) {
+      logger.d(e);
+      _isLoading = false;
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
   void careRegisterUser(
     context, {
     CareGiverResiterEntityModel? registerEntity,
-    String? userType
+    String? userType,
   }) async {
     try {
       loadingDialog(context);
@@ -356,6 +425,7 @@ class AuthViewModel extends BaseViewModel {
           Routes.verificationScreenForgotPassword,
           arguments: VerificationScreenForgotPasswordArguments(
             email: registerEntity.email,
+            userType: userType,
           ),
         );
       }

@@ -53,7 +53,9 @@ class AuthRepoImpl {
   final _session = locator<SharedPreferencesService>();
   final _contract = locator<AuthContractsImpl>();
 
-  Future<UserRegistration> register(RegistrationEntityModel registerEntity) async {
+  Future<UserRegistration> register(
+    RegistrationEntityModel registerEntity,
+  ) async {
     final response = await _contract.register(registerEntity);
     return response;
   }
@@ -174,6 +176,18 @@ class AuthRepoImpl {
 
   Future<dynamic> resendOtp(RequestOtpEntityModel requestEntity) async {
     final response = await _contract.resendOtp(requestEntity);
+    return response;
+  }
+
+  Future<dynamic> verifyOtpCareGiver(VerifyOtpEntityModel verifyEntity) async {
+    final response = await _contract.verifyOtpCareGiver(verifyEntity);
+    return response;
+  }
+
+  Future<dynamic> resendOtpCareGiver(
+    RequestOtpEntityModel requestEntity,
+  ) async {
+    final response = await _contract.resendOtpCareGiver(requestEntity);
     return response;
   }
 

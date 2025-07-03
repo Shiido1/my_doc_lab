@@ -409,6 +409,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 password: passwordTextController.text.trim(),
                                 role: model.selectedRole,
                               ),
+                              userType: widget.userType,
                             )
                             : model.registerUser(
                               context,
@@ -424,6 +425,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 address: addressTextController.text.trim(),
                                 state: stateTextController.text.trim(),
                               ),
+                              userType: widget.userType,
                             );
                       } else {
                         AppUtils.snackbarTop(

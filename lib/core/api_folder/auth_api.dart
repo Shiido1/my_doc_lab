@@ -104,7 +104,9 @@ class AuthApi {
     }
   }
 
-  Future<UserRegistration> register(RegistrationEntityModel registerEntity) async {
+  Future<UserRegistration> register(
+    RegistrationEntityModel registerEntity,
+  ) async {
     try {
       final response = await _service.call(
         UrlConfig.register,
@@ -388,6 +390,40 @@ class AuthApi {
   }
 
   Future<dynamic> resendOtp(RequestOtpEntityModel requestEntity) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.resentPatientOtp,
+        RequestMethod.post,
+        data: requestEntity.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> verifyOtpCareGiver(
+    VerifyOtpEntityModel verifyOtpEntity,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.verifyCareGiverOtp,
+        RequestMethod.post,
+        data: verifyOtpEntity.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> resendOtpCareGiver(
+    RequestOtpEntityModel requestEntity,
+  ) async {
     try {
       final response = await _service.call(
         UrlConfig.resentPatientOtp,
