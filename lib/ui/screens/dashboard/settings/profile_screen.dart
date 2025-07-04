@@ -618,8 +618,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                            vertical: 7.2.w,
-                            horizontal: 14.0.w,
+                            vertical: 10.2.w,
+                            horizontal: 16.0.w,
                           ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -660,8 +660,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                            vertical: 7.2.w,
-                            horizontal: 14.0.w,
+                            vertical: 10.2.w,
+                            horizontal: 16.0.w,
                           ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
