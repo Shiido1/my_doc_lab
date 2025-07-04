@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -259,13 +261,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     firstContainer(context),
                   ],
                 ),
-                // Row(
-                //   children: [
-                //     firstContainer(context),
-                //     SizedBox(width: 10.w),
-                //     thirdContainer(context),
-                //   ],
-                // ),
                 SizedBox(height: 20.h),
                 TextView(
                   text: 'Upcoming Appointments',
@@ -312,17 +307,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     model.query = p0;
                     model.notifyListeners();
                   },
-                  // suffixWidget: Padding(
-                  //   padding: EdgeInsets.all(14.w),
-                  //   child: GestureDetector(
-                  //     // onTap: () => modalBottomSheetFilter(context),
-                  //     child: SvgPicture.asset(
-                  //       AppImage.filter,
-                  //       height: 20.h,
-                  //       width: 20.w,
-                  //     ),
-                  //   ),
-                  // ),
                 ),
                 SizedBox(height: 20.h),
                 Row(
