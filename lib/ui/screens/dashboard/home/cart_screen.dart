@@ -50,12 +50,22 @@ class _CartScreenState extends State<CartScreen> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+
                     SizedBox(height: 20.h, width: 20.w),
                   ],
                 ),
 
                 Divider(color: AppColor.friendlyPrimary),
-                SizedBox(height: 30.h),
+                SizedBox(height: 20.h),
+                TextView(
+                  text: 'Kindly long press item to delete item from cart',
+                  textStyle: GoogleFonts.dmSans(
+                    color: AppColor.funnyLookingGrey,
+                    fontSize: 13.20.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 10.h),
                 ...List.generate(box.length, (index) {
                   return CartItemWidget(
                     model: box.getAt(index),

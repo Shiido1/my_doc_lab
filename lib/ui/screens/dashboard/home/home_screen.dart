@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/core/connect_end/model/search_doctor_entity_model.dart';
+import 'package:my_doc_lab/main.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
@@ -134,10 +135,41 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (context) => CartScreen(),
                             ),
                           ),
-                      child: SvgPicture.asset(
-                        AppImage.cart,
-                        width: 24.w,
-                        height: 24.w,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          SvgPicture.asset(
+                            AppImage.cart,
+                            width: 24.w,
+                            height: 24.w,
+                          ),
+                          box.length > 0
+                              ? Positioned(
+                                right: -6,
+                                top: -6,
+                                child: Container(
+                                  padding: EdgeInsets.all(4.w),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: const Color.fromARGB(
+                                      255,
+                                      255,
+                                      123,
+                                      0,
+                                    ),
+                                  ),
+                                  child: TextView(
+                                    text: '${box.length}',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.black,
+                                      fontSize: 12.20.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              : SizedBox.shrink(),
+                        ],
                       ),
                     ),
                     SizedBox(width: 20.w),

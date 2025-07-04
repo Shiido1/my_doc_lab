@@ -248,12 +248,14 @@ class DocViewModel extends BaseViewModel {
 
   onToggleMicrophone() {
     if (onToggleMic == false) {
+      onToggleMic = true;
       engine?.muteLocalAudioStream(false);
       engine?.muteRemoteAudioStream(
         uid: int.parse(remoteUidGlobal.toString()),
         mute: false,
       );
     } else {
+      onToggleMic = false;
       engine?.muteLocalAudioStream(true);
       engine?.muteRemoteAudioStream(
         uid: int.parse(remoteUidGlobal.toString()),
