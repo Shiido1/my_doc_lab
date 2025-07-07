@@ -48,6 +48,7 @@ import '../../debouncer.dart';
 import '../model/add_booking_entity_model.dart';
 import '../model/checkout_entity_model/item.dart';
 import '../model/checkoutentitymodel.dart';
+import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_doctors_response_model/get_all_doctors_response_model.dart';
 import '../model/get_all_lab_tech_response_model/get_all_lab_tech_response_model.dart';
 import '../model/get_all_medicine_response_model/get_all_medicine_response_model.dart';
@@ -457,7 +458,28 @@ class AuthViewModel extends BaseViewModel {
       );
       if (_loginResponseModel?.status == 'success') {
         Navigator.pop(context);
-        AppUtils.snackbar(context, message: _loginResponseModel?.message!);
+        await AppUtils.snackbar(context, message: _loginResponseModel?.message!);
+        navigate.navigateTo(Routes.dashboard);
+      }
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void forgotPassword(context, {ForgotPasswordEntityModel? forgotPassword}) async {
+    try {
+      loadingDialog(context);
+      var v = await runBusyFuture(
+        repositoryImply.forgotPassword(forgotPassword!),
+        throwException: true,
+      );
+      if (v['status'] == 'success') {
+        Navigator.pop(context);
+        await AppUtils.snackbar(context, message: v['message']);
         navigate.navigateTo(Routes.dashboard);
       }
     } catch (e) {
