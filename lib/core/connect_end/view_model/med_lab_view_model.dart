@@ -290,10 +290,7 @@ class LabTechViewModel extends BaseViewModel {
       );
       if (_postUserVerificationCloudResponse != null) {
         Navigator.pop(context);
-        AppUtils.snackbar(
-          context,
-          message: 'Image uploaded to cloudinary Sucessfully.!',
-        );
+        AppUtils.snackbar(context, message: 'Image uploaded Sucessfully.!');
       }
     } catch (e) {
       Navigator.pop(context);
@@ -3176,7 +3173,7 @@ class LabTechViewModel extends BaseViewModel {
                               ),
                               SizedBox(height: 20.h),
                               TextFormWidget(
-                                label: 'Bank Code',
+                                label: 'Bank Name',
                                 labelStyle: TextStyle(
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w500,

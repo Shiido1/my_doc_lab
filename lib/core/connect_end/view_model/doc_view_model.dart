@@ -602,9 +602,9 @@ class DocViewModel extends BaseViewModel {
         repositoryImply.updateDoctor(id!, updateDoctor: update),
         throwException: true,
       );
-      if (v['message'] == 'Account updated successfully!') {
+      if (v['message'] == 'Account Updated Successfully!') {
         Navigator.pop(context);
-        AppUtils.snackbar(context, message: v['message']);
+        await AppUtils.snackbar(context, message: v['message']);
         navigate.navigateTo(Routes.docDashboard);
       }
     } catch (e) {
@@ -685,10 +685,7 @@ class DocViewModel extends BaseViewModel {
       );
       if (_postUserVerificationCloudResponse != null) {
         Navigator.pop(context);
-        AppUtils.snackbar(
-          context,
-          message: 'Image uploaded to cloudinary Sucessfully.!',
-        );
+        AppUtils.snackbar(context, message: 'Image uploaded Sucessfully.!');
       }
     } catch (e) {
       Navigator.pop(context);
@@ -1755,7 +1752,7 @@ class DocViewModel extends BaseViewModel {
                                 maxline: 4,
                                 fillColor: AppColor.white,
                                 controller: patientConditionTextController,
-                                validator: AppValidator.validateInt(),
+                                validator: AppValidator.validateString(),
                               ),
                               SizedBox(height: 20.h),
 
@@ -2661,7 +2658,7 @@ class DocViewModel extends BaseViewModel {
                               ),
                               SizedBox(height: 20.h),
                               TextFormWidget(
-                                label: 'Bank Code',
+                                label: 'Bank Name',
                                 labelStyle: TextStyle(
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w500,

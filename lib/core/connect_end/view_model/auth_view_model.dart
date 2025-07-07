@@ -1408,10 +1408,7 @@ class AuthViewModel extends BaseViewModel {
       );
       if (_postUserVerificationCloudResponse != null) {
         Navigator.pop(context);
-        AppUtils.snackbar(
-          context,
-          message: 'Image uploaded to cloudinary Sucessfully.!',
-        );
+        AppUtils.snackbar(context, message: 'Image uploaded Sucessfully.!');
       }
     } catch (e) {
       Navigator.pop(context);

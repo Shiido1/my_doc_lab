@@ -8,6 +8,8 @@ import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
 
+import '../../app_assets/app_validatiion.dart';
+
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
 
@@ -16,9 +18,7 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  bool _onTap = false;
   TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,90 +49,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ),
             ),
             SizedBox(height: 30.h),
-            Container(
-              padding: EdgeInsets.all(6.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(32.r),
-                color: AppColor.greylight,
+            TextFormWidget(
+              label: 'Enter your email',
+              border: 10,
+              isFilled: true,
+              fillColor: AppColor.white,
+              controller: emailController,
+              prefixWidget: Padding(
+                padding: EdgeInsets.all(9.2.w),
+                child: SvgPicture.asset(AppImage.message),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () => setState(() => _onTap = false),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 14.w,
-                        horizontal: 42.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.r),
-                        color:
-                            _onTap ? AppColor.transparent : AppColor.primary1,
-                      ),
-                      child: TextView(
-                        text: 'Email',
-                        textStyle: GoogleFonts.dmSans(
-                          color: _onTap ? AppColor.darkindgrey : AppColor.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => setState(() => _onTap = true),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 14.w,
-                        horizontal: 42.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.r),
-                        color:
-                            _onTap ? AppColor.primary1 : AppColor.transparent,
-                      ),
-                      child: TextView(
-                        text: 'Phone',
-                        textStyle: GoogleFonts.dmSans(
-                          color: _onTap ? AppColor.white : AppColor.darkindgrey,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              validator: AppValidator.validateEmail(),
             ),
-            SizedBox(height: 30.h),
-            _onTap
-                ? TextFormWidget(
-                  label: 'Enter your Phone number',
-                  // hint: 'Email Address',
-                  border: 10,
-                  isFilled: true,
-                  fillColor: AppColor.white,
-                  controller: phoneController,
-                  prefixWidget: Padding(
-                    padding: EdgeInsets.all(9.2.w),
-                    child: SvgPicture.asset(AppImage.phone),
-                  ),
-                  // validator: AppValidator.validateEmail(),
-                )
-                : TextFormWidget(
-                  label: 'Enter your email',
-                  // hint: 'Email Address',
-                  border: 10,
-                  isFilled: true,
-                  fillColor: AppColor.white,
-                  controller: emailController,
-                  prefixWidget: Padding(
-                    padding: EdgeInsets.all(9.2.w),
-                    child: SvgPicture.asset(AppImage.message),
-                  ),
-                  // validator: AppValidator.validateEmail(),
-                ),
             SizedBox(height: 80.h),
             ButtonWidget(
               buttonText: 'Reset Password',

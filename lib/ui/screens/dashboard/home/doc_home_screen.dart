@@ -5,8 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/tasks/tasks_screen.dart';
-import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
@@ -109,29 +107,7 @@ class DocHomeScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 20.w),
-                TextFormWidget(
-                  label: 'Search for Patients or Appointment',
-                  border: 10,
-                  isFilled: true,
-                  fillColor: AppColor.transparent,
-                  prefixWidget: Padding(
-                    padding: EdgeInsets.all(14.w),
-                    child: SvgPicture.asset(
-                      AppImage.search,
-                      height: 20.h,
-                      width: 20.w,
-                    ),
-                  ),
-                  suffixWidget: Padding(
-                    padding: EdgeInsets.all(14.w),
-                    child: SvgPicture.asset(
-                      AppImage.filter,
-                      height: 20.h,
-                      width: 20.w,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
+
                 Row(
                   children: [
                     dashContainer(
@@ -176,12 +152,6 @@ class DocHomeScreen extends StatelessWidget {
                       secondText: 'Current:',
                       thirdText:
                           '${getCurrency()}${oCcy.format(model.getDoctorStatisticModel?.totalPatients ?? 0.0)}',
-                      onTap:
-                          () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => TasksScreen(),
-                            ),
-                          ),
                     ),
                   ],
                 ),

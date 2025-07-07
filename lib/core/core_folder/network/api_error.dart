@@ -54,6 +54,9 @@ class ApiError {
               dioError.response?.statusCode == 409) {
             apiErrorModel = ApiErrorModel.fromJson(dioError.response?.data);
             print('..u... ${apiErrorModel?.msg}');
+            if (apiErrorModel?.msg != null) {
+              errorDescription = apiErrorModel?.msg;
+            }
             if (apiErrorModel?.error != null) {
               if (apiErrorModel?.error['code'] != null) {
                 errorDescription = apiErrorModel?.error['code'][0];
