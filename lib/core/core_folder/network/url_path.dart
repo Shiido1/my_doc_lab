@@ -32,6 +32,7 @@ class UrlConfig {
   static const String all_meds = 'user/pharmacies/medicine/list';
   static const String all_consultation = 'user/consultations';
   static const String forgot_password = 'forgot-password';
+  static const String forgot_password_caregiver = 'caregiver/forgot-password';
   static const String update_password = 'reset-password';
   static const String labt_tech = 'lab-technician';
   static const String user_lab_tech = 'user/lab_technician';

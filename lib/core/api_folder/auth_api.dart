@@ -359,6 +359,23 @@ class AuthApi {
     }
   }
 
+  Future<dynamic> forgotPasswordCareGiver(
+    ForgotPasswordEntityModel forgotEntity,
+  ) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.forgot_password_caregiver,
+        RequestMethod.post,
+        data: forgotEntity.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
   Future<dynamic> updatePassword(ResetPasswordEntityModel forgotEntity) async {
     try {
       final response = await _service.call(

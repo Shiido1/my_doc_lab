@@ -50,11 +50,9 @@ class PatientSceen extends StatelessWidget {
                 SizedBox(height: 20.w),
                 TextFormWidget(
                   label: 'Search for Patients',
-                  // hint: 'Email Address',
                   border: 10,
                   isFilled: true,
                   fillColor: AppColor.transparent,
-                  // controller: fullnameTextController,
                   prefixWidget: Padding(
                     padding: EdgeInsets.all(14.w),
                     child: SvgPicture.asset(
@@ -63,21 +61,25 @@ class PatientSceen extends StatelessWidget {
                       width: 20.w,
                     ),
                   ),
-                  // suffixWidget: Padding(
-                  //   padding: EdgeInsets.all(14.w),
-                  //   child: SvgPicture.asset(
-                  //     AppImage.personPlus,
-                  //     height: 20.h,
-                  //     width: 20.w,
-                  //   ),
-                  // ),
                   onChange: (p0) {
                     model.queryPatient = p0;
                     model.notifyListeners();
                   },
-                  // validator: AppValidator.validateEmail(),
                 ),
                 SizedBox(height: 30.h),
+                if (model.docPatientListResponseModelList != null &&
+                    model
+                        .docPatientListResponseModelList!
+                        .docPatientListResponseModelList!
+                        .isEmpty)
+                  TextView(
+                    text: 'No Patient',
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.darkindgrey,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 if (model.docPatientListResponseModelList != null &&
                     model
                         .docPatientListResponseModelList!
@@ -174,7 +176,7 @@ class PatientSceen extends StatelessWidget {
                                       SizedBox(height: 4.w),
                                       TextView(
                                         text:
-                                            '${i.user?.age} years • ${i.user?.gender?.capitalize()}',
+                                            '${i.user?.age} years • ${i.user?.gender?.capitalize() ?? ''}',
                                         textStyle: GoogleFonts.gabarito(
                                           color: AppColor.greyIt,
                                           fontSize: 13.sp,
@@ -288,7 +290,7 @@ class PatientSceen extends StatelessWidget {
                                       SizedBox(height: 4.w),
                                       TextView(
                                         text:
-                                            '${i.user?.age} years • ${i.user?.gender?.capitalize()}',
+                                            '${i.user?.age ?? ''} years • ${i.user?.gender?.capitalize() ?? ''}',
                                         textStyle: GoogleFonts.gabarito(
                                           color: AppColor.greyIt,
                                           fontSize: 13.sp,

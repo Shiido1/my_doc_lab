@@ -102,6 +102,20 @@ class DoctorMessageListScreen extends StatelessWidget {
                               model
                                   .getMessageIndexResponseModelList!
                                   .getMessageIndexResponseModelList!
+                                  .isEmpty)
+                            TextView(
+                              text: 'No Message',
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.darkindgrey,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          else if (model.getMessageIndexResponseModelList !=
+                                  null &&
+                              model
+                                  .getMessageIndexResponseModelList!
+                                  .getMessageIndexResponseModelList!
                                   .isNotEmpty)
                             ..._buildChatList(model)
                           else

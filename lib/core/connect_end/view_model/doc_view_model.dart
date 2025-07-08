@@ -1913,7 +1913,7 @@ class DocViewModel extends BaseViewModel {
                               ),
                               SizedBox(height: 20.h),
                               TextFormWidget(
-                                label: 'Medication',
+                                label: 'Search for Medication',
                                 labelStyle: TextStyle(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w400,
@@ -1983,6 +1983,23 @@ class DocViewModel extends BaseViewModel {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+                                          if (model.searchedMedResponseModelList !=
+                                                  null &&
+                                              model
+                                                  .searchedMedResponseModelList!
+                                                  .searchedMedicineResponseModelList!
+                                                  .isEmpty)
+                                            TextView(
+                                              text: 'Drug not Available',
+                                              maxLines: 1,
+                                              textOverflow:
+                                                  TextOverflow.ellipsis,
+                                              textStyle: TextStyle(
+                                                color: AppColor.darkindgrey,
+                                                fontSize: 16.20.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
                                           ...model.searchedMedResponseModelList!.searchedMedicineResponseModelList!.map(
                                             (o) => Column(
                                               children: [
@@ -2201,7 +2218,8 @@ class DocViewModel extends BaseViewModel {
                                       GestureDetector(
                                         onTap: () {
                                           if (presMedsFormKey.currentState!
-                                              .validate()) {
+                                                  .validate() &&
+                                              _searchedMeds?.id != null) {
                                             model.createMedicinePrescrition(
                                               context,
                                               id: id,
@@ -2428,7 +2446,6 @@ class DocViewModel extends BaseViewModel {
                           maxline: 3,
                           alignLabelWithHint: true,
                           fillColor: AppColor.transparent,
-
                           controller: reasonController,
                           validator: AppValidator.validateString(),
                         ),

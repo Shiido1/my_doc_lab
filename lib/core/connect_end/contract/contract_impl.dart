@@ -116,6 +116,10 @@ class AuthContractsImpl {
     ForgotPasswordEntityModel forgotPassword,
   ) async => await _api.forgotPassword(forgotPassword);
 
+  Future<dynamic> forgotPasswordCareGiver(
+    ForgotPasswordEntityModel forgotPassword,
+  ) async => await _api.forgotPasswordCareGiver(forgotPassword);
+
   Future<dynamic> updatePassword(
     ResetPasswordEntityModel updatePassword,
   ) async => await _api.updatePassword(updatePassword);

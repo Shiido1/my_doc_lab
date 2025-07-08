@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,7 +16,8 @@ import '../../../core/core_folder/app/app.locator.dart';
 import '../../app_assets/app_validatiion.dart';
 
 class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({super.key});
+  ForgotPassword({super.key, required this.userType});
+  String? userType;
 
   @override
   State<ForgotPassword> createState() => _ForgotPasswordState();
@@ -83,12 +86,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        model.forgotPassword(
-                          context,
-                          forgotPassword: ForgotPasswordEntityModel(
-                            email: emailController.text.trim(),
-                          ),
-                        );
+                        widget.userType == 'care-giver'
+                            ? model.forgotPasswordCareGiver(
+                              context,
+                              forgotPassword: ForgotPasswordEntityModel(
+                                email: emailController.text.trim(),
+                                role: 'doctor',
+                              ),
+                            )
+                            : model.forgotPassword(
+                              context,
+                              forgotPassword: ForgotPasswordEntityModel(
+                                email: emailController.text.trim(),
+                              ),
+                            );
                       }
                     },
                   ),

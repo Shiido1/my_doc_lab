@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/patient/patient_sceen.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
@@ -12,6 +13,8 @@ import '../../../app_assets/app_image.dart';
 import '../../../app_assets/constant.dart';
 import '../../../widget/text_widget.dart';
 import '../appointment/doctors_appointment/doctors_appointment_screen.dart';
+import '../chat/doc_message_list_screen.dart';
+import '../settings/wallet/doc_wallet_screen.dart';
 
 class DocHomeScreen extends StatelessWidget {
   const DocHomeScreen({super.key});
@@ -118,6 +121,12 @@ class DocHomeScreen extends StatelessWidget {
                       secondText: 'Total Patients:',
                       thirdText:
                           '${model.getDoctorStatisticModel?.totalPatients ?? 0}',
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PatientSceen(),
+                            ),
+                          ),
                     ),
                     SizedBox(width: 10.w),
                     dashContainer(
@@ -128,6 +137,12 @@ class DocHomeScreen extends StatelessWidget {
                       secondText: 'Today:',
                       thirdText:
                           '${model.getDoctorStatisticModel?.appointmentToday ?? 0}',
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DoctorsAppointmentScreen(),
+                            ),
+                          ),
                     ),
                   ],
                 ),
@@ -142,6 +157,12 @@ class DocHomeScreen extends StatelessWidget {
                       secondText: 'Unread:',
                       thirdText:
                           '${model.getDoctorStatisticModel?.unread ?? 0}',
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DoctorMessageListScreen(),
+                            ),
+                          ),
                     ),
                     SizedBox(width: 10.w),
                     dashContainer(
@@ -151,7 +172,13 @@ class DocHomeScreen extends StatelessWidget {
                       firstText: 'Balance',
                       secondText: 'Current:',
                       thirdText:
-                          '${getCurrency()}${oCcy.format(model.getDoctorStatisticModel?.totalPatients ?? 0.0)}',
+                          '${getCurrency()}${oCcy.format(model.getDoctorStatisticModel?.balance ?? 0.0)}',
+                      onTap:
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DoctorWalletScreen(),
+                            ),
+                          ),
                     ),
                   ],
                 ),
@@ -160,7 +187,7 @@ class DocHomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextView(
-                      text: 'Upcoming Appointments',
+                      text: 'Completded Appointments',
                       textStyle: GoogleFonts.dmSans(
                         color: AppColor.darkindgrey,
                         fontSize: 16.20.sp,
@@ -334,75 +361,6 @@ class DocHomeScreen extends StatelessWidget {
                         ),
                       ),
                 SizedBox(height: 20.h),
-
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     TextView(
-                //       text: 'Priority Tasks',
-                //       textStyle: GoogleFonts.dmSans(
-                //         color: AppColor.black,
-                //         fontSize: 16.20.sp,
-                //         fontWeight: FontWeight.w700,
-                //       ),
-                //     ),
-                //     GestureDetector(
-                //       onTap: () {},
-                //       child: TextView(
-                //         text: 'View all',
-                //         textStyle: GoogleFonts.gabarito(
-                //           color: AppColor.primary,
-                //           fontSize: 14.0.sp,
-                //           fontWeight: FontWeight.w400,
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // SizedBox(height: 20.h),
-                // Container(
-                //   width: double.infinity,
-                //   padding: EdgeInsets.symmetric(
-                //     vertical: 14.w,
-                //     horizontal: 18.w,
-                //   ),
-                //   decoration: BoxDecoration(
-                //     color: AppColor.primary1,
-                //     borderRadius: BorderRadius.circular(10),
-                //     border: Border.all(color: AppColor.white),
-                //   ),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       TextView(
-                //         text: 'Review Sarah Johnson\'s blood test results',
-                //         textStyle: GoogleFonts.gabarito(
-                //           color: AppColor.white,
-                //           fontSize: 15.20.sp,
-                //           fontWeight: FontWeight.w600,
-                //         ),
-                //       ),
-                //       SizedBox(height: 12.h),
-                //       TextView(
-                //         text: 'Due: 4/12/2025',
-                //         textStyle: GoogleFonts.gabarito(
-                //           color: AppColor.white,
-                //           fontSize: 12.0.sp,
-                //           fontWeight: FontWeight.w600,
-                //         ),
-                //       ),
-                //       SizedBox(height: 12.h),
-                //       TextView(
-                //         text: 'Check hypertension medication effectiveness',
-                //         textStyle: GoogleFonts.gabarito(
-                //           color: AppColor.white,
-                //           fontSize: 12.0.sp,
-                //           fontWeight: FontWeight.w600,
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -468,12 +426,17 @@ class DocHomeScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10.h),
-            TextView(
-              text: thirdText,
-              textStyle: TextStyle(
-                color: AppColor.white,
-                fontSize: 24.20.sp,
-                fontWeight: FontWeight.w700,
+            SizedBox(
+              width: 200.w,
+              child: TextView(
+                text: thirdText,
+                textOverflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                textStyle: TextStyle(
+                  color: AppColor.white,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             SizedBox(height: 10.h),

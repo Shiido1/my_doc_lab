@@ -272,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SizedBox(height: 20.h),
                 TextFormWidget(
-                  label: 'Search for doctors, specialties, or tests...',
+                  label: 'Search for doctors, specialties,',
                   border: 10,
                   isFilled: true,
                   fillColor: AppColor.transparent,

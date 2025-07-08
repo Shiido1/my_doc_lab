@@ -50,10 +50,10 @@ PODS:
   - Firebase/Messaging (11.15.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 11.15.0)
-  - firebase_core (3.15.0):
+  - firebase_core (3.15.1):
     - Firebase/CoreOnly (= 11.15.0)
     - Flutter
-  - firebase_messaging (15.2.8):
+  - firebase_messaging (15.2.9):
     - Firebase/Messaging (= 11.15.0)
     - firebase_core
     - Flutter
@@ -205,8 +205,8 @@ SPEC CHECKSUMS:
   AgoraIrisRTC_iOS: eab58c126439adf5ec99632828a558ea216860da
   AgoraRtcEngine_iOS: 97e2398a2addda9057815a2a583a658e36796ff6
   Firebase: d99ac19b909cd2c548339c2241ecd0d1599ab02e
-  firebase_core: d4cf851433d9aa90e6071aea763460566c02db16
-  firebase_messaging: 1a2cef42599e0c021e5bae2272a16f824be22b79
+  firebase_core: cf4d42a8ac915e51c0c2dc103442f3036d941a2d
+  firebase_messaging: fee490327c1aae28a0da1e65fca856547deca493
   FirebaseCore: efb3893e5b94f32b86e331e3bd6dadf18b66568e
   FirebaseCoreInternal: 9afa45b1159304c963da48addb78275ef701c6b4
   FirebaseInstallations: 317270fec08a5d418fdbc8429282238cab3ac843

@@ -164,6 +164,13 @@ class AuthRepoImpl {
     return response;
   }
 
+  Future<dynamic> forgotPasswordCareGiver(
+    ForgotPasswordEntityModel forgotEntity,
+  ) async {
+    final response = await _contract.forgotPasswordCareGiver(forgotEntity);
+    return response;
+  }
+
   Future<dynamic> updatePassword(ResetPasswordEntityModel forgotEntity) async {
     final response = await _contract.updatePassword(forgotEntity);
     return response;

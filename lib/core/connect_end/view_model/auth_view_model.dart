@@ -458,7 +458,10 @@ class AuthViewModel extends BaseViewModel {
       );
       if (_loginResponseModel?.status == 'success') {
         Navigator.pop(context);
-        await AppUtils.snackbar(context, message: _loginResponseModel?.message!);
+        await AppUtils.snackbar(
+          context,
+          message: _loginResponseModel?.message!,
+        );
         navigate.navigateTo(Routes.dashboard);
       }
     } catch (e) {
@@ -470,7 +473,10 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void forgotPassword(context, {ForgotPasswordEntityModel? forgotPassword}) async {
+  void forgotPassword(
+    context, {
+    ForgotPasswordEntityModel? forgotPassword,
+  }) async {
     try {
       loadingDialog(context);
       var v = await runBusyFuture(
@@ -480,7 +486,31 @@ class AuthViewModel extends BaseViewModel {
       if (v['status'] == 'success') {
         Navigator.pop(context);
         await AppUtils.snackbar(context, message: v['message']);
-        navigate.navigateTo(Routes.dashboard);
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      Navigator.pop(context);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void forgotPasswordCareGiver(
+    context, {
+    ForgotPasswordEntityModel? forgotPassword,
+  }) async {
+    try {
+      loadingDialog(context);
+      var v = await runBusyFuture(
+        repositoryImply.forgotPasswordCareGiver(forgotPassword!),
+        throwException: true,
+      );
+      if (v['status'] == 'success') {
+        Navigator.pop(context);
+        await AppUtils.snackbar(context, message: v['message']);
+        Navigator.pop(context);
       }
     } catch (e) {
       _isLoading = false;
