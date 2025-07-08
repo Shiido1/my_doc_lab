@@ -1115,17 +1115,22 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void getSearchedMed(SearchDoctorEntityModel searchEntity) async {
+  void getSearchedMed(context, {SearchDoctorEntityModel? searchEntity}) async {
     try {
       _isLoadingMedSearch = true;
       _searchedMedResponseModelList = await runBusyFuture(
-        repositoryImply.getSearchedMedicine(searchEntity),
+        repositoryImply.getSearchedMedicine(searchEntity!),
         throwException: true,
       );
 
       _isLoadingMedSearch = false;
     } catch (e) {
       _isLoadingMedSearch = false;
+      AppUtils.snackbarTop(
+        context,
+        message: "medication searched is not found on our system..!",
+        error: true,
+      );
       logger.d(e);
     }
     notifyListeners();
@@ -1945,7 +1950,10 @@ class DocViewModel extends BaseViewModel {
                                   model.debouncer.run(() {
                                     model.query = p0;
                                     model.getSearchedMed(
-                                      SearchDoctorEntityModel(query: p0),
+                                      context,
+                                      searchEntity: SearchDoctorEntityModel(
+                                        query: p0,
+                                      ),
                                     );
                                   });
                                   model.notifyListeners();
@@ -2239,6 +2247,13 @@ class DocViewModel extends BaseViewModel {
                                                         noteTextController.text
                                                             .trim(),
                                                   ),
+                                            );
+                                          } else {
+                                            AppUtils.snackbarTop(
+                                              context,
+                                              message:
+                                                  "Search for medications on our system and fill all required fields.!",
+                                              error: true,
                                             );
                                           }
                                           model.notifyListeners();
