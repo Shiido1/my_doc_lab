@@ -1234,6 +1234,13 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  setMessage(message) {
+    if (message == 'video-call-agora') {
+      return 'Video Call';
+    }
+    return message;
+  }
+
   boxMessage(context, {ReceivedMessageResponseModel? message}) => Column(
     children: [
       message?.senderType == "MydocLab\\Models\\User"

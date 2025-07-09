@@ -258,6 +258,13 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  setMessage(message) {
+    if (message == 'video-call-agora') {
+      return 'Video Call';
+    }
+    return message;
+  }
+
   onSwitched() {
     onSwitch = !onSwitch;
     notifyListeners();
@@ -1546,6 +1553,10 @@ class AuthViewModel extends BaseViewModel {
           sendList.clear();
         });
       });
+      runBusyFuture(
+        repositoryImply.readMessage(int.parse(id)),
+        throwException: true,
+      );
     } catch (e) {
       _isLoading = false;
       logger.d(e);

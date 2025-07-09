@@ -209,13 +209,19 @@ class DoctorMessageListScreen extends StatelessWidget {
                           ),
                         ),
                         TextView(
-                          text: o.lastMessage ?? '',
+                          text: model.setMessage(o.lastMessage) ?? '',
                           maxLines: 1,
                           textOverflow: TextOverflow.ellipsis,
                           textStyle: GoogleFonts.gabarito(
-                            color: AppColor.lightgrey,
+                            color:
+                                o.unreadCount! > 0
+                                    ? AppColor.black
+                                    : AppColor.lightgrey,
                             fontSize: 12.20.sp,
-                            fontWeight: FontWeight.w400,
+                            fontWeight:
+                                o.unreadCount! > 0
+                                    ? FontWeight.w500
+                                    : FontWeight.w400,
                           ),
                         ),
                       ],
@@ -224,9 +230,15 @@ class DoctorMessageListScreen extends StatelessWidget {
                   TextView(
                     text: getWeekdayAbbreviation(o.lastMessageTime ?? ''),
                     textStyle: GoogleFonts.gabarito(
-                      color: AppColor.lightgrey,
+                      color:
+                          o.unreadCount! > 0
+                              ? AppColor.black
+                              : AppColor.lightgrey,
                       fontSize: 12.20.sp,
-                      fontWeight: FontWeight.w400,
+                      fontWeight:
+                          o.unreadCount! > 0
+                              ? FontWeight.w500
+                              : FontWeight.w400,
                     ),
                   ),
                   SizedBox(width: 12.w),
