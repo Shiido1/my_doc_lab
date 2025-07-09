@@ -1170,8 +1170,13 @@ class DocViewModel extends BaseViewModel {
         throwException: true,
       );
       _isLoading = false;
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 0), () async {
         if (hasLoadedConversation) receiveConversation(id);
+        await runBusyFuture(
+          repositoryImply.readMessage(int.parse(id)),
+          throwException: true,
+        );
+
         Future.delayed(Duration(seconds: 3), () {
           session.chatsData = {'chat': []};
           sendList.clear();
