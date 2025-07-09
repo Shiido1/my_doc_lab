@@ -274,6 +274,11 @@ class AuthRepoImpl {
     return response;
   }
 
+  Future<dynamic> readMessage(int id) async {
+    final response = await _contract.readMessage(id);
+    return response;
+  }
+
   Future<dynamic> logout() async {
     final response = await _contract.logout();
     return response;

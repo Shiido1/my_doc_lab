@@ -168,5 +168,6 @@ class AuthContractsImpl {
       await _api.orderHistory();
   Future<GetUserNotificationModelList> notification() async =>
       await _api.notification();
+  Future<dynamic> readMessage(int id) async => await _api.readMessage(id);
   Future<dynamic> logout() async => await _api.logout();
 }

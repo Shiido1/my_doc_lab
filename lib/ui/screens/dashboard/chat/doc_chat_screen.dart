@@ -12,6 +12,7 @@ import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../../../../core/connect_end/model/get_user_response_model/data.dart';
+import '../../../../core/connect_end/model/send_message_entity_model.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import 'video_chat_agora/doctor_video_chat_screen.dart';
 
@@ -129,22 +130,35 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                             ? Padding(
                               padding: EdgeInsets.only(top: 10.w, right: 20.w),
                               child: GestureDetector(
-                                onTap:
-                                    () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => DoctorVideoChatScreen(
-                                              conversationId: int.parse(
-                                                '${widget.messageModel!.conversationId ?? widget.id}',
-                                              ),
-                                              receiverId: int.parse(
-                                                '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                              ),
-                                              receiverType:
-                                                  '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => DoctorVideoChatScreen(
+                                            conversationId: int.parse(
+                                              '${widget.messageModel!.conversationId ?? widget.id}',
                                             ),
-                                      ),
+                                            receiverId: int.parse(
+                                              '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                            ),
+                                            receiverType:
+                                                '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
+                                          ),
                                     ),
+                                  );
+                                  model.sendMessage(
+                                    SendMessageEntityModel(
+                                      conversationId: int.parse(
+                                        '${widget.messageModel!.conversationId ?? widget.id}',
+                                      ),
+                                      receiverId: int.parse(
+                                        '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                      ),
+                                      receiverType: "MydocLab\\Models\\User",
+                                      message: 'video-call-agora',
+                                    ),
+                                  );
+                                },
 
                                 child: SvgPicture.asset(
                                   AppImage.video,
@@ -178,7 +192,10 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                 ...model
                                     .receivedMessageResponseModelList!
                                     .receivedMessageResponseModelList!
-                                    .map((o) => model.boxMessage(o)),
+                                    .map(
+                                      (o) =>
+                                          model.boxMessage(context, message: o),
+                                    ),
                               if (model.session.chatsData['chat'] == null ||
                                   model.session.chatsData['chat'].isEmpty)
                                 SizedBox.shrink()
@@ -287,44 +304,6 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                         ),
                                         filled: true,
                                         fillColor: AppColor.white,
-                                        // suffixIcon: Padding(
-                                        //   padding: EdgeInsets.only(
-                                        //     top: 13.w,
-                                        //     right: 16.w,
-                                        //   ),
-                                        //   child:
-                                        //       !isContainedText
-                                        //           ? Padding(
-                                        //             padding: EdgeInsets.only(
-                                        //               bottom:
-                                        //                   isTablet ? 10.w : 0.w,
-                                        //             ),
-                                        //             child: Wrap(
-                                        //               children: [
-                                        //                 SvgPicture.asset(
-                                        //                   AppImage.clipper,
-                                        //                   height: 20.h,
-                                        //                   width: 20.w,
-                                        //                 ),
-
-                                        //                 SizedBox(width: 16.w),
-                                        //                 SvgPicture.asset(
-                                        //                   AppImage.mic,
-                                        //                   height: 20.h,
-                                        //                   width: 20.w,
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           )
-                                        //           : Padding(
-                                        //             padding: EdgeInsets.only(
-                                        //               bottom: 10.w,
-                                        //             ),
-                                        //             child: SvgPicture.asset(
-                                        //               AppImage.clipper,
-                                        //             ),
-                                        //           ),
-                                        // ),
                                       ),
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {

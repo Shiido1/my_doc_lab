@@ -76,6 +76,7 @@ class UrlConfig {
   static const String reject_call = 'chat/reject';
   static const String end_call = 'chat/end';
   static const String chat = 'chat';
+  static const String read_chat = 'chat/as_read';
   static const String checkout = 'user/checkout';
 
   static const String pharm_category = 'pharmacy/categories/list';

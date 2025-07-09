@@ -119,5 +119,7 @@ class DocContractsImpl {
 
   Future<GetDoctorsAnalysisModel> doctorsAnalytics() async =>
       await _api.doctorsAnalytics();
+
+  Future<dynamic> readMessage(int id) async => await _api.readMessage(id);
   Future<dynamic> logout() async => await _api.logout();
 }

@@ -443,6 +443,21 @@ class DocAuthApi {
     }
   }
 
+  Future<dynamic> readMessage(int id) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.read_chat,
+        RequestMethod.post,
+        data: {"conversation_id": id},
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
   Future<dynamic> logout() async {
     try {
       final response = await _service.call(

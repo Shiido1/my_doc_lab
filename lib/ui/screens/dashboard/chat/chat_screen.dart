@@ -113,22 +113,35 @@ class _ChatScreenState extends State<ChatScreen> {
                         Padding(
                           padding: EdgeInsets.only(top: 10.w, right: 20.w),
                           child: GestureDetector(
-                            onTap:
-                                () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => VideoChatScreen(
-                                          conversationId: int.parse(
-                                            widget.id.toString(),
-                                          ),
-                                          receiverId: int.parse(
-                                            '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                          ),
-                                          receiverType:
-                                              '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => VideoChatScreen(
+                                        conversationId: int.parse(
+                                          widget.id.toString(),
                                         ),
-                                  ),
+                                        receiverId: int.parse(
+                                          '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                        ),
+                                        receiverType:
+                                            '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
+                                      ),
                                 ),
+                              );
+                              model.sendMessage(
+                                SendMessageEntityModel(
+                                  conversationId: int.parse(
+                                    '${widget.messageModel!.conversationId ?? widget.id}',
+                                  ),
+                                  receiverId: int.parse(
+                                    '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                  ),
+                                  receiverType: "MydocLab\\Models\\Doctor",
+                                  message: 'video-call-agora',
+                                ),
+                              );
+                            },
                             child: SvgPicture.asset(
                               AppImage.video,
                               width: 22.w,
@@ -161,7 +174,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ...model
                                     .receivedMessageResponseModelList!
                                     .receivedMessageResponseModelList!
-                                    .map((o) => model.boxMessage(o)),
+                                    .map(
+                                      (o) =>
+                                          model.boxMessage(context, message: o),
+                                    ),
                               if (model.session.chatsData['chat'] == null ||
                                   model.session.chatsData['chat'].isEmpty)
                                 SizedBox.shrink()
@@ -268,44 +284,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                         ),
                                         filled: true,
                                         fillColor: AppColor.white,
-                                        // suffixIcon: Padding(
-                                        //   padding: EdgeInsets.only(
-                                        //     top: 13.w,
-                                        //     right: 16.w,
-                                        //   ),
-                                        //   child:
-                                        //       !isContainedText
-                                        //           ? Padding(
-                                        //             padding: EdgeInsets.only(
-                                        //               bottom:
-                                        //                   isTablet ? 10.w : 0.w,
-                                        //             ),
-                                        //             child: Wrap(
-                                        //               children: [
-                                        //                 SvgPicture.asset(
-                                        //                   AppImage.clipper,
-                                        //                   height: 20.h,
-                                        //                   width: 20.w,
-                                        //                 ),
-
-                                        //                 SizedBox(width: 16.w),
-                                        //                 SvgPicture.asset(
-                                        //                   AppImage.mic,
-                                        //                   height: 20.h,
-                                        //                   width: 20.w,
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           )
-                                        //           : Padding(
-                                        //             padding: EdgeInsets.only(
-                                        //               bottom: 10.w,
-                                        //             ),
-                                        //             child: SvgPicture.asset(
-                                        //               AppImage.clipper,
-                                        //             ),
-                                        //           ),
-                                        // ),
                                       ),
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {

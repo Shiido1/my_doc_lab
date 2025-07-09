@@ -28,6 +28,7 @@ import '../../../ui/app_assets/app_image.dart';
 import '../../../ui/app_assets/app_utils.dart';
 import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/app_assets/image_picker.dart';
+import '../../../ui/screens/dashboard/chat/video_chat_agora/video_chat_screen.dart';
 import '../../../ui/widget/text_form_widget.dart';
 import '../../../ui/widget/text_widget.dart';
 import '../../core_folder/app/app.locator.dart';
@@ -250,17 +251,17 @@ class DocViewModel extends BaseViewModel {
     if (onToggleMic == false) {
       onToggleMic = true;
       engine?.muteLocalAudioStream(false);
-      engine?.muteRemoteAudioStream(
-        uid: int.parse(remoteUidGlobal.toString()),
-        mute: false,
-      );
+      // engine?.muteRemoteAudioStream(
+      //   uid: int.parse(remoteUidGlobal.toString()),
+      //   mute: false,
+      // );
     } else {
       onToggleMic = false;
       engine?.muteLocalAudioStream(true);
-      engine?.muteRemoteAudioStream(
-        uid: int.parse(remoteUidGlobal.toString()),
-        mute: true,
-      );
+      // engine?.muteRemoteAudioStream(
+      //   uid: int.parse(remoteUidGlobal.toString()),
+      //   mute: true,
+      // );
     }
     notifyListeners();
   }
@@ -1233,98 +1234,286 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  boxMessage(ReceivedMessageResponseModel message) => Column(
+  boxMessage(context, {ReceivedMessageResponseModel? message}) => Column(
     children: [
-      message.senderType == "MydocLab\\Models\\User"
+      message?.senderType == "MydocLab\\Models\\User"
           ? Align(
             alignment: Alignment.topLeft,
-            child: Container(
-              margin: EdgeInsets.only(left: 20.w, right: 100.w, bottom: 20.w),
+            child:
+                message?.message == 'video-call-agora'
+                    ? GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder:
+                                (context) => VideoChatScreen(
+                                  conversationId: int.parse(
+                                    message.conversationId.toString(),
+                                  ),
+                                  receiverId: int.parse(
+                                    message.sender!.id.toString(),
+                                  ),
+                                  receiverType: 'User',
+                                ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 160.w,
+                        margin: EdgeInsets.only(
+                          left: 20.w,
+                          right: 100.w,
+                          bottom: 20.w,
+                        ),
 
-              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(0),
-                  bottomRight: Radius.circular(10),
-                ),
-                color: AppColor.primary1.withOpacity(.1),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextView(
-                    text: message.message ?? '',
-                    textStyle: GoogleFonts.dmSans(
-                      fontSize: 15.2.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColor.darkindgrey,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4.w,
+                          horizontal: 4.w,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(10),
+                          ),
+                          color: AppColor.primary1.withOpacity(.1),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(1.w),
+                          padding: EdgeInsets.all(3.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColor.primary.withOpacity(.2),
+                          ),
+
+                          child: Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: 2.w),
+                                padding: EdgeInsets.all(6.0.w),
+                                decoration: BoxDecoration(
+                                  color: AppColor.darkindgrey.withOpacity(.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.video_call_outlined,
+                                  size: 16.20.sp,
+                                  color: AppColor.darkindgrey,
+                                ),
+                              ),
+                              SizedBox(width: 10.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextView(
+                                    text: 'Video call',
+                                    textStyle: GoogleFonts.dmSans(
+                                      fontSize: 14.2.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColor.darkindgrey,
+                                    ),
+                                  ),
+                                  TextView(
+                                    text: DateFormat('hh:mma').format(
+                                      DateTime.parse(
+                                        message!.updatedAt.toString(),
+                                      ).toLocal(),
+                                    ),
+                                    textStyle: GoogleFonts.dmSans(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColor.darkindgrey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                    : Container(
+                      margin: EdgeInsets.only(
+                        left: 20.w,
+                        right: 100.w,
+                        bottom: 20.w,
+                      ),
+
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.w,
+                        horizontal: 10.w,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        color: AppColor.primary1.withOpacity(.1),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextView(
+                            text: message?.message ?? '',
+                            textStyle: GoogleFonts.dmSans(
+                              fontSize: 15.2.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.darkindgrey,
+                            ),
+                          ),
+                          TextView(
+                            text: DateFormat('hh:mma').format(
+                              DateTime.parse(
+                                message!.updatedAt.toString(),
+                              ).toLocal(),
+                            ),
+                            textStyle: GoogleFonts.dmSans(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                              color: AppColor.darkindgrey,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  TextView(
-                    text: DateFormat('hh:mma').format(
-                      DateTime.parse(message.updatedAt.toString()).toLocal(),
-                    ),
-                    textStyle: GoogleFonts.dmSans(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: AppColor.darkindgrey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           )
           : Align(
             alignment: Alignment.topRight,
-            child: Container(
-              margin: EdgeInsets.only(right: 20.w, left: 100.w, bottom: 20.w),
-              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(0),
-                ),
-                color: AppColor.primary1,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextView(
-                    text: message.message ?? '',
-                    textStyle: GoogleFonts.dmSans(
-                      fontSize: 15.2.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColor.white,
-                    ),
-                  ),
-
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextView(
-                        text: DateFormat('hh:mma').format(
-                          DateTime.parse(
-                            message.updatedAt.toString(),
-                          ).toLocal(),
+            child:
+                message?.message == 'video-call-agora'
+                    ? Container(
+                      width: 160.w,
+                      margin: EdgeInsets.only(
+                        right: 20.w,
+                        left: 100.w,
+                        bottom: 20.w,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.w,
+                        horizontal: 4.0.w,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(0),
                         ),
-                        textStyle: GoogleFonts.dmSans(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400,
-                          color: AppColor.white,
+                        color: AppColor.primary1,
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.all(1.w),
+                        padding: EdgeInsets.all(3.w),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: AppColor.white.withOpacity(.2),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(left: 2.w),
+                              padding: EdgeInsets.all(6.0.w),
+                              decoration: BoxDecoration(
+                                color: AppColor.white.withOpacity(.3),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.video_call_outlined,
+                                size: 16.20.sp,
+                                color: AppColor.white,
+                              ),
+                            ),
+                            SizedBox(width: 10.w),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextView(
+                                  text: 'Video call',
+                                  textStyle: GoogleFonts.dmSans(
+                                    fontSize: 14.2.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColor.white,
+                                  ),
+                                ),
+                                TextView(
+                                  text: DateFormat('hh:mma').format(
+                                    DateTime.parse(
+                                      message!.updatedAt.toString(),
+                                    ).toLocal(),
+                                  ),
+                                  textStyle: GoogleFonts.dmSans(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColor.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
+                    )
+                    : Container(
+                      margin: EdgeInsets.only(
+                        right: 20.w,
+                        left: 100.w,
+                        bottom: 20.w,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.w,
+                        horizontal: 10.w,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(0),
+                        ),
+                        color: AppColor.primary1,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextView(
+                            text: message?.message ?? '',
+                            textStyle: GoogleFonts.dmSans(
+                              fontSize: 15.2.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.white,
+                            ),
+                          ),
 
-                      SizedBox(width: 4.w),
-                      Icon(Icons.check, color: AppColor.white, size: 14.sp),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextView(
+                                text: DateFormat('hh:mma').format(
+                                  DateTime.parse(
+                                    message!.updatedAt.toString(),
+                                  ).toLocal(),
+                                ),
+                                textStyle: GoogleFonts.dmSans(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.white,
+                                ),
+                              ),
+
+                              SizedBox(width: 4.w),
+                              Icon(
+                                Icons.check,
+                                color: AppColor.white,
+                                size: 14.sp,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
           ),
     ],
   );
