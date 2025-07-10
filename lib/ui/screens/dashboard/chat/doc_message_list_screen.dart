@@ -201,7 +201,7 @@ class DoctorMessageListScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextView(
-                          text: o.contactName?.capitalize() ?? '',
+                          text: o.contactName?.capitalizeWords() ?? '',
                           textStyle: GoogleFonts.gabarito(
                             color: AppColor.darkindgrey,
                             fontSize: 16.sp,

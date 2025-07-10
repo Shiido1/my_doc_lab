@@ -252,7 +252,7 @@ class DocMoreSettingsScreen extends StatelessWidget {
                   text: 'Withdraw',
                   onTap: () => model.modalBottomSheetWithdrawFunds(context),
                 ),
-                SizedBox(height: 20.h),
+                // SizedBox(height: 20.h),
                 // moreContainerWidget(
                 //   image: AppImage.history,
                 //   borderColor: AppColor.lightgrey,
@@ -266,18 +266,18 @@ class DocMoreSettingsScreen extends StatelessWidget {
                 //       ),
                 // ),
                 // SizedBox(height: 20.h),
-                moreContainerWidget(
-                  image: AppImage.help,
-                  borderColor: AppColor.lightgrey,
-                  color: AppColor.black,
-                  text: 'Help & Support',
-                  onTap:
-                      () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => HelpAndSupportScreen(),
-                        ),
-                      ),
-                ),
+                // moreContainerWidget(
+                //   image: AppImage.help,
+                //   borderColor: AppColor.lightgrey,
+                //   color: AppColor.black,
+                //   text: 'Help & Support',
+                //   onTap:
+                //       () => Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (context) => HelpAndSupportScreen(),
+                //         ),
+                //       ),
+                // ),
                 SizedBox(height: 40.h),
                 moreContainerWidget(
                   image: AppImage.help,
