@@ -209,6 +209,7 @@ class DocViewModel extends BaseViewModel {
 
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
+  AvailableSlots? _slot;
 
   returnMonthText(text) {
     switch (text) {
@@ -2608,7 +2609,14 @@ class DocViewModel extends BaseViewModel {
     },
   );
 
-  AvailableSlots? _slot;
+  getBankNameViaCode(code) {
+    for (var bank in BankCodes().bank_code['data']!) {
+      if (code == bank['code']) {
+        return bank['name'];
+      }
+    }
+    return '';
+  }
 
   void rescheduleAppointmentDialogBox(
     context, {
@@ -3303,6 +3311,108 @@ class DocViewModel extends BaseViewModel {
                                     color: AppColor.primary1,
                                     size: 34.sp,
                                   ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void modalBottomSheetBankDetails(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Enables full-screen dragging
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (builder) {
+        return ViewModelBuilder<DocViewModel>.reactive(
+          viewModelBuilder: () => DocViewModel(),
+          onViewModelReady: (model) {
+            model.getDoctorsDetail(context);
+          },
+          onDispose: (viewModel) {},
+          builder: (_, DocViewModel model, __) {
+            return StatefulBuilder(
+              builder: (_, StateSetter setState) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: DraggableScrollableSheet(
+                    expand: false,
+                    initialChildSize: 0.35, // 50% of screen height
+                    minChildSize: 0.3, // Can be dragged to 30% of screen height
+                    maxChildSize: 0.5, // Can be dragged to 90% of screen height
+                    builder: (__, scrollController) {
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 12.w, right: 24.w),
+                        controller: scrollController,
+                        child: Form(
+                          key: formKeyWithdraw,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 6.0.h),
+                              Center(
+                                child: Container(
+                                  width: 30.w,
+                                  height: 3.5.h,
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey2.withOpacity(.4),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.0.h),
+                              TextView(
+                                text: 'Bank Account Detail',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              TextView(
+                                text:
+                                    'Account Name: ${model.getDocDetailResponseModel?.original?.bankAccount?.accountName?.capitalize() ?? ''}',
+                                textStyle: TextStyle(
+                                  color: AppColor.primary1.withOpacity(.9),
+                                  fontSize: 16.90.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(height: 12.20.h),
+                              TextView(
+                                text:
+                                    'Account Number: ${model.getDocDetailResponseModel?.original?.bankAccount?.accountNumber?.capitalize() ?? ''}',
+                                textStyle: TextStyle(
+                                  color: AppColor.grey1,
+                                  fontSize: 16.20.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(height: 12.20.h),
+                              TextView(
+                                text:
+                                    'Bank Name: ${model.getBankNameViaCode(model.getDocDetailResponseModel?.original?.bankAccount?.bankCode ?? '')}',
+                                textStyle: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 16.20.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
                             ],
                           ),
                         ),

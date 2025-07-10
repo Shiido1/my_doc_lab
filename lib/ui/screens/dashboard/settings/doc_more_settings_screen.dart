@@ -133,6 +133,31 @@ class DocMoreSettingsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                SizedBox(height: 10.h),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    onTap: () => model.modalBottomSheetBankDetails(context),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.w,
+                        horizontal: 10.w,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppColor.primary1.withOpacity(.7),
+                      ),
+                      child: TextView(
+                        text: 'Bank Detail',
+                        textStyle: GoogleFonts.gabarito(
+                          color: AppColor.white,
+                          fontSize: 15.20.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(height: 30.h),
                 moreContainerWidget(
                   image: AppImage.person,

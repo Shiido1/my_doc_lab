@@ -60,6 +60,7 @@ class Original {
   dynamic deletedAt;
   List<Availabilities>? availabilities;
   List<AvailableSlots>? availableSlots;
+  BankAccount? bankAccount;
 
   Original({
     this.id,
@@ -84,6 +85,7 @@ class Original {
     this.deletedAt,
     this.availabilities,
     this.availableSlots,
+    this.bankAccount,
   });
 
   Original.fromJson(Map<String, dynamic> json) {
@@ -119,6 +121,10 @@ class Original {
         availableSlots!.add(AvailableSlots.fromJson(v));
       });
     }
+    bankAccount =
+        json['bank_account'] != null
+            ? BankAccount.fromJson(json['bank_account'])
+            : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -148,6 +154,9 @@ class Original {
     }
     if (availableSlots != null) {
       data['available_slots'] = availableSlots!.map((v) => v.toJson()).toList();
+    }
+    if (bankAccount != null) {
+      data['bank_account'] = bankAccount!.toJson();
     }
     return data;
   }
@@ -243,6 +252,52 @@ class AvailableSlots {
     data['available_time'] = availableTime;
     data['availability_id'] = availabilityId;
     data['is_booked'] = isBooked;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    return data;
+  }
+}
+
+class BankAccount {
+  int? id;
+  String? ownerType;
+  int? ownerId;
+  String? accountNumber;
+  String? bankCode;
+  String? accountName;
+  String? createdAt;
+  String? updatedAt;
+
+  BankAccount({
+    this.id,
+    this.ownerType,
+    this.ownerId,
+    this.accountNumber,
+    this.bankCode,
+    this.accountName,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  BankAccount.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    ownerType = json['owner_type'];
+    ownerId = json['owner_id'];
+    accountNumber = json['account_number'];
+    bankCode = json['bank_code'];
+    accountName = json['account_name'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = id;
+    data['owner_type'] = ownerType;
+    data['owner_id'] = ownerId;
+    data['account_number'] = accountNumber;
+    data['bank_code'] = bankCode;
+    data['account_name'] = accountName;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     return data;
