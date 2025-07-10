@@ -10,6 +10,10 @@ extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
+
+  String capitalizeWords() {
+    return split(' ').map((word) => word.capitalize()).join(' ');
+  }
 }
 
 final oCcy = NumberFormat("#,##0.00", "en_US");
