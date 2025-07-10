@@ -15,7 +15,6 @@ import '../../../app_assets/constant.dart';
 import '../appointment/doctors_appointment/doctors_analysis_screen.dart';
 import '../appointment/doctors_appointment/doctors_availabilty_screen.dart';
 import '../appointment/prescription_screen.dart';
-import 'help_and_support_screen.dart';
 import 'wallet/doc_wallet_screen.dart';
 
 class DocMoreSettingsScreen extends StatelessWidget {

@@ -15,7 +15,6 @@ import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
 import '../../authentication/edit_profile_screen.dart';
-import 'help_and_support_screen.dart';
 
 class MoreSettingsScreen extends StatelessWidget {
   const MoreSettingsScreen({super.key});
@@ -185,19 +184,19 @@ class MoreSettingsScreen extends StatelessWidget {
                         ),
                       ),
                 ),
-                SizedBox(height: 20.h),
-                moreContainerWidget(
-                  image: AppImage.help,
-                  borderColor: AppColor.lightgrey,
-                  color: AppColor.black,
-                  text: 'Help & Support',
-                  onTap:
-                      () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => HelpAndSupportScreen(),
-                        ),
-                      ),
-                ),
+                // SizedBox(height: 20.h),
+                // moreContainerWidget(
+                //   image: AppImage.help,
+                //   borderColor: AppColor.lightgrey,
+                //   color: AppColor.black,
+                //   text: 'Help & Support',
+                //   onTap:
+                //       () => Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (context) => HelpAndSupportScreen(),
+                //         ),
+                //       ),
+                // ),
                 SizedBox(height: 40.h),
                 moreContainerWidget(
                   image: AppImage.help,
