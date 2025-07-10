@@ -3386,7 +3386,7 @@ class DocViewModel extends BaseViewModel {
                               SizedBox(height: 20.h),
                               TextView(
                                 text:
-                                    'Account Name: ${model.getDocDetailResponseModel?.original?.bankAccount?.accountName?.capitalize() ?? ''}',
+                                    'Account Name: ${model.getDocDetailResponseModel?.original?.bankAccount?.accountName?.capitalizeWords() ?? ''}',
                                 textStyle: TextStyle(
                                   color: AppColor.primary1.withOpacity(.9),
                                   fontSize: 16.90.sp,
