@@ -2898,7 +2898,7 @@ class DocViewModel extends BaseViewModel {
                                   color: AppColor.primary1,
                                 ),
                                 border: 10,
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
                                 isFilled: true,
                                 readOnly: true,
                                 fillColor: AppColor.white,
@@ -2947,8 +2947,7 @@ class DocViewModel extends BaseViewModel {
                                                 color: AppColor.primary1,
                                               ),
                                               border: 10,
-                                              keyboardType:
-                                                  TextInputType.number,
+                                              keyboardType: TextInputType.text,
                                               isFilled: true,
                                               fillColor: AppColor.white,
                                               prefixIcon: Icons.search,
