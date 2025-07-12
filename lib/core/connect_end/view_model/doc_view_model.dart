@@ -1195,7 +1195,7 @@ class DocViewModel extends BaseViewModel {
                     ?.receivedMessageResponseModelList
                     ?.last
                     .senderType ==
-                "MydocLab\\Models\\Doctor") {
+                "MydocLab\\Models\\User") {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder:

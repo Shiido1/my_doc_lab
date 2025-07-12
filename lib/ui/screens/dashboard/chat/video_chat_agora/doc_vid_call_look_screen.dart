@@ -71,9 +71,9 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                   children: [
                     TextView(
                       text:
-                          '${widget.messageModel?.contactName?.capitalizeWords() ?? ''}is Calling..',
+                          '${widget.messageModel?.contactName?.capitalizeWords() ?? ''} is Calling..',
                       textStyle: GoogleFonts.dmSans(
-                        fontSize: 17.2.sp,
+                        fontSize: 22.2.sp,
                         fontWeight: FontWeight.w500,
                         color: AppColor.white,
                       ),
@@ -97,82 +97,96 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.call_sharp),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => VideoChatScreen(
-                                      conversationId: int.parse(
-                                        widget.conversationId.toString(),
+                        Container(
+                          padding: EdgeInsets.all(5.2.w),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColor.white.withOpacity(.4),
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.call_sharp),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => VideoChatScreen(
+                                        conversationId: int.parse(
+                                          widget.conversationId.toString(),
+                                        ),
+                                        receiverId: int.parse(
+                                          '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                        ),
+                                        receiverType:
+                                            '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
                                       ),
-                                      receiverId: int.parse(
-                                        '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                      ),
-                                      receiverType:
-                                          '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
-                                    ),
-                              ),
-                            );
-                            model.sendMessage(
-                              SendMessageEntityModel(
-                                conversationId: int.parse(
-                                  '${widget.messageModel!.conversationId}',
                                 ),
-                                receiverId: int.parse(
-                                  '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                              );
+                              model.sendMessage(
+                                SendMessageEntityModel(
+                                  conversationId: int.parse(
+                                    '${widget.messageModel!.conversationId}',
+                                  ),
+                                  receiverId: int.parse(
+                                    '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                  ),
+                                  receiverType: "MydocLab\\Models\\User",
+                                  message: 'accept-call-agora',
                                 ),
-                                receiverType: "MydocLab\\Models\\User",
-                                message: 'accept-call-agora',
-                              ),
-                            );
-                          },
-                          color: AppColor.primary,
-                          iconSize: 50.sp,
+                              );
+                            },
+                            color: AppColor.primary,
+                            iconSize: 50.sp,
+                          ),
                         ),
-                        SizedBox(width: 200.w),
-                        IconButton(
-                          icon: Icon(Icons.call_end),
-                          onPressed: () async {
-                            model.hasLoadedConversation = true;
-                            model.notifyListeners();
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            await model.sendMessage(
-                              SendMessageEntityModel(
-                                conversationId: int.parse(
-                                  '${widget.messageModel!.conversationId}',
+                        SizedBox(width: 80.w),
+                        Container(
+                          padding: EdgeInsets.all(5.2.w),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColor.white.withOpacity(.4),
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.call_end),
+                            onPressed: () async {
+                              model.hasLoadedConversation = true;
+                              model.notifyListeners();
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              await model.sendMessage(
+                                SendMessageEntityModel(
+                                  conversationId: int.parse(
+                                    '${widget.messageModel!.conversationId}',
+                                  ),
+                                  receiverId: int.parse(
+                                    '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                  ),
+                                  receiverType: "MydocLab\\Models\\Doctor",
+                                  message: 'reject-call-agora',
                                 ),
-                                receiverId: int.parse(
-                                  '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                              );
+                              await model.generateToken(
+                                context,
+                                calltoken: CallTokenGenerateEntityModel(
+                                  conversationId: int.parse(
+                                    '${widget.conversationId}',
+                                  ),
+                                  receiverId: int.parse(
+                                    '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                  ),
+                                  receiverType: "Doctor",
                                 ),
-                                receiverType: "MydocLab\\Models\\Doctor",
-                                message: 'reject-call-agora',
-                              ),
-                            );
-                            await model.generateToken(
-                              context,
-                              calltoken: CallTokenGenerateEntityModel(
-                                conversationId: int.parse(
-                                  '${widget.conversationId}',
-                                ),
-                                receiverId: int.parse(
-                                  '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                ),
-                                receiverType: "Doctor",
-                              ),
-                            );
+                              );
 
-                            model.rejectCall(
-                              int.parse(
-                                model.callTokenGenerateResponseModel!.callId
-                                    .toString(),
-                              ),
-                            );
-                          },
-                          color: AppColor.red,
-                          iconSize: 50.sp,
+                              model.rejectCall(
+                                int.parse(
+                                  model.callTokenGenerateResponseModel!.callId
+                                      .toString(),
+                                ),
+                              );
+                            },
+                            color: AppColor.red,
+                            iconSize: 50.sp,
+                          ),
                         ),
                       ],
                     ),

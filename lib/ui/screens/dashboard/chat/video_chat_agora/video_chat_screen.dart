@@ -86,8 +86,8 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
                           ),
                         );
                         Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
+                        // Navigator.pop(context);
                       },
                       color: AppColor.red,
                       iconSize: 40.sp,
