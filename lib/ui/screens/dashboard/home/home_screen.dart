@@ -369,6 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                           : model.homeGridView(mainAxisExtent: mainAxisExtent),
                 ),
+                SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

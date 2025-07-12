@@ -38,13 +38,17 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return ViewModelBuilder<AuthViewModel>.reactive(
       viewModelBuilder: () => AuthViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
-          model.receiveConversationOnce(widget.id!);
+          model.receiveConversationOnce(
+            context,
+            id: widget.id!,
+            messageModel: widget.messageModel,
+            sender: widget.sender,
+          );
         });
       },
       onDispose: (viewModel) {

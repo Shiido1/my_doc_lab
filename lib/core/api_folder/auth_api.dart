@@ -561,6 +561,51 @@ class AuthApi {
     }
   }
 
+  Future<dynamic> acceptCall(int callId) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.accept_call,
+        RequestMethod.post,
+        data: {"call_id": callId},
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> rejectCall(int callId) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.reject_call,
+        RequestMethod.post,
+        data: {"call_id": callId},
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> endCall(int callId) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.end_call,
+        RequestMethod.post,
+        data: {"call_id": callId},
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
   Future<ViewDoctorsPrescriptionModelList> viewDocPrescription() async {
     try {
       final response = await _service.call(

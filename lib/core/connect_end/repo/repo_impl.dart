@@ -229,6 +229,21 @@ class AuthRepoImpl {
     return response;
   }
 
+  Future<dynamic> acceptCall(int callId) async {
+    final response = await _contract.acceptCall(callId);
+    return response;
+  }
+
+  Future<dynamic> rejectCall(int callId) async {
+    final response = await _contract.rejectCall(callId);
+    return response;
+  }
+
+  Future<dynamic> endCall(int callId) async {
+    final response = await _contract.endCall(callId);
+    return response;
+  }
+
   Future<ViewDoctorsPrescriptionModelList> viewDocPrescription() async {
     final response = await _contract.viewDocPrescription();
     return response;

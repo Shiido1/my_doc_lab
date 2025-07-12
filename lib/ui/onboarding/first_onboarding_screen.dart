@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,6 +10,9 @@ import 'package:my_doc_lab/ui/app_assets/app_image.dart';
 import 'package:my_doc_lab/ui/onboarding/third_onboarding_screen.dart';
 import 'package:my_doc_lab/ui/widget/button_widget.dart';
 import 'package:my_doc_lab/ui/widget/text_widget.dart';
+
+import '../../core/firebase_api.dart';
+import '../../firebase_options.dart';
 
 // ignore: must_be_immutable
 class FirstOnboardingScreen extends StatefulWidget {
@@ -30,6 +36,23 @@ class _FirstOnboardingScreenState extends State<FirstOnboardingScreen> {
   ];
 
   int index = 0;
+
+  Future<void> initializeFirebase() async {
+    if (Platform.isAndroid) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      await FirebaseApi().initNotification();
+    } else {
+      await Firebase.initializeApp();
+    }
+  }
+
+  @override
+  void initState() {
+    unawaited(initializeFirebase());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

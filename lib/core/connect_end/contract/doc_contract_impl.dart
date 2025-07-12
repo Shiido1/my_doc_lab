@@ -63,6 +63,9 @@ class DocContractsImpl {
   Future<CallTokenGenerateResponseModel> generateToken(
     CallTokenGenerateEntityModel callToken,
   ) async => await _api.genCallToken(callToken);
+  Future<dynamic> acceptCall(int callId) async => await _api.acceptCall(callId);
+  Future<dynamic> rejectCall(int callId) async => await _api.rejectCall(callId);
+  Future<dynamic> endCall(int callId) async => await _api.endCall(callId);
   Future<GetListOfDoctorsAppointmentModelList> doctorsAppointment() async =>
       await _api.doctorsAppointment();
   Future<GetDoctorsWalletResponseModel> doctorsWallet() async =>

@@ -37,6 +37,10 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
               receiverType: widget.receiverType,
             ),
           );
+
+          model.acceptCall(
+            int.parse(model.callTokenGenerateResponseModel!.callId.toString()),
+          );
         });
       },
       onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),
@@ -74,6 +78,14 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                     IconButton(
                       icon: Icon(Icons.call_end),
                       onPressed: () {
+                        model.endCall(
+                          int.parse(
+                            model.callTokenGenerateResponseModel!.callId
+                                .toString(),
+                          ),
+                        );
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                         Navigator.pop(context);
                       },
                       color: AppColor.red,

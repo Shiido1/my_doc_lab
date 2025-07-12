@@ -31,13 +31,16 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
       viewModelBuilder: () => AuthViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          model.generateToken(
+          await model.generateToken(
             context,
             calltoken: CallTokenGenerateEntityModel(
               conversationId: widget.conversationId,
               receiverId: widget.receiverId,
               receiverType: widget.receiverType,
             ),
+          );
+          model.acceptCall(
+            int.parse(model.callTokenGenerateResponseModel!.callId.toString()),
           );
         });
       },
@@ -76,6 +79,14 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
                     IconButton(
                       icon: Icon(Icons.call_end),
                       onPressed: () {
+                        model.endCall(
+                          int.parse(
+                            model.callTokenGenerateResponseModel!.callId
+                                .toString(),
+                          ),
+                        );
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                         Navigator.pop(context);
                       },
                       color: AppColor.red,

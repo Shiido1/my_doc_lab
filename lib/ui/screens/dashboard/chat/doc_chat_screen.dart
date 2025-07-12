@@ -54,7 +54,12 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
           model.hasLoadedConversation = true;
           model.hasLoadedIndexConversation = false;
           if (widget.messageModel != null || widget.sender != null) {
-            model.receiveConversationOnce(widget.id!);
+            model.receiveConversationOnce(
+              context,
+              id: widget.id!,
+              messageModel: widget.messageModel,
+              sender: widget.sender,
+            );
           } else {
             model.getChatIndex();
           }

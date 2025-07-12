@@ -153,6 +153,9 @@ class AuthContractsImpl {
   Future<CallTokenGenerateResponseModel> generateToken(
     CallTokenGenerateEntityModel callToken,
   ) async => await _api.genCallToken(callToken);
+  Future<dynamic> acceptCall(int callId) async => await _api.acceptCall(callId);
+  Future<dynamic> rejectCall(int callId) async => await _api.rejectCall(callId);
+  Future<dynamic> endCall(int callId) async => await _api.endCall(callId);
   Future<ViewDoctorsPrescriptionModelList> viewDocPrescription() async =>
       await _api.viewDocPrescription();
   Future<GetDoctorsWalletResponseModel> userWallet() async =>

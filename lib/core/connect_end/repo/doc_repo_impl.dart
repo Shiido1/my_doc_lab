@@ -104,6 +104,21 @@ class DocRepoImpl {
     return response;
   }
 
+  Future<dynamic> acceptCall(int callId) async {
+    final response = await _contract.acceptCall(callId);
+    return response;
+  }
+
+  Future<dynamic> rejectCall(int callId) async {
+    final response = await _contract.rejectCall(callId);
+    return response;
+  }
+
+  Future<dynamic> endCall(int callId) async {
+    final response = await _contract.endCall(callId);
+    return response;
+  }
+
   Future<GetDoctorsWalletResponseModel> doctorsWallet() async {
     final response = await _contract.doctorsWallet();
     return response;
