@@ -25,10 +25,6 @@ class _LabOrderPatientDetailSceenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
-            ),
             SizedBox(height: 20.h),
             Row(
               children: [

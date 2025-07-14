@@ -1,9 +1,11 @@
 // ignore_for_file: deprecated_member_use
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:stacked/stacked.dart';
+import '../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
@@ -134,14 +136,49 @@ class _DocDashboardState extends State<DocDashboard> {
                   label: 'Patients',
                 ),
                 BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    AppImage.chat,
-                    color:
-                        _currentIndex == 2
-                            ? AppColor.darkindgrey
-                            : AppColor.funnyLookingGrey,
-                    height: 30.h,
-                    width: 30.w,
+                  icon: ViewModelBuilder<DocViewModel>.reactive(
+                    viewModelBuilder: () => DocViewModel(),
+                    onViewModelReady: (model) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        model.getDoctorsStatistic();
+                      });
+                    },
+                    disposeViewModel: false,
+                    builder: (_, DocViewModel model, __) {
+                      final stat = model.getDoctorStatisticModel;
+                      final unread = stat?.unread ?? 0;
+                      return Stack(
+                        children: [
+                          SvgPicture.asset(
+                            AppImage.chat,
+                            color:
+                                _currentIndex == 2
+                                    ? AppColor.darkindgrey
+                                    : AppColor.funnyLookingGrey,
+                            height: 30.h,
+                            width: 30.w,
+                          ),
+                          unread > 0
+                              ? Positioned(
+                                right: 1,
+                                top: 1,
+                                child: Container(
+                                  padding: EdgeInsets.all(4.6.w),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: const Color.fromARGB(
+                                      255,
+                                      255,
+                                      55,
+                                      0,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              : SizedBox.shrink(),
+                        ],
+                      );
+                    },
                   ),
                   label: 'Message',
                 ),

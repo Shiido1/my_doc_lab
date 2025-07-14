@@ -28,7 +28,6 @@ import '../../../ui/app_assets/app_image.dart';
 import '../../../ui/app_assets/app_utils.dart';
 import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/app_assets/image_picker.dart';
-import '../../../ui/screens/dashboard/chat/video_chat_agora/doc_vid_call_look_screen.dart';
 import '../../../ui/widget/text_form_widget.dart';
 import '../../../ui/widget/text_widget.dart';
 import '../../core_folder/app/app.locator.dart';
@@ -36,6 +35,7 @@ import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
 import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
+import '../model/availability_history_model/availability_history_model.dart';
 import '../model/bank_save_entity_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
@@ -106,6 +106,9 @@ class DocViewModel extends BaseViewModel {
   SendMessageResponseModel? _sendMessageResponseModel;
   SendMessageResponseModel? get sendMessageResponseModel =>
       _sendMessageResponseModel;
+  AvailabilityHistoryModel? _availabilityHistoryModel;
+  AvailabilityHistoryModel? get availabilityHistoryModel =>
+      _availabilityHistoryModel;
   GetPrescriptionListResponseModelList? _getPrescriptionListResponseModelList;
   GetPrescriptionListResponseModelList?
   get getPrescriptionListResponseModelList =>
@@ -1146,6 +1149,21 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> doctorAvailabiltity(String id) async {
+    try {
+      _isLoading = true;
+      _availabilityHistoryModel = await runBusyFuture(
+        repositoryImply.doctorsAvailabilityHistory(id),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   void logout() async {
     try {
       await runBusyFuture(repositoryImply.logout(), throwException: true);
@@ -1156,12 +1174,7 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> receiveConversation(
-    context, {
-    String? id,
-    GetMessageIndexResponseModel? messageModel,
-    dynamic sender,
-  }) async {
+  Future<void> receiveConversation(String? id) async {
     try {
       _receivedMessageResponseModelList = await runBusyFuture(
         repositoryImply.receiveMessage(id!),
@@ -1169,14 +1182,8 @@ class DocViewModel extends BaseViewModel {
       );
       _isLoading = false;
       Future.delayed(Duration(seconds: 0), () async {
-        if (hasLoadedConversation) {
-          receiveConversation(
-            context,
-            id: id,
-            messageModel: messageModel,
-            sender: sender,
-          );
-        }
+        if (hasLoadedConversation) receiveConversation(id);
+
         await runBusyFuture(
           repositoryImply.readMessage(int.parse(id)),
           throwException: true,
@@ -1186,35 +1193,6 @@ class DocViewModel extends BaseViewModel {
           session.chatsData = {'chat': []};
           sendList.clear();
         });
-        if (_receivedMessageResponseModelList
-                    ?.receivedMessageResponseModelList
-                    ?.last
-                    .message ==
-                'video-call-agora' &&
-            _receivedMessageResponseModelList
-                    ?.receivedMessageResponseModelList
-                    ?.last
-                    .senderType ==
-                "MydocLab\\Models\\User") {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder:
-                  (context) => DocVidCallLookScreen(
-                    conversationId: id,
-                    messageModel: messageModel,
-                    sender: sender,
-                    image:
-                        _receivedMessageResponseModelList
-                            ?.receivedMessageResponseModelList
-                            ?.last
-                            .sender
-                            ?.profileImage,
-                    callId: _callTokenGenerateResponseModel?.callId.toString(),
-                  ),
-            ),
-          );
-          hasLoadedConversation = false;
-        }
       });
     } catch (e) {
       _isLoading = false;
@@ -1223,23 +1201,12 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void receiveConversationOnce(
-    context, {
-    String? id,
-    GetMessageIndexResponseModel? messageModel,
-    dynamic sender,
-  }) async {
+  void receiveConversationOnce(String? id) async {
     if (hasLoadedConversation == false) {
       return;
     } else {
       hasLoadedConversation = true;
-      await receiveConversation(
-        context,
-        id: id,
-        messageModel: messageModel,
-        sender: sender,
-      );
-
+      await receiveConversation(id);
       scrollToBottom(); // existing method
     }
     notifyListeners();
@@ -1302,557 +1269,91 @@ class DocViewModel extends BaseViewModel {
       message?.senderType == "MydocLab\\Models\\User"
           ? Align(
             alignment: Alignment.topLeft,
-            child:
-                message?.message == 'video-call-agora'
-                    ? Container(
-                      width: 160.w,
-                      margin: EdgeInsets.only(
-                        left: 20.w,
-                        right: 100.w,
-                        bottom: 20.w,
-                      ),
+            child: Container(
+              margin: EdgeInsets.only(left: 20.w, right: 100.w, bottom: 20.w),
 
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.w,
-                        horizontal: 4.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        color: AppColor.primary1.withOpacity(.1),
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.all(1.w),
-                        padding: EdgeInsets.all(3.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColor.primary.withOpacity(.2),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 2.w),
-                              padding: EdgeInsets.all(6.0.w),
-                              decoration: BoxDecoration(
-                                color: AppColor.darkindgrey.withOpacity(.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.video_call_outlined,
-                                size: 16.20.sp,
-                                color: AppColor.darkindgrey,
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextView(
-                                  text: 'Video call',
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 14.2.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColor.darkindgrey,
-                                  ),
-                                ),
-                                TextView(
-                                  text: DateFormat('hh:mma').format(
-                                    DateTime.parse(
-                                      message!.updatedAt.toString(),
-                                    ).toLocal(),
-                                  ),
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColor.darkindgrey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    : message?.message == 'accept-call-agora'
-                    ? Container(
-                      width: 160.w,
-                      margin: EdgeInsets.only(
-                        left: 20.w,
-                        right: 100.w,
-                        bottom: 20.w,
-                      ),
-
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.w,
-                        horizontal: 4.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        color: AppColor.primary1.withOpacity(.1),
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.all(1.w),
-                        padding: EdgeInsets.all(3.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColor.primary.withOpacity(.2),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 2.w),
-                              padding: EdgeInsets.all(6.0.w),
-                              decoration: BoxDecoration(
-                                color: AppColor.darkindgrey.withOpacity(.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.video_call_outlined,
-                                size: 16.20.sp,
-                                color: AppColor.darkindgrey,
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextView(
-                                  text: 'Call ended',
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 14.2.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColor.darkindgrey,
-                                  ),
-                                ),
-                                TextView(
-                                  text: DateFormat('hh:mma').format(
-                                    DateTime.parse(
-                                      message!.updatedAt.toString(),
-                                    ).toLocal(),
-                                  ),
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColor.darkindgrey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    : message?.message == 'reject-call-agora'
-                    ? Container(
-                      width: 160.w,
-                      margin: EdgeInsets.only(
-                        left: 20.w,
-                        right: 100.w,
-                        bottom: 20.w,
-                      ),
-
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.w,
-                        horizontal: 4.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        color: AppColor.primary1.withOpacity(.1),
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.all(1.w),
-                        padding: EdgeInsets.all(3.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColor.primary.withOpacity(.2),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 2.w),
-                              padding: EdgeInsets.all(6.0.w),
-                              decoration: BoxDecoration(
-                                color: AppColor.darkindgrey.withOpacity(.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.video_call_outlined,
-                                size: 16.20.sp,
-                                color: AppColor.darkindgrey,
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextView(
-                                  text: 'Ignored call',
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 14.2.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColor.darkindgrey,
-                                  ),
-                                ),
-                                TextView(
-                                  text: DateFormat('hh:mma').format(
-                                    DateTime.parse(
-                                      message!.updatedAt.toString(),
-                                    ).toLocal(),
-                                  ),
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColor.darkindgrey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    : Container(
-                      margin: EdgeInsets.only(
-                        left: 20.w,
-                        right: 100.w,
-                        bottom: 20.w,
-                      ),
-
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.w,
-                        horizontal: 10.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        color: AppColor.primary1.withOpacity(.1),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextView(
-                            text: message?.message ?? '',
-                            textStyle: GoogleFonts.dmSans(
-                              fontSize: 15.2.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColor.darkindgrey,
-                            ),
-                          ),
-                          TextView(
-                            text: DateFormat('hh:mma').format(
-                              DateTime.parse(
-                                message!.updatedAt.toString(),
-                              ).toLocal(),
-                            ),
-                            textStyle: GoogleFonts.dmSans(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400,
-                              color: AppColor.darkindgrey,
-                            ),
-                          ),
-                        ],
-                      ),
+              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(0),
+                  bottomRight: Radius.circular(10),
+                ),
+                color: AppColor.primary1.withOpacity(.1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextView(
+                    text: message?.message ?? '',
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 15.2.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.darkindgrey,
                     ),
+                  ),
+                  TextView(
+                    text: DateFormat('hh:mma').format(
+                      DateTime.parse(message!.updatedAt.toString()).toLocal(),
+                    ),
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.darkindgrey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           )
           : Align(
             alignment: Alignment.topRight,
-            child:
-                message?.message == 'video-call-agora'
-                    ? Container(
-                      width: 160.w,
-                      margin: EdgeInsets.only(
-                        right: 20.w,
-                        left: 100.w,
-                        bottom: 20.w,
-                      ),
-
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.w,
-                        horizontal: 4.0.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(0),
-                        ),
-                        color: AppColor.primary1,
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.all(1.w),
-                        padding: EdgeInsets.all(3.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColor.white.withOpacity(.2),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 2.w),
-                              padding: EdgeInsets.all(6.0.w),
-                              decoration: BoxDecoration(
-                                color: AppColor.white.withOpacity(.3),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.video_call_outlined,
-                                size: 16.20.sp,
-                                color: AppColor.white,
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextView(
-                                  text: 'Video call',
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 14.2.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColor.white,
-                                  ),
-                                ),
-                                TextView(
-                                  text: DateFormat('hh:mma').format(
-                                    DateTime.parse(
-                                      message!.updatedAt.toString(),
-                                    ).toLocal(),
-                                  ),
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColor.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    : message?.message == 'accept-call-agora'
-                    ? Container(
-                      width: 160.w,
-                      margin: EdgeInsets.only(
-                        right: 20.w,
-                        left: 100.w,
-                        bottom: 20.w,
-                      ),
-
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.w,
-                        horizontal: 4.0.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(0),
-                        ),
-                        color: AppColor.primary1,
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.all(1.w),
-                        padding: EdgeInsets.all(3.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColor.white.withOpacity(.2),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 2.w),
-                              padding: EdgeInsets.all(6.0.w),
-                              decoration: BoxDecoration(
-                                color: AppColor.white.withOpacity(.3),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.video_call_outlined,
-                                size: 16.20.sp,
-                                color: AppColor.white,
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextView(
-                                  text: 'Call ended',
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 14.2.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColor.white,
-                                  ),
-                                ),
-                                TextView(
-                                  text: DateFormat('hh:mma').format(
-                                    DateTime.parse(
-                                      message!.updatedAt.toString(),
-                                    ).toLocal(),
-                                  ),
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColor.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    : message?.message == 'reject-call-agora'
-                    ? Container(
-                      width: 160.w,
-                      margin: EdgeInsets.only(
-                        right: 20.w,
-                        left: 100.w,
-                        bottom: 20.w,
-                      ),
-
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.w,
-                        horizontal: 4.0.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(0),
-                        ),
-                        color: AppColor.primary1,
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.all(1.w),
-                        padding: EdgeInsets.all(3.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: AppColor.white.withOpacity(.2),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: 2.w),
-                              padding: EdgeInsets.all(6.0.w),
-                              decoration: BoxDecoration(
-                                color: AppColor.white.withOpacity(.3),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.video_call_outlined,
-                                size: 16.20.sp,
-                                color: AppColor.white,
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextView(
-                                  text: 'Ignored call',
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 14.2.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColor.white,
-                                  ),
-                                ),
-                                TextView(
-                                  text: DateFormat('hh:mma').format(
-                                    DateTime.parse(
-                                      message!.updatedAt.toString(),
-                                    ).toLocal(),
-                                  ),
-                                  textStyle: GoogleFonts.dmSans(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColor.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    : Container(
-                      margin: EdgeInsets.only(
-                        right: 20.w,
-                        left: 100.w,
-                        bottom: 20.w,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.w,
-                        horizontal: 10.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(0),
-                        ),
-                        color: AppColor.primary1,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          TextView(
-                            text: message?.message ?? '',
-                            textStyle: GoogleFonts.dmSans(
-                              fontSize: 15.2.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColor.white,
-                            ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextView(
-                                text: DateFormat('hh:mma').format(
-                                  DateTime.parse(
-                                    message!.updatedAt.toString(),
-                                  ).toLocal(),
-                                ),
-                                textStyle: GoogleFonts.dmSans(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColor.white,
-                                ),
-                              ),
-                              SizedBox(width: 4.w),
-                              Icon(
-                                Icons.check,
-                                color: AppColor.white,
-                                size: 14.sp,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+            child: Container(
+              margin: EdgeInsets.only(right: 20.w, left: 100.w, bottom: 20.w),
+              padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(0),
+                ),
+                color: AppColor.primary1,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextView(
+                    text: message?.message ?? '',
+                    textStyle: GoogleFonts.dmSans(
+                      fontSize: 15.2.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.white,
                     ),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextView(
+                        text: DateFormat('hh:mma').format(
+                          DateTime.parse(
+                            message!.updatedAt.toString(),
+                          ).toLocal(),
+                        ),
+                        textStyle: GoogleFonts.dmSans(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.white,
+                        ),
+                      ),
+                      SizedBox(width: 4.w),
+                      Icon(Icons.check, color: AppColor.white, size: 14.sp),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
     ],
   );

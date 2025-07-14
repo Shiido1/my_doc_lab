@@ -374,7 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextView(
-                      text: 'Tests',
+                      text: 'Test Result',
                       textStyle: GoogleFonts.dmSans(
                         color: AppColor.black,
                         fontSize: 16.20.sp,

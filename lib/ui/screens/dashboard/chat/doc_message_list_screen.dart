@@ -227,19 +227,40 @@ class DoctorMessageListScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  TextView(
-                    text: getWeekdayAbbreviation(o.lastMessageTime ?? ''),
-                    textStyle: GoogleFonts.gabarito(
-                      color:
-                          o.unreadCount! > 0
-                              ? AppColor.black
-                              : AppColor.lightgrey,
-                      fontSize: 12.20.sp,
-                      fontWeight:
-                          o.unreadCount! > 0
-                              ? FontWeight.w500
-                              : FontWeight.w400,
-                    ),
+                  Column(
+                    children: [
+                      TextView(
+                        text: getWeekdayAbbreviation(o.lastMessageTime ?? ''),
+                        textStyle: GoogleFonts.gabarito(
+                          color:
+                              o.unreadCount! > 0
+                                  ? AppColor.black
+                                  : AppColor.lightgrey,
+                          fontSize: 12.20.sp,
+                          fontWeight:
+                              o.unreadCount! > 0
+                                  ? FontWeight.w500
+                                  : FontWeight.w400,
+                        ),
+                      ),
+                      o.unreadCount! > 0
+                          ? Container(
+                            padding: EdgeInsets.all(6.w),
+                            decoration: BoxDecoration(
+                              color: AppColor.yellow.withOpacity(.6),
+                              shape: BoxShape.circle,
+                            ),
+                            child: TextView(
+                              text: o.unreadCount.toString(),
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.black,
+                                fontSize: 12.20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          )
+                          : SizedBox.shrink(),
+                    ],
                   ),
                   SizedBox(width: 12.w),
                 ],

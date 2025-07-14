@@ -39,9 +39,6 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
               receiverType: widget.receiverType,
             ),
           );
-          model.acceptCall(
-            int.parse(model.callTokenGenerateResponseModel!.callId.toString()),
-          );
         });
       },
       onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),

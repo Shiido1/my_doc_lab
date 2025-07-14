@@ -1,14 +1,15 @@
+// ignore_for_file: unnecessary_string_escapes, deprecated_member_use, prefer_final_fields
+
 import 'dart:ui';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/doctor_video_chat_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/video_chat_screen.dart';
 import 'package:stacked/stacked.dart';
-
-import '../../../../../core/connect_end/model/call_token_generate_entity_model.dart';
 import '../../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
-import '../../../../../core/connect_end/model/send_message_entity_model.dart';
 import '../../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../../app_assets/app_color.dart';
 import '../../../../app_assets/constant.dart';
@@ -35,12 +36,19 @@ class DocVidCallLookScreen extends StatefulWidget {
 }
 
 class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
+  AudioPlayer _player = AudioPlayer();
+  var audioSource;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.grey,
       body: ViewModelBuilder<DocViewModel>.reactive(
         viewModelBuilder: () => DocViewModel(),
-        onViewModelReady: (model) {},
+        onViewModelReady: (model) {
+          _playerSound();
+          print('player:::K${widget.sender['caller_type']}');
+        },
         onDispose: (viewModel) {},
         disposeViewModel: false,
         builder: (_, DocViewModel model, __) {
@@ -48,12 +56,15 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
             children: [
               // Fullscreen image
               Positioned.fill(
-                child: Image.network(
-                  widget.image!.contains('https')
-                      ? '${widget.image}'
-                      : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${widget.image}',
-                  fit: BoxFit.cover,
-                ),
+                child:
+                    widget.image == null || !widget.image!.contains('https')
+                        ? Container(color: AppColor.funnyLookingGrey)
+                        : Image.network(
+                          widget.image!.contains('https')
+                              ? '${widget.image}'
+                              : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${widget.image}',
+                          fit: BoxFit.cover,
+                        ),
               ),
               // Blur effect layer
               Positioned.fill(
@@ -71,29 +82,36 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                   children: [
                     TextView(
                       text:
-                          '${widget.messageModel?.contactName?.capitalizeWords() ?? ''} is Calling..',
+                          widget.sender['caller_type'] ==
+                                  "MydocLab\Models\Doctor"
+                              ? 'Dr. ${widget.messageModel?.contactName?.capitalizeWords() ?? widget.sender['caller_name'] ?? ''} is Calling..'
+                              : '${widget.messageModel?.contactName?.capitalizeWords() ?? widget.sender['caller_name'] ?? ''} is Calling..',
                       textStyle: GoogleFonts.dmSans(
-                        fontSize: 22.2.sp,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 23.2.sp,
+                        fontWeight: FontWeight.w600,
                         color: AppColor.white,
                       ),
                     ),
-                    SizedBox(height: 30.h),
+                    SizedBox(height: 60.h),
                     ClipOval(
                       child: SizedBox.fromSize(
-                        size: const Size.fromRadius(68),
-                        child: Image.network(
-                          widget.image!.contains('https')
-                              ? '${widget.image}'
-                              : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${widget.image}',
-                          fit: BoxFit.cover,
-                          errorBuilder:
-                              (context, error, stackTrace) =>
-                                  shimmerViewPharm(),
-                        ),
+                        size: const Size.fromRadius(98),
+                        child:
+                            widget.image == null ||
+                                    !widget.image!.contains('https')
+                                ? Container(color: AppColor.funnyLookingGrey)
+                                : Image.network(
+                                  widget.image!.contains('https')
+                                      ? '${widget.image}'
+                                      : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${widget.image}',
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, error, stackTrace) =>
+                                          shimmerViewPharm(),
+                                ),
                       ),
                     ),
-                    SizedBox(height: 50.h),
+                    SizedBox(height: 100.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -106,39 +124,48 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                           child: IconButton(
                             icon: Icon(Icons.call_sharp),
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => VideoChatScreen(
-                                        conversationId: int.parse(
-                                          widget.conversationId.toString(),
+                              _player.stop();
+                              if (widget.sender['caller_type'] ==
+                                  "MydocLab\Models\Doctor") {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => VideoChatScreen(
+                                          conversationId: int.parse(
+                                            widget.conversationId.toString(),
+                                          ),
+                                          receiverId: int.parse(
+                                            '${widget.messageModel!.contactId ?? widget.sender['caller_id']}',
+                                          ),
+                                          receiverType: 'Doctor',
                                         ),
-                                        receiverId: int.parse(
-                                          '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                  ),
+                                );
+                              } else {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => DoctorVideoChatScreen(
+                                          conversationId: int.parse(
+                                            widget.conversationId.toString(),
+                                          ),
+                                          receiverId: int.parse(
+                                            '${widget.messageModel!.contactId ?? widget.sender['caller_id']}',
+                                          ),
+                                          receiverType: 'User',
                                         ),
-                                        receiverType:
-                                            '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
-                                      ),
-                                ),
-                              );
-                              model.sendMessage(
-                                SendMessageEntityModel(
-                                  conversationId: int.parse(
-                                    '${widget.messageModel!.conversationId}',
                                   ),
-                                  receiverId: int.parse(
-                                    '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                  ),
-                                  receiverType: "MydocLab\\Models\\User",
-                                  message: 'accept-call-agora',
-                                ),
+                                );
+                              }
+                              model.acceptCall(
+                                int.parse(widget.sender['call_id'].toString()),
                               );
                             },
                             color: AppColor.primary,
                             iconSize: 50.sp,
                           ),
                         ),
-                        SizedBox(width: 80.w),
+                        SizedBox(width: 120.w),
                         Container(
                           padding: EdgeInsets.all(5.2.w),
                           decoration: BoxDecoration(
@@ -148,40 +175,12 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                           child: IconButton(
                             icon: Icon(Icons.call_end),
                             onPressed: () async {
+                              _player.stop();
                               model.hasLoadedConversation = true;
                               model.notifyListeners();
                               Navigator.pop(context);
-                              Navigator.pop(context);
-                              await model.sendMessage(
-                                SendMessageEntityModel(
-                                  conversationId: int.parse(
-                                    '${widget.messageModel!.conversationId}',
-                                  ),
-                                  receiverId: int.parse(
-                                    '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                  ),
-                                  receiverType: "MydocLab\\Models\\Doctor",
-                                  message: 'reject-call-agora',
-                                ),
-                              );
-                              await model.generateToken(
-                                context,
-                                calltoken: CallTokenGenerateEntityModel(
-                                  conversationId: int.parse(
-                                    '${widget.conversationId}',
-                                  ),
-                                  receiverId: int.parse(
-                                    '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                  ),
-                                  receiverType: "Doctor",
-                                ),
-                              );
-
                               model.rejectCall(
-                                int.parse(
-                                  model.callTokenGenerateResponseModel!.callId
-                                      .toString(),
-                                ),
+                                int.parse(widget.sender['call_id'].toString()),
                               );
                             },
                             color: AppColor.red,
@@ -199,5 +198,16 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
         },
       ),
     );
+  }
+
+  void _playerSound() async {
+    audioSource = AssetSource('audio/ringing.mp3');
+    await _player.setReleaseMode(ReleaseMode.loop);
+    await _player.play(audioSource);
+  }
+
+  Future<void> replaySound() async {
+    await _player.stop(); // optional: stop if already playing
+    await _player.play(audioSource);
   }
 }

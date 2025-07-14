@@ -8,12 +8,16 @@ import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/widget/text_form_widget.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../../core/connect_end/model/checkoutentitymodel.dart';
+import '../../../../../core/connect_end/model/get_list_of_lab_diagnosis_model/get_list_of_lab_diagnosis_model.dart';
 import '../../../../../core/connect_end/model/search_doctor_entity_model.dart';
 import '../../../../../core/connect_end/view_model/auth_view_model.dart';
+import '../../../../../main.dart';
 import '../../../../app_assets/app_image.dart';
+import '../../../../app_assets/app_utils.dart';
 import '../../../../app_assets/constant.dart';
 import '../../../../widget/text_widget.dart';
-import '../report_screen.dart';
+import '../cart_screen.dart';
 
 // ignore: must_be_immutable
 class DoctorTestScreen extends StatefulWidget {
@@ -26,6 +30,34 @@ class DoctorTestScreen extends StatefulWidget {
 }
 
 class _DoctorTestScreenState extends State<DoctorTestScreen> {
+  List timeList = [
+    '8:00 AM',
+    '8:30 AM',
+    '9:00 AM',
+    '9:30 AM',
+    '10:00 AM',
+    '10:30 AM',
+    '11:00 AM',
+    '11:30 AM',
+    '12:00 PM',
+    '12:30 PM',
+    '1:00 PM',
+    '1:30 PM',
+    '2:00 PM',
+    '2:30 PM',
+    '3:00 PM',
+    '3:30 PM',
+    '4:00 PM',
+    '4:30 PM',
+    '5:00 PM',
+    '5:30 PM',
+    '6:00 PM',
+  ];
+  var t;
+
+  bool isTapped = false;
+  List<GetListOfLabDiagnosisModel> selectedOptions = [];
+
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
@@ -35,7 +67,9 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           model.getAllDoctors(context);
-          model.getAllReport(context);
+          // model.getAllReport(context);
+
+          model.getAllDiagnosisList(context, id: '1');
         });
       },
       disposeViewModel: false,
@@ -208,15 +242,35 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                       ],
                     )
                     : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        TextView(
+                          text: 'Available Services',
+                          textStyle: GoogleFonts.gabarito(
+                            color: AppColor.black,
+                            fontSize: 22.sp,
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
                         TextFormWidget(
-                          label: 'Search for tests...',
+                          label: 'Search Service',
+                          labelStyle: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.primary1,
+                          ),
                           border: 10,
                           isFilled: true,
-                          fillColor: AppColor.transparent,
+                          fillColor: AppColor.white,
                           prefixWidget: Padding(
                             padding: EdgeInsets.all(14.w),
-                            child: SvgPicture.asset(AppImage.search),
+                            child: SvgPicture.asset(
+                              AppImage.search,
+                              height: 20.h,
+                              width: 20.w,
+                            ),
                           ),
                           onChange: (p0) {
                             model.query = p0;
@@ -224,216 +278,338 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
                           },
                         ),
                         SizedBox(height: 20.h),
-                        if (model.getReportResponseModel != null &&
+                        Divider(color: AppColor.grey, thickness: .5),
+                        if (model.getListOfLabDiagnosisModelList != null &&
                             model
-                                .getReportResponseModel!
-                                .data!
-                                .reports!
+                                .getListOfLabDiagnosisModelList!
+                                .getListOfLabDiagnosisModelList!
                                 .isNotEmpty)
                           if (model.query != '')
-                            ...model.getReportResponseModel!.data!.reports!
+                            ...model
+                                .getListOfLabDiagnosisModelList!
+                                .getListOfLabDiagnosisModelList!
                                 .where(
-                                  (w) => w.diagnosis!.toLowerCase().contains(
+                                  (w) => w.name!.toLowerCase().contains(
                                     model.query.toLowerCase(),
                                   ),
                                 )
                                 .map(
-                                  (o) => GestureDetector(
-                                    onTap:
-                                        () => Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder:
-                                                (context) =>
-                                                    ReportScreen(report: o),
-                                          ),
-                                        ),
-                                    child: Container(
-                                      width: double.infinity,
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: Image.network(
-                                                  o.imageUrl ?? '',
-                                                  height: 70.h,
-                                                  width: 70.w,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder:
-                                                      (
-                                                        context,
-                                                        error,
-                                                        stackTrace,
-                                                      ) => Container(
-                                                        padding: EdgeInsets.all(
-                                                          16.w,
-                                                        ),
-                                                        decoration: BoxDecoration(
-                                                          color: AppColor
-                                                              .primary1
-                                                              .withOpacity(.7),
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                14,
-                                                              ),
-                                                        ),
-                                                        child: SvgPicture.asset(
-                                                          AppImage.blood,
-                                                          height: 40.h,
-                                                          width: 50.w,
-                                                        ),
-                                                      ),
-                                                ),
-                                              ),
-
-                                              SizedBox(width: 20.w),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  TextView(
-                                                    text: o.diagnosis ?? "",
-                                                    textStyle:
-                                                        GoogleFonts.gabarito(
-                                                          color:
-                                                              AppColor.primary1,
-                                                          fontSize: 18.20.sp,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                  ),
-                                                  SizedBox(height: 10.w),
-                                                  SizedBox(
-                                                    width: 240.w,
-                                                    child: TextView(
-                                                      text: o.summary ?? '',
-                                                      textStyle:
-                                                          GoogleFonts.gabarito(
-                                                            color: AppColor
-                                                                .black
-                                                                .withOpacity(
-                                                                  .7,
-                                                                ),
-                                                            fontSize: 15.20.sp,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
-                                                      textOverflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 6,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-
-                                          Divider(color: AppColor.greylight),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                          else
-                            ...model.getReportResponseModel!.data!.reports!.map(
-                              (o) => GestureDetector(
-                                onTap:
-                                    () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) =>
-                                                ReportScreen(report: o),
-                                      ),
-                                    ),
-                                child: Container(
-                                  width: double.infinity,
-                                  child: Column(
+                                  (o) => Column(
                                     children: [
                                       Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
+                                          Container(
+                                            padding: EdgeInsets.all(16.w),
+                                            decoration: BoxDecoration(
+                                              color: AppColor.primary1
+                                                  .withOpacity(.7),
+                                              borderRadius:
+                                                  BorderRadius.circular(14),
                                             ),
-                                            child: Image.network(
-                                              o.imageUrl ?? '',
-                                              height: 70.h,
-                                              width: 70.w,
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (
-                                                    context,
-                                                    error,
-                                                    stackTrace,
-                                                  ) => Container(
-                                                    padding: EdgeInsets.all(
-                                                      16.w,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      color: AppColor.primary1
-                                                          .withOpacity(.7),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            14,
-                                                          ),
-                                                    ),
-                                                    child: SvgPicture.asset(
-                                                      AppImage.blood,
-                                                      height: 40.h,
-                                                      width: 50.w,
-                                                    ),
-                                                  ),
+                                            child: SvgPicture.asset(
+                                              AppImage.blood,
+                                              height: 20.40.h,
+                                              width: 20.50.w,
                                             ),
                                           ),
-
-                                          SizedBox(width: 20.w),
+                                          SizedBox(width: 12.20.w),
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               TextView(
-                                                text: o.diagnosis ?? "",
+                                                text: o.name!.capitalize(),
                                                 textStyle: GoogleFonts.gabarito(
-                                                  color: AppColor.primary1,
-                                                  fontSize: 18.20.sp,
-                                                  fontWeight: FontWeight.w500,
+                                                  color: AppColor.black,
+                                                  fontSize: 17.6.sp,
+                                                  letterSpacing: 0,
+                                                  fontWeight: FontWeight.w400,
                                                 ),
                                               ),
-                                              SizedBox(height: 10.w),
                                               SizedBox(
-                                                width: 240.w,
+                                                width: 200.w,
                                                 child: TextView(
-                                                  text: o.summary ?? '',
+                                                  text: o.details!.capitalize(),
                                                   textStyle:
                                                       GoogleFonts.gabarito(
-                                                        color: AppColor.black
-                                                            .withOpacity(.7),
-                                                        fontSize: 15.20.sp,
+                                                        color: AppColor.black,
+                                                        fontSize: 14.8.sp,
+                                                        letterSpacing: 0,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                            FontWeight.w300,
                                                       ),
-                                                  textOverflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 6,
                                                 ),
                                               ),
                                             ],
                                           ),
+                                          Spacer(),
+                                          Checkbox(
+                                            value: selectedOptions.contains(o),
+                                            onChanged: (isChecked) {
+                                              setState(() {
+                                                if (isChecked!) {
+                                                  selectedOptions.add(o);
+                                                } else {
+                                                  selectedOptions.remove(o);
+                                                }
+                                              });
+                                            },
+                                          ),
                                         ],
                                       ),
 
-                                      Divider(color: AppColor.greylight),
+                                      Divider(
+                                        color: AppColor.grey,
+                                        thickness: .5,
+                                      ),
                                     ],
+                                  ),
+                                )
+                          else
+                            ...model
+                                .getListOfLabDiagnosisModelList!
+                                .getListOfLabDiagnosisModelList!
+                                .map(
+                                  (o) => Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.all(16.w),
+                                            decoration: BoxDecoration(
+                                              color: AppColor.primary1
+                                                  .withOpacity(.7),
+                                              borderRadius:
+                                                  BorderRadius.circular(14),
+                                            ),
+                                            child: SvgPicture.asset(
+                                              AppImage.blood,
+                                              height: 20.40.h,
+                                              width: 20.50.w,
+                                            ),
+                                          ),
+                                          SizedBox(width: 12.20.w),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextView(
+                                                text: o.name!.capitalize(),
+                                                textStyle: GoogleFonts.gabarito(
+                                                  color: AppColor.black,
+                                                  fontSize: 17.6.sp,
+                                                  letterSpacing: 0,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 200.w,
+                                                child: TextView(
+                                                  text: o.details!.capitalize(),
+                                                  textStyle:
+                                                      GoogleFonts.gabarito(
+                                                        color: AppColor.black,
+                                                        fontSize: 14.8.sp,
+                                                        letterSpacing: 0,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Spacer(),
+                                          Checkbox(
+                                            value: selectedOptions.contains(o),
+                                            onChanged: (isChecked) {
+                                              setState(() {
+                                                if (isChecked!) {
+                                                  selectedOptions.add(o);
+                                                } else {
+                                                  selectedOptions.remove(o);
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+
+                                      Divider(
+                                        color: AppColor.grey,
+                                        thickness: .5,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                        SizedBox(height: 20.w),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () => model.openCalendarDialog(context),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 6.w,
+                                  horizontal: 8.w,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColor.primary1,
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                child: TextView(
+                                  text: 'Select Date',
+                                  textStyle: GoogleFonts.dmSans(
+                                    color: AppColor.white,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
                             ),
+                            model.selectLabDate != ''
+                                ? Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 6.w,
+                                    horizontal: 8.w,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    border: Border.all(
+                                      color: AppColor.primary1,
+                                    ),
+                                  ),
+                                  child: TextView(
+                                    text: model.selectLabDate,
+                                    textStyle: GoogleFonts.dmSans(
+                                      color: AppColor.black,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                )
+                                : SizedBox.shrink(),
+                          ],
+                        ),
+                        Divider(color: AppColor.grey, thickness: .2),
+                        SizedBox(height: 10.h),
+                        Wrap(
+                          spacing: 6.20,
+                          runSpacing: 10,
+                          alignment: WrapAlignment.start,
+                          children: [
+                            ...timeList.map(
+                              (o) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    t = o;
+                                  });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 5.4.w,
+                                    horizontal: 6.w,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(22),
+                                    color:
+                                        t == o
+                                            ? AppColor.primary1
+                                            : AppColor.transparent,
+                                    border: Border.all(
+                                      color: AppColor.funnyLookingGrey,
+                                    ),
+                                  ),
+                                  child: TextView(
+                                    text: o,
+                                    textStyle: GoogleFonts.dmSans(
+                                      color:
+                                          t == o
+                                              ? AppColor.white
+                                              : AppColor.black,
+                                      fontSize: 15.6.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 40.h),
+                        GestureDetector(
+                          onTap: () {
+                            navPatientDetail(
+                              context: context,
+                              date: model.selectLabDate,
+                              time: t,
+                              selectedOptions: selectedOptions,
+                              actions: () async {
+                                for (
+                                  int i = 0;
+                                  i < selectedOptions.length;
+                                  i++
+                                ) {
+                                  await box.add(
+                                    CheckoutEntityModel(
+                                      serviceType: 'lab',
+                                      serviceId: int.parse(
+                                        selectedOptions[i].id.toString(),
+                                      ),
+                                      doctorId: int.parse('1'),
+                                      slotId: 0,
+                                      complaint: '',
+                                      amount:
+                                          selectedOptions[i].price!.toString(),
+                                      date: model.selectLabDate,
+                                      time: t,
+                                      doctor: 'Lab',
+                                      productId: 0,
+                                      qty: 0,
+                                      name: selectedOptions[i].name!,
+                                    ),
+                                  );
+                                }
+                                await AppUtils.snackbar(
+                                  context,
+                                  message: 'Lab test request added to Cart..!',
+                                );
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => CartScreen(),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10.w,
+                              horizontal: 14.0.w,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColor.primary1,
+                            ),
+                            child: Center(
+                              child: TextView(
+                                text: 'Add To Cart',
+                                textStyle: GoogleFonts.gabarito(
+                                  color: AppColor.white,
+                                  fontSize: 18.0.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 60.h),
                       ],
                     ),
                 SizedBox(height: 40.h),
@@ -443,5 +619,24 @@ class _DoctorTestScreenState extends State<DoctorTestScreen> {
         );
       },
     );
+  }
+
+  navPatientDetail({
+    BuildContext? context,
+    String? date,
+    String? time,
+    List<GetListOfLabDiagnosisModel>? selectedOptions,
+    Function()? actions,
+  }) {
+    if (date == '' || time == null || selectedOptions!.isEmpty) {
+      AppUtils.snackbarTop(
+        context,
+        message: "Select Date, time and Available Services",
+        error: true,
+      );
+    } else {
+      actions!.call();
+      setState(() {});
+    }
   }
 }

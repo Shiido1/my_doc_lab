@@ -45,12 +45,6 @@ class _PatientDetailSceenState extends State<PatientDetailSceen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
-                ),
                 SizedBox(height: 20.h),
                 Row(
                   children: [

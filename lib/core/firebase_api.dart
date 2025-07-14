@@ -1,15 +1,16 @@
-// ignore_for_file: unnecessary_string_escapes
+// ignore_for_file: unnecessary_string_escapes, unnecessary_null_comparison
 
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
-
 import '../main.dart';
 import 'connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 
-Future<void> handlerBackgroundMessage(RemoteMessage message) async {}
+Future<void> handlerBackgroundMessage(RemoteMessage message) async {
+  print('object::::${{message.data}}');
+}
 
 class FirebaseApi {
   final _firebaseMessage = FirebaseMessaging.instance;
@@ -56,6 +57,7 @@ class FirebaseApi {
         ),
       );
     }
+
     if (message.data['agora_token'] != null &&
         message.data['caller_type'] == "MydocLab\Models\Doctor") {
       navigate.navigateTo(
@@ -78,7 +80,6 @@ class FirebaseApi {
         ),
       );
     }
-
     // navigation to screens when push notification pops should be implemented here
   }
 
@@ -138,6 +139,19 @@ class FirebaseApi {
         ),
         payload: jsonEncode(message.toMap()),
       );
+
+      if (message.data != null) {
+        navigate.navigateTo(
+          Routes.docVidCallLookScreen,
+          arguments: DocVidCallLookScreenArguments(
+            conversationId: message.data['conversation_id'],
+            messageModel: GetMessageIndexResponseModel(),
+            sender: message.data,
+            image: message.data['caller_image'],
+            callId: message.data['call_id'].toString(),
+          ),
+        );
+      }
     });
   }
 

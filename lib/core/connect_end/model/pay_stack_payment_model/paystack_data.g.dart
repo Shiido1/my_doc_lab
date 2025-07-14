@@ -7,10 +7,10 @@ part of 'paystack_data.dart';
 // **************************************************************************
 
 PaystackData _$PaystackDataFromJson(Map<String, dynamic> json) => PaystackData(
-  amount: json['amount'] as num?,
-  email: json['email'] as String?,
-  reference: json['reference'] as String?,
-);
+      amount: json['amount'] as num?,
+      email: json['email'] as String?,
+      reference: json['reference'] as String?,
+    );
 
 Map<String, dynamic> _$PaystackDataToJson(PaystackData instance) =>
     <String, dynamic>{

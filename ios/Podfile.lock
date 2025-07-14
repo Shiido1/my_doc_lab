@@ -45,6 +45,9 @@ PODS:
   - AgoraRtcEngine_iOS/VideoCodecEnc (4.5.2)
   - AgoraRtcEngine_iOS/VirtualBackground (4.5.2)
   - AgoraRtcEngine_iOS/VQA (4.5.2)
+  - audioplayers_darwin (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - Firebase/CoreOnly (11.15.0):
     - FirebaseCore (~> 11.15.0)
   - Firebase/Messaging (11.15.0):
@@ -139,6 +142,7 @@ PODS:
 
 DEPENDENCIES:
   - agora_rtc_engine (from `.symlinks/plugins/agora_rtc_engine/ios`)
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/darwin`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - fl_downloader (from `.symlinks/plugins/fl_downloader/ios`)
@@ -172,6 +176,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   agora_rtc_engine:
     :path: ".symlinks/plugins/agora_rtc_engine/ios"
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/darwin"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
@@ -204,6 +210,7 @@ SPEC CHECKSUMS:
   AgoraInfra_iOS: 3691b2b277a1712a35ae96de25af319de0d73d08
   AgoraIrisRTC_iOS: eab58c126439adf5ec99632828a558ea216860da
   AgoraRtcEngine_iOS: 97e2398a2addda9057815a2a583a658e36796ff6
+  audioplayers_darwin: 4027b33a8f471d996c13f71cb77f0b1583b5d923
   Firebase: d99ac19b909cd2c548339c2241ecd0d1599ab02e
   firebase_core: cf4d42a8ac915e51c0c2dc103442f3036d941a2d
   firebase_messaging: fee490327c1aae28a0da1e65fca856547deca493

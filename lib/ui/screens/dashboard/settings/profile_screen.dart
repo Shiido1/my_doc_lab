@@ -595,7 +595,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          if (v != null) {
+                          if (v != null && t != null) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder:

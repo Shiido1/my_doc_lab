@@ -37,10 +37,6 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
               receiverType: widget.receiverType,
             ),
           );
-
-          model.acceptCall(
-            int.parse(model.callTokenGenerateResponseModel!.callId.toString()),
-          );
         });
       },
       onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),
@@ -84,7 +80,6 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                                 .toString(),
                           ),
                         );
-                        Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },

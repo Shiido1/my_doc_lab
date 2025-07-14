@@ -7,6 +7,7 @@ import '../../../ui/screens/dashboard/appointment/prescription_detail_screen.dar
 import '../../../ui/screens/dashboard/chat/chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/doc_chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/pharm_chat_screen.dart';
+import '../../../ui/screens/dashboard/chat/video_chat_agora/doc_vid_call_look_screen.dart';
 import '../../../ui/screens/dashboard/chat/video_chat_agora/doctor_video_chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/video_chat_agora/video_chat_screen.dart';
 import '../../../ui/screens/dashboard/dashboard_screen.dart';
@@ -56,6 +57,7 @@ import '../network/network_service.dart';
     MaterialRoute(page: PrescriptionDetailScreen),
     MaterialRoute(page: UserPrescriptionDetailScreen),
     MaterialRoute(page: VerificationScreenForgotPassword),
+    MaterialRoute(page: DocVidCallLookScreen),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),

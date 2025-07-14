@@ -7,6 +7,7 @@ import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/
 import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import '../../core_folder/app/app.locator.dart';
+import '../model/availability_history_model/availability_history_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/create_add_medicine_entity_model.dart';
@@ -168,6 +169,11 @@ class DocRepoImpl {
 
   Future<PrescriptionViewResponse> getPrescriptionView(String id) async {
     final response = await _contract.getPrescriptionView(id);
+    return response;
+  }
+
+  Future<AvailabilityHistoryModel> doctorsAvailabilityHistory(String id) async {
+    final response = await _contract.doctorsAvailabilityHistory(id);
     return response;
   }
 

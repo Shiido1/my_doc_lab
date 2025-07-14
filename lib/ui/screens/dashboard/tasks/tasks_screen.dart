@@ -26,10 +26,6 @@ class _TasksScreenState extends State<TasksScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
-                ),
                 TextView(
                   text: 'My Task',
                   textStyle: GoogleFonts.gabarito(
@@ -49,7 +45,6 @@ class _TasksScreenState extends State<TasksScreen> {
                 padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 4.w),
                 width: 120.w,
                 decoration: BoxDecoration(
-                  // ignore: deprecated_member_use
                   color: AppColor.primary1,
 
                   borderRadius: BorderRadius.circular(10),

@@ -310,7 +310,7 @@ class _LaboratoryPatientScreenState extends State<LaboratoryPatientScreen> {
                                                 ),
                                               )
                                               : Container(
-                                                padding: EdgeInsets.all(28.8.w),
+                                                padding: EdgeInsets.all(23.8.w),
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: AppColor.oneKindgrey,

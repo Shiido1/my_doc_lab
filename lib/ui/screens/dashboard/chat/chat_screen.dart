@@ -43,12 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
-          model.receiveConversationOnce(
-            context,
-            id: widget.id!,
-            messageModel: widget.messageModel,
-            sender: widget.sender,
-          );
+          model.receiveConversationOnce(widget.id!);
         });
       },
       onDispose: (viewModel) {
@@ -77,7 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               child: TextView(
                                 text:
                                     widget.messageModel?.contactName
-                                        ?.capitalize() ??
+                                        ?.capitalizeWords() ??
                                     '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.lastName?.capitalize() ?? ''}'
                                         '',
                                 textStyle: GoogleFonts.dmSans(
@@ -131,18 +126,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                         receiverType:
                                             '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
                                       ),
-                                ),
-                              );
-                              model.sendMessage(
-                                SendMessageEntityModel(
-                                  conversationId: int.parse(
-                                    '${widget.messageModel!.conversationId ?? widget.id}',
-                                  ),
-                                  receiverId: int.parse(
-                                    '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                  ),
-                                  receiverType: "MydocLab\\Models\\Doctor",
-                                  message: 'video-call-agora',
                                 ),
                               );
                             },

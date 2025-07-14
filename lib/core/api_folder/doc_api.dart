@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:my_doc_lab/core/connect_end/model/availability_history_model/availability_history_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/bank_save_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/bank_save_response_model/bank_save_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/create_prescription_entity_model.dart';
@@ -482,6 +483,20 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return GetDoctorsAnalysisModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<AvailabilityHistoryModel> doctorsAvailabilityHistory(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.doctor_availability_history}/$id',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return AvailabilityHistoryModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

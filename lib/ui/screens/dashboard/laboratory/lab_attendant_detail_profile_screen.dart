@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:my_doc_lab/ui/app_assets/app_utils.dart';
@@ -10,7 +11,9 @@ import '../../../../core/connect_end/model/checkoutentitymodel.dart';
 import '../../../../core/connect_end/model/get_list_of_lab_diagnosis_model/get_list_of_lab_diagnosis_model.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../main.dart';
+import '../../../app_assets/app_image.dart';
 import '../../../app_assets/constant.dart';
+import '../../../widget/text_form_widget.dart';
 import '../../../widget/text_widget.dart';
 import '../home/cart_screen.dart';
 
@@ -77,49 +80,181 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
                   ),
                 ),
                 SizedBox(height: 20.h),
+                TextFormWidget(
+                  label: 'Search Service',
+                  labelStyle: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.primary1,
+                  ),
+                  border: 10,
+                  isFilled: true,
+                  fillColor: AppColor.white,
+                  prefixWidget: Padding(
+                    padding: EdgeInsets.all(14.w),
+                    child: SvgPicture.asset(
+                      AppImage.search,
+                      height: 20.h,
+                      width: 20.w,
+                    ),
+                  ),
+                  onChange: (p0) {
+                    model.query = p0;
+                    model.notifyListeners();
+                  },
+                ),
+                SizedBox(height: 20.h),
                 Divider(color: AppColor.grey, thickness: .5),
                 if (model.getListOfLabDiagnosisModelList != null &&
                     model
                         .getListOfLabDiagnosisModelList!
                         .getListOfLabDiagnosisModelList!
                         .isNotEmpty)
-                  ...model
-                      .getListOfLabDiagnosisModelList!
-                      .getListOfLabDiagnosisModelList!
-                      .map(
-                        (o) => Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextView(
-                                  text: o.name!.capitalize(),
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.black,
-                                    fontSize: 16.sp,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.w400,
+                  if (model.query != '')
+                    ...model
+                        .getListOfLabDiagnosisModelList!
+                        .getListOfLabDiagnosisModelList!
+                        .where(
+                          (w) => w.name!.toLowerCase().contains(
+                            model.query.toLowerCase(),
+                          ),
+                        )
+                        .map(
+                          (o) => Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(16.w),
+                                    decoration: BoxDecoration(
+                                      color: AppColor.primary1.withOpacity(.7),
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: SvgPicture.asset(
+                                      AppImage.blood,
+                                      height: 20.40.h,
+                                      width: 20.50.w,
+                                    ),
                                   ),
-                                ),
-                                Checkbox(
-                                  value: selectedOptions.contains(o),
-                                  onChanged: (isChecked) {
-                                    setState(() {
-                                      if (isChecked!) {
-                                        selectedOptions.add(o);
-                                      } else {
-                                        selectedOptions.remove(o);
-                                      }
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
+                                  SizedBox(width: 12.20.w),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextView(
+                                        text: o.name!.capitalize(),
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.black,
+                                          fontSize: 17.6.sp,
+                                          letterSpacing: 0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 200.w,
+                                        child: TextView(
+                                          text: o.details!.capitalize(),
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.black,
+                                            fontSize: 14.8.sp,
+                                            letterSpacing: 0,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Checkbox(
+                                    value: selectedOptions.contains(o),
+                                    onChanged: (isChecked) {
+                                      setState(() {
+                                        if (isChecked!) {
+                                          selectedOptions.add(o);
+                                        } else {
+                                          selectedOptions.remove(o);
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
 
-                            Divider(color: AppColor.grey, thickness: .5),
-                          ],
+                              Divider(color: AppColor.grey, thickness: .5),
+                            ],
+                          ),
+                        )
+                  else
+                    ...model
+                        .getListOfLabDiagnosisModelList!
+                        .getListOfLabDiagnosisModelList!
+                        .map(
+                          (o) => Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(16.w),
+                                    decoration: BoxDecoration(
+                                      color: AppColor.primary1.withOpacity(.7),
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: SvgPicture.asset(
+                                      AppImage.blood,
+                                      height: 20.40.h,
+                                      width: 20.50.w,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.20.w),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextView(
+                                        text: o.name!.capitalize(),
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.black,
+                                          fontSize: 17.6.sp,
+                                          letterSpacing: 0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 200.w,
+                                        child: TextView(
+                                          text: o.details!.capitalize(),
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.black,
+                                            fontSize: 14.8.sp,
+                                            letterSpacing: 0,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Checkbox(
+                                    value: selectedOptions.contains(o),
+                                    onChanged: (isChecked) {
+                                      setState(() {
+                                        if (isChecked!) {
+                                          selectedOptions.add(o);
+                                        } else {
+                                          selectedOptions.remove(o);
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+
+                              Divider(color: AppColor.grey, thickness: .5),
+                            ],
+                          ),
                         ),
-                      ),
                 SizedBox(height: 20.w),
 
                 Row(

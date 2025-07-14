@@ -90,6 +90,8 @@ class UrlConfig {
   static const String pharmacy_order_detail = 'pharmacy/orders/detail';
   static const String pharmacy_wallet = 'pharmacy/wallet';
   static const String doctor_wallet = 'doctor/wallet';
+  static const String doctor_availability_history =
+      'doctor/availability_history';
   static const String user_wallet = 'user/wallet';
   static const String add_pharm_med_list = 'pharmacy/medicine/list';
   static const String add_pharm_med = 'pharmacy/medicine/add';

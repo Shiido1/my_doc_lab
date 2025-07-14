@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/notification/notification_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/patient/patient_sceen.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
@@ -92,20 +91,6 @@ class DocHomeScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap:
-                          () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => NotificationScreen(),
-                            ),
-                          ),
-                      child: SvgPicture.asset(
-                        AppImage.notification,
-                        width: 24.w,
-                        height: 24.w,
-                      ),
                     ),
                   ],
                 ),

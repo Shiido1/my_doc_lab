@@ -40,12 +40,6 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
-                ),
                 SizedBox(height: 20.h),
                 Row(
                   children: [
@@ -188,7 +182,7 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
 
                                   children: [
                                     TextView(
-                                      text: 'Email:',
+                                      text: 'Status:',
                                       textStyle: GoogleFonts.gabarito(
                                         color: AppColor.darkindgrey,
                                         fontSize: 14.sp,
@@ -203,7 +197,8 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
                                             model
                                                 .getUserResponseModel
                                                 ?.data
-                                                ?.email ??
+                                                ?.status
+                                                ?.capitalize() ??
                                             '',
                                         maxLines: 4,
                                         textAlign: TextAlign.end,
@@ -254,7 +249,7 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
 
                                   children: [
                                     TextView(
-                                      text: 'Phone no:',
+                                      text: 'Type:',
                                       textStyle: GoogleFonts.gabarito(
                                         color: AppColor.darkindgrey,
                                         fontSize: 14.sp,
@@ -265,12 +260,7 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
                                     SizedBox(
                                       width: 200.w,
                                       child: TextView(
-                                        text:
-                                            model
-                                                .getUserResponseModel
-                                                ?.data
-                                                ?.phone ??
-                                            '',
+                                        text: 'Patient',
                                         maxLines: 4,
                                         textAlign: TextAlign.end,
                                         textStyle: GoogleFonts.gabarito(

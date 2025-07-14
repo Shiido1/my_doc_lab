@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../../core/connect_end/model/doctor_availability_entity_model/availability.dart';
 import '../../../../../core/connect_end/model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
@@ -17,8 +18,11 @@ class DoctorAvailabilityScreen extends StatelessWidget {
     return ViewModelBuilder<DocViewModel>.reactive(
       viewModelBuilder: () => locator<DocViewModel>(),
       onViewModelReady: (model) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          model.getDoctorsDetail(context);
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          await model.getDoctorsDetail(context);
+          model.doctorAvailabiltity(
+            model.getDocDetailResponseModel!.original!.id.toString(),
+          );
         });
       },
       disposeViewModel: false,
@@ -32,7 +36,7 @@ class DoctorAvailabilityScreen extends StatelessWidget {
               children: [
                 SizedBox(height: 20.h),
                 TextView(
-                  text: 'Set Availabilty',
+                  text: 'Set Availability',
                   textStyle: GoogleFonts.gabarito(
                     color: AppColor.primary1,
                     fontSize: 20.sp,
@@ -112,7 +116,9 @@ class DoctorAvailabilityScreen extends StatelessWidget {
                         add: () {
                           model.availabilities.add(
                             Availability(
-                              dayOfWeek: model.availabilityDate,
+                              dayOfWeek:
+                                  model.availabilityDate ??
+                                  DateFormat('yyyy-MM-dd').format(model.now),
                               startTime:
                                   '${model.formatTimeOfDay24(model.timeStart)['24Hour']}',
                               endTime:
@@ -143,7 +149,7 @@ class DoctorAvailabilityScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 20.w),
                         TextView(
-                          text: 'Set Availabilty Time',
+                          text: 'Add Availability Time',
                           textStyle: GoogleFonts.gabarito(
                             color: AppColor.white,
                             fontSize: 16.20.sp,
@@ -190,6 +196,89 @@ class DoctorAvailabilityScreen extends StatelessWidget {
                       ),
                     )
                     : SizedBox.shrink(),
+
+                SizedBox(height: 40.h),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 8.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColor.grey),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextView(
+                            text: 'Date',
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.black,
+                              fontSize: 17.80.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          TextView(
+                            text: 'Start Time',
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.black,
+                              fontSize: 17.80.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          TextView(
+                            text: 'End Time',
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.black,
+                              fontSize: 17.80.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(color: AppColor.grey, thickness: 1),
+                      if (model.availabilityHistoryModel != null &&
+                          model.availabilityHistoryModel!.original!.isNotEmpty)
+                        ...model.availabilityHistoryModel!.original!.map(
+                          (o) => Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextView(
+                                    text: o.date ?? '',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.black,
+                                      fontSize: 15.80.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  TextView(
+                                    text: o.startTime ?? '',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.black,
+                                      fontSize: 15.80.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  TextView(
+                                    text: o.endTime ?? '',
+                                    textStyle: GoogleFonts.gabarito(
+                                      color: AppColor.black,
+                                      fontSize: 15.80.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Divider(color: AppColor.grey, thickness: 1),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

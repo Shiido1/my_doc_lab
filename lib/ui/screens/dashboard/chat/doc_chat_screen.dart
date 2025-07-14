@@ -12,7 +12,6 @@ import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../../../../core/connect_end/model/get_user_response_model/data.dart';
-import '../../../../core/connect_end/model/send_message_entity_model.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import 'video_chat_agora/doctor_video_chat_screen.dart';
 
@@ -54,12 +53,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
           model.hasLoadedConversation = true;
           model.hasLoadedIndexConversation = false;
           if (widget.messageModel != null || widget.sender != null) {
-            model.receiveConversationOnce(
-              context,
-              id: widget.id!,
-              messageModel: widget.messageModel,
-              sender: widget.sender,
-            );
+            model.receiveConversationOnce(widget.id!);
           } else {
             model.getChatIndex();
           }
@@ -149,18 +143,6 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                             receiverType:
                                                 '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
                                           ),
-                                    ),
-                                  );
-                                  model.sendMessage(
-                                    SendMessageEntityModel(
-                                      conversationId: int.parse(
-                                        '${widget.messageModel!.conversationId ?? widget.id}',
-                                      ),
-                                      receiverId: int.parse(
-                                        '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                      ),
-                                      receiverType: "MydocLab\\Models\\User",
-                                      message: 'video-call-agora',
                                     ),
                                   );
                                 },

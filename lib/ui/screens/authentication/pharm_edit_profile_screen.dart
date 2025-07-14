@@ -77,10 +77,6 @@ class PharmEditProfileScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.arrow_back_ios_outlined, size: 20.sp),
-                      ),
                       TextView(
                         text: 'Edit Profile',
                         textStyle: GoogleFonts.gabarito(

@@ -28,6 +28,7 @@ dependencies:
   image_cropper: ^9.1.0
   image_picker: ^1.1.2
   webview_flutter: ^4.13.0
+  audioplayers: ^6.5.0
 
 
 
@@ -87,3 +88,4 @@ flutter:
   assets:
     - assets/svg/
     - assets/image/
+    - assets/audio/

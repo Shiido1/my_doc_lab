@@ -4,6 +4,7 @@ import 'package:my_doc_lab/core/connect_end/model/doctor_availability_entity_mod
 import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
 import '../../core_folder/app/app.locator.dart';
+import '../model/availability_history_model/availability_history_model.dart';
 import '../model/bank_save_entity_model.dart';
 import '../model/bank_save_response_model/bank_save_response_model.dart';
 import '../model/call_token_generate_entity_model.dart';
@@ -122,6 +123,9 @@ class DocContractsImpl {
 
   Future<GetDoctorsAnalysisModel> doctorsAnalytics() async =>
       await _api.doctorsAnalytics();
+  Future<AvailabilityHistoryModel> doctorsAvailabilityHistory(
+    String id,
+  ) async => await _api.doctorsAvailabilityHistory(id);
 
   Future<dynamic> readMessage(int id) async => await _api.readMessage(id);
   Future<dynamic> logout() async => await _api.logout();
