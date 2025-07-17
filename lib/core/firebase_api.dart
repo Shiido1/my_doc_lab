@@ -32,6 +32,8 @@ class FirebaseApi {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   void handleMessage(RemoteMessage? message) {
+    print('serious fb ${message?.data}');
+    print('serious fb ${message?.data['caller_type'].runtimeType}');
     if (message == null) return;
     if (message.data['message'] != null &&
         message.data['sender_type'] == 'Doctor') {
@@ -59,25 +61,17 @@ class FirebaseApi {
     }
 
     if (message.data['agora_token'] != null &&
-        message.data['caller_type'] == "MydocLab\Models\Doctor") {
+        message.data['caller_type'] == 'MydocLab\Models\Doctor') {
       navigate.navigateTo(
-        Routes.videoChatScreen,
-        arguments: VideoChatScreenArguments(
-          conversationId: int.parse(message.data['conversation_id'].toString()),
-          receiverId: message.data['caller_id'],
-          receiverType: 'Doctor',
-        ),
+        Routes.joinVideoChatScreen,
+        arguments: JoinVideoChatScreenArguments(agoravalue: message.data),
       );
     }
     if (message.data['agora_token'] != null &&
-        message.data['caller_type'] == "MydocLab\Models\User") {
+        message.data['caller_type'] == 'MydocLab\Models\User') {
       navigate.navigateTo(
-        Routes.doctorVideoChatScreen,
-        arguments: DoctorVideoChatScreenArguments(
-          conversationId: int.parse(message.data['conversation_id'].toString()),
-          receiverId: message.data['caller_id'],
-          receiverType: 'User',
-        ),
+        Routes.joinDoctorVideoChatScreen,
+        arguments: JoinDoctorVideoChatScreenArguments(agoravalue: message.data),
       );
     }
     // navigation to screens when push notification pops should be implemented here
@@ -141,6 +135,7 @@ class FirebaseApi {
       );
 
       if (message.data != null) {
+        print('push mes::::${message.data}');
         navigate.navigateTo(
           Routes.docVidCallLookScreen,
           arguments: DocVidCallLookScreenArguments(

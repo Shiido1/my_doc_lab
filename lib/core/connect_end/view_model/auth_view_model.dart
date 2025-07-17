@@ -945,7 +945,10 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> initializeAgoraVoiceSDK() async {
+  Future<void> initializeAgoraVoiceSDK({
+    String? token,
+    String? channelName,
+  }) async {
     await [Permission.microphone, Permission.camera].request();
     engine = createAgoraRtcEngine();
     await engine?.initialize(
@@ -957,6 +960,7 @@ class AuthViewModel extends BaseViewModel {
     _setupLocalVideo();
     _setupEventHandlers();
     _joinChannel();
+    _joiningChannel(channelName: channelName, token: token);
   }
 
   Future<void> _setupLocalVideo() async {
@@ -965,7 +969,7 @@ class AuthViewModel extends BaseViewModel {
     await engine?.startPreview();
   }
 
-  // If a remote user has joined, render their video, else display a waiting message
+  // If a remote user has joined, render their video, else display a waiting message;
   Widget remoteVideo() {
     if (remoteUidGlobal != null) {
       return AgoraVideoView(
@@ -987,8 +991,42 @@ class AuthViewModel extends BaseViewModel {
     }
   }
 
-  // Displays the local user's video view using the Agora engine.
+  // Displays the local user's video view using the Agora engine.;
   Widget localVideo() {
+    return AgoraVideoView(
+      controller: VideoViewController(
+        rtcEngine: engine!, // Uses the Agora engine instance
+        canvas: VideoCanvas(
+          uid: 0, // Specifies the local user // Sets the video rendering mode
+        ),
+      ),
+    );
+  }
+
+  // If a remote user has joined, render their video, else display a waiting message;
+  Widget remoteJoinVideo(channelName) {
+    if (remoteUidGlobal != null) {
+      return AgoraVideoView(
+        controller: VideoViewController.remote(
+          rtcEngine: engine!, // Uses the Agora engine instance
+          canvas: VideoCanvas(
+            uid: int.parse(remoteUidGlobal.toString()),
+          ), // Binds the remote user's video
+          connection: RtcConnection(
+            channelId: channelName,
+          ), // Specifies the channel
+        ),
+      );
+    } else {
+      return const Text(
+        'Waiting for remote user to join...r',
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
+  // Displays the local user's video view using the Agora engine.;
+  Widget localJoinVideo() {
     return AgoraVideoView(
       controller: VideoViewController(
         rtcEngine: engine!, // Uses the Agora engine instance
@@ -1042,6 +1080,25 @@ class AuthViewModel extends BaseViewModel {
         publishMicrophoneTrack: true, // Publish microphone-captured audio
         // Use clientRoleBroadcaster to act as a host or clientRoleAudience for audience
         clientRoleType: ClientRoleType.clientRoleAudience,
+      ),
+      uid: 0,
+    );
+  }
+
+  // Join a channel as a broadcasted
+  Future<void> _joiningChannel({String? token, String? channelName}) async {
+    await engine?.joinChannel(
+      token: token ?? "",
+      channelId: channelName ?? "",
+      options: ChannelMediaOptions(
+        autoSubscribeVideo:
+            true, // Automatically subscribe to all video streams
+        autoSubscribeAudio:
+            true, // Automatically subscribe to all audio streams
+        publishCameraTrack: true, // Publish camera-captured video
+        publishMicrophoneTrack: true, // Publish microphone-captured audio
+        // Use clientRoleBroadcaster to act as a host or clientRoleAudience for audience
+        clientRoleType: ClientRoleType.clientRoleBroadcaster,
       ),
       uid: 0,
     );

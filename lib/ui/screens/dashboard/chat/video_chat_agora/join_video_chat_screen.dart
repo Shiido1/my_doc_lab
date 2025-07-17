@@ -1,47 +1,32 @@
-// ignore_for_file: must_be_immutable
-
+// ignore_for_file: must_be_immutable, non_constant_identifier_names
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/view_model/doc_view_model.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
 import 'package:stacked/stacked.dart';
+import '../../../../../core/connect_end/view_model/auth_view_model.dart';
+import '../../../../app_assets/app_color.dart';
 
-class DoctorVideoChatScreen extends StatefulWidget {
-  DoctorVideoChatScreen({
-    super.key,
-    required this.conversationId,
-    required this.receiverId,
-    required this.receiverType,
-  });
-  int? conversationId;
-  int? receiverId;
-  String? receiverType;
+class JoinVideoChatScreen extends StatefulWidget {
+  JoinVideoChatScreen({super.key, required this.agoravalue});
+  dynamic agoravalue;
 
   @override
-  State<DoctorVideoChatScreen> createState() => _DoctorVideoChatScreenState();
+  State<JoinVideoChatScreen> createState() => _JoinVideoChatScreenState();
 }
 
-class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
+class _JoinVideoChatScreenState extends State<JoinVideoChatScreen> {
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<DocViewModel>.reactive(
-      viewModelBuilder: () => DocViewModel(),
+    return ViewModelBuilder<AuthViewModel>.reactive(
+      viewModelBuilder: () => AuthViewModel(),
       onViewModelReady: (model) {
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
-          model.generateToken(
-            context,
-            calltoken: CallTokenGenerateEntityModel(
-              conversationId: widget.conversationId,
-              receiverId: widget.receiverId,
-              receiverType: widget.receiverType,
-            ),
-          );
-        });
+        model.initializeAgoraVoiceSDK(
+          channelName: widget.agoravalue['channel_name'],
+          token: widget.agoravalue['agora_token'],
+        );
       },
       onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),
       disposeViewModel: false,
-      builder: (_, DocViewModel model, __) {
+      builder: (_, AuthViewModel model, __) {
         return Scaffold(
           body: Stack(
             children: [
@@ -51,7 +36,9 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                 Center(
                   child:
                       !model.onSwitch
-                          ? model.remoteVideo()
+                          ? model.remoteJoinVideo(
+                            widget.agoravalue['channel_name'],
+                          )
                           : model.localVideo(),
                 ),
               Positioned(
@@ -75,12 +62,11 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                       icon: Icon(Icons.call_end),
                       onPressed: () {
                         model.endCall(
-                          int.parse(
-                            model.callTokenGenerateResponseModel!.callId
-                                .toString(),
-                          ),
+                          int.parse(widget.agoravalue['call_id'].toString()),
                         );
                         Navigator.pop(context);
+                        Navigator.pop(context);
+                        // Navigator.pop(context);
                       },
                       color: AppColor.red,
                       iconSize: 40.sp,
@@ -93,7 +79,7 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                 child: Padding(
                   padding: EdgeInsets.only(left: 12.w, top: 40.w),
                   child: GestureDetector(
-                    onTap: () => model.onSwitched(),
+                    onTap: model.onSwitched,
                     child: SizedBox(
                       width: 100,
                       height: 150,
@@ -101,8 +87,10 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                         child:
                             model.localUserJoined
                                 ? !model.onSwitch
-                                    ? model.localVideo()
-                                    : model.remoteVideo()
+                                    ? model.localJoinVideo()
+                                    : model.remoteJoinVideo(
+                                      widget.agoravalue['channel_name'],
+                                    )
                                 : const CircularProgressIndicator(),
                       ),
                     ),

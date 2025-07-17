@@ -45,7 +45,6 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return ViewModelBuilder<DocViewModel>.reactive(
       viewModelBuilder: () => DocViewModel(),
       onViewModelReady: (model) {
@@ -88,7 +87,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                 text:
                                     widget.app?.user?.firstName?.capitalize() ??
                                     widget.messageModel?.contactName
-                                        ?.capitalize() ??
+                                        ?.capitalizeWords() ??
                                     widget.data?.firstName?.capitalize() ??
                                     '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.lastName?.capitalize() ?? ''}'
                                         '',

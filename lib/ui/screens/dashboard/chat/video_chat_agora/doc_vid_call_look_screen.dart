@@ -6,8 +6,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/doctor_video_chat_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/video_chat_screen.dart';
+import 'package:my_doc_lab/main.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/join_doctor_video_chat_screen.dart';
+import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/join_video_chat_screen.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../../../../../core/connect_end/view_model/doc_view_model.dart';
@@ -123,36 +124,27 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                           ),
                           child: IconButton(
                             icon: Icon(Icons.call_sharp),
-                            onPressed: () {
-                              _player.stop();
+                            onPressed: () async {
+                              await _player.stop();
+                              navigate.back();
                               if (widget.sender['caller_type'] ==
                                   "MydocLab\Models\Doctor") {
+                                await _player.stop();
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder:
-                                        (context) => VideoChatScreen(
-                                          conversationId: int.parse(
-                                            widget.conversationId.toString(),
-                                          ),
-                                          receiverId: int.parse(
-                                            '${widget.messageModel!.contactId ?? widget.sender['caller_id']}',
-                                          ),
-                                          receiverType: 'Doctor',
+                                        (context) => JoinVideoChatScreen(
+                                          agoravalue: widget.sender,
                                         ),
                                   ),
                                 );
                               } else {
+                                await _player.stop();
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder:
-                                        (context) => DoctorVideoChatScreen(
-                                          conversationId: int.parse(
-                                            widget.conversationId.toString(),
-                                          ),
-                                          receiverId: int.parse(
-                                            '${widget.messageModel!.contactId ?? widget.sender['caller_id']}',
-                                          ),
-                                          receiverType: 'User',
+                                        (context) => JoinDoctorVideoChatScreen(
+                                          agoravalue: widget.sender,
                                         ),
                                   ),
                                 );
@@ -175,7 +167,7 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                           child: IconButton(
                             icon: Icon(Icons.call_end),
                             onPressed: () async {
-                              _player.stop();
+                              await _player.stop();
                               model.hasLoadedConversation = true;
                               model.notifyListeners();
                               Navigator.pop(context);

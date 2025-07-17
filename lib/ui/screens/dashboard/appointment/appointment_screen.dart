@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +12,8 @@ import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
+import '../../../../core/core_folder/app/app.router.dart';
+import '../../../../main.dart';
 import '../../../widget/text_form_widget.dart';
 import '../../../widget/text_widget.dart';
 
@@ -174,7 +176,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         children: [
                           if (tab == 'Upcoming')
                             if (model.query != '')
-                              ...model.getListOfScheduledAppointmentModelList!
+                              ...model
+                                  .getListOfScheduledAppointmentModelList!
+                                  .reversed
                                   .where(
                                     (w) =>
                                         w.doctor!.firstName!
@@ -193,7 +197,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                     ),
                                   )
                             else
-                              ...model.getListOfScheduledAppointmentModelList!
+                              ...model
+                                  .getListOfScheduledAppointmentModelList!
+                                  .reversed
                                   .map(
                                     (o) => appointMentCard(
                                       appointmentStatus: 'Upcoming',
@@ -202,7 +208,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   )
                           else if (tab == 'Completed')
                             if (model.query != '')
-                              ...model.getListOfCompletedAppointmentModelList!
+                              ...model
+                                  .getListOfCompletedAppointmentModelList!
+                                  .reversed
                                   .where(
                                     (w) =>
                                         w.doctor!.firstName!
@@ -221,7 +229,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                     ),
                                   )
                             else
-                              ...model.getListOfCompletedAppointmentModelList!
+                              ...model
+                                  .getListOfCompletedAppointmentModelList!
+                                  .reversed
                                   .map(
                                     (o) => appointMentCard(
                                       appointmentStatus: 'Completed',
@@ -230,7 +240,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   )
                           else if (tab == 'Cancelled')
                             if (model.query != '')
-                              ...model.getListOfCancelledAppointmentModelList!
+                              ...model
+                                  .getListOfCancelledAppointmentModelList!
+                                  .reversed
                                   .where(
                                     (w) =>
                                         w.doctor!.firstName!
@@ -249,7 +261,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                     ),
                                   )
                             else
-                              ...model.getListOfCancelledAppointmentModelList!
+                              ...model
+                                  .getListOfCancelledAppointmentModelList!
+                                  .reversed
                                   .map(
                                     (o) => appointMentCard(
                                       appointmentStatus: 'Cancelled',
@@ -278,132 +292,203 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     return AppColor.darkindgrey;
   }
 
+  DateTime parseTime(String time) {
+    String cleanTime = time.replaceAll(RegExp(r'\s+'), ' ').trim();
+    return DateFormat('hh:mm a').parse(cleanTime);
+  }
+
   appointMentCard({
     String? appointmentStatus,
     GetUsersAppointmentModel? getUsersAppointmentModel,
-  }) => Container(
-    padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 12.w),
-    margin: EdgeInsets.only(bottom: 20.w),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10),
-      border: Border.all(color: const Color.fromARGB(218, 208, 208, 208)),
-    ),
-    child: Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextView(
-                  text:
-                      'Dr ${getUsersAppointmentModel?.doctor?.firstName?.capitalize()} ${getUsersAppointmentModel?.doctor?.lastName?.capitalize()}',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.darkindgrey,
-                    fontSize: 18.0.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                TextView(
-                  text: 'Doctor',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.darkindgrey,
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            getUsersAppointmentModel?.doctor?.profileImage != null
-                ? ClipOval(
-                  child: SizedBox.fromSize(
-                    size: const Size.fromRadius(24),
-                    child: Image.network(
-                      getUsersAppointmentModel!.doctor!.profileImage!.contains(
-                            'https',
-                          )
-                          ? '${getUsersAppointmentModel.doctor!.profileImage}'
-                          : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${getUsersAppointmentModel.doctor?.profileImage}',
-                      fit: BoxFit.cover,
-                      errorBuilder:
-                          (context, error, stackTrace) => shimmerViewPharm(),
+  }) {
+    String today = DateTime.now().toString().substring(0, 10);
+    String slotDate = getUsersAppointmentModel!.slot!.availableDate
+        .toString()
+        .substring(0, 10);
+
+    String nowTimeStr = DateFormat('hh:mm a').format(DateTime.now());
+    String slotTimeStr = getUsersAppointmentModel.slot!.availableTime!;
+
+    bool shouldShowButton = false;
+
+    try {
+      shouldShowButton =
+          today == slotDate &&
+          parseTime(nowTimeStr).isAfter(parseTime(slotTimeStr));
+    } catch (e) {
+      print('Time parsing failed: $e');
+    }
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 12.w),
+      margin: EdgeInsets.only(bottom: 20.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color.fromARGB(218, 208, 208, 208)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextView(
+                    text:
+                        'Dr ${getUsersAppointmentModel.doctor?.firstName?.capitalize()} ${getUsersAppointmentModel.doctor?.lastName?.capitalize()}',
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.darkindgrey,
+                      fontSize: 18.0.sp,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                )
-                : Container(
-                  padding: EdgeInsets.all(24.w),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.oneKindgrey,
+                  TextView(
+                    text: 'Doctor',
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.darkindgrey,
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-          ],
-        ),
-        SizedBox(height: 40.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                SvgPicture.asset(
-                  AppImage.calendar,
-                  color: AppColor.darkindgrey,
-                ),
-                SizedBox(width: 8.w),
-                TextView(
-                  text: DateFormat('dd/MM/yyyy').format(
-                    DateTime.parse(
-                      getUsersAppointmentModel!.slot!.availableDate.toString(),
-                    ).toLocal(),
+                ],
+              ),
+              getUsersAppointmentModel.doctor?.profileImage != null
+                  ? ClipOval(
+                    child: SizedBox.fromSize(
+                      size: const Size.fromRadius(24),
+                      child: Image.network(
+                        getUsersAppointmentModel.doctor!.profileImage!.contains(
+                              'https',
+                            )
+                            ? '${getUsersAppointmentModel.doctor!.profileImage}'
+                            : 'https://res.cloudinary.com/dnv6yelbr/image/upload/v1747827538/${getUsersAppointmentModel.doctor?.profileImage}',
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (context, error, stackTrace) => shimmerViewPharm(),
+                      ),
+                    ),
+                  )
+                  : Container(
+                    padding: EdgeInsets.all(24.w),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColor.oneKindgrey,
+                    ),
                   ),
-                  textStyle: GoogleFonts.gabarito(
+            ],
+          ),
+          SizedBox(height: 40.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    AppImage.calendar,
                     color: AppColor.darkindgrey,
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                SvgPicture.asset(AppImage.time, color: AppColor.darkindgrey),
-                SizedBox(width: 8.w),
-                TextView(
-                  text: '${getUsersAppointmentModel.slot!.availableTime}',
-                  textStyle: GoogleFonts.gabarito(
-                    color: AppColor.darkindgrey,
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
+                  SizedBox(width: 8.w),
+                  TextView(
+                    text: DateFormat('dd/MM/yyyy').format(
+                      DateTime.parse(
+                        getUsersAppointmentModel.slot!.availableDate.toString(),
+                      ).toLocal(),
+                    ),
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.darkindgrey,
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 2.w),
-                  padding: EdgeInsets.all(4.w),
-                  decoration: BoxDecoration(
-                    color: getAppColor(appointmentStatus!),
-                    shape: BoxShape.circle,
+                ],
+              ),
+              Row(
+                children: [
+                  SvgPicture.asset(AppImage.time, color: AppColor.darkindgrey),
+                  SizedBox(width: 8.w),
+                  TextView(
+                    text: '${getUsersAppointmentModel.slot!.availableTime}',
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.darkindgrey,
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                SizedBox(width: 8.w),
-                TextView(
-                  text: appointmentStatus,
-                  textStyle: GoogleFonts.gabarito(
-                    color: getAppColor(appointmentStatus),
-                    fontSize: 14.0.sp,
-                    fontWeight: FontWeight.w400,
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 2.w),
+                    padding: EdgeInsets.all(4.w),
+                    decoration: BoxDecoration(
+                      color: getAppColor(appointmentStatus!),
+                      shape: BoxShape.circle,
+                    ),
                   ),
+                  SizedBox(width: 8.w),
+                  TextView(
+                    text: appointmentStatus,
+                    textStyle: GoogleFonts.gabarito(
+                      color: getAppColor(appointmentStatus),
+                      fontSize: 14.0.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 12.0.h),
+          shouldShowButton
+              ? GestureDetector(
+                onTap:
+                    () => navigate.navigateTo(
+                      Routes.chatScreen,
+                      arguments: ChatScreenArguments(
+                        id: '',
+                        messageModel: null,
+                        sender: null,
+                        getUsersAppointmentModel: getUsersAppointmentModel,
+                      ),
+                    ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.6.w,
+                        horizontal: 4.8.w,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColor.primary1,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            AppImage.chat,
+                            color: AppColor.white,
+                          ),
+                          SizedBox(width: 10.w),
+                          TextView(
+                            text: 'Chat Doctor',
+                            textStyle: GoogleFonts.gabarito(
+                              color: AppColor.white.withOpacity(.8),
+                              fontSize: 17.0.sp,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 4.0.h),
+                  ],
                 ),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(height: 12.0.h),
-      ],
-    ),
-  );
+              )
+              : SizedBox.shrink(),
+        ],
+      ),
+    );
+  }
 }

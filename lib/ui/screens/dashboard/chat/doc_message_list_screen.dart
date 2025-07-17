@@ -189,7 +189,7 @@ class DoctorMessageListScreen extends StatelessWidget {
                         ),
                       )
                       : Container(
-                        padding: EdgeInsets.all(24.80.w),
+                        padding: EdgeInsets.all(23.10.w),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColor.friendlyPrimary,

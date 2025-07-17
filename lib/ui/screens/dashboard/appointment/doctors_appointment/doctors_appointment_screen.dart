@@ -186,7 +186,9 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                           children: [
                             if (tab == 'Upcoming')
                               if (model.query != '')
-                                ...model.getListOfScheduledAppointmentModelList!
+                                ...model
+                                    .getListOfScheduledAppointmentModelList!
+                                    .reversed
                                     .where(
                                       (w) =>
                                           w.user!.firstName!
@@ -206,7 +208,9 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                                       ),
                                     )
                               else
-                                ...model.getListOfScheduledAppointmentModelList!
+                                ...model
+                                    .getListOfScheduledAppointmentModelList!
+                                    .reversed
                                     .map(
                                       (o) => appointMentCard(
                                         appointmentStatus: 'Upcoming',
@@ -216,7 +220,9 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                                     )
                             else if (tab == 'Completed')
                               if (model.query != '')
-                                ...model.getListOfCompletedAppointmentModelList!
+                                ...model
+                                    .getListOfCompletedAppointmentModelList!
+                                    .reversed
                                     .where(
                                       (w) =>
                                           w.user!.firstName!
@@ -235,7 +241,9 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                                       ),
                                     )
                               else
-                                ...model.getListOfCompletedAppointmentModelList!
+                                ...model
+                                    .getListOfCompletedAppointmentModelList!
+                                    .reversed
                                     .map(
                                       (o) => appointMentCard(
                                         appointmentStatus: 'Completed',
@@ -244,7 +252,9 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                                     )
                             else if (tab == 'Cancelled')
                               if (model.query != '')
-                                ...model.getListOfCancelledAppointmentModelList!
+                                ...model
+                                    .getListOfCancelledAppointmentModelList!
+                                    .reversed
                                     .where(
                                       (w) =>
                                           w.user!.firstName!
@@ -263,7 +273,9 @@ class _DoctorsAppointmentScreenState extends State<DoctorsAppointmentScreen> {
                                       ),
                                     )
                               else
-                                ...model.getListOfCancelledAppointmentModelList!
+                                ...model
+                                    .getListOfCancelledAppointmentModelList!
+                                    .reversed
                                     .map(
                                       (o) => appointMentCard(
                                         appointmentStatus: 'Cancelled',

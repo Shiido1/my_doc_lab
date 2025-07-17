@@ -1,11 +1,15 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:async';
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import '../../../core/connect_end/view_model/doc_view_model.dart';
+import '../../../core/firebase_api.dart';
+import '../../../firebase_options.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../../widget/text_widget.dart';
@@ -85,6 +89,23 @@ class _DocDashboardState extends State<DocDashboard> {
     Future.delayed(const Duration(milliseconds: 1000), () {
       SystemChannels.platform.invokeListMethod('SystemNavigator.pop');
     });
+  }
+
+  Future<void> initializeFirebase() async {
+    if (Platform.isAndroid) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      await FirebaseApi().initNotification();
+    } else {
+      await Firebase.initializeApp();
+    }
+  }
+
+  @override
+  void initState() {
+    unawaited(initializeFirebase());
+    super.initState();
   }
 
   @override

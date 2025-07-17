@@ -82,27 +82,11 @@ class DocMoreSettingsScreen extends StatelessWidget {
                           : Stack(
                             fit: StackFit.loose,
                             children: [
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                left: 0,
-                                child: SvgPicture.asset(AppImage.edit),
-                              ),
                               Container(
                                 padding: EdgeInsets.all(60.w),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColor.oneKindgrey,
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                left: 96.0,
-                                child: SvgPicture.asset(
-                                  AppImage.edit,
-                                  width: 20.w,
-                                  height: 20.h,
                                 ),
                               ),
                             ],

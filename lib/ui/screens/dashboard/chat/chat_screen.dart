@@ -11,6 +11,7 @@ import 'package:my_doc_lab/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart' show ViewModelBuilder;
 
 import '../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
+import '../../../../core/connect_end/model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../../../../core/connect_end/model/send_message_entity_model.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 
@@ -21,10 +22,12 @@ class ChatScreen extends StatefulWidget {
     required this.id,
     required this.messageModel,
     required this.sender,
+    this.getUsersAppointmentModel,
   });
   GetMessageIndexResponseModel? messageModel;
   String? id;
   dynamic sender;
+  GetUsersAppointmentModel? getUsersAppointmentModel;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -35,6 +38,18 @@ class _ChatScreenState extends State<ChatScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   bool isContainedText = false;
+  bool isJustInitiated = false;
+
+  String returnDocName({name1, name2, name3}) {
+    if (!name1.toString().contains('null')) {
+      return 'Dr. $name1';
+    } else if (!name2.toString().contains('null')) {
+      return 'Dr. $name2';
+    } else if (!name3.toString().contains('null')) {
+      return 'Dr. $name3';
+    }
+    return 'Doctor';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +58,17 @@ class _ChatScreenState extends State<ChatScreen> {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.hasLoadedConversation = true;
-          model.receiveConversationOnce(widget.id!);
+          model.hasLoadedIndexConversation = false;
+          if (widget.messageModel != null || widget.sender != null) {
+            model.receiveConversationOnce(widget.id!);
+          } else {
+            model.getChatIndex();
+          }
         });
       },
       onDispose: (viewModel) {
         viewModel.hasLoadedConversation = false;
+        viewModel.hasLoadedIndexConversation = true;
       },
       disposeViewModel: false,
       builder: (_, AuthViewModel model, __) {
@@ -70,11 +91,15 @@ class _ChatScreenState extends State<ChatScreen> {
                             SizedBox(
                               width: 200.w,
                               child: TextView(
-                                text:
-                                    widget.messageModel?.contactName
-                                        ?.capitalizeWords() ??
-                                    '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.lastName?.capitalize() ?? ''}'
-                                        '',
+                                text: returnDocName(
+                                  name1:
+                                      '${widget.getUsersAppointmentModel?.doctor?.firstName?.capitalize()} ${widget.getUsersAppointmentModel?.doctor?.lastName?.capitalize()}',
+                                  name2:
+                                      widget.messageModel?.contactName
+                                          ?.capitalizeWords(),
+                                  name3:
+                                      '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.lastName?.capitalize() ?? ''}',
+                                ),
                                 textStyle: GoogleFonts.dmSans(
                                   color: AppColor.black,
                                   fontSize: 20.0.sp,
@@ -109,33 +134,35 @@ class _ChatScreenState extends State<ChatScreen> {
                           ],
                         ),
                         Spacer(),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10.w, right: 20.w),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => VideoChatScreen(
-                                        conversationId: int.parse(
-                                          widget.id.toString(),
-                                        ),
-                                        receiverId: int.parse(
-                                          '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                        ),
-                                        receiverType:
-                                            '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
-                                      ),
+                        widget.messageModel != null || widget.sender != null
+                            ? Padding(
+                              padding: EdgeInsets.only(top: 10.w, right: 20.w),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => VideoChatScreen(
+                                            conversationId: int.parse(
+                                              widget.id.toString(),
+                                            ),
+                                            receiverId: int.parse(
+                                              '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                            ),
+                                            receiverType:
+                                                '${widget.messageModel!.contactType ?? widget.sender['sender_type']}',
+                                          ),
+                                    ),
+                                  );
+                                },
+                                child: SvgPicture.asset(
+                                  AppImage.video,
+                                  width: 22.w,
+                                  height: 22.0.h,
                                 ),
-                              );
-                            },
-                            child: SvgPicture.asset(
-                              AppImage.video,
-                              width: 22.w,
-                              height: 22.0.h,
-                            ),
-                          ),
-                        ),
+                              ),
+                            )
+                            : SizedBox.shrink(),
                       ],
                     ),
                     Divider(color: AppColor.greylight),
@@ -286,38 +313,76 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ),
                                   ),
                                   SizedBox(width: 4.w),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.send,
-                                      color: AppColor.primary,
-                                      size: 20.sp,
-                                    ),
-                                    onPressed: () async {
-                                      if (model.sendtextController.text != '') {
-                                        String msg =
-                                            model.sendtextController.text;
-                                        Future.delayed(
-                                          Duration(seconds: 0),
-                                          () {
-                                            model.sendtextController.clear();
-                                          },
-                                        );
-                                        await model.sendMessage(
-                                          SendMessageEntityModel(
-                                            conversationId: int.parse(
-                                              widget.id.toString(),
-                                            ),
-                                            receiverId: int.parse(
-                                              '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
-                                            ),
-                                            receiverType:
-                                                "MydocLab\\Models\\Doctor",
-                                            message: msg,
-                                          ),
-                                        );
-                                      } else {}
-                                    },
-                                  ),
+                                  widget.getUsersAppointmentModel != null &&
+                                              isJustInitiated ||
+                                          model.getMessageIndexResponseModelList !=
+                                                  null &&
+                                              model
+                                                  .getMessageIndexResponseModelList!
+                                                  .getMessageIndexResponseModelList!
+                                                  .any(
+                                                    (o) =>
+                                                        o.contactId
+                                                            .toString() ==
+                                                        widget
+                                                            .getUsersAppointmentModel
+                                                            ?.doctor
+                                                            ?.id
+                                                            .toString(),
+                                                  )
+                                      ? SizedBox.shrink()
+                                      : IconButton(
+                                        icon: Icon(
+                                          Icons.send,
+                                          color: AppColor.primary,
+                                          size: 20.sp,
+                                        ),
+                                        onPressed: () async {
+                                          if (model.sendtextController.text !=
+                                              '') {
+                                            String msg =
+                                                model.sendtextController.text;
+                                            Future.delayed(
+                                              Duration(seconds: 0),
+                                              () {
+                                                model.sendtextController
+                                                    .clear();
+                                              },
+                                            );
+                                            if (widget.id == null ||
+                                                widget.id == '') {
+                                              setState(() {
+                                                isJustInitiated = true;
+                                              });
+                                              await model.sendMessage(
+                                                SendMessageEntityModel(
+                                                  conversationId: 0,
+                                                  receiverId: int.parse(
+                                                    '${widget.getUsersAppointmentModel!.doctor!.id}',
+                                                  ),
+                                                  receiverType:
+                                                      "MydocLab\\Models\\Doctor",
+                                                  message: msg,
+                                                ),
+                                              );
+                                            } else {
+                                              await model.sendMessage(
+                                                SendMessageEntityModel(
+                                                  conversationId: int.parse(
+                                                    widget.id.toString(),
+                                                  ),
+                                                  receiverId: int.parse(
+                                                    '${widget.messageModel!.contactId ?? widget.sender['sender_id']}',
+                                                  ),
+                                                  receiverType:
+                                                      "MydocLab\\Models\\Doctor",
+                                                  message: msg,
+                                                ),
+                                              );
+                                            }
+                                          } else {}
+                                        },
+                                      ),
                                 ],
                               ),
                             ),

@@ -54,11 +54,9 @@ class MessageListScreen extends StatelessWidget {
                     SizedBox(height: 10.w),
                     TextFormWidget(
                       label: 'Search name',
-                      // hint: 'Email Address',
                       border: 10,
                       isFilled: true,
                       fillColor: AppColor.transparent,
-                      // controller: fullnameTextController,
                       prefixWidget: Padding(
                         padding: EdgeInsets.all(14.w),
                         child: SvgPicture.asset(
@@ -188,7 +186,7 @@ class MessageListScreen extends StatelessWidget {
                         ),
                       )
                       : Container(
-                        padding: EdgeInsets.all(24.80.w),
+                        padding: EdgeInsets.all(22.80.w),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColor.friendlyPrimary,
@@ -200,7 +198,7 @@ class MessageListScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextView(
-                          text: o.contactName?.capitalize() ?? '',
+                          text: o.contactName?.capitalizeWords() ?? '',
                           textStyle: GoogleFonts.gabarito(
                             color: AppColor.darkindgrey,
                             fontSize: 16.sp,
@@ -226,19 +224,40 @@ class MessageListScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  TextView(
-                    text: getWeekdayAbbreviation(o.lastMessageTime ?? ''),
-                    textStyle: GoogleFonts.gabarito(
-                      color:
-                          o.unreadCount! > 0
-                              ? AppColor.black
-                              : AppColor.lightgrey,
-                      fontSize: 12.20.sp,
-                      fontWeight:
-                          o.unreadCount! > 0
-                              ? FontWeight.w500
-                              : FontWeight.w400,
-                    ),
+                  Column(
+                    children: [
+                      TextView(
+                        text: getWeekdayAbbreviation(o.lastMessageTime ?? ''),
+                        textStyle: GoogleFonts.gabarito(
+                          color:
+                              o.unreadCount! > 0
+                                  ? AppColor.black
+                                  : AppColor.lightgrey,
+                          fontSize: 12.20.sp,
+                          fontWeight:
+                              o.unreadCount! > 0
+                                  ? FontWeight.w500
+                                  : FontWeight.w400,
+                        ),
+                      ),
+                      o.unreadCount! > 0
+                          ? Container(
+                            padding: EdgeInsets.all(6.w),
+                            decoration: BoxDecoration(
+                              color: AppColor.yellow.withOpacity(.6),
+                              shape: BoxShape.circle,
+                            ),
+                            child: TextView(
+                              text: o.unreadCount.toString(),
+                              textStyle: GoogleFonts.gabarito(
+                                color: AppColor.black,
+                                fontSize: 12.20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          )
+                          : SizedBox.shrink(),
+                    ],
                   ),
                   SizedBox(width: 12.w),
                 ],

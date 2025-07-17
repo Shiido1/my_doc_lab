@@ -54,6 +54,7 @@ class _PatientDetailComplaintScreenState
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   bool onTap = false;
+  List<String> genderList = ['Male', 'Female'];
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +124,37 @@ class _PatientDetailComplaintScreenState
                     fillColor: AppColor.oneKindgrey,
                     borderColor: AppColor.transparent,
                     validator: AppValidator.validateString(),
+                    suffixWidget: PopupMenuButton<String>(
+                      onSelected: (String item) {
+                        // Handle the selected menu item
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return [
+                          ...genderList.map(
+                            (list) => PopupMenuItem<String>(
+                              value: list,
+                              child: TextView(
+                                text: list,
+                                textStyle: GoogleFonts.gabarito(
+                                  color: AppColor.darkindgrey,
+                                  fontSize: 15.40.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onTap: () {
+                                gender.text = list;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ];
+                      },
+                      child: Icon(
+                        Icons.arrow_drop_down_sharp,
+                        size: 24.30.sp,
+                        color: AppColor.darkindgrey,
+                      ), // Optional: Customize the button's icon
+                    ),
                   ),
                   SizedBox(height: 20.h),
                   TextFormWidget(
