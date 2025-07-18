@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import "package:collection/collection.dart";
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:dio/dio.dart';
@@ -193,6 +194,9 @@ class DocViewModel extends BaseViewModel {
   ScrollController scrollController1 = ScrollController();
 
   DateTime now = DateTime.now();
+
+  AudioPlayer player = AudioPlayer();
+  var audioSource;
 
   TextEditingController patientNameTextController = TextEditingController();
   TextEditingController patientConditionTextController =
@@ -2909,7 +2913,7 @@ class DocViewModel extends BaseViewModel {
                                                             .isOnTogglePassword();
                                                         model.notifyListeners();
                                                       },
-                                                      child: Container(
+                                                      child: SizedBox(
                                                         width: 250.w,
                                                         child: TextView(
                                                           text: i['name'] ?? '',
@@ -2948,7 +2952,7 @@ class DocViewModel extends BaseViewModel {
                                                     model.isOnTogglePassword();
                                                     model.notifyListeners();
                                                   },
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     width: 250.w,
                                                     child: TextView(
                                                       text: i['name'] ?? '',
@@ -3343,5 +3347,11 @@ class DocViewModel extends BaseViewModel {
         );
       },
     );
+  }
+
+  void playerSound() async {
+    audioSource = AssetSource('audio/ringing.mp3');
+    await player.setReleaseMode(ReleaseMode.loop);
+    await player.play(audioSource);
   }
 }

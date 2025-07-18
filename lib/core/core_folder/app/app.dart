@@ -11,6 +11,7 @@ import '../../../ui/screens/dashboard/chat/video_chat_agora/doc_vid_call_look_sc
 import '../../../ui/screens/dashboard/chat/video_chat_agora/doctor_video_chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/video_chat_agora/join_doctor_video_chat_screen.dart';
 import '../../../ui/screens/dashboard/chat/video_chat_agora/join_video_chat_screen.dart';
+import '../../../ui/screens/dashboard/chat/video_chat_agora/vid_call_look_screen.dart';
 import '../../../ui/screens/dashboard/chat/video_chat_agora/video_chat_screen.dart';
 import '../../../ui/screens/dashboard/dashboard_screen.dart';
 import '../../../ui/screens/dashboard/doctor_dashboard_screen.dart';
@@ -60,6 +61,7 @@ import '../network/network_service.dart';
     MaterialRoute(page: UserPrescriptionDetailScreen),
     MaterialRoute(page: VerificationScreenForgotPassword),
     MaterialRoute(page: DocVidCallLookScreen),
+    MaterialRoute(page: VidCallLookScreen),
     MaterialRoute(page: JoinVideoChatScreen),
     MaterialRoute(page: JoinDoctorVideoChatScreen),
   ],

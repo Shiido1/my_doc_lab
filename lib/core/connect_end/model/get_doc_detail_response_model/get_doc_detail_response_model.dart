@@ -291,7 +291,7 @@ class BankAccount {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['owner_type'] = ownerType;
     data['owner_id'] = ownerId;

@@ -5,20 +5,20 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i22;
+import 'package:flutter/material.dart' as _i23;
 import 'package:flutter/material.dart';
 import 'package:my_doc_lab/core/connect_end/model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart'
-    as _i24;
-import 'package:my_doc_lab/core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart'
-    as _i23;
-import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart'
-    as _i27;
-import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/data.dart'
     as _i25;
-import 'package:my_doc_lab/core/connect_end/model/get_users_appointment_model/get_users_appointment_model.dart'
-    as _i26;
-import 'package:my_doc_lab/core/connect_end/model/view_doctors_prescription_model/view_doctors_prescription_model.dart'
+import 'package:my_doc_lab/core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart'
+    as _i24;
+import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart'
     as _i28;
+import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/data.dart'
+    as _i26;
+import 'package:my_doc_lab/core/connect_end/model/get_users_appointment_model/get_users_appointment_model.dart'
+    as _i27;
+import 'package:my_doc_lab/core/connect_end/model/view_doctors_prescription_model/view_doctors_prescription_model.dart'
+    as _i29;
 import 'package:my_doc_lab/ui/onboarding/first_onboarding_screen.dart' as _i2;
 import 'package:my_doc_lab/ui/screens/authentication/login_screen.dart' as _i7;
 import 'package:my_doc_lab/ui/screens/authentication/verification_screen_forgot_password.dart'
@@ -35,8 +35,10 @@ import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/doc_vid_ca
 import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/doctor_video_chat_screen.dart'
     as _i11;
 import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/join_doctor_video_chat_screen.dart'
-    as _i21;
+    as _i22;
 import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/join_video_chat_screen.dart'
+    as _i21;
+import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/vid_call_look_screen.dart'
     as _i20;
 import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/video_chat_screen.dart'
     as _i12;
@@ -56,7 +58,7 @@ import 'package:my_doc_lab/ui/screens/dashboard/settings/profile_screen.dart'
 import 'package:my_doc_lab/ui/screens/dashboard/settings/user_prescription/user_prescription_detail_screen.dart'
     as _i17;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i29;
+import 'package:stacked_services/stacked_services.dart' as _i30;
 
 class Routes {
   static const firstOnboardingScreen = '/';
@@ -98,6 +100,8 @@ class Routes {
 
   static const docVidCallLookScreen = '/doc-vid-call-look-screen';
 
+  static const vidCallLookScreen = '/vid-call-look-screen';
+
   static const joinVideoChatScreen = '/join-video-chat-screen';
 
   static const joinDoctorVideoChatScreen = '/join-doctor-video-chat-screen';
@@ -121,6 +125,7 @@ class Routes {
     userPrescriptionDetailScreen,
     verificationScreenForgotPassword,
     docVidCallLookScreen,
+    vidCallLookScreen,
     joinVideoChatScreen,
     joinDoctorVideoChatScreen,
   };
@@ -201,49 +206,53 @@ class StackedRouter extends _i1.RouterBase {
       page: _i19.DocVidCallLookScreen,
     ),
     _i1.RouteDef(
+      Routes.vidCallLookScreen,
+      page: _i20.VidCallLookScreen,
+    ),
+    _i1.RouteDef(
       Routes.joinVideoChatScreen,
-      page: _i20.JoinVideoChatScreen,
+      page: _i21.JoinVideoChatScreen,
     ),
     _i1.RouteDef(
       Routes.joinDoctorVideoChatScreen,
-      page: _i21.JoinDoctorVideoChatScreen,
+      page: _i22.JoinDoctorVideoChatScreen,
     ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.FirstOnboardingScreen: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.FirstOnboardingScreen(),
         settings: data,
       );
     },
     _i3.Dashboard: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.Dashboard(),
         settings: data,
       );
     },
     _i4.DocDashboard: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.DocDashboard(),
         settings: data,
       );
     },
     _i5.LaboratoryDashboard: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.LaboratoryDashboard(),
         settings: data,
       );
     },
     _i6.PharmacyDashboard: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.PharmacyDashboard(),
         settings: data,
       );
     },
     _i7.LoginScreen: (data) {
       final args = data.getArgs<LoginScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i7.LoginScreen(key: args.key, userType: args.userType),
         settings: data,
@@ -251,14 +260,14 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i8.ProfileScreen: (data) {
       final args = data.getArgs<ProfileScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i8.ProfileScreen(key: args.key, id: args.id),
         settings: data,
       );
     },
     _i9.DoctorChatScreen: (data) {
       final args = data.getArgs<DoctorChatScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i9.DoctorChatScreen(
             key: args.key,
             id: args.id,
@@ -271,7 +280,7 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i10.ChatScreen: (data) {
       final args = data.getArgs<ChatScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i10.ChatScreen(
             key: args.key,
             id: args.id,
@@ -283,7 +292,7 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i11.DoctorVideoChatScreen: (data) {
       final args = data.getArgs<DoctorVideoChatScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i11.DoctorVideoChatScreen(
             key: args.key,
             conversationId: args.conversationId,
@@ -294,7 +303,7 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i12.VideoChatScreen: (data) {
       final args = data.getArgs<VideoChatScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i12.VideoChatScreen(
             key: args.key,
             conversationId: args.conversationId,
@@ -307,7 +316,7 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<DoctorAppointmentDetailSceenArguments>(
         orElse: () => const DoctorAppointmentDetailSceenArguments(),
       );
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i13.DoctorAppointmentDetailSceen(
             key: args.key, appointment: args.appointment),
         settings: data,
@@ -317,7 +326,7 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<PatientDetailSceenArguments>(
         orElse: () => const PatientDetailSceenArguments(),
       );
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i14.PatientDetailSceen(
             key: args.key, order: args.order, item: args.item),
         settings: data,
@@ -325,7 +334,7 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i15.PharmChatScreen: (data) {
       final args = data.getArgs<PharmChatScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i15.PharmChatScreen(
             key: args.key,
             id: args.id,
@@ -337,7 +346,7 @@ class StackedRouter extends _i1.RouterBase {
     _i16.PrescriptionDetailScreen: (data) {
       final args =
           data.getArgs<PrescriptionDetailScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i16.PrescriptionDetailScreen(key: args.key, id: args.id),
         settings: data,
@@ -346,7 +355,7 @@ class StackedRouter extends _i1.RouterBase {
     _i17.UserPrescriptionDetailScreen: (data) {
       final args =
           data.getArgs<UserPrescriptionDetailScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i17.UserPrescriptionDetailScreen(key: args.key, view: args.view),
         settings: data,
@@ -355,7 +364,7 @@ class StackedRouter extends _i1.RouterBase {
     _i18.VerificationScreenForgotPassword: (data) {
       final args = data.getArgs<VerificationScreenForgotPasswordArguments>(
           nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i18.VerificationScreenForgotPassword(
             key: args.key, email: args.email, userType: args.userType),
         settings: data,
@@ -363,30 +372,41 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i19.DocVidCallLookScreen: (data) {
       final args = data.getArgs<DocVidCallLookScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i19.DocVidCallLookScreen(
             key: args.key,
             image: args.image,
             callId: args.callId,
             conversationId: args.conversationId,
-            messageModel: args.messageModel,
             sender: args.sender),
         settings: data,
       );
     },
-    _i20.JoinVideoChatScreen: (data) {
+    _i20.VidCallLookScreen: (data) {
+      final args = data.getArgs<VidCallLookScreenArguments>(nullOk: false);
+      return _i23.MaterialPageRoute<dynamic>(
+        builder: (context) => _i20.VidCallLookScreen(
+            key: args.key,
+            image: args.image,
+            callId: args.callId,
+            conversationId: args.conversationId,
+            sender: args.sender),
+        settings: data,
+      );
+    },
+    _i21.JoinVideoChatScreen: (data) {
       final args = data.getArgs<JoinVideoChatScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
-        builder: (context) => _i20.JoinVideoChatScreen(
+      return _i23.MaterialPageRoute<dynamic>(
+        builder: (context) => _i21.JoinVideoChatScreen(
             key: args.key, agoravalue: args.agoravalue),
         settings: data,
       );
     },
-    _i21.JoinDoctorVideoChatScreen: (data) {
+    _i22.JoinDoctorVideoChatScreen: (data) {
       final args =
           data.getArgs<JoinDoctorVideoChatScreenArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
-        builder: (context) => _i21.JoinDoctorVideoChatScreen(
+      return _i23.MaterialPageRoute<dynamic>(
+        builder: (context) => _i22.JoinDoctorVideoChatScreen(
             key: args.key, agoravalue: args.agoravalue),
         settings: data,
       );
@@ -406,7 +426,7 @@ class LoginScreenArguments {
     required this.userType,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final String? userType;
 
@@ -433,7 +453,7 @@ class ProfileScreenArguments {
     required this.id,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final String? id;
 
@@ -464,15 +484,15 @@ class DoctorChatScreenArguments {
     required this.sender,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final String? id;
 
-  final _i23.GetMessageIndexResponseModel? messageModel;
+  final _i24.GetMessageIndexResponseModel? messageModel;
 
-  final _i24.GetListOfDoctorsAppointmentModel? app;
+  final _i25.GetListOfDoctorsAppointmentModel? app;
 
-  final _i25.Data? data;
+  final _i26.Data? data;
 
   final dynamic sender;
 
@@ -512,15 +532,15 @@ class ChatScreenArguments {
     this.getUsersAppointmentModel,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final String? id;
 
-  final _i23.GetMessageIndexResponseModel? messageModel;
+  final _i24.GetMessageIndexResponseModel? messageModel;
 
   final dynamic sender;
 
-  final _i26.GetUsersAppointmentModel? getUsersAppointmentModel;
+  final _i27.GetUsersAppointmentModel? getUsersAppointmentModel;
 
   @override
   String toString() {
@@ -555,7 +575,7 @@ class DoctorVideoChatScreenArguments {
     required this.receiverType,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final int? conversationId;
 
@@ -594,7 +614,7 @@ class VideoChatScreenArguments {
     required this.receiverType,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final int? conversationId;
 
@@ -631,9 +651,9 @@ class DoctorAppointmentDetailSceenArguments {
     this.appointment,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
-  final _i24.GetListOfDoctorsAppointmentModel? appointment;
+  final _i25.GetListOfDoctorsAppointmentModel? appointment;
 
   @override
   String toString() {
@@ -659,11 +679,11 @@ class PatientDetailSceenArguments {
     this.item,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
-  final _i27.Orders? order;
+  final _i28.Orders? order;
 
-  final _i27.Items? item;
+  final _i28.Items? item;
 
   @override
   String toString() {
@@ -690,13 +710,13 @@ class PharmChatScreenArguments {
     required this.appOrder,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final String? id;
 
-  final _i23.GetMessageIndexResponseModel? messageModel;
+  final _i24.GetMessageIndexResponseModel? messageModel;
 
-  final _i27.Orders? appOrder;
+  final _i28.Orders? appOrder;
 
   @override
   String toString() {
@@ -727,7 +747,7 @@ class PrescriptionDetailScreenArguments {
     required this.id,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final String? id;
 
@@ -754,9 +774,9 @@ class UserPrescriptionDetailScreenArguments {
     required this.view,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
-  final _i28.ViewDoctorsPrescriptionModel? view;
+  final _i29.ViewDoctorsPrescriptionModel? view;
 
   @override
   String toString() {
@@ -782,7 +802,7 @@ class VerificationScreenForgotPasswordArguments {
     required this.userType,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final String? email;
 
@@ -813,11 +833,10 @@ class DocVidCallLookScreenArguments {
     required this.image,
     required this.callId,
     required this.conversationId,
-    required this.messageModel,
     required this.sender,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final String? image;
 
@@ -825,13 +844,11 @@ class DocVidCallLookScreenArguments {
 
   final String? conversationId;
 
-  final _i23.GetMessageIndexResponseModel? messageModel;
-
   final dynamic sender;
 
   @override
   String toString() {
-    return '{"key": "$key", "image": "$image", "callId": "$callId", "conversationId": "$conversationId", "messageModel": "$messageModel", "sender": "$sender"}';
+    return '{"key": "$key", "image": "$image", "callId": "$callId", "conversationId": "$conversationId", "sender": "$sender"}';
   }
 
   @override
@@ -841,7 +858,6 @@ class DocVidCallLookScreenArguments {
         other.image == image &&
         other.callId == callId &&
         other.conversationId == conversationId &&
-        other.messageModel == messageModel &&
         other.sender == sender;
   }
 
@@ -851,7 +867,50 @@ class DocVidCallLookScreenArguments {
         image.hashCode ^
         callId.hashCode ^
         conversationId.hashCode ^
-        messageModel.hashCode ^
+        sender.hashCode;
+  }
+}
+
+class VidCallLookScreenArguments {
+  const VidCallLookScreenArguments({
+    this.key,
+    required this.image,
+    required this.callId,
+    required this.conversationId,
+    required this.sender,
+  });
+
+  final _i23.Key? key;
+
+  final String? image;
+
+  final String? callId;
+
+  final String? conversationId;
+
+  final dynamic sender;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "image": "$image", "callId": "$callId", "conversationId": "$conversationId", "sender": "$sender"}';
+  }
+
+  @override
+  bool operator ==(covariant VidCallLookScreenArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.image == image &&
+        other.callId == callId &&
+        other.conversationId == conversationId &&
+        other.sender == sender;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^
+        image.hashCode ^
+        callId.hashCode ^
+        conversationId.hashCode ^
         sender.hashCode;
   }
 }
@@ -862,7 +921,7 @@ class JoinVideoChatScreenArguments {
     required this.agoravalue,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final dynamic agoravalue;
 
@@ -889,7 +948,7 @@ class JoinDoctorVideoChatScreenArguments {
     required this.agoravalue,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final dynamic agoravalue;
 
@@ -910,7 +969,7 @@ class JoinDoctorVideoChatScreenArguments {
   }
 }
 
-extension NavigatorStateExtension on _i29.NavigationService {
+extension NavigatorStateExtension on _i30.NavigationService {
   Future<dynamic> navigateToFirstOnboardingScreen([
     int? routerId,
     bool preventDuplicates = true,
@@ -982,7 +1041,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToLoginScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? userType,
     int? routerId,
     bool preventDuplicates = true,
@@ -999,7 +1058,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToProfileScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
     int? routerId,
     bool preventDuplicates = true,
@@ -1016,11 +1075,11 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToDoctorChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
-    required _i23.GetMessageIndexResponseModel? messageModel,
-    required _i24.GetListOfDoctorsAppointmentModel? app,
-    required _i25.Data? data,
+    required _i24.GetMessageIndexResponseModel? messageModel,
+    required _i25.GetListOfDoctorsAppointmentModel? app,
+    required _i26.Data? data,
     required dynamic sender,
     int? routerId,
     bool preventDuplicates = true,
@@ -1043,11 +1102,11 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
-    required _i23.GetMessageIndexResponseModel? messageModel,
+    required _i24.GetMessageIndexResponseModel? messageModel,
     required dynamic sender,
-    _i26.GetUsersAppointmentModel? getUsersAppointmentModel,
+    _i27.GetUsersAppointmentModel? getUsersAppointmentModel,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1068,7 +1127,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToDoctorVideoChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required int? conversationId,
     required int? receiverId,
     required String? receiverType,
@@ -1091,7 +1150,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToVideoChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required int? conversationId,
     required int? receiverId,
     required String? receiverType,
@@ -1114,8 +1173,8 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToDoctorAppointmentDetailSceen({
-    _i22.Key? key,
-    _i24.GetListOfDoctorsAppointmentModel? appointment,
+    _i23.Key? key,
+    _i25.GetListOfDoctorsAppointmentModel? appointment,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1132,9 +1191,9 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToPatientDetailSceen({
-    _i22.Key? key,
-    _i27.Orders? order,
-    _i27.Items? item,
+    _i23.Key? key,
+    _i28.Orders? order,
+    _i28.Items? item,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1151,10 +1210,10 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToPharmChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
-    required _i23.GetMessageIndexResponseModel? messageModel,
-    required _i27.Orders? appOrder,
+    required _i24.GetMessageIndexResponseModel? messageModel,
+    required _i28.Orders? appOrder,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1171,7 +1230,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToPrescriptionDetailScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
     int? routerId,
     bool preventDuplicates = true,
@@ -1188,8 +1247,8 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToUserPrescriptionDetailScreen({
-    _i22.Key? key,
-    required _i28.ViewDoctorsPrescriptionModel? view,
+    _i23.Key? key,
+    required _i29.ViewDoctorsPrescriptionModel? view,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1205,7 +1264,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToVerificationScreenForgotPassword({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? email,
     required String? userType,
     int? routerId,
@@ -1224,11 +1283,10 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToDocVidCallLookScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? image,
     required String? callId,
     required String? conversationId,
-    required _i23.GetMessageIndexResponseModel? messageModel,
     required dynamic sender,
     int? routerId,
     bool preventDuplicates = true,
@@ -1242,7 +1300,31 @@ extension NavigatorStateExtension on _i29.NavigationService {
             image: image,
             callId: callId,
             conversationId: conversationId,
-            messageModel: messageModel,
+            sender: sender),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToVidCallLookScreen({
+    _i23.Key? key,
+    required String? image,
+    required String? callId,
+    required String? conversationId,
+    required dynamic sender,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.vidCallLookScreen,
+        arguments: VidCallLookScreenArguments(
+            key: key,
+            image: image,
+            callId: callId,
+            conversationId: conversationId,
             sender: sender),
         id: routerId,
         preventDuplicates: preventDuplicates,
@@ -1251,7 +1333,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToJoinVideoChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required dynamic agoravalue,
     int? routerId,
     bool preventDuplicates = true,
@@ -1269,7 +1351,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> navigateToJoinDoctorVideoChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required dynamic agoravalue,
     int? routerId,
     bool preventDuplicates = true,
@@ -1357,7 +1439,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithLoginScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? userType,
     int? routerId,
     bool preventDuplicates = true,
@@ -1374,7 +1456,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithProfileScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
     int? routerId,
     bool preventDuplicates = true,
@@ -1391,11 +1473,11 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithDoctorChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
-    required _i23.GetMessageIndexResponseModel? messageModel,
-    required _i24.GetListOfDoctorsAppointmentModel? app,
-    required _i25.Data? data,
+    required _i24.GetMessageIndexResponseModel? messageModel,
+    required _i25.GetListOfDoctorsAppointmentModel? app,
+    required _i26.Data? data,
     required dynamic sender,
     int? routerId,
     bool preventDuplicates = true,
@@ -1418,11 +1500,11 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
-    required _i23.GetMessageIndexResponseModel? messageModel,
+    required _i24.GetMessageIndexResponseModel? messageModel,
     required dynamic sender,
-    _i26.GetUsersAppointmentModel? getUsersAppointmentModel,
+    _i27.GetUsersAppointmentModel? getUsersAppointmentModel,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1443,7 +1525,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithDoctorVideoChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required int? conversationId,
     required int? receiverId,
     required String? receiverType,
@@ -1466,7 +1548,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithVideoChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required int? conversationId,
     required int? receiverId,
     required String? receiverType,
@@ -1489,8 +1571,8 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithDoctorAppointmentDetailSceen({
-    _i22.Key? key,
-    _i24.GetListOfDoctorsAppointmentModel? appointment,
+    _i23.Key? key,
+    _i25.GetListOfDoctorsAppointmentModel? appointment,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1507,9 +1589,9 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithPatientDetailSceen({
-    _i22.Key? key,
-    _i27.Orders? order,
-    _i27.Items? item,
+    _i23.Key? key,
+    _i28.Orders? order,
+    _i28.Items? item,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1526,10 +1608,10 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithPharmChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
-    required _i23.GetMessageIndexResponseModel? messageModel,
-    required _i27.Orders? appOrder,
+    required _i24.GetMessageIndexResponseModel? messageModel,
+    required _i28.Orders? appOrder,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1546,7 +1628,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithPrescriptionDetailScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? id,
     int? routerId,
     bool preventDuplicates = true,
@@ -1563,8 +1645,8 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithUserPrescriptionDetailScreen({
-    _i22.Key? key,
-    required _i28.ViewDoctorsPrescriptionModel? view,
+    _i23.Key? key,
+    required _i29.ViewDoctorsPrescriptionModel? view,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1580,7 +1662,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithVerificationScreenForgotPassword({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? email,
     required String? userType,
     int? routerId,
@@ -1599,11 +1681,10 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithDocVidCallLookScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required String? image,
     required String? callId,
     required String? conversationId,
-    required _i23.GetMessageIndexResponseModel? messageModel,
     required dynamic sender,
     int? routerId,
     bool preventDuplicates = true,
@@ -1617,7 +1698,31 @@ extension NavigatorStateExtension on _i29.NavigationService {
             image: image,
             callId: callId,
             conversationId: conversationId,
-            messageModel: messageModel,
+            sender: sender),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithVidCallLookScreen({
+    _i23.Key? key,
+    required String? image,
+    required String? callId,
+    required String? conversationId,
+    required dynamic sender,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.vidCallLookScreen,
+        arguments: VidCallLookScreenArguments(
+            key: key,
+            image: image,
+            callId: callId,
+            conversationId: conversationId,
             sender: sender),
         id: routerId,
         preventDuplicates: preventDuplicates,
@@ -1626,7 +1731,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithJoinVideoChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required dynamic agoravalue,
     int? routerId,
     bool preventDuplicates = true,
@@ -1644,7 +1749,7 @@ extension NavigatorStateExtension on _i29.NavigationService {
   }
 
   Future<dynamic> replaceWithJoinDoctorVideoChatScreen({
-    _i22.Key? key,
+    _i23.Key? key,
     required dynamic agoravalue,
     int? routerId,
     bool preventDuplicates = true,

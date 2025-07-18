@@ -98,7 +98,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       widget.messageModel?.contactName
                                           ?.capitalizeWords(),
                                   name3:
-                                      '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.lastName?.capitalize() ?? ''}',
+                                      '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?.last.sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?.last.sender?.lastName?.capitalize() ?? ''}',
                                 ),
                                 textStyle: GoogleFonts.dmSans(
                                   color: AppColor.black,

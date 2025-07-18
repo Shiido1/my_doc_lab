@@ -7,11 +7,11 @@ class AvailabilityHistoryModel {
 
   AvailabilityHistoryModel.fromJson(Map<String, dynamic> json) {
     headers =
-        json['headers'] != null ? new Headers.fromJson(json['headers']) : null;
+        json['headers'] != null ? Headers.fromJson(json['headers']) : null;
     if (json['original'] != null) {
       original = <Original>[];
       json['original'].forEach((v) {
-        original!.add(new Original.fromJson(v));
+        original!.add(Original.fromJson(v));
       });
     }
     exception = json['exception'];

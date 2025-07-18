@@ -302,7 +302,7 @@ class PharmViewModel extends BaseViewModel {
                                   Navigator.pop(context);
                                   notifyListeners();
                                 },
-                                child: Container(
+                                child: SizedBox(
                                   width: double.infinity,
                                   child: TextView(
                                     text: o.name ?? '',
@@ -2547,7 +2547,7 @@ class PharmViewModel extends BaseViewModel {
                                                             .isOnTogglePassword();
                                                         model.notifyListeners();
                                                       },
-                                                      child: Container(
+                                                      child: SizedBox(
                                                         width: 250.w,
                                                         child: TextView(
                                                           text: i['name'] ?? '',
@@ -2586,7 +2586,7 @@ class PharmViewModel extends BaseViewModel {
                                                     model.isOnTogglePassword();
                                                     model.notifyListeners();
                                                   },
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     width: 250.w,
                                                     child: TextView(
                                                       text: i['name'] ?? '',

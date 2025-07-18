@@ -65,7 +65,7 @@ class LabTechViewModel extends BaseViewModel {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  bool _isLoadingDelCat = false;
+  final bool _isLoadingDelCat = false;
   bool get isLoadingDelCat => _isLoadingDelCat;
   bool isSwitched = false;
   bool onEditCate = false;
@@ -1341,7 +1341,7 @@ class LabTechViewModel extends BaseViewModel {
                                   Navigator.pop(context);
                                   notifyListeners();
                                 },
-                                child: Container(
+                                child: SizedBox(
                                   width: double.infinity,
                                   child: TextView(
                                     text: o.name ?? '',
@@ -1397,7 +1397,7 @@ class LabTechViewModel extends BaseViewModel {
                         Navigator.pop(context);
                         notifyListeners();
                       },
-                      child: Container(
+                      child: SizedBox(
                         width: double.infinity,
                         child: TextView(
                           text: o,
@@ -3266,7 +3266,7 @@ class LabTechViewModel extends BaseViewModel {
                                                             .isOnTogglePassword();
                                                         model.notifyListeners();
                                                       },
-                                                      child: Container(
+                                                      child: SizedBox(
                                                         width: 250.w,
                                                         child: TextView(
                                                           text: i['name'] ?? '',

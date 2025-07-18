@@ -4,18 +4,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_doc_lab/core/connect_end/view_model/auth_view_model.dart';
 import 'package:my_doc_lab/main.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/join_doctor_video_chat_screen.dart';
 import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/join_video_chat_screen.dart';
 import 'package:stacked/stacked.dart';
-import '../../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../../app_assets/app_color.dart';
 import '../../../../app_assets/constant.dart';
 import '../../../../widget/text_widget.dart';
 
 // ignore: must_be_immutable
-class DocVidCallLookScreen extends StatefulWidget {
-  DocVidCallLookScreen({
+class VidCallLookScreen extends StatefulWidget {
+  VidCallLookScreen({
     super.key,
     required this.image,
     required this.callId,
@@ -28,23 +28,23 @@ class DocVidCallLookScreen extends StatefulWidget {
   dynamic sender;
 
   @override
-  State<DocVidCallLookScreen> createState() => _DocVidCallLookScreenState();
+  State<VidCallLookScreen> createState() => _VidCallLookScreenState();
 }
 
-class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
+class _VidCallLookScreenState extends State<VidCallLookScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.grey,
-      body: ViewModelBuilder<DocViewModel>.reactive(
-        viewModelBuilder: () => DocViewModel(),
+      body: ViewModelBuilder<AuthViewModel>.reactive(
+        viewModelBuilder: () => AuthViewModel(),
         onViewModelReady: (model) {
           model.playerSound();
           print('player:::K${widget.sender['caller_type']}');
         },
         onDispose: (viewModel) {},
         disposeViewModel: false,
-        builder: (_, DocViewModel model, __) {
+        builder: (_, AuthViewModel model, __) {
           return Stack(
             children: [
               // Fullscreen image
@@ -75,7 +75,7 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                   children: [
                     TextView(
                       text:
-                          '${widget.sender['caller_name'] ?? ''} is Calling..',
+                          'Dr. ${widget.sender['caller_name'] ?? ''} is Calling..',
                       textStyle: GoogleFonts.dmSans(
                         fontSize: 23.2.sp,
                         fontWeight: FontWeight.w600,
@@ -141,6 +141,7 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                               model.acceptCall(
                                 int.parse(widget.sender['call_id'].toString()),
                               );
+                              model.notifyListeners();
                             },
                             color: AppColor.primary,
                             iconSize: 50.sp,
@@ -157,6 +158,7 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                             icon: Icon(Icons.call_end),
                             onPressed: () async {
                               await model.player.stop();
+                              navigate.back();
                               model.hasLoadedConversation = true;
                               model.notifyListeners();
                               Navigator.pop(context);

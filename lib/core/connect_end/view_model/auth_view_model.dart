@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison, deprecated_member_use
+import 'package:audioplayers/audioplayers.dart';
 import "package:collection/collection.dart";
 import 'package:my_doc_lab/core/connect_end/model/get_user_notification_model/get_user_notification_model.dart';
 import 'package:my_doc_lab/core/connect_end/model/user_registration/user_registration.dart';
@@ -182,6 +183,9 @@ class AuthViewModel extends BaseViewModel {
   String selectedRole = '';
 
   List<Item> items = [];
+
+  AudioPlayer player = AudioPlayer();
+  var audioSource;
 
   AuthViewModel({this.context});
 
@@ -2203,5 +2207,11 @@ class AuthViewModel extends BaseViewModel {
       return AppColor.brown;
     }
     return AppColor.primary1;
+  }
+
+  void playerSound() async {
+    audioSource = AssetSource('audio/ringing.mp3');
+    await player.setReleaseMode(ReleaseMode.loop);
+    await player.play(audioSource);
   }
 }

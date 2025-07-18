@@ -16,7 +16,7 @@ import '../../../widget/text_widget.dart';
 import 'med_profile_screen.dart';
 
 class ProfileScreen1 extends StatefulWidget {
-  ProfileScreen1({super.key});
+  const ProfileScreen1({super.key});
   @override
   State<ProfileScreen1> createState() => _ProfileScreen1State();
 }

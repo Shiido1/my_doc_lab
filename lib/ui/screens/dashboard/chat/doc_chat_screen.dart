@@ -89,7 +89,7 @@ class _DoctorChatScreenState extends State<DoctorChatScreen> {
                                     widget.messageModel?.contactName
                                         ?.capitalizeWords() ??
                                     widget.data?.firstName?.capitalize() ??
-                                    '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?[0].sender?.lastName?.capitalize() ?? ''}'
+                                    '${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?.last.sender?.firstName?.capitalize() ?? ''} ${model.receivedMessageResponseModelList?.receivedMessageResponseModelList?.last.sender?.lastName?.capitalize() ?? ''}'
                                         '',
                                 textStyle: GoogleFonts.dmSans(
                                   color: AppColor.black,
