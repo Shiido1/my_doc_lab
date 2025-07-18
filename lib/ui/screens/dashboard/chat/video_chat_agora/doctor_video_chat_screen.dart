@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
 import 'package:my_doc_lab/core/connect_end/view_model/doc_view_model.dart';
 import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:my_doc_lab/ui/app_assets/constant.dart';
 import 'package:stacked/stacked.dart';
 
 class DoctorVideoChatScreen extends StatefulWidget {
@@ -43,6 +44,7 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
       disposeViewModel: false,
       builder: (_, DocViewModel model, __) {
         return Scaffold(
+          backgroundColor: AppColor.transparent.withOpacity(.5),
           body: Stack(
             children: [
               if (model.engine == null)
@@ -54,6 +56,79 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                           ? model.remoteVideo()
                           : model.localVideo(),
                 ),
+              Positioned(
+                bottom: 80,
+                left: 20,
+                child: SizedBox(
+                  width: 400.w,
+                  child: Form(
+                    // key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 120.0.h,
+                          child: ListView.builder(
+                            itemCount: model.messages.length,
+                            itemBuilder: (context, index) {
+                              print('position: $index'); // Optional debug print
+                              return model.callboxMessage(
+                                context: context,
+                                message:
+                                    '${index + 1}. ${model.messages[index].capitalize()}',
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 330,
+                              child: TextFormField(
+                                controller: model.sendtextController,
+                                style: TextStyle(color: AppColor.white),
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                minLines: 1,
+                                decoration: InputDecoration(
+                                  hintText: 'Note...!',
+                                  hintStyle: TextStyle(color: AppColor.white),
+
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  filled: true,
+                                  fillColor: AppColor.transparent,
+                                ),
+                                onChanged: (value) {},
+                              ),
+                            ),
+                            SizedBox(width: 12.0.w),
+                            IconButton(
+                              icon: Icon(
+                                Icons.send,
+                                color: AppColor.primary1,
+                                size: 34.40.sp,
+                              ),
+                              onPressed: () {
+                                model.messages.add(
+                                  model.sendtextController.text,
+                                );
+                                Future.delayed(Duration(seconds: 0), () {
+                                  model.sendtextController.clear();
+                                });
+                                model.notifyListeners();
+                              },
+                            ),
+                            SizedBox(width: 10.w),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               Positioned(
                 bottom: 20,
                 left: 50,

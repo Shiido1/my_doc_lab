@@ -136,31 +136,31 @@ class FirebaseApi {
 
       if (message.data != null) {
         print('push mes::vv::${message.data}');
-        if (message.data.containsKey('agora_token')) {
-          if (message.data['caller_type'] == 'MydocLab\Models\User') {
-            print('push mes::user::${message.data}');
-            navigate.navigateTo(
-              Routes.docVidCallLookScreen,
-              arguments: DocVidCallLookScreenArguments(
-                conversationId: message.data['conversation_id'],
-                sender: message.data,
-                image: message.data['caller_image'],
-                callId: message.data['call_id'].toString(),
-              ),
-            );
-          } else {
-            print('push mes::::${message.data}');
-            navigate.navigateTo(
-              Routes.vidCallLookScreen,
-              arguments: VidCallLookScreenArguments(
-                conversationId: message.data['conversation_id'],
-                sender: message.data,
-                image: message.data['caller_image'],
-                callId: message.data['call_id'].toString(),
-              ),
-            );
-          }
+        // if (message.data.containsKey('agora_token')) {
+        if (message.data['caller_type'] == 'MydocLab\Models\User') {
+          print('push mes::user::${message.data}');
+          navigate.navigateTo(
+            Routes.docVidCallLookScreen,
+            arguments: DocVidCallLookScreenArguments(
+              conversationId: message.data['conversation_id'],
+              sender: message.data,
+              image: message.data['caller_image'],
+              callId: message.data['call_id'].toString(),
+            ),
+          );
+        } else {
+          print('push mes::::${message.data}');
+          navigate.navigateTo(
+            Routes.vidCallLookScreen,
+            arguments: VidCallLookScreenArguments(
+              conversationId: message.data['conversation_id'],
+              sender: message.data,
+              image: message.data['caller_image'],
+              callId: message.data['call_id'].toString(),
+            ),
+          );
         }
+        // }
       }
     });
   }

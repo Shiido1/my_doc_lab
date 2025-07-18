@@ -1361,6 +1361,51 @@ class DocViewModel extends BaseViewModel {
           ),
     ],
   );
+  List<String> messages = [];
+
+  callboxMessage({context, message}) => Align(
+    alignment: Alignment.topLeft,
+    child: Container(
+      margin: EdgeInsets.only(left: 1.0.w, right: 240.w, bottom: 20.w),
+      padding: EdgeInsets.symmetric(vertical: 4.w, horizontal: 10.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(0),
+        ),
+        color: AppColor.transparent.withOpacity(.1),
+        border: Border.all(color: AppColor.white),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 200.w,
+            child: TextView(
+              text: message,
+              textStyle: GoogleFonts.dmSans(
+                fontSize: 12.66.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColor.white,
+              ),
+            ),
+          ),
+          // TextView(
+          //   text: DateFormat('hh:mma').format(
+          //     DateTime.parse(message!.updatedAt.toString()).toLocal(),
+          //   ),
+          //   textStyle: GoogleFonts.dmSans(
+          //     fontSize: 12.sp,
+          //     fontWeight: FontWeight.w400,
+          //     color: AppColor.darkindgrey,
+          //   ),
+          // ),
+        ],
+      ),
+    ),
+  );
 
   void scrollToBottom() {
     if (scrollController1.hasClients) {
@@ -1467,6 +1512,7 @@ class DocViewModel extends BaseViewModel {
       return const Text(
         'Waiting for remote user to join.o..',
         textAlign: TextAlign.center,
+        style: TextStyle(color: AppColor.white),
       );
     }
   }
