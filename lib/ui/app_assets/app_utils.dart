@@ -1,6 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
 
 class AppUtils {
   static Future<void> snackbar(

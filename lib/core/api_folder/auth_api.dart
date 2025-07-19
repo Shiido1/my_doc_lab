@@ -1,20 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/checkout_entity_model/checkout_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/forgot_password_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/pay_stack_payment_model/pay_stack_payment_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/request_otp_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/reset_password_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/update_user_response_model/update_user_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/verify_otp_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/view_doctors_prescription_model/view_doctors_prescription_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/care_giver_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/checkout_entity_model/checkout_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/forgot_password_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/pay_stack_payment_model/pay_stack_payment_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/registration_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/request_otp_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/reset_password_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/update_user_response_model/update_user_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/verify_otp_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/view_doctors_prescription_model/view_doctors_prescription_model.dart';
 import '../connect_end/model/add_booking_entity_model.dart';
 import '../connect_end/model/care_giver_registration_model/care_giver_registration_model.dart';
 import '../connect_end/model/care_giver_resiter_entity_model.dart';
@@ -576,12 +577,12 @@ class AuthApi {
     }
   }
 
-  Future<dynamic> rejectCall(int callId) async {
+  Future<dynamic> rejectCall(CallEntityModel callEntity) async {
     try {
       final response = await _service.call(
         UrlConfig.reject_call,
         RequestMethod.post,
-        data: {"call_id": callId},
+        data: callEntity.toJson(),
       );
       logger.d(response.data);
       return response.data;
@@ -591,12 +592,12 @@ class AuthApi {
     }
   }
 
-  Future<dynamic> endCall(int callId) async {
+  Future<dynamic> endCall(CallEntityModel callEntity) async {
     try {
       final response = await _service.call(
         UrlConfig.end_call,
         RequestMethod.post,
-        data: {"call_id": callId},
+        data: callEntity.toJson(),
       );
       logger.d(response.data);
       return response.data;

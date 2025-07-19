@@ -2,11 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_entity_model.dart';
 import 'package:stacked/stacked.dart';
-
-import '../../../../../core/connect_end/view_model/auth_view_model.dart'
-    show AuthViewModel;
+import '../../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../app_assets/app_color.dart';
 
 class VideoChatScreen extends StatefulWidget {
@@ -77,9 +76,14 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
                       icon: Icon(Icons.call_end),
                       onPressed: () {
                         model.endCall(
-                          int.parse(
-                            model.callTokenGenerateResponseModel!.callId
-                                .toString(),
+                          CallEntityModel(
+                            callId: int.parse(
+                              model.callTokenGenerateResponseModel!.callId
+                                  .toString(),
+                            ),
+                            conversationId: widget.conversationId,
+                            receiverId: widget.receiverId,
+                            receiverType: widget.receiverType,
                           ),
                         );
                         Navigator.pop(context);

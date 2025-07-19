@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/main.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/widget/text_widget.dart';
+import 'package:doc_lab_pharm/main.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';

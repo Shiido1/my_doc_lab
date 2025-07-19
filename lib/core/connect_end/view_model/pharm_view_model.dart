@@ -10,14 +10,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:my_doc_lab/core/connect_end/model/add_med_entity_model/add_med_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/post_user_cloud_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/repo/pharm_repo_impl.dart';
-import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/add_med_entity_model/add_med_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/post_user_cloud_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/update_pharm_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/repo/pharm_repo_impl.dart';
+import 'package:doc_lab_pharm/core/core_folder/app/app.router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 import '../../../main.dart';
@@ -45,7 +45,7 @@ import '../model/order_by_id_response_model/order_by_id_response_model.dart'
     hide Orders;
 import '../model/pharm_stats_response_model/pharm_stats_response_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart'
+import 'package:doc_lab_pharm/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart'
     as item;
 
 import '../model/received_message_response_model/received_message_response_model.dart';

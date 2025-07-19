@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/widget/button_widget.dart';
-import 'package:my_doc_lab/ui/widget/text_widget.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/widget/button_widget.dart';
+import 'package:doc_lab_pharm/ui/widget/text_widget.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stacked/stacked.dart';
 

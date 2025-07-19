@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/ui/app_assets/constant.dart';
+import 'package:doc_lab_pharm/ui/app_assets/constant.dart';
 import '../../../../../core/connect_end/model/view_doctors_prescription_model/view_doctors_prescription_model.dart';
 import '../../../../app_assets/app_color.dart';
 import '../../../../widget/text_widget.dart';

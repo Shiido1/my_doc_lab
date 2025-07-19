@@ -4,11 +4,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/core/connect_end/view_model/auth_view_model.dart';
-import 'package:my_doc_lab/main.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/join_doctor_video_chat_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/chat/video_chat_agora/join_video_chat_screen.dart';
+import 'package:doc_lab_pharm/core/connect_end/view_model/auth_view_model.dart';
+import 'package:doc_lab_pharm/main.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/chat/video_chat_agora/join_doctor_video_chat_screen.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/chat/video_chat_agora/join_video_chat_screen.dart';
 import 'package:stacked/stacked.dart';
+import '../../../../../core/connect_end/model/call_entity_model.dart';
 import '../../../../app_assets/app_color.dart';
 import '../../../../app_assets/constant.dart';
 import '../../../../widget/text_widget.dart';
@@ -40,7 +41,7 @@ class _VidCallLookScreenState extends State<VidCallLookScreen> {
         viewModelBuilder: () => AuthViewModel(),
         onViewModelReady: (model) {
           model.playerSound();
-          print('player:::K${widget.sender['caller_type']}');
+          print('player:::K${widget.sender}');
         },
         onDispose: (viewModel) {},
         disposeViewModel: false,
@@ -163,7 +164,14 @@ class _VidCallLookScreenState extends State<VidCallLookScreen> {
                               model.notifyListeners();
                               Navigator.pop(context);
                               model.rejectCall(
-                                int.parse(widget.sender['call_id'].toString()),
+                                CallEntityModel(
+                                  callId: int.parse(
+                                    widget.sender['call_id'].toString(),
+                                  ),
+                                  conversationId: 0,
+                                  receiverId: 0,
+                                  receiverType: '',
+                                ),
                               );
                             },
                             color: AppColor.red,

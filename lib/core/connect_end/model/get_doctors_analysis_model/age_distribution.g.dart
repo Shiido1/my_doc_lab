@@ -7,11 +7,7 @@ part of 'age_distribution.dart';
 // **************************************************************************
 
 AgeDistribution _$AgeDistributionFromJson(Map<String, dynamic> json) =>
-    AgeDistribution(
-      i935: json['9-35'] as num?,
-    );
+    AgeDistribution(i935: json['9-35'] as num?);
 
 Map<String, dynamic> _$AgeDistributionToJson(AgeDistribution instance) =>
-    <String, dynamic>{
-      '9-35': instance.i935,
-    };
+    <String, dynamic>{'9-35': instance.i935};

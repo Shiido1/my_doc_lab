@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "my_doc_lab" "\0"
+            VALUE "FileDescription", "doc_lab_pharm" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "my_doc_lab" "\0"
+            VALUE "InternalName", "doc_lab_pharm" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "my_doc_lab.exe" "\0"
-            VALUE "ProductName", "my_doc_lab" "\0"
+            VALUE "OriginalFilename", "doc_lab_pharm.exe" "\0"
+            VALUE "ProductName", "doc_lab_pharm" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

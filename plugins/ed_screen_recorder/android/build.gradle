@@ -1,0 +1,43 @@
+group 'com.ed_screen_recorder'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.1'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 31
+
+    namespace 'com.ed_screen_recorder'   // ✅✅✅ THIS FIXES THE BUILD
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 21
+    }
+}
+
+dependencies {
+    implementation 'com.github.HBiSoft:HBRecorder:3.0.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+}

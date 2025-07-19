@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/chat/message_list_screen.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/chat/message_list_screen.dart';
 import '../../../core/firebase_api.dart';
 import '../../../firebase_options.dart';
 import '../../app_assets/app_color.dart';

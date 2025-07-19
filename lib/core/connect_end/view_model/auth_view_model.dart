@@ -1,9 +1,9 @@
 // ignore_for_file: unnecessary_null_comparison, deprecated_member_use
 import 'package:audioplayers/audioplayers.dart';
 import "package:collection/collection.dart";
-import 'package:my_doc_lab/core/connect_end/model/get_user_notification_model/get_user_notification_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/user_registration/user_registration.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/web_view_screen.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_user_notification_model/get_user_notification_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/user_registration/user_registration.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/settings/wallet/web_view_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'dart:io';
@@ -14,27 +14,28 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/care_giver_resiter_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/login_entity.dart';
-import 'package:my_doc_lab/core/connect_end/model/login_response_model/login_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/searched_doctor_response_model/searched_doctor_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/send_message_response_model/send_message_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/update_user_response_model/update_user_response_model.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/widget/text_widget.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/care_giver_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/care_giver_resiter_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/login_entity.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/login_response_model/login_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/registration_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/searched_doctor_response_model/searched_doctor_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/send_message_response_model/send_message_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/update_user_response_model/update_user_response_model.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/screens/dashboard/dashboard_screen.dart';
 import '../../../ui/widget/button_widget.dart';
 import '../../../ui/widget/text_form_widget.dart';
+import '../model/call_entity_model.dart';
 import '../model/care_giver_registration_model/care_giver_registration_model.dart';
 import '../model/checkout_entity_model/checkout_entity_model.dart' as ch;
 import '../../../main.dart';
@@ -1686,18 +1687,24 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> rejectCall(int id) async {
+  Future<void> rejectCall(CallEntityModel callEntity) async {
     try {
-      await runBusyFuture(repositoryImply.rejectCall(id), throwException: true);
+      await runBusyFuture(
+        repositoryImply.rejectCall(callEntity),
+        throwException: true,
+      );
     } catch (e) {
       logger.d(e);
     }
     notifyListeners();
   }
 
-  Future<void> endCall(int id) async {
+  Future<void> endCall(CallEntityModel callEntity) async {
     try {
-      await runBusyFuture(repositoryImply.endCall(id), throwException: true);
+      await runBusyFuture(
+        repositoryImply.endCall(callEntity),
+        throwException: true,
+      );
     } catch (e) {
       logger.d(e);
     }

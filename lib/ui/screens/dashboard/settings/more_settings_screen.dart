@@ -1,16 +1,17 @@
+import 'package:doc_lab_pharm/ui/screens/dashboard/settings/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/core/core_folder/manager/shared_preference.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/app_assets/constant.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/order_history_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/user_prescription/user_prescription_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/settings/wallet/wallet_screen.dart';
-import 'package:my_doc_lab/ui/widget/text_widget.dart';
+import 'package:doc_lab_pharm/core/core_folder/manager/shared_preference.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_image.dart';
+import 'package:doc_lab_pharm/ui/app_assets/constant.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/home/diagnosis_cate_screen.dart/doctor_test_screen.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/settings/order_history_screen.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/settings/user_prescription/user_prescription_screen.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/settings/wallet/wallet_screen.dart';
+import 'package:doc_lab_pharm/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
@@ -39,12 +40,18 @@ class MoreSettingsScreen extends StatelessWidget {
               children: [
                 SizedBox(height: 10.h),
                 Center(
-                  child: TextView(
-                    text: 'More',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.black,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w600,
+                  child: GestureDetector(
+                    onTap:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => TestPage()),
+                        ),
+                    child: TextView(
+                      text: 'More',
+                      textStyle: GoogleFonts.gabarito(
+                        color: AppColor.black,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

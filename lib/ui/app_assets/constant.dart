@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
 import 'package:shimmer/shimmer.dart';
 
 extension StringExtension on String {

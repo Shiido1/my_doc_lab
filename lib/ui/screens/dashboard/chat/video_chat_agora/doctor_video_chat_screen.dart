@@ -1,11 +1,12 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
+import 'package:ed_screen_recorder/ed_screen_recorder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/view_model/doc_view_model.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/app_assets/constant.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/view_model/doc_view_model.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/app_assets/constant.dart';
 import 'package:stacked/stacked.dart';
 
 class DoctorVideoChatScreen extends StatefulWidget {
@@ -24,13 +25,15 @@ class DoctorVideoChatScreen extends StatefulWidget {
 }
 
 class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<DocViewModel>.reactive(
       viewModelBuilder: () => DocViewModel(),
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          model.generateToken(
+          await model.generateToken(
             context,
             calltoken: CallTokenGenerateEntityModel(
               conversationId: widget.conversationId,
@@ -38,12 +41,24 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
               receiverType: widget.receiverType,
             ),
           );
+
+          model.screenRecorder = EdScreenRecorder();
+          model.startRecord(
+            fileName: "eren",
+            width: context.size?.width.toInt() ?? 0,
+            height: context.size?.height.toInt() ?? 0,
+          );
+          print('object:::${model.response?.file}');
         });
       },
-      onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),
+      onDispose: (viewModel) {
+        viewModel.cleanupAgoraEngine();
+        viewModel.stopRecord();
+      },
       disposeViewModel: false,
       builder: (_, DocViewModel model, __) {
         return Scaffold(
+          // ignore: deprecated_member_use
           backgroundColor: AppColor.transparent.withOpacity(.5),
           body: Stack(
             children: [
@@ -62,7 +77,7 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                 child: SizedBox(
                   width: 400.w,
                   child: Form(
-                    // key: formKey,
+                    key: formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -84,7 +99,7 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                         Row(
                           children: [
                             SizedBox(
-                              width: 330,
+                              width: 280,
                               child: TextFormField(
                                 controller: model.sendtextController,
                                 style: TextStyle(color: AppColor.white),
@@ -112,13 +127,15 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                                 size: 34.40.sp,
                               ),
                               onPressed: () {
-                                model.messages.add(
-                                  model.sendtextController.text,
-                                );
-                                Future.delayed(Duration(seconds: 0), () {
-                                  model.sendtextController.clear();
-                                });
-                                model.notifyListeners();
+                                if (formKey.currentState!.validate()) {
+                                  model.messages.add(
+                                    model.sendtextController.text,
+                                  );
+                                  Future.delayed(Duration(seconds: 0), () {
+                                    model.sendtextController.clear();
+                                  });
+                                  model.notifyListeners();
+                                }
                               },
                             ),
                             SizedBox(width: 10.w),

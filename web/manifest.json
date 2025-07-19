@@ -1,6 +1,6 @@
 {
-    "name": "my_doc_lab",
-    "short_name": "my_doc_lab",
+    "name": "doc_lab_pharm",
+    "short_name": "doc_lab_pharm",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -15,7 +15,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-        isCoreLibraryDesugaringEnabled = true
+        coreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -27,8 +27,8 @@ android {
         applicationId = "com.doclabpharm"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        minSdk = 24  // Required by ed_screen_recorder!
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -36,13 +36,13 @@ android {
     buildTypes {
         debug {
             // ✅ For debug, NEVER shrink
-            isMinifyEnabled = false
-            isShrinkResources = false // must be false if minify is false
+            minifyEnabled = false
+            shrinkResources = false // must be false if minify is false
         }
         release {
             // ✅ For release, both true or both false
-            isMinifyEnabled = true
-            isShrinkResources = true
+            minifyEnabled = true
+            shrinkResources = true
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
@@ -68,4 +68,6 @@ dependencies {
 
   // Add the dependencies for any other desired Firebase products
   // https://firebase.google.com/docs/android/setup#available-libraries
+  implementation("com.github.HBiSoft:HBRecorder:3.0.1")
+  implementation("androidx.appcompat:appcompat:1.4.1")
 }

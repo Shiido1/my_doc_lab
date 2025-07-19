@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
+import 'package:doc_lab_pharm/core/core_folder/app/app.router.dart';
 import '../main.dart';
 import 'connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 
@@ -149,17 +149,30 @@ class FirebaseApi {
             ),
           );
         } else {
-          print('push mes::::${message.data}');
-          navigate.navigateTo(
-            Routes.vidCallLookScreen,
-            arguments: VidCallLookScreenArguments(
-              conversationId: message.data['conversation_id'],
-              sender: message.data,
-              image: message.data['caller_image'],
-              callId: message.data['call_id'].toString(),
-            ),
-          );
+          if (message.data['caller_type'] == 'MydocLab\Models\Doctor') {
+            print('push mes::::${message.data}');
+            navigate.navigateTo(
+              Routes.vidCallLookScreen,
+              arguments: VidCallLookScreenArguments(
+                conversationId: message.data['conversation_id'],
+                sender: message.data,
+                image: message.data['caller_image'],
+                callId: message.data['call_id'].toString(),
+              ),
+            );
+          } else {
+            navigate.navigateTo(
+              Routes.docVidCallLookScreen,
+              arguments: DocVidCallLookScreenArguments(
+                conversationId: message.data['conversation_id'],
+                sender: message.data,
+                image: message.data['caller_image'],
+                callId: message.data['call_id'].toString(),
+              ),
+            );
+          }
         }
+
         // }
       }
     });

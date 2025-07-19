@@ -1,4 +1,4 @@
-import 'package:my_doc_lab/core/core_folder/app/app.router.dart';
+import 'package:doc_lab_pharm/core/core_folder/app/app.router.dart';
 
 class AppRoutes {
   AppRoutes();

@@ -1,13 +1,14 @@
+import 'package:doc_lab_pharm/ui/screens/dashboard/settings/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/core/core_folder/manager/shared_preference.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/screens/authentication/doc_edit_profile_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/appointment/doctors_appointment/doctors_appointment_screen.dart';
-import 'package:my_doc_lab/ui/widget/text_widget.dart';
+import 'package:doc_lab_pharm/core/core_folder/manager/shared_preference.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_image.dart';
+import 'package:doc_lab_pharm/ui/screens/authentication/doc_edit_profile_screen.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/appointment/doctors_appointment/doctors_appointment_screen.dart';
+import 'package:doc_lab_pharm/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
@@ -45,12 +46,18 @@ class DocMoreSettingsScreen extends StatelessWidget {
               children: [
                 SizedBox(height: 10.h),
                 Center(
-                  child: TextView(
-                    text: 'More',
-                    textStyle: GoogleFonts.gabarito(
-                      color: AppColor.black,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w600,
+                  child: GestureDetector(
+                    onTap:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => TestPage()),
+                        ),
+                    child: TextView(
+                      text: 'More',
+                      textStyle: GoogleFonts.gabarito(
+                        color: AppColor.black,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

@@ -1,18 +1,19 @@
 import 'package:injectable/injectable.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/care_giver_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/care_giver_resiter_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/checkout_entity_model/checkout_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/registration_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/search_doctor_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/user_registration/user_registration.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/care_giver_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/care_giver_resiter_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/care_giver_response_model/care_giver_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/checkout_entity_model/checkout_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_user_response_model/get_user_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/registration_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/search_doctor_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/user_registration/user_registration.dart';
 import '../../api_folder/auth_api.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_booking_entity_model.dart';
+import '../model/call_entity_model.dart';
 import '../model/care_giver_registration_model/care_giver_registration_model.dart';
 import '../model/forgot_password_entity_model.dart';
 import '../model/get_all_consultant_response_model/get_all_consultant_response_model.dart';
@@ -154,8 +155,10 @@ class AuthContractsImpl {
     CallTokenGenerateEntityModel callToken,
   ) async => await _api.genCallToken(callToken);
   Future<dynamic> acceptCall(int callId) async => await _api.acceptCall(callId);
-  Future<dynamic> rejectCall(int callId) async => await _api.rejectCall(callId);
-  Future<dynamic> endCall(int callId) async => await _api.endCall(callId);
+  Future<dynamic> rejectCall(CallEntityModel callEntity) async =>
+      await _api.rejectCall(callEntity);
+  Future<dynamic> endCall(CallEntityModel callEntity) async =>
+      await _api.endCall(callEntity);
   Future<ViewDoctorsPrescriptionModelList> viewDocPrescription() async =>
       await _api.viewDocPrescription();
   Future<GetDoctorsWalletResponseModel> userWallet() async =>

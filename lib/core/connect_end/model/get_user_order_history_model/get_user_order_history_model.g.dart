@@ -7,35 +7,38 @@ part of 'get_user_order_history_model.dart';
 // **************************************************************************
 
 GetUserOrderHistoryModel _$GetUserOrderHistoryModelFromJson(
-        Map<String, dynamic> json) =>
-    GetUserOrderHistoryModel(
-      id: json['id'] as num?,
-      userId: json['user_id'] as num?,
-      orderTrx: json['order_trx'] as String?,
-      status: json['status'] as String?,
-      totalAmount: json['total_amount'] as String?,
-      paymentMethod: json['payment_method'] as String?,
-      createdAt: json['created_at'] == null
+  Map<String, dynamic> json,
+) => GetUserOrderHistoryModel(
+  id: json['id'] as num?,
+  userId: json['user_id'] as num?,
+  orderTrx: json['order_trx'] as String?,
+  status: json['status'] as String?,
+  totalAmount: json['total_amount'] as String?,
+  paymentMethod: json['payment_method'] as String?,
+  createdAt:
+      json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
-      updatedAt: json['updated_at'] == null
+  updatedAt:
+      json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
-      items: (json['items'] as List<dynamic>?)
+  items:
+      (json['items'] as List<dynamic>?)
           ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
           .toList(),
-    );
+);
 
 Map<String, dynamic> _$GetUserOrderHistoryModelToJson(
-        GetUserOrderHistoryModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'user_id': instance.userId,
-      'order_trx': instance.orderTrx,
-      'status': instance.status,
-      'total_amount': instance.totalAmount,
-      'payment_method': instance.paymentMethod,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'updated_at': instance.updatedAt?.toIso8601String(),
-      'items': instance.items,
-    };
+  GetUserOrderHistoryModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'user_id': instance.userId,
+  'order_trx': instance.orderTrx,
+  'status': instance.status,
+  'total_amount': instance.totalAmount,
+  'payment_method': instance.paymentMethod,
+  'created_at': instance.createdAt?.toIso8601String(),
+  'updated_at': instance.updatedAt?.toIso8601String(),
+  'items': instance.items,
+};

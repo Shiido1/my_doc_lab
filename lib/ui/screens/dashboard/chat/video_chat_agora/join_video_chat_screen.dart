@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
+import '../../../../../core/connect_end/model/call_entity_model.dart';
 import '../../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../app_assets/app_color.dart';
 
@@ -28,6 +29,7 @@ class _JoinVideoChatScreenState extends State<JoinVideoChatScreen> {
       disposeViewModel: false,
       builder: (_, AuthViewModel model, __) {
         return Scaffold(
+          backgroundColor: AppColor.transparent.withOpacity(.5),
           body: Stack(
             children: [
               if (model.engine == null)
@@ -62,11 +64,17 @@ class _JoinVideoChatScreenState extends State<JoinVideoChatScreen> {
                       icon: Icon(Icons.call_end),
                       onPressed: () {
                         model.endCall(
-                          int.parse(widget.agoravalue['call_id'].toString()),
+                          CallEntityModel(
+                            callId: int.parse(
+                              widget.agoravalue['call_id'].toString(),
+                            ),
+                            conversationId: 0,
+                            receiverId: 0,
+                            receiverType: '',
+                          ),
                         );
                         Navigator.pop(context);
                         Navigator.pop(context);
-                        // Navigator.pop(context);
                       },
                       color: AppColor.red,
                       iconSize: 40.sp,

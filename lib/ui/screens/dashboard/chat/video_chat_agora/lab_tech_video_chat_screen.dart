@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_doc_lab/core/connect_end/model/call_token_generate_entity_model.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_entity_model.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../../core/connect_end/view_model/med_lab_view_model.dart';

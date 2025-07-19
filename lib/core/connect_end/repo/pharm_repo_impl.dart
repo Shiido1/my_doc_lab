@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
-import 'package:my_doc_lab/core/connect_end/contract/pharm_contract_impl.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/contract/pharm_contract_impl.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/update_pharm_entity_model.dart';
 
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_med_entity_model/add_med_entity_model.dart';

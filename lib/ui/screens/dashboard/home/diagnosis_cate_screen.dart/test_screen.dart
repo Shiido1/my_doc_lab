@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/home/diagnosis_cate_screen.dart/confirm_test_screen.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/home/diagnosis_cate_screen.dart/confirm_test_screen.dart';
 
 import '../../../../app_assets/app_image.dart';
 import '../../../../widget/button_widget.dart';

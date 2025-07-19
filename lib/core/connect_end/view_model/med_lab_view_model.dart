@@ -8,7 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_lab_tech_report_response_model/datum.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_lab_tech_report_response_model/datum.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 import "package:collection/collection.dart";

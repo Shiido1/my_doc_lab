@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/doctor_dashboard_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/lab_dashboard_screen.dart';
-import 'package:my_doc_lab/ui/screens/dashboard/pharmacy_dashboard_screen.dart';
-import 'package:my_doc_lab/ui/widget/text_widget.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_image.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/doctor_dashboard_screen.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/lab_dashboard_screen.dart';
+import 'package:doc_lab_pharm/ui/screens/dashboard/pharmacy_dashboard_screen.dart';
+import 'package:doc_lab_pharm/ui/widget/text_widget.dart';
 
 // ignore: must_be_immutable
 class CareGiverSelectScreen extends StatefulWidget {

@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_doc_lab/core/connect_end/model/add_med_entity_model/add_med_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/pharm_stats_response_model/pharm_stats_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/update_pharm_entity_model.dart';
-import 'package:my_doc_lab/core/core_folder/network/cloudinary_network_service.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/add_med_entity_model/add_med_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_pharm_wallet_response_model/get_pharm_wallet_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/pharm_stats_response_model/pharm_stats_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/update_pharm_entity_model.dart';
+import 'package:doc_lab_pharm/core/core_folder/network/cloudinary_network_service.dart';
 import '../connect_end/model/bank_save_entity_model.dart';
 import '../connect_end/model/bank_save_response_model/bank_save_response_model.dart';
 import '../connect_end/model/call_token_generate_entity_model.dart';

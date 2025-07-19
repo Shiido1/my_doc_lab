@@ -4,6 +4,10 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import "package:collection/collection.dart";
+import 'package:ed_screen_recorder/ed_screen_recorder.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -12,15 +16,15 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:my_doc_lab/core/connect_end/model/bank_save_response_model/bank_save_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/received_message_response_model/received_message_response_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/send_message_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/update_doctor_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/model/update_status_reason_entity_model.dart';
-import 'package:my_doc_lab/core/connect_end/repo/doc_repo_impl.dart';
-import 'package:my_doc_lab/ui/app_assets/bank_codes.dart';
-import 'package:my_doc_lab/ui/app_assets/constant.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/bank_save_response_model/bank_save_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_doc_detail_response_model/get_doc_detail_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/received_message_response_model/received_message_response_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/send_message_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/update_doctor_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/update_status_reason_entity_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/repo/doc_repo_impl.dart';
+import 'package:doc_lab_pharm/ui/app_assets/bank_codes.dart';
+import 'package:doc_lab_pharm/ui/app_assets/constant.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 import '../../../main.dart';
@@ -213,6 +217,10 @@ class DocViewModel extends BaseViewModel {
   SearchedMedicineResponseModel? _searchedMeds;
   String presFrequency = '';
   String? bankCode;
+
+  EdScreenRecorder? screenRecorder;
+  RecordOutput? response;
+  bool inProgress = false;
 
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
@@ -1361,6 +1369,71 @@ class DocViewModel extends BaseViewModel {
           ),
     ],
   );
+
+  Future<void> startRecord({
+    required String fileName,
+    required int width,
+    required int height,
+  }) async {
+    Directory? tempDir = await getDownloadsDirectory();
+    String? tempPath = tempDir!.path;
+    print('ooooo$tempPath');
+    try {
+      print('record for file to be retr');
+      var startResponse = await screenRecorder?.startRecordScreen(
+        fileName: "Eren",
+        //Optional. It will save the video there when you give the file path with whatever you want.
+        //If you leave it blank, the Android operating system will save it to the gallery.
+        dirPathToSave: tempPath,
+        audioEnable: true,
+        width: width,
+        height: height,
+      );
+      response = startResponse;
+      print('record for file to be retrieved:::::::$response');
+    } on PlatformException {
+      kDebugMode
+          ? debugPrint("Error: An error occurred while starting the recording!")
+          : null;
+    }
+    notifyListeners();
+  }
+
+  Future<void> stopRecord() async {
+    try {
+      var stopResponse = await screenRecorder?.stopRecord();
+      response = stopResponse;
+    } on PlatformException {
+      kDebugMode
+          ? debugPrint("Error: An error occurred while stopping recording.")
+          : null;
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> pauseRecord() async {
+    try {
+      await screenRecorder?.pauseRecord();
+    } on PlatformException {
+      kDebugMode
+          ? debugPrint("Error: An error occurred while pause recording.")
+          : null;
+    }
+    notifyListeners();
+  }
+
+  Future<void> resumeRecord() async {
+    try {
+      await screenRecorder?.resumeRecord();
+    } on PlatformException {
+      kDebugMode
+          ? debugPrint("Error: An error occurred while resume recording.")
+          : null;
+    }
+    notifyListeners();
+  }
+
   List<String> messages = [];
 
   callboxMessage({context, message}) => Align(

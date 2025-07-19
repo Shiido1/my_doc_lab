@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:injectable/injectable.dart';
-import 'package:my_doc_lab/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_pharm_order_model/get_pharm_order_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../main.dart';

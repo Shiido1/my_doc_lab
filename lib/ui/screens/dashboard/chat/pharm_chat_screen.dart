@@ -3,11 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:my_doc_lab/core/connect_end/view_model/pharm_view_model.dart';
-import 'package:my_doc_lab/ui/app_assets/app_color.dart';
-import 'package:my_doc_lab/ui/app_assets/app_image.dart';
-import 'package:my_doc_lab/ui/app_assets/constant.dart';
-import 'package:my_doc_lab/ui/widget/text_widget.dart';
+import 'package:doc_lab_pharm/core/connect_end/view_model/pharm_view_model.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
+import 'package:doc_lab_pharm/ui/app_assets/app_image.dart';
+import 'package:doc_lab_pharm/ui/app_assets/constant.dart';
+import 'package:doc_lab_pharm/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../core/connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
