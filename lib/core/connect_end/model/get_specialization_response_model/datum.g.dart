@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'category.dart';
+part of 'datum.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
+Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
       id: json['id'] as num?,
       name: json['name'] as String?,
       createdAt: json['created_at'] == null
@@ -17,7 +17,7 @@ Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
           : DateTime.parse(json['updated_at'] as String),
     );
 
-Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
+Map<String, dynamic> _$DatumToJson(Datum instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'created_at': instance.createdAt?.toIso8601String(),

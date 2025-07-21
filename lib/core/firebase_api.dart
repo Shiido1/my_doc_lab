@@ -134,10 +134,12 @@ class FirebaseApi {
         payload: jsonEncode(message.toMap()),
       );
 
-      if (message.data != null) {
+      if (message.data['agora_token'] != null) {
         print('push mes::vv::${message.data}');
-        // if (message.data.containsKey('agora_token')) {
-        if (message.data['caller_type'] == 'MydocLab\Models\User') {
+        print('pushhshshsh caller_type:${message.data['caller_type']}');
+        final callerType = message.data['caller_type']?.replaceAll('\\', '');
+
+        if (callerType == 'MydocLabModelsUser') {
           print('push mes::user::${message.data}');
           navigate.navigateTo(
             Routes.docVidCallLookScreen,
@@ -148,33 +150,21 @@ class FirebaseApi {
               callId: message.data['call_id'].toString(),
             ),
           );
-        } else {
-          if (message.data['caller_type'] == 'MydocLab\Models\Doctor') {
-            print('push mes::::${message.data}');
-            navigate.navigateTo(
-              Routes.vidCallLookScreen,
-              arguments: VidCallLookScreenArguments(
-                conversationId: message.data['conversation_id'],
-                sender: message.data,
-                image: message.data['caller_image'],
-                callId: message.data['call_id'].toString(),
-              ),
-            );
-          } else {
-            navigate.navigateTo(
-              Routes.docVidCallLookScreen,
-              arguments: DocVidCallLookScreenArguments(
-                conversationId: message.data['conversation_id'],
-                sender: message.data,
-                image: message.data['caller_image'],
-                callId: message.data['call_id'].toString(),
-              ),
-            );
-          }
+        } else if (callerType == 'MydocLabModelsDoctor') {
+          print('push mes::::${message.data}');
+          navigate.navigateTo(
+            Routes.vidCallLookScreen,
+            arguments: VidCallLookScreenArguments(
+              conversationId: message.data['conversation_id'],
+              sender: message.data,
+              image: message.data['caller_image'],
+              callId: message.data['call_id'].toString(),
+            ),
+          );
         }
-
-        // }
       }
+
+      // }
     });
   }
 

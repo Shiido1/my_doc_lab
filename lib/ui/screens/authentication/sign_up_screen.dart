@@ -125,23 +125,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   widget.userType == 'care-giver'
                       ? Column(
                         children: [
-                          TextFormWidget(
-                            label: 'Enter Area of Specialization',
-                            border: 10,
-                            isFilled: true,
-                            fillColor: AppColor.white,
-                            controller: specTextController,
-                            prefixWidget: Padding(
-                              padding: EdgeInsets.all(9.2.w),
-                              child: SvgPicture.asset(
-                                AppImage.prof,
-                                width: 20.w,
-                                height: 20.h,
-                              ),
-                            ),
-                            validator: AppValidator.validateString(),
-                          ),
-                          SizedBox(height: 20.h),
+                          // TextFormWidget(
+                          //   label: 'Enter Area of Specialization',
+                          //   border: 10,
+                          //   isFilled: true,
+                          //   fillColor: AppColor.white,
+                          //   controller: specTextController,
+                          //   prefixWidget: Padding(
+                          //     padding: EdgeInsets.all(9.2.w),
+                          //     child: SvgPicture.asset(
+                          //       AppImage.prof,
+                          //       width: 20.w,
+                          //       height: 20.h,
+                          //     ),
+                          //   ),
+                          //   validator: AppValidator.validateString(),
+                          // ),
+                          // SizedBox(height: 20.h),
                           TextFormWidget(
                             label: 'Select your role',
                             border: 10,

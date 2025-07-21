@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_specialization_response_model/get_specialization_response_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:doc_lab_pharm/core/connect_end/model/availability_history_model/availability_history_model.dart';
 import 'package:doc_lab_pharm/core/connect_end/model/bank_save_entity_model.dart';
@@ -13,6 +14,7 @@ import 'package:doc_lab_pharm/core/connect_end/model/send_message_entity_model.d
 import 'package:doc_lab_pharm/core/connect_end/model/update_doctor_entity_model.dart';
 import 'package:doc_lab_pharm/core/connect_end/model/update_password_entity_model.dart';
 import 'package:doc_lab_pharm/core/connect_end/model/update_status_reason_entity_model.dart';
+import '../connect_end/model/call_entity_model.dart';
 import '../connect_end/model/call_token_generate_entity_model.dart';
 import '../connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../connect_end/model/create_add_medicine_entity_model.dart';
@@ -211,12 +213,12 @@ class DocAuthApi {
     }
   }
 
-  Future<dynamic> rejectCall(int callId) async {
+  Future<dynamic> rejectCall(CallEntityModel call) async {
     try {
       final response = await _service.call(
         UrlConfig.reject_call,
         RequestMethod.post,
-        data: {"call_id": callId},
+        data: call.toJson(),
       );
       logger.d(response.data);
       return response.data;
@@ -226,12 +228,12 @@ class DocAuthApi {
     }
   }
 
-  Future<dynamic> endCall(int callId) async {
+  Future<dynamic> endCall(CallEntityModel call) async {
     try {
       final response = await _service.call(
         UrlConfig.end_call,
         RequestMethod.post,
-        data: {"call_id": callId},
+        data: call.toJson(),
       );
       logger.d(response.data);
       return response.data;
@@ -512,6 +514,20 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetSpecializationResponseModel> specializationList() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.specializations_list,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetSpecializationResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

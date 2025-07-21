@@ -1389,7 +1389,8 @@ class AuthViewModel extends BaseViewModel {
             final doctorName =
                 '${doctor.firstName ?? ''} ${doctor.lastName ?? ''}'
                     .capitalize();
-            final speciality = doctor.speciality ?? '';
+            final specialization =
+                doctor.specialization != null ? doctor.specialization.name : '';
 
             return GestureDetector(
               onTap: () {
@@ -1440,7 +1441,7 @@ class AuthViewModel extends BaseViewModel {
                             ),
                           ),
                           TextView(
-                            text: speciality,
+                            text: specialization,
                             textStyle: GoogleFonts.gabarito(
                               color: AppColor.grey,
                               fontSize: 12.0.sp,

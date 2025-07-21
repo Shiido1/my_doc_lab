@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:io';
+import 'package:doc_lab_pharm/ui/screens/dashboard/home/report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -408,65 +409,82 @@ class _HomeScreenState extends State<HomeScreen> {
                       .map(
                         (o) => Column(
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-
-                                  child: Image.network(
-                                    o.imageUrl ?? '',
-                                    height: 70.h,
-                                    width: 70.w,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Container(
-                                              padding: EdgeInsets.all(16.w),
-                                              decoration: BoxDecoration(
-                                                color: AppColor.primary1
-                                                    .withOpacity(.7),
-                                                borderRadius:
-                                                    BorderRadius.circular(14),
-                                              ),
-                                              child: SvgPicture.asset(
-                                                AppImage.blood,
-                                                height: 40.h,
-                                                width: 50.w,
-                                              ),
-                                            ),
+                            GestureDetector(
+                              onTap:
+                                  () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => ReportScreen(report: o),
+                                    ),
                                   ),
-                                ),
-
-                                SizedBox(width: 20.w),
-                                Column(
+                              child: SizedBox(
+                                width: double.infinity.w,
+                                child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    TextView(
-                                      text: o.diagnosis ?? "",
-                                      textStyle: GoogleFonts.gabarito(
-                                        color: AppColor.primary1,
-                                        fontSize: 18.20.sp,
-                                        fontWeight: FontWeight.w500,
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+
+                                      child: Image.network(
+                                        o.imageUrl ?? '',
+                                        height: 70.h,
+                                        width: 70.w,
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                Container(
+                                                  padding: EdgeInsets.all(16.w),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.primary1
+                                                        .withOpacity(.7),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          14,
+                                                        ),
+                                                  ),
+                                                  child: SvgPicture.asset(
+                                                    AppImage.blood,
+                                                    height: 40.h,
+                                                    width: 50.w,
+                                                  ),
+                                                ),
                                       ),
                                     ),
-                                    SizedBox(height: 10.w),
-                                    SizedBox(
-                                      width: 240.w,
-                                      child: TextView(
-                                        text: o.summary ?? '',
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.black.withOpacity(.7),
-                                          fontSize: 15.20.sp,
-                                          fontWeight: FontWeight.w500,
+
+                                    SizedBox(width: 20.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextView(
+                                          text: o.diagnosis ?? "",
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.primary1,
+                                            fontSize: 18.20.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
-                                        textOverflow: TextOverflow.ellipsis,
-                                        maxLines: 6,
-                                      ),
+                                        SizedBox(height: 10.w),
+                                        SizedBox(
+                                          width: 240.w,
+                                          child: TextView(
+                                            text: o.summary ?? '',
+                                            textStyle: GoogleFonts.gabarito(
+                                              color: AppColor.black.withOpacity(
+                                                .7,
+                                              ),
+                                              fontSize: 15.20.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            textOverflow: TextOverflow.ellipsis,
+                                            maxLines: 6,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
 
                             Divider(color: AppColor.greylight),

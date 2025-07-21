@@ -168,9 +168,13 @@ class _VidCallLookScreenState extends State<VidCallLookScreen> {
                                   callId: int.parse(
                                     widget.sender['call_id'].toString(),
                                   ),
-                                  conversationId: 0,
-                                  receiverId: 0,
-                                  receiverType: '',
+                                  conversationId: int.parse(
+                                    widget.sender['conversation_id'].toString(),
+                                  ),
+                                  receiverId: int.parse(
+                                    widget.sender['caller_id'].toString(),
+                                  ),
+                                  receiverType: 'Doctor',
                                 ),
                               );
                             },

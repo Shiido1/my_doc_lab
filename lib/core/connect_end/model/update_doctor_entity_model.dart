@@ -8,6 +8,7 @@ class UpdateDoctorEntityModel {
   String? experience;
   String? profileImage;
   String? about;
+  String? specializationId;
 
   UpdateDoctorEntityModel({
     this.firstName,
@@ -19,6 +20,7 @@ class UpdateDoctorEntityModel {
     this.experience,
     this.profileImage,
     this.about,
+    this.specializationId,
   });
 
   factory UpdateDoctorEntityModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class UpdateDoctorEntityModel {
       experience: json['experience']?.toString(),
       profileImage: json['profile_image']?.toString(),
       about: json['about']?.toString(),
+      specializationId: json['specialization_id']?.toString(),
     );
   }
 
@@ -45,5 +48,6 @@ class UpdateDoctorEntityModel {
     if (experience != null) 'experience': experience,
     if (profileImage != null) 'profile_image': profileImage,
     if (about != null) 'about': about,
+    if (specializationId != null) 'specialization_id': specializationId,
   };
 }

@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
-import 'package:ed_screen_recorder/ed_screen_recorder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doc_lab_pharm/core/connect_end/model/call_token_generate_entity_model.dart';
@@ -8,6 +7,8 @@ import 'package:doc_lab_pharm/core/connect_end/view_model/doc_view_model.dart';
 import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
 import 'package:doc_lab_pharm/ui/app_assets/constant.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../../../../core/connect_end/model/call_entity_model.dart';
 
 class DoctorVideoChatScreen extends StatefulWidget {
   DoctorVideoChatScreen({
@@ -41,20 +42,9 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
               receiverType: widget.receiverType,
             ),
           );
-
-          model.screenRecorder = EdScreenRecorder();
-          model.startRecord(
-            fileName: "eren",
-            width: context.size?.width.toInt() ?? 0,
-            height: context.size?.height.toInt() ?? 0,
-          );
-          print('object:::${model.response?.file}');
         });
       },
-      onDispose: (viewModel) {
-        viewModel.cleanupAgoraEngine();
-        viewModel.stopRecord();
-      },
+      onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),
       disposeViewModel: false,
       builder: (_, DocViewModel model, __) {
         return Scaffold(
@@ -167,9 +157,16 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                       icon: Icon(Icons.call_end),
                       onPressed: () {
                         model.endCall(
-                          int.parse(
-                            model.callTokenGenerateResponseModel!.callId
-                                .toString(),
+                          CallEntityModel(
+                            callId: int.parse(
+                              model.callTokenGenerateResponseModel!.callId
+                                  .toString(),
+                            ),
+                            conversationId: int.parse(
+                              widget.conversationId.toString(),
+                            ),
+                            receiverId: int.parse(widget.receiverId.toString()),
+                            receiverType: widget.receiverType,
                           ),
                         );
                         Navigator.pop(context);

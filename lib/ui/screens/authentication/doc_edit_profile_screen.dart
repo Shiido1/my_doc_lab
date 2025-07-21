@@ -29,6 +29,7 @@ class DocEditProfileScreen extends StatelessWidget {
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailTextController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  String? specializedId;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class DocEditProfileScreen extends StatelessWidget {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           await model.getDoctorsDetail(context);
+          model.specializationList();
           firstnameTextController.text =
               model.getDocDetailResponseModel?.original?.firstName ?? '';
           lastnameTextController.text =
@@ -231,6 +233,41 @@ class DocEditProfileScreen extends StatelessWidget {
                     fillColor: AppColor.oneKindgrey,
                     borderColor: AppColor.transparent,
                     controller: roleController,
+                    readOnly: true,
+                    suffixWidget: PopupMenuButton<String>(
+                      onSelected: (String item) {
+                        // Handle the selected menu item
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return [
+                          if (model.specializationListModel != null &&
+                              model.specializationListModel!.data!.isNotEmpty)
+                            ...model.specializationListModel!.data!.map(
+                              (s) => PopupMenuItem<String>(
+                                value: s.name,
+                                child: TextView(
+                                  text: s.name ?? '',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: AppColor.darkindgrey,
+                                    fontSize: 15.40.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                onTap: () {
+                                  roleController.text = s.name!;
+                                  specializedId = s.id.toString();
+                                  model.notifyListeners();
+                                },
+                              ),
+                            ),
+                        ];
+                      },
+                      child: Icon(
+                        Icons.arrow_drop_down_sharp,
+                        size: 20.sp,
+                        color: AppColor.darkindgrey,
+                      ), // Optional: Customize the button's icon
+                    ),
                     validator: AppValidator.validateString(),
                   ),
                   SizedBox(height: 20.h),
@@ -286,6 +323,7 @@ class DocEditProfileScreen extends StatelessWidget {
                             speciality: roleController.text.trim(),
                             certifications: certificationController.text.trim(),
                             experience: expController.text.trim(),
+                            specializationId: specializedId,
                             profileImage:
                                 model
                                     .postUserVerificationCloudResponse

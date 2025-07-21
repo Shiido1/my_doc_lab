@@ -8,6 +8,7 @@ import 'package:doc_lab_pharm/main.dart';
 import 'package:doc_lab_pharm/ui/screens/dashboard/chat/video_chat_agora/join_doctor_video_chat_screen.dart';
 import 'package:doc_lab_pharm/ui/screens/dashboard/chat/video_chat_agora/join_video_chat_screen.dart';
 import 'package:stacked/stacked.dart';
+import '../../../../../core/connect_end/model/call_entity_model.dart';
 import '../../../../../core/connect_end/view_model/doc_view_model.dart';
 import '../../../../app_assets/app_color.dart';
 import '../../../../app_assets/constant.dart';
@@ -161,7 +162,18 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
                               model.notifyListeners();
                               Navigator.pop(context);
                               model.rejectCall(
-                                int.parse(widget.sender['call_id'].toString()),
+                                CallEntityModel(
+                                  callId: int.parse(
+                                    widget.sender['call_id'].toString(),
+                                  ),
+                                  conversationId: int.parse(
+                                    widget.sender['conversation_id'].toString(),
+                                  ),
+                                  receiverId: int.parse(
+                                    widget.sender['caller_id'].toString(),
+                                  ),
+                                  receiverType: 'User',
+                                ),
                               );
                             },
                             color: AppColor.red,

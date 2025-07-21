@@ -8,6 +8,7 @@ import 'package:doc_lab_pharm/core/connect_end/model/send_message_entity_model.d
 import 'package:doc_lab_pharm/core/connect_end/model/update_doctor_entity_model.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/availability_history_model/availability_history_model.dart';
+import '../model/call_entity_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/create_add_medicine_entity_model.dart';
@@ -19,6 +20,7 @@ import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appoi
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
 import '../model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
+import '../model/get_specialization_response_model/get_specialization_response_model.dart';
 import '../model/get_user_response_model/get_user_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -110,13 +112,13 @@ class DocRepoImpl {
     return response;
   }
 
-  Future<dynamic> rejectCall(int callId) async {
-    final response = await _contract.rejectCall(callId);
+  Future<dynamic> rejectCall(CallEntityModel call) async {
+    final response = await _contract.rejectCall(call);
     return response;
   }
 
-  Future<dynamic> endCall(int callId) async {
-    final response = await _contract.endCall(callId);
+  Future<dynamic> endCall(CallEntityModel call) async {
+    final response = await _contract.endCall(call);
     return response;
   }
 
@@ -231,6 +233,11 @@ class DocRepoImpl {
 
   Future<dynamic> readMessage(int id) async {
     final response = await _contract.readMessage(id);
+    return response;
+  }
+
+  Future<GetSpecializationResponseModel> specializationList() async {
+    final response = await _contract.specializationList();
     return response;
   }
 

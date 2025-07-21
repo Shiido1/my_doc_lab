@@ -1,18 +1,13 @@
 // ignore_for_file: must_be_immutable, non_constant_identifier_names, deprecated_member_use
 
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:doc_lab_pharm/ui/app_assets/constant.dart';
-import 'package:ed_screen_recorder/ed_screen_recorder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doc_lab_pharm/core/connect_end/view_model/doc_view_model.dart';
 import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../../../../core/connect_end/model/call_entity_model.dart';
 
 class JoinDoctorVideoChatScreen extends StatefulWidget {
   JoinDoctorVideoChatScreen({super.key, required this.agoravalue});
@@ -26,65 +21,8 @@ class JoinDoctorVideoChatScreen extends StatefulWidget {
 class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  EdScreenRecorder? screenRecorder;
-  RecordOutput? response;
-  bool inProgress = false;
-
-  Future<void> startRecord({
-    required String fileName,
-    required int width,
-    required int height,
-  }) async {
-    // ✅ Request microphone permission
-    var micStatus = await Permission.microphone.status;
-    if (!micStatus.isGranted) {
-      micStatus = await Permission.microphone.request();
-      if (!micStatus.isGranted) {
-        debugPrint("Microphone permission not granted");
-        return;
-      }
-    }
-
-    // ✅ Request storage permission (optional but recommended)
-    var storageStatus = await Permission.storage.status;
-    if (!storageStatus.isGranted) {
-      storageStatus = await Permission.storage.request();
-      if (!storageStatus.isGranted) {
-        debugPrint("Storage permission not granted");
-        return;
-      }
-    }
-
-    Directory? tempDir = await getApplicationDocumentsDirectory();
-    String tempPath = tempDir.path;
-
-    try {
-      var startResponse = await screenRecorder?.startRecordScreen(
-        fileName: fileName,
-        dirPathToSave: tempPath,
-        audioEnable: true,
-        width: width,
-        height: height,
-      );
-      setState(() {
-        response = startResponse;
-      });
-      print('report note:::$response');
-    } on PlatformException {
-      debugPrint("Error: An error occurred while starting the recording!");
-    }
-  }
-
-  @override
-  void initState() {
-    screenRecorder = EdScreenRecorder();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width.toInt();
-    final screenHeight = MediaQuery.of(context).size.height.toInt();
     return ViewModelBuilder<DocViewModel>.reactive(
       viewModelBuilder: () => DocViewModel(),
       onViewModelReady: (model) {
@@ -92,13 +30,8 @@ class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
           channelName: widget.agoravalue['channel_name'],
           token: widget.agoravalue['agora_token'],
         );
-        // model.screenRecorder = EdScreenRecorder();
-        // model.startRecord(fileName: "eren", width: 100, height: 100);
       },
-      onDispose: (viewModel) {
-        viewModel.cleanupAgoraEngine();
-        viewModel.stopRecord();
-      },
+      onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),
       disposeViewModel: false,
       builder: (_, DocViewModel model, __) {
         return Scaffold(
@@ -174,17 +107,12 @@ class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
                               ),
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
-                                  startRecord(
-                                    fileName: "eren",
-                                    width: screenWidth,
-                                    height: screenHeight,
+                                  model.messages.add(
+                                    model.sendtextController.text,
                                   );
-                                  // model.messages.add(
-                                  //   model.sendtextController.text,
-                                  // );
-                                  // Future.delayed(Duration(seconds: 0), () {
-                                  //   model.sendtextController.clear();
-                                  // });
+                                  Future.delayed(Duration(seconds: 0), () {
+                                    model.sendtextController.clear();
+                                  });
                                   model.notifyListeners();
                                 }
                               },
@@ -219,7 +147,18 @@ class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
                       icon: Icon(Icons.call_end),
                       onPressed: () {
                         model.endCall(
-                          int.parse(widget.agoravalue['call_id'].toString()),
+                          CallEntityModel(
+                            callId: int.parse(
+                              widget.agoravalue['call_id'].toString(),
+                            ),
+                            conversationId: int.parse(
+                              widget.agoravalue['conversation_id'].toString(),
+                            ),
+                            receiverId: int.parse(
+                              widget.agoravalue['caller_id'].toString(),
+                            ),
+                            receiverType: 'User',
+                          ),
                         );
                         Navigator.pop(context);
                         Navigator.pop(context);

@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -102,7 +101,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   model
                                       .getDocDetailResponseModel
                                       ?.original
-                                      ?.speciality ??
+                                      ?.specialization
+                                      ?.name ??
                                   '',
                               textStyle: GoogleFonts.gabarito(
                                 color: AppColor.grey,
@@ -142,24 +142,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             SizedBox(height: 10.w),
-                            Row(
-                              children: [
-                                SvgPicture.asset(
-                                  AppImage.location,
-                                  height: 14.h,
-                                  width: 14.w,
-                                ),
-                                SizedBox(width: 4.w),
-                                TextView(
-                                  text: '800m away',
-                                  textStyle: GoogleFonts.gabarito(
-                                    color: AppColor.black,
-                                    fontSize: 12.0.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),

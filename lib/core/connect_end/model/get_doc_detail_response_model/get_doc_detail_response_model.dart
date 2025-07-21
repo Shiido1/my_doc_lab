@@ -61,6 +61,7 @@ class Original {
   List<Availabilities>? availabilities;
   List<AvailableSlots>? availableSlots;
   BankAccount? bankAccount;
+  Specialization? specialization;
 
   Original({
     this.id,
@@ -86,6 +87,7 @@ class Original {
     this.availabilities,
     this.availableSlots,
     this.bankAccount,
+    this.specialization,
   });
 
   Original.fromJson(Map<String, dynamic> json) {
@@ -125,6 +127,10 @@ class Original {
         json['bank_account'] != null
             ? BankAccount.fromJson(json['bank_account'])
             : null;
+    specialization =
+        json['specialization'] != null
+            ? Specialization.fromJson(json['specialization'])
+            : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -157,6 +163,9 @@ class Original {
     }
     if (bankAccount != null) {
       data['bank_account'] = bankAccount!.toJson();
+    }
+    if (specialization != null) {
+      data['specialization'] = specialization!.toJson();
     }
     return data;
   }
@@ -300,6 +309,24 @@ class BankAccount {
     data['account_name'] = accountName;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    return data;
+  }
+}
+
+class Specialization {
+  int? id;
+  String? name;
+
+  Specialization.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+
     return data;
   }
 }

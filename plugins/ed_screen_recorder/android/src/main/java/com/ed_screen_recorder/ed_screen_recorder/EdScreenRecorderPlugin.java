@@ -36,61 +36,46 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 
-/**
- * EdScreenRecorderPlugin
- */
 public class EdScreenRecorderPlugin implements FlutterPlugin, ActivityAware, MethodCallHandler,
-        HBRecorderListener,PluginRegistry.ActivityResultListener, PluginRegistry.RequestPermissionsResultListener {
+        HBRecorderListener, PluginRegistry.ActivityResultListener, PluginRegistry.RequestPermissionsResultListener {
 
     private FlutterPluginBinding flutterPluginBinding;
     private ActivityPluginBinding activityPluginBinding;
-    Result recentResult;
-    Result startRecordingResult;
-    Result stopRecordingResult;
-    Result pauseRecordingResult;
-    Result resumeRecordingResult;
-    Activity activity;
-    private static final int SCREEN_RECORD_REQUEST_CODE = 777;
+    private Activity activity;
     private HBRecorder hbRecorder;
-    boolean isAudioEnabled;
-    String fileName;
-    String dirPathToSave;
-    boolean addTimeCode;
-    String filePath;
-    int videoFrame;
-    int videoBitrate;
-    String fileOutputFormat;
-    String fileExtension;
-    boolean success;
-    String videoHash;
-    long startDate;
-    long endDate;
-    int width;
-    int height;
 
-    boolean micPermission = false;
-    boolean mediaPermission = false;
+    private static final int SCREEN_RECORD_REQUEST_CODE = 777;
+    private static final int PERMISSION_AUDIO_REQUEST_CODE = 333;
+    private static final int PERMISSION_STORAGE_REQUEST_CODE = 444;
 
-    private void initializeResults() {
-        startRecordingResult = null;
-        stopRecordingResult = null;
-        pauseRecordingResult = null;
-        resumeRecordingResult = null;
-        recentResult = null;
-    }
+    private Result startRecordingResult;
+    private Result stopRecordingResult;
+    private Result pauseRecordingResult;
+    private Result resumeRecordingResult;
 
-    // public static void registerWith(Registrar registrar) {
-    //     final EdScreenRecorderPlugin instance = new EdScreenRecorderPlugin();
-    //     instance.setupChannels(registrar.messenger(), registrar.activity());
-    //     registrar.addActivityResultListener(instance);
-    // }
+    private boolean micPermission = false;
+    private boolean mediaPermission = false;
+
+    private boolean isAudioEnabled;
+    private String fileName;
+    private String dirPathToSave;
+    private boolean addTimeCode;
+    private String filePath;
+    private int videoFrame;
+    private int videoBitrate;
+    private String fileOutputFormat;
+    private String fileExtension;
+    private String videoHash;
+    private long startDate;
+    private long endDate;
+    private int width;
+    private int height;
+
+    private boolean success;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
         this.flutterPluginBinding = binding;
-        hbRecorder = new HBRecorder(flutterPluginBinding.getApplicationContext(), this);
-        HBRecorderCodecInfo hbRecorderCodecInfo = new HBRecorderCodecInfo();
-
     }
 
     @Override
@@ -101,12 +86,18 @@ public class EdScreenRecorderPlugin implements FlutterPlugin, ActivityAware, Met
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         this.activityPluginBinding = binding;
-        setupChannels(flutterPluginBinding.getBinaryMessenger(), binding.getActivity());
+        this.activity = binding.getActivity();
+        hbRecorder = new HBRecorder(flutterPluginBinding.getApplicationContext(), this);
+        binding.addActivityResultListener(this);
+        binding.addRequestPermissionsResultListener(this);
+
+        BinaryMessenger messenger = flutterPluginBinding.getBinaryMessenger();
+        MethodChannel channel = new MethodChannel(messenger, "ed_screen_recorder");
+        channel.setMethodCallHandler(this);
     }
 
     @Override
-    public void onDetachedFromActivityForConfigChanges() {
-    }
+    public void onDetachedFromActivityForConfigChanges() { }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
@@ -114,75 +105,16 @@ public class EdScreenRecorderPlugin implements FlutterPlugin, ActivityAware, Met
     }
 
     @Override
-    public void onDetachedFromActivity() {
-    }
+    public void onDetachedFromActivity() { }
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-        initializeResults();
-        recentResult = result;
         switch (call.method) {
             case "startRecordScreen":
-                try {
-                    startRecordingResult = result;
-                    isAudioEnabled = Boolean.TRUE.equals(call.argument("audioenable"));
-                    fileName = call.argument("filename");
-                    dirPathToSave = call.argument("dirpathtosave");
-                    addTimeCode = Boolean.TRUE.equals(call.argument("addtimecode"));
-                    videoFrame = call.argument("videoframe");
-                    videoBitrate = call.argument("videobitrate");
-                    fileOutputFormat = call.argument("fileoutputformat");
-                    fileExtension = call.argument("fileextension");
-                    videoHash = call.argument("videohash");
-                    startDate = call.argument("startdate");
-                    width = call.argument("width");
-                    height = call.argument("height");
-                    customSettings(videoFrame, videoBitrate, fileOutputFormat, addTimeCode, fileName, width, height);
-                    if (dirPathToSave != null) {
-                        setOutputPath(addTimeCode, fileName, dirPathToSave);
-                    }
-                    if (isAudioEnabled) {
-                        if (ContextCompat.checkSelfPermission(flutterPluginBinding.getApplicationContext(), Manifest.permission.RECORD_AUDIO)
-                                != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(activity,
-                                    new String[]{Manifest.permission.RECORD_AUDIO},
-                                    333);
-                        } else {
-
-                            micPermission = true;
-                        }
-                    } else {
-                        micPermission = true;
-                    }
-
-                    if (ContextCompat.checkSelfPermission(flutterPluginBinding.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-
-                        ActivityCompat.requestPermissions(activity,
-                                new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                444);
-                    } else {
-                        mediaPermission = true;
-                    }
-                    if (micPermission && mediaPermission) {
-                        success = startRecordingScreen();
-                    }
-
-                } catch (Exception e) {
-                    Map<Object, Object> dataMap = new HashMap<Object, Object>();
-                    dataMap.put("success", false);
-                    dataMap.put("isProgress", false);
-                    dataMap.put("file", "");
-                    dataMap.put("eventname", "startRecordScreen Error");
-                    dataMap.put("message", e.getMessage());
-                    dataMap.put("videohash", videoHash);
-                    dataMap.put("startdate", startDate);
-                    dataMap.put("enddate", endDate);
-                    JSONObject jsonObj = new JSONObject(dataMap);
-                    startRecordingResult.success(jsonObj.toString());
-                    startRecordingResult = null;
-                    recentResult = null;
-                }
+                handleStart(call, result);
+                break;
+            case "stopRecordScreen":
+                handleStop(call, result);
                 break;
             case "pauseRecordScreen":
                 pauseRecordingResult = result;
@@ -192,118 +124,178 @@ public class EdScreenRecorderPlugin implements FlutterPlugin, ActivityAware, Met
                 resumeRecordingResult = result;
                 hbRecorder.resumeScreenRecording();
                 break;
-            case "stopRecordScreen":
-                stopRecordingResult = result;
-                endDate = call.argument("enddate");
-                hbRecorder.stopScreenRecording();
-                break;
             default:
                 result.notImplemented();
                 break;
         }
     }
 
-    @Override
-    public boolean onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 333) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                micPermission = true;
-            } else {
-                micPermission = false;
+    private void handleStart(MethodCall call, Result result) {
+        startRecordingResult = result;
+        isAudioEnabled = Boolean.TRUE.equals(call.argument("audioenable"));
+        fileName = call.argument("filename");
+        dirPathToSave = call.argument("dirpathtosave");
+        addTimeCode = Boolean.TRUE.equals(call.argument("addtimecode"));
+        videoFrame = call.argument("videoframe") != null ? call.argument("videoframe") : 30;
+        videoBitrate = call.argument("videobitrate") != null ? call.argument("videobitrate") : 4500000;
+        fileOutputFormat = call.argument("fileoutputformat") != null ? call.argument("fileoutputformat") : "DEFAULT";
+        fileExtension = call.argument("fileextension") != null ? call.argument("fileextension") : "mp4";
+        videoHash = call.argument("videohash");
+        startDate = call.argument("startdate") != null ? call.argument("startdate") : System.currentTimeMillis();
+        width = call.argument("width") != null ? call.argument("width") : 720;
+        height = call.argument("height") != null ? call.argument("height") : 1280;
+
+        customSettings();
+        try {
+            if (dirPathToSave != null) {
+                setOutputPath();
             }
-        } else if (requestCode == 444) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mediaPermission = true;
-            } else {
-                mediaPermission = false;
-            }
+
+            checkPermissionsAndStart();
+        } catch (Exception e) {
+            reportErrorToDart("startRecordScreen", e.getMessage());
         }
-        return true;
     }
 
-    @Override
-    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SCREEN_RECORD_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (data != null) {
-                    hbRecorder.startScreenRecording(data, resultCode);
-                }
-            }
-        }
-        return true;
+    private void handleStop(MethodCall call, Result result) {
+        stopRecordingResult = result;
+        endDate = call.argument("enddate") != null ? call.argument("enddate") : System.currentTimeMillis();
+        hbRecorder.stopScreenRecording();
     }
 
-    private void setupChannels(BinaryMessenger messenger, Activity activity) {
-        if (activityPluginBinding != null) {
-            activityPluginBinding.addActivityResultListener(this);
+    private void checkPermissionsAndStart() {
+        micPermission = !isAudioEnabled || ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        mediaPermission = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (!micPermission) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_AUDIO_REQUEST_CODE);
         }
-        this.activity = activity;
-        MethodChannel channel = new MethodChannel(messenger, "ed_screen_recorder");
-        channel.setMethodCallHandler(this);
+
+        if (!mediaPermission) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_STORAGE_REQUEST_CODE);
+        }
+
+        if (micPermission && mediaPermission) {
+            success = startRecordingScreen();
+        }
     }
 
-    @Override
-    public void HBRecorderOnStart() {
-
-        Log.e("Video Start:", "Start called");
-        Map<Object, Object> dataMap = new HashMap<Object, Object>();
-        dataMap.put("success", success);
-        dataMap.put("isProgress", true);
-        if (dirPathToSave != null) {
-            dataMap.put("file", filePath + "." + fileExtension);
-        } else {
-            dataMap.put("file", generateFileName(fileName, addTimeCode) + "." + fileExtension);
+    private boolean startRecordingScreen() {
+        try {
+            hbRecorder.enableCustomSettings();
+            MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) activity.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+            Intent permissionIntent = mediaProjectionManager.createScreenCaptureIntent();
+            activity.startActivityForResult(permissionIntent, SCREEN_RECORD_REQUEST_CODE);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        dataMap.put("eventname", "startRecordScreen");
-        dataMap.put("message", "Started Video");
-        dataMap.put("videohash", videoHash);
-        dataMap.put("startdate", startDate);
-        dataMap.put("enddate", null);
+    }
+
+    private void customSettings() {
+        hbRecorder.isAudioEnabled(isAudioEnabled);
+        hbRecorder.setAudioSource("DEFAULT");
+        hbRecorder.setVideoEncoder("DEFAULT");
+        hbRecorder.setVideoFrameRate(videoFrame);
+        hbRecorder.setVideoBitrate(videoBitrate);
+        hbRecorder.setOutputFormat(fileOutputFormat);
+        if (width > 0 && height > 0) {
+            hbRecorder.setScreenDimensions(height, width);
+        }
+        if (dirPathToSave == null) {
+            hbRecorder.setFileName(generateFileName());
+        }
+    }
+
+    private void setOutputPath() throws IOException {
+        hbRecorder.setFileName(generateFileName());
+        File dirFile = new File(dirPathToSave);
+        hbRecorder.setOutputPath(dirFile.getAbsolutePath());
+        filePath = dirFile.getAbsolutePath() + "/" + generateFileName();
+    }
+
+    private String generateFileName() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
+        String timeCode = addTimeCode ? "-" + formatter.format(new Date()) : "";
+        return fileName + timeCode;
+    }
+
+    private void reportErrorToDart(String eventName, String message) {
+        Map<Object, Object> dataMap = new HashMap<>();
+        dataMap.put("success", false);
+        dataMap.put("isProgress", false);
+        dataMap.put("file", "");
+        dataMap.put("eventname", eventName);
+        dataMap.put("message", message);
         JSONObject jsonObj = new JSONObject(dataMap);
         if (startRecordingResult != null) {
             startRecordingResult.success(jsonObj.toString());
             startRecordingResult = null;
-            recentResult = null;
+        }
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SCREEN_RECORD_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            hbRecorder.startScreenRecording(data, resultCode);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_AUDIO_REQUEST_CODE && grantResults.length > 0) {
+            micPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        } else if (requestCode == PERMISSION_STORAGE_REQUEST_CODE && grantResults.length > 0) {
+            mediaPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        }
+
+        if (micPermission && mediaPermission) {
+            success = startRecordingScreen();
+        }
+        return true;
+    }
+
+    @Override
+    public void HBRecorderOnStart() {
+        Map<Object, Object> dataMap = new HashMap<>();
+        dataMap.put("success", true);
+        dataMap.put("isProgress", true);
+        dataMap.put("file", dirPathToSave != null ? filePath + "." + fileExtension : generateFileName() + "." + fileExtension);
+        dataMap.put("eventname", "startRecordScreen");
+        dataMap.put("message", "Recording started");
+        dataMap.put("videohash", videoHash);
+        dataMap.put("startdate", startDate);
+        JSONObject jsonObj = new JSONObject(dataMap);
+        if (startRecordingResult != null) {
+            startRecordingResult.success(jsonObj.toString());
+            startRecordingResult = null;
         }
     }
 
     @Override
     public void HBRecorderOnComplete() {
-        Log.e("Video Complete:", "Complete called");
-        Map<Object, Object> dataMap = new HashMap<Object, Object>();
-        dataMap.put("success", success);
+        Map<Object, Object> dataMap = new HashMap<>();
+        dataMap.put("success", true);
         dataMap.put("isProgress", false);
-        if (dirPathToSave != null) {
-            dataMap.put("file", filePath + "." + fileExtension);
-        } else {
-            dataMap.put("file", generateFileName(fileName, addTimeCode) + "." + fileExtension);
-        }
+        dataMap.put("file", dirPathToSave != null ? filePath + "." + fileExtension : generateFileName() + "." + fileExtension);
         dataMap.put("eventname", "stopRecordScreen");
-        dataMap.put("message", "Paused Video");
+        dataMap.put("message", "Recording complete");
         dataMap.put("videohash", videoHash);
         dataMap.put("startdate", startDate);
         dataMap.put("enddate", endDate);
         JSONObject jsonObj = new JSONObject(dataMap);
-        try {
-            if (stopRecordingResult != null) {
-                stopRecordingResult.success(jsonObj.toString());
-                stopRecordingResult = null;
-                recentResult = null;
-            }
-        } catch (Exception e) {
-            if (recentResult != null) {
-                recentResult.error("Error", e.getMessage(), null);
-                recentResult = null;
-            }
+        if (stopRecordingResult != null) {
+            stopRecordingResult.success(jsonObj.toString());
+            stopRecordingResult = null;
         }
     }
 
     @Override
     public void HBRecorderOnError(int errorCode, String reason) {
-        Log.e("Video Error:", reason);
-        if (recentResult != null) {
-            recentResult.error("Error", reason, null);
-            recentResult = null;
+        if (startRecordingResult != null) {
+            startRecordingResult.error("Error", reason, null);
+            startRecordingResult = null;
         }
     }
 
@@ -312,7 +304,6 @@ public class EdScreenRecorderPlugin implements FlutterPlugin, ActivityAware, Met
         if (pauseRecordingResult != null) {
             pauseRecordingResult.success(true);
             pauseRecordingResult = null;
-            recentResult = null;
         }
     }
 
@@ -321,64 +312,6 @@ public class EdScreenRecorderPlugin implements FlutterPlugin, ActivityAware, Met
         if (resumeRecordingResult != null) {
             resumeRecordingResult.success(true);
             resumeRecordingResult = null;
-            recentResult = null;
-        }
-    }
-
-    private Boolean startRecordingScreen() {
-
-        try {
-            hbRecorder.enableCustomSettings();
-            MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) flutterPluginBinding
-                    .getApplicationContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-            Intent permissionIntent = mediaProjectionManager != null
-                    ? mediaProjectionManager.createScreenCaptureIntent()
-                    : null;
-            activity.startActivityForResult(permissionIntent, SCREEN_RECORD_REQUEST_CODE);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private void customSettings(int videoFrame, int videoBitrate, String fileOutputFormat, boolean addTimeCode,
-                                String fileName, int width, int height) {
-        hbRecorder.isAudioEnabled(isAudioEnabled);
-        hbRecorder.setAudioSource("DEFAULT");
-        hbRecorder.setVideoEncoder("DEFAULT");
-        hbRecorder.setVideoFrameRate(videoFrame);
-        hbRecorder.setVideoBitrate(videoBitrate);
-        hbRecorder.setOutputFormat(fileOutputFormat);
-        if ((width != 0 && height != 0) && (width >= 720 || height >= 1520)) {
-            hbRecorder.setScreenDimensions(height, width);
-        }
-        if (dirPathToSave == null) {
-            hbRecorder.setFileName(generateFileName(fileName, addTimeCode));
-        }
-    }
-
-    private void setOutputPath(boolean addTimeCode, String fileName, String dirPathToSave) throws IOException {
-        hbRecorder.setFileName(generateFileName(fileName, addTimeCode));
-        if (dirPathToSave != null && !dirPathToSave.equals("")) {
-            File dirFile = new File(dirPathToSave);
-            hbRecorder.setOutputPath(dirFile.getAbsolutePath());
-            filePath = dirFile.getAbsolutePath() + "/" + generateFileName(fileName, addTimeCode);
-        } else {
-            hbRecorder.setOutputPath(
-                    flutterPluginBinding.getApplicationContext().getExternalCacheDir().getAbsolutePath());
-            filePath = flutterPluginBinding.getApplicationContext().getExternalCacheDir().getAbsolutePath() + "/"
-                    + generateFileName(fileName, addTimeCode);
-        }
-
-    }
-
-    private String generateFileName(String fileName, boolean addTimeCode) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
-        Date curDate = new Date(System.currentTimeMillis());
-        if (addTimeCode) {
-            return fileName + "-" + formatter.format(curDate).replace(" ", "");
-        } else {
-            return fileName;
         }
     }
 }

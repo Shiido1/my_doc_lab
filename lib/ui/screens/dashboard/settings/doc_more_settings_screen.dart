@@ -1,4 +1,3 @@
-import 'package:doc_lab_pharm/ui/screens/dashboard/settings/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,7 +27,6 @@ class DocMoreSettingsScreen extends StatelessWidget {
       onViewModelReady: (model) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           model.getDoctorsDetail(context);
-
           model.hasLoadedIndexConversation = false;
         });
       },
@@ -46,21 +44,16 @@ class DocMoreSettingsScreen extends StatelessWidget {
               children: [
                 SizedBox(height: 10.h),
                 Center(
-                  child: GestureDetector(
-                    onTap:
-                        () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => TestPage()),
-                        ),
-                    child: TextView(
-                      text: 'More',
-                      textStyle: GoogleFonts.gabarito(
-                        color: AppColor.black,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  child: TextView(
+                    text: 'More',
+                    textStyle: GoogleFonts.gabarito(
+                      color: AppColor.black,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
+                // ignore: deprecated_member_use
                 Divider(color: AppColor.grey.withOpacity(.3)),
                 SizedBox(height: 30.h),
                 Center(

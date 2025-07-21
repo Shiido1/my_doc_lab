@@ -68,9 +68,13 @@ class _JoinVideoChatScreenState extends State<JoinVideoChatScreen> {
                             callId: int.parse(
                               widget.agoravalue['call_id'].toString(),
                             ),
-                            conversationId: 0,
-                            receiverId: 0,
-                            receiverType: '',
+                            conversationId: int.parse(
+                              widget.agoravalue['conversation_id'].toString(),
+                            ),
+                            receiverId: int.parse(
+                              widget.agoravalue['caller_id'].toString(),
+                            ),
+                            receiverType: 'User',
                           ),
                         );
                         Navigator.pop(context);

@@ -4,10 +4,6 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import "package:collection/collection.dart";
-import 'package:ed_screen_recorder/ed_screen_recorder.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +38,7 @@ import '../../core_folder/manager/shared_preference.dart';
 import '../../debouncer.dart';
 import '../model/availability_history_model/availability_history_model.dart';
 import '../model/bank_save_entity_model.dart';
+import '../model/call_entity_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/create_add_medicine_entity_model.dart';
@@ -55,6 +52,7 @@ import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appoi
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
 import '../model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
+import '../model/get_specialization_response_model/get_specialization_response_model.dart';
 import '../model/get_user_response_model/get_user_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -75,6 +73,8 @@ class DocViewModel extends BaseViewModel {
   final session = locator<SharedPreferencesService>();
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _isLoadingSpecial = false;
+  bool get isLoadingSpecial => _isLoadingSpecial;
   bool _isLoadingMessageIndex = false;
   bool get isLoadingMessageIndex => _isLoadingMessageIndex;
   bool _isLoadingUserSearch = false;
@@ -189,6 +189,9 @@ class DocViewModel extends BaseViewModel {
   TimeOfDay? selectedTime;
   TextEditingController sendtextController = TextEditingController(text: '');
   TextEditingController amountTextController = TextEditingController();
+  GetSpecializationResponseModel? get specializationListModel =>
+      _specializationListModel;
+  GetSpecializationResponseModel? _specializationListModel;
 
   bool hasLoadedConversation = false;
   bool hasLoadedIndexConversation = false;
@@ -217,10 +220,6 @@ class DocViewModel extends BaseViewModel {
   SearchedMedicineResponseModel? _searchedMeds;
   String presFrequency = '';
   String? bankCode;
-
-  EdScreenRecorder? screenRecorder;
-  RecordOutput? response;
-  bool inProgress = false;
 
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
@@ -1176,6 +1175,21 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void specializationList() async {
+    try {
+      _isLoadingSpecial = true;
+      _specializationListModel = await runBusyFuture(
+        repositoryImply.specializationList(),
+        throwException: true,
+      );
+      _isLoadingSpecial = false;
+    } catch (e) {
+      _isLoadingSpecial = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
   void logout() async {
     try {
       await runBusyFuture(repositoryImply.logout(), throwException: true);
@@ -1370,70 +1384,6 @@ class DocViewModel extends BaseViewModel {
     ],
   );
 
-  Future<void> startRecord({
-    required String fileName,
-    required int width,
-    required int height,
-  }) async {
-    Directory? tempDir = await getDownloadsDirectory();
-    String? tempPath = tempDir!.path;
-    print('ooooo$tempPath');
-    try {
-      print('record for file to be retr');
-      var startResponse = await screenRecorder?.startRecordScreen(
-        fileName: "Eren",
-        //Optional. It will save the video there when you give the file path with whatever you want.
-        //If you leave it blank, the Android operating system will save it to the gallery.
-        dirPathToSave: tempPath,
-        audioEnable: true,
-        width: width,
-        height: height,
-      );
-      response = startResponse;
-      print('record for file to be retrieved:::::::$response');
-    } on PlatformException {
-      kDebugMode
-          ? debugPrint("Error: An error occurred while starting the recording!")
-          : null;
-    }
-    notifyListeners();
-  }
-
-  Future<void> stopRecord() async {
-    try {
-      var stopResponse = await screenRecorder?.stopRecord();
-      response = stopResponse;
-    } on PlatformException {
-      kDebugMode
-          ? debugPrint("Error: An error occurred while stopping recording.")
-          : null;
-    }
-
-    notifyListeners();
-  }
-
-  Future<void> pauseRecord() async {
-    try {
-      await screenRecorder?.pauseRecord();
-    } on PlatformException {
-      kDebugMode
-          ? debugPrint("Error: An error occurred while pause recording.")
-          : null;
-    }
-    notifyListeners();
-  }
-
-  Future<void> resumeRecord() async {
-    try {
-      await screenRecorder?.resumeRecord();
-    } on PlatformException {
-      kDebugMode
-          ? debugPrint("Error: An error occurred while resume recording.")
-          : null;
-    }
-    notifyListeners();
-  }
-
   List<String> messages = [];
 
   callboxMessage({context, message}) => Align(
@@ -1524,18 +1474,21 @@ class DocViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> rejectCall(int id) async {
+  Future<void> rejectCall(CallEntityModel call) async {
     try {
-      await runBusyFuture(repositoryImply.rejectCall(id), throwException: true);
+      await runBusyFuture(
+        repositoryImply.rejectCall(call),
+        throwException: true,
+      );
     } catch (e) {
       logger.d(e);
     }
     notifyListeners();
   }
 
-  Future<void> endCall(int id) async {
+  Future<void> endCall(CallEntityModel call) async {
     try {
-      await runBusyFuture(repositoryImply.endCall(id), throwException: true);
+      await runBusyFuture(repositoryImply.endCall(call), throwException: true);
     } catch (e) {
       logger.d(e);
     }

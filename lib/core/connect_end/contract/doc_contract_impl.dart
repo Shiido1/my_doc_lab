@@ -7,6 +7,7 @@ import '../../core_folder/app/app.locator.dart';
 import '../model/availability_history_model/availability_history_model.dart';
 import '../model/bank_save_entity_model.dart';
 import '../model/bank_save_response_model/bank_save_response_model.dart';
+import '../model/call_entity_model.dart';
 import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/create_add_medicine_entity_model.dart';
@@ -18,6 +19,7 @@ import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appoi
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_patient_list_for_doc_model/get_patient_list_for_doc_model.dart';
 import '../model/get_prescription_list_response_model/get_prescription_list_response_model.dart';
+import '../model/get_specialization_response_model/get_specialization_response_model.dart';
 import '../model/get_user_response_model/get_user_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
@@ -65,8 +67,10 @@ class DocContractsImpl {
     CallTokenGenerateEntityModel callToken,
   ) async => await _api.genCallToken(callToken);
   Future<dynamic> acceptCall(int callId) async => await _api.acceptCall(callId);
-  Future<dynamic> rejectCall(int callId) async => await _api.rejectCall(callId);
-  Future<dynamic> endCall(int callId) async => await _api.endCall(callId);
+  Future<dynamic> rejectCall(CallEntityModel call) async =>
+      await _api.rejectCall(call);
+  Future<dynamic> endCall(CallEntityModel call) async =>
+      await _api.endCall(call);
   Future<GetListOfDoctorsAppointmentModelList> doctorsAppointment() async =>
       await _api.doctorsAppointment();
   Future<GetDoctorsWalletResponseModel> doctorsWallet() async =>
@@ -128,5 +132,7 @@ class DocContractsImpl {
   ) async => await _api.doctorsAvailabilityHistory(id);
 
   Future<dynamic> readMessage(int id) async => await _api.readMessage(id);
+  Future<GetSpecializationResponseModel> specializationList() async =>
+      await _api.specializationList();
   Future<dynamic> logout() async => await _api.logout();
 }
