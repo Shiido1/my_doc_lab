@@ -77,8 +77,7 @@ class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
                         SizedBox(height: 20.h),
                         Row(
                           children: [
-                            SizedBox(
-                              width: 280,
+                            Expanded(
                               child: TextFormField(
                                 controller: model.sendtextController,
                                 style: TextStyle(color: AppColor.white),
@@ -117,7 +116,7 @@ class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
                                 }
                               },
                             ),
-                            SizedBox(width: 10.w),
+                            SizedBox(width: 26.w),
                           ],
                         ),
                       ],

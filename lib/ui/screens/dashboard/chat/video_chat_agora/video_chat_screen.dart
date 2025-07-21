@@ -44,6 +44,7 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
       disposeViewModel: false,
       builder: (_, AuthViewModel model, __) {
         return Scaffold(
+          backgroundColor: AppColor.white.withOpacity(.5),
           body: Stack(
             children: [
               if (model.engine == null)
