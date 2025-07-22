@@ -13,6 +13,7 @@ import '../model/call_token_generate_entity_model.dart';
 import '../model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../model/create_add_medicine_entity_model.dart';
 import '../model/create_prescription_entity_model.dart';
+import '../model/doctors_note_entity_model.dart';
 import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../model/get_doctors_analysis_model/get_doctors_analysis_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
@@ -238,6 +239,11 @@ class DocRepoImpl {
 
   Future<GetSpecializationResponseModel> specializationList() async {
     final response = await _contract.specializationList();
+    return response;
+  }
+
+  Future<dynamic> doctorsNote(DoctorsNoteEntityModel? doctorsNoteEntity) async {
+    final response = await _contract.doctorsNote(doctorsNoteEntity);
     return response;
   }
 

@@ -41,9 +41,12 @@ class _DocVidCallLookScreenState extends State<DocVidCallLookScreen> {
         viewModelBuilder: () => DocViewModel(),
         onViewModelReady: (model) {
           model.playerSound();
+          model.startTimer();
           print('player:::K${widget.sender['caller_type']}');
         },
-        onDispose: (viewModel) {},
+        onDispose: (viewModel) {
+          viewModel.dispose();
+        },
         disposeViewModel: false,
         builder: (_, DocViewModel model, __) {
           return Stack(

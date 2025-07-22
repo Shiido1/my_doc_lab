@@ -6,8 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doc_lab_pharm/core/connect_end/view_model/doc_view_model.dart';
 import 'package:doc_lab_pharm/ui/app_assets/app_color.dart';
 import 'package:stacked/stacked.dart';
-
 import '../../../../../core/connect_end/model/call_entity_model.dart';
+import '../../../../../core/connect_end/model/doctors_note_entity_model.dart';
 
 class JoinDoctorVideoChatScreen extends StatefulWidget {
   JoinDoctorVideoChatScreen({super.key, required this.agoravalue});
@@ -31,7 +31,16 @@ class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
           token: widget.agoravalue['agora_token'],
         );
       },
-      onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),
+      onDispose: (viewModel) {
+        viewModel.doctorsNote(
+          DoctorsNoteEntityModel(
+            callId: int.parse(widget.agoravalue['call_id'].toString()),
+            userId: int.parse(widget.agoravalue['caller_id'].toString()),
+            note: viewModel.messages.join(','),
+          ),
+        );
+        viewModel.cleanupAgoraEngine();
+      },
       disposeViewModel: false,
       builder: (_, DocViewModel model, __) {
         return Scaffold(
@@ -65,7 +74,7 @@ class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
                           child: ListView.builder(
                             itemCount: model.messages.length,
                             itemBuilder: (context, index) {
-                              print('position: $index'); // Optional debug print
+                              // Optional debug print
                               return model.callboxMessage(
                                 context: context,
                                 message:
@@ -144,8 +153,8 @@ class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
                     SizedBox(width: 150.w),
                     IconButton(
                       icon: Icon(Icons.call_end),
-                      onPressed: () {
-                        model.endCall(
+                      onPressed: () async {
+                        await model.endCall(
                           CallEntityModel(
                             callId: int.parse(
                               widget.agoravalue['call_id'].toString(),
@@ -157,6 +166,17 @@ class _JoinDoctorVideoChatScreenState extends State<JoinDoctorVideoChatScreen> {
                               widget.agoravalue['caller_id'].toString(),
                             ),
                             receiverType: 'User',
+                          ),
+                        );
+                        model.doctorsNote(
+                          DoctorsNoteEntityModel(
+                            callId: int.parse(
+                              widget.agoravalue['call_id'].toString(),
+                            ),
+                            userId: int.parse(
+                              widget.agoravalue['caller_id'].toString(),
+                            ),
+                            note: model.messages.join(','),
                           ),
                         );
                         Navigator.pop(context);

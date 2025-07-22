@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -45,6 +46,7 @@ import '../model/create_add_medicine_entity_model.dart';
 import '../model/create_prescription_entity_model.dart';
 import '../model/doctor_availability_entity_model/availability.dart';
 import '../model/doctor_availability_entity_model/doctor_availability_entity_model.dart';
+import '../model/doctors_note_entity_model.dart';
 import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../model/get_doctors_analysis_model/get_doctors_analysis_model.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
@@ -224,6 +226,30 @@ class DocViewModel extends BaseViewModel {
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
   AvailableSlots? _slot;
+
+  Timer? _timer;
+  int _start = 60;
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(oneSec, (Timer timer) {
+      if (_start == 0) {
+        timer.cancel();
+        player.stop();
+        navigate.back();
+        notifyListeners();
+      } else {
+        _start--;
+        notifyListeners();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   returnMonthText(text) {
     switch (text) {
@@ -1185,6 +1211,20 @@ class DocViewModel extends BaseViewModel {
       _isLoadingSpecial = false;
     } catch (e) {
       _isLoadingSpecial = false;
+      logger.d(e);
+    }
+    notifyListeners();
+  }
+
+  void doctorsNote(DoctorsNoteEntityModel? doctorsNoteEntity) async {
+    try {
+      await runBusyFuture(
+        repositoryImply.doctorsNote(doctorsNoteEntity),
+        throwException: true,
+      );
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
       logger.d(e);
     }
     notifyListeners();

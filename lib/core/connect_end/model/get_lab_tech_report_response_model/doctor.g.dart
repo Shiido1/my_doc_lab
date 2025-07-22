@@ -7,13 +7,13 @@ part of 'doctor.dart';
 // **************************************************************************
 
 Doctor _$DoctorFromJson(Map<String, dynamic> json) => Doctor(
-      id: json['id'] as num?,
-      firstName: json['first_name'] as String?,
-      lastName: json['last_name'] as String?,
-    );
+  id: json['id'] as num?,
+  firstName: json['first_name'] as String?,
+  lastName: json['last_name'] as String?,
+);
 
 Map<String, dynamic> _$DoctorToJson(Doctor instance) => <String, dynamic>{
-      'id': instance.id,
-      'first_name': instance.firstName,
-      'last_name': instance.lastName,
-    };
+  'id': instance.id,
+  'first_name': instance.firstName,
+  'last_name': instance.lastName,
+};

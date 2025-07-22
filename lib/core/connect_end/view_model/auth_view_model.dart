@@ -1,4 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison, deprecated_member_use
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import "package:collection/collection.dart";
 import 'package:doc_lab_pharm/core/connect_end/model/get_user_notification_model/get_user_notification_model.dart';
@@ -33,6 +35,7 @@ import 'package:doc_lab_pharm/ui/widget/text_widget.dart';
 import 'package:stacked/stacked.dart';
 import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/screens/dashboard/dashboard_screen.dart';
+import '../../../ui/screens/dashboard/settings/wallet/wallet_screen.dart';
 import '../../../ui/widget/button_widget.dart';
 import '../../../ui/widget/text_form_widget.dart';
 import '../model/call_entity_model.dart';
@@ -242,6 +245,30 @@ class AuthViewModel extends BaseViewModel {
 
   bool localUserJoined = false;
   bool onSwitch = false;
+
+  Timer? _timer;
+  int _start = 60;
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(oneSec, (Timer timer) {
+      if (_start == 0) {
+        timer.cancel();
+        player.stop();
+        navigate.back();
+        notifyListeners();
+      } else {
+        _start--;
+        notifyListeners();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   onToggleMicrophone() {
     if (onToggleMic == false) {
@@ -555,9 +582,16 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = false;
       logger.d(e);
       Navigator.pop(context);
-      Future.delayed(Duration(seconds: 1), () {
+      await Future.delayed(Duration(seconds: 1), () {
         AppUtils.snackbar(context, message: e.toString(), error: true);
       });
+      if (e.toString() == "Insufficient wallet balance") {
+        await Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (context) => WalletScreen()));
+        });
+      }
     }
     notifyListeners();
   }
@@ -992,6 +1026,7 @@ class AuthViewModel extends BaseViewModel {
       return const Text(
         'Waiting for remote user to join...',
         textAlign: TextAlign.center,
+        style: TextStyle(color: AppColor.white),
       );
     }
   }

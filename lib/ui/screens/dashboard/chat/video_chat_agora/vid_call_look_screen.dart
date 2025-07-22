@@ -41,9 +41,12 @@ class _VidCallLookScreenState extends State<VidCallLookScreen> {
         viewModelBuilder: () => AuthViewModel(),
         onViewModelReady: (model) {
           model.playerSound();
+          model.startTimer();
           print('player:::K${widget.sender}');
         },
-        onDispose: (viewModel) {},
+        onDispose: (viewModel) {
+          viewModel.dispose();
+        },
         disposeViewModel: false,
         builder: (_, AuthViewModel model, __) {
           return Stack(

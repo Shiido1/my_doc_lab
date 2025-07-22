@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:doc_lab_pharm/core/core_folder/app/app.router.dart';
@@ -14,6 +15,8 @@ Future<void> handlerBackgroundMessage(RemoteMessage message) async {
 
 class FirebaseApi {
   final _firebaseMessage = FirebaseMessaging.instance;
+  AudioPlayer player = AudioPlayer();
+  var audioSource;
 
   ///
   final AndroidNotificationChannel _androidChannel =
@@ -150,6 +153,7 @@ class FirebaseApi {
               callId: message.data['call_id'].toString(),
             ),
           );
+          playerSound();
         } else if (callerType == 'MydocLabModelsDoctor') {
           print('push mes::::${message.data}');
           navigate.navigateTo(
@@ -161,6 +165,7 @@ class FirebaseApi {
               callId: message.data['call_id'].toString(),
             ),
           );
+          playerSound();
         }
       }
 
@@ -203,5 +208,11 @@ class FirebaseApi {
     initPushNotification();
     initLocalNotification();
     _initNotification();
+  }
+
+  void playerSound() async {
+    audioSource = AssetSource('audio/ringing.mp3');
+    await player.setReleaseMode(ReleaseMode.loop);
+    await player.play(audioSource);
   }
 }

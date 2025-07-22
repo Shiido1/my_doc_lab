@@ -18,6 +18,7 @@ import '../connect_end/model/call_entity_model.dart';
 import '../connect_end/model/call_token_generate_entity_model.dart';
 import '../connect_end/model/call_token_generate_response_model/call_token_generate_response_model.dart';
 import '../connect_end/model/create_add_medicine_entity_model.dart';
+import '../connect_end/model/doctors_note_entity_model.dart';
 import '../connect_end/model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../connect_end/model/get_doctors_analysis_model/get_doctors_analysis_model.dart';
 import '../connect_end/model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
@@ -528,6 +529,21 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return GetSpecializationResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> doctorsNote(DoctorsNoteEntityModel? doctorsNoteEntity) async {
+    try {
+      final response = await _service.call(
+        UrlConfig.doctors_note,
+        RequestMethod.post,
+        data: doctorsNoteEntity?.toJson(),
+      );
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;

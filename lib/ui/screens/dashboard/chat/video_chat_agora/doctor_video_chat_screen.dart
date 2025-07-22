@@ -9,6 +9,7 @@ import 'package:doc_lab_pharm/ui/app_assets/constant.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../../core/connect_end/model/call_entity_model.dart';
+import '../../../../../core/connect_end/model/doctors_note_entity_model.dart';
 
 class DoctorVideoChatScreen extends StatefulWidget {
   DoctorVideoChatScreen({
@@ -44,7 +45,18 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
           );
         });
       },
-      onDispose: (viewModel) => viewModel.cleanupAgoraEngine(),
+      onDispose: (viewModel) {
+        viewModel.doctorsNote(
+          DoctorsNoteEntityModel(
+            callId: int.parse(
+              viewModel.callTokenGenerateResponseModel!.callId.toString(),
+            ),
+            userId: widget.receiverId,
+            note: viewModel.messages.join(','),
+          ),
+        );
+        viewModel.cleanupAgoraEngine();
+      },
       disposeViewModel: false,
       builder: (_, DocViewModel model, __) {
         return Scaffold(
@@ -76,7 +88,7 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                           child: ListView.builder(
                             itemCount: model.messages.length,
                             itemBuilder: (context, index) {
-                              print('position: $index'); // Optional debug print
+                              // Optional debug print
                               return model.callboxMessage(
                                 context: context,
                                 message:
@@ -154,8 +166,8 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                     SizedBox(width: 150.w),
                     IconButton(
                       icon: Icon(Icons.call_end),
-                      onPressed: () {
-                        model.endCall(
+                      onPressed: () async {
+                        await model.endCall(
                           CallEntityModel(
                             callId: int.parse(
                               model.callTokenGenerateResponseModel!.callId
@@ -166,6 +178,17 @@ class _DoctorVideoChatScreenState extends State<DoctorVideoChatScreen> {
                             ),
                             receiverId: int.parse(widget.receiverId.toString()),
                             receiverType: widget.receiverType,
+                          ),
+                        );
+                        model.doctorsNote(
+                          DoctorsNoteEntityModel(
+                            callId: int.parse(
+                              model.callTokenGenerateResponseModel!.callId
+                                  .toString(),
+                            ),
+                            userId: int.parse(widget.receiverId.toString()),
+
+                            note: model.messages.join(','),
                           ),
                         );
                         Navigator.pop(context);
