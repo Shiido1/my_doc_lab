@@ -172,7 +172,7 @@ class DocHomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextView(
-                      text: 'Completded Appointments',
+                      text: 'Completed Appointments',
                       textStyle: GoogleFonts.dmSans(
                         color: AppColor.darkindgrey,
                         fontSize: 16.20.sp,

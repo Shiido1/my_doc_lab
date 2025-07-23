@@ -1,38 +1,37 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'datum.dart';
+part of 'note.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
+Note _$NoteFromJson(Map<String, dynamic> json) => Note(
       id: json['id'] as num?,
+      callId: json['call_id'] as num?,
+      authorId: json['author_id'] as num?,
+      authorType: json['author_type'] as String?,
       userId: json['user_id'] as num?,
-      diagnosisId: json['diagnosis_id'] as num?,
-      orderId: json['order_id'] as num?,
-      labTechnicianId: json['lab_technician_id'] as num?,
-      status: json['status'] as String?,
-      date:
-          json['date'] == null ? null : DateTime.parse(json['date'] as String),
-      time: json['time'] as String?,
+      note: json['note'] as String?,
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
       updatedAt: json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
+      author: json['author'] == null
+          ? null
+          : Author.fromJson(json['author'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$DatumToJson(Datum instance) => <String, dynamic>{
+Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
       'id': instance.id,
+      'call_id': instance.callId,
+      'author_id': instance.authorId,
+      'author_type': instance.authorType,
       'user_id': instance.userId,
-      'diagnosis_id': instance.diagnosisId,
-      'order_id': instance.orderId,
-      'lab_technician_id': instance.labTechnicianId,
-      'status': instance.status,
-      'date': instance.date?.toIso8601String(),
-      'time': instance.time,
+      'note': instance.note,
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
+      'author': instance.author,
     };
