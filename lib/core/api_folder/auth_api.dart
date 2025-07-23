@@ -30,6 +30,7 @@ import '../connect_end/model/get_medicine_detail_response_model/get_medicine_det
 import '../connect_end/model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../connect_end/model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../connect_end/model/get_report_response_model/get_report_response_model.dart';
+import '../connect_end/model/get_specialization_response_model/get_specialization_response_model.dart';
 import '../connect_end/model/get_user_notification_model/get_user_notification_model.dart';
 import '../connect_end/model/get_user_order_history_model/get_user_order_history_model.dart';
 import '../connect_end/model/get_users_appointment_model/get_users_appointment_model.dart';
@@ -701,6 +702,20 @@ class AuthApi {
       );
       logger.d(response.data);
       return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetSpecializationResponseModel> specializationList() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.specializations_list,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetSpecializationResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

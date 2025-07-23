@@ -29,7 +29,9 @@ class _DoctorAppointmentDetailSceenState
   Widget build(BuildContext context) {
     return ViewModelBuilder<DocViewModel>.reactive(
       viewModelBuilder: () => DocViewModel(),
-      onViewModelReady: (model) {},
+      onViewModelReady: (model) {
+        model.getDoctorsNote(context, id: widget.appointment!.user!.id);
+      },
       disposeViewModel: false,
       builder: (_, DocViewModel model, __) {
         return Scaffold(
@@ -145,6 +147,7 @@ class _DoctorAppointmentDetailSceenState
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           padding: EdgeInsets.symmetric(
@@ -331,7 +334,53 @@ class _DoctorAppointmentDetailSceenState
                             ],
                           ),
                         ),
-                        SizedBox(height: 20.h),
+                        SizedBox(height: 30.h),
+                        if (model.getDoctorsNoteModel != null &&
+                            model.getDoctorsNoteModel!.notes!.isNotEmpty)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextView(
+                                text: 'Doctor\'s Overview',
+                                textStyle: GoogleFonts.gabarito(
+                                  color: const Color.fromARGB(255, 8, 27, 31),
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              ...model.getDoctorsNoteModel!.notes!.map(
+                                (n) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextView(
+                                      text:
+                                          'Dr. ${n.author?.firstName?.capitalize()} ${n.author?.lastName?.capitalize()}',
+                                      textStyle: GoogleFonts.gabarito(
+                                        color: AppColor.darkindgrey,
+                                        fontSize: 18.8.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    SizedBox(height: 16.0.h),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 8.w),
+                                      child: TextView(
+                                        text: model.getAllDoctorsNotes(n),
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.black,
+                                          fontSize: 15.4.sp,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 12.0.h),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 6.0.h),
+                            ],
+                          ),
                       ],
                     ),
                   ),

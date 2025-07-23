@@ -29,6 +29,8 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
       onViewModelReady: (model) async {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           model.getUserDetail(context, id: widget.id);
+
+          model.getDoctorsNote(context, id: widget.id);
         });
       },
       disposeViewModel: false,
@@ -154,6 +156,7 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -276,407 +279,54 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
                             ),
                           ),
 
-                          // model.orderByIdResponseModel != null &&
-                          //         model
-                          //             .orderByIdResponseModel!
-                          //             .original!
-                          //             .orders![0]
-                          //             .items!
-                          //             .any(
-                          //               (element) =>
-                          //                   element.status!.toLowerCase() ==
-                          //                   'processed',
-                          //             )
-                          //     ? Container(
-                          //       width: double.infinity,
-                          //       margin: EdgeInsets.only(top: 12.w),
-                          //       decoration: BoxDecoration(
-                          //         borderRadius: BorderRadius.circular(8),
-                          //         border: Border.all(color: AppColor.greyIt),
-                          //       ),
-                          //       child: Column(
-                          //         crossAxisAlignment: CrossAxisAlignment.start,
-                          //         children: [
-                          //           Container(
-                          //             decoration: BoxDecoration(
-                          //               color: AppColor.primary1.withOpacity(
-                          //                 .7,
-                          //               ),
-                          //               borderRadius: BorderRadius.only(
-                          //                 topLeft: Radius.circular(6),
-                          //                 topRight: Radius.circular(6),
-                          //               ),
-                          //             ),
-                          //             width: double.infinity,
-                          //             child: Padding(
-                          //               padding: EdgeInsets.symmetric(
-                          //                 horizontal: 10.w,
-                          //                 vertical: 4.w,
-                          //               ),
-                          //               child: Row(
-                          //                 children: [
-                          //                   SvgPicture.asset(
-                          //                     AppImage.task,
-                          //                     color: AppColor.white,
-                          //                   ),
-                          //                   SizedBox(width: 10.w),
-                          //                   TextView(
-                          //                     text: 'Upcoming Orders',
-                          //                     textStyle: GoogleFonts.gabarito(
-                          //                       color: AppColor.white,
-                          //                       fontSize: 14.8.sp,
-                          //                       fontWeight: FontWeight.w500,
-                          //                     ),
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //           ),
-
-                          //           Column(
-                          //             children: [
-                          //               SizedBox(height: 10.h),
-                          //               if (items.isNotEmpty)
-                          //                 ...items.asMap().entries.map((entry) {
-                          //                   final index = entry.key;
-                          //                   final o = entry.value;
-                          //                   final isLast =
-                          //                       index == items.length - 1;
-                          //                   return Wrap(
-                          //                     children: [
-                          //                       Padding(
-                          //                         padding: EdgeInsets.symmetric(
-                          //                           horizontal: 10.w,
-                          //                         ),
-
-                          //                         child: Row(
-                          //                           mainAxisAlignment:
-                          //                               MainAxisAlignment
-                          //                                   .spaceBetween,
-                          //                           children: [
-                          //                             Padding(
-                          //                               padding:
-                          //                                   EdgeInsets.symmetric(
-                          //                                     horizontal: 10.w,
-                          //                                   ),
-                          //                               child: TextView(
-                          //                                 text: DateFormat(
-                          //                                   'dd/MM/yyyy',
-                          //                                 ).format(
-                          //                                   DateTime.parse(
-                          //                                     o.updatedAt
-                          //                                         .toString(),
-                          //                                   ).toLocal(),
-                          //                                 ),
-                          //                                 textStyle:
-                          //                                     GoogleFonts.gabarito(
-                          //                                       color:
-                          //                                           AppColor
-                          //                                               .grey,
-                          //                                       fontSize: 16.sp,
-                          //                                       fontWeight:
-                          //                                           FontWeight
-                          //                                               .w500,
-                          //                                     ),
-                          //                               ),
-                          //                             ),
-                          //                             Row(
-                          //                               children: [
-                          //                                 SvgPicture.asset(
-                          //                                   AppImage.time,
-                          //                                   color:
-                          //                                       AppColor.grey,
-                          //                                 ),
-                          //                                 SizedBox(width: 6.w),
-                          //                                 TextView(
-                          //                                   text: DateFormat(
-                          //                                     'hh:mma',
-                          //                                   ).format(
-                          //                                     DateTime.parse(
-                          //                                       o.updatedAt
-                          //                                           .toString(),
-                          //                                     ).toLocal(),
-                          //                                   ),
-                          //                                   textStyle:
-                          //                                       GoogleFonts.gabarito(
-                          //                                         color:
-                          //                                             AppColor
-                          //                                                 .grey,
-                          //                                         fontSize:
-                          //                                             16.sp,
-                          //                                         fontWeight:
-                          //                                             FontWeight
-                          //                                                 .w500,
-                          //                                       ),
-                          //                                 ),
-                          //                               ],
-                          //                             ),
-                          //                           ],
-                          //                         ),
-                          //                       ),
-
-                          //                       if (!isLast) ...[
-                          //                         Divider(
-                          //                           color: AppColor.greyIt,
-                          //                         ),
-                          //                       ],
-                          //                     ],
-                          //                   );
-                          //                 }),
-                          //               SizedBox(height: 10.h),
-                          //             ],
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     )
-                          //     : SizedBox.shrink(),
-
-                          // SizedBox(height: 20.h),
-                          // Row(
-                          //   children: [
-                          //     SvgPicture.asset(
-                          //       AppImage.pres,
-                          //       height: 12.h,
-                          //       width: 12.w,
-                          //     ),
-                          //     SizedBox(width: 6.w),
-                          //     TextView(
-                          //       text: 'Prescriptions',
-                          //       textStyle: GoogleFonts.gabarito(
-                          //         color: AppColor.darkindgrey,
-                          //         fontSize: 16.20.sp,
-                          //         fontWeight: FontWeight.w500,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // SizedBox(height: 12.h),
-                          // Container(
-                          //   padding: EdgeInsets.symmetric(
-                          //     vertical: 4.w,
-                          //     horizontal: 8.w,
-                          //   ),
-                          //   width: double.infinity,
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(8),
-                          //     border: Border.all(color: AppColor.grey),
-                          //   ),
-                          //   child: Column(
-                          //     children: [
-                          //       if (items.isNotEmpty)
-                          //         ...items.asMap().entries.map((entry) {
-                          //           final index = entry.key;
-                          //           final o = entry.value;
-                          //           final isLast = index == items.length - 1;
-
-                          //           return Column(
-                          //             crossAxisAlignment:
-                          //                 CrossAxisAlignment.start,
-                          //             children: [
-                          //               TextView(
-                          //                 text:
-                          //                     'Drug: ${o.medicine?.name ?? ''}',
-                          //                 textStyle: GoogleFonts.gabarito(
-                          //                   color: AppColor.darkindgrey,
-                          //                   fontSize: 16.sp,
-                          //                   fontWeight: FontWeight.w500,
-                          //                 ),
-                          //               ),
-                          //               SizedBox(height: 6.h),
-                          //               TextView(
-                          //                 text: 'Quantity: ${o.quantity}',
-                          //                 textStyle: GoogleFonts.gabarito(
-                          //                   color: AppColor.darkindgrey,
-                          //                   fontSize: 16.sp,
-                          //                   fontWeight: FontWeight.w500,
-                          //                 ),
-                          //               ),
-                          //               SizedBox(height: 6.h),
-                          //               Row(
-                          //                 mainAxisAlignment:
-                          //                     MainAxisAlignment.spaceBetween,
-                          //                 children: [
-                          //                   TextView(
-                          //                     text:
-                          //                         'Price: ${getCurrency()}${oCcy.format(double.parse(o.medicine!.price.toString()))}',
-                          //                     textStyle: GoogleFonts.gabarito(
-                          //                       color: AppColor.darkindgrey,
-                          //                       fontSize: 15.0.sp,
-                          //                       fontWeight: FontWeight.w400,
-                          //                     ),
-                          //                   ),
-
-                          //                   o.status == 'cancelled' ||
-                          //                           o.status == 'completed'
-                          //                       ? SizedBox.shrink()
-                          //                       : Row(
-                          //                         children: [
-                          //                           GestureDetector(
-                          //                             onTap:
-                          //                                 () => model
-                          //                                     .pharmOrderUpdateItem(
-                          //                                       context,
-                          //                                       status:
-                          //                                           'completed',
-                          //                                       reason:
-                          //                                           'ok reason',
-                          //                                       id:
-                          //                                           o.id.toString(),
-                          //                                     ),
-                          //                             child: Container(
-                          //                               padding:
-                          //                                   EdgeInsets.symmetric(
-                          //                                     vertical: 4.w,
-                          //                                     horizontal: 8.w,
-                          //                                   ),
-                          //                               decoration: BoxDecoration(
-                          //                                 borderRadius:
-                          //                                     BorderRadius.circular(
-                          //                                       6,
-                          //                                     ),
-                          //                                 border: Border.all(
-                          //                                   color:
-                          //                                       AppColor.white,
-                          //                                 ),
-                          //                                 color:
-                          //                                     AppColor
-                          //                                         .darkindgrey,
-                          //                               ),
-                          //                               child: TextView(
-                          //                                 text: 'Approve',
-                          //                                 textStyle:
-                          //                                     GoogleFonts.gabarito(
-                          //                                       color:
-                          //                                           AppColor
-                          //                                               .white,
-                          //                                       fontSize: 14.sp,
-                          //                                       fontWeight:
-                          //                                           FontWeight
-                          //                                               .w500,
-                          //                                     ),
-                          //                               ),
-                          //                             ),
-                          //                           ),
-                          //                           SizedBox(width: 10.w),
-                          //                           GestureDetector(
-                          //                             onTap:
-                          //                                 () => model
-                          //                                     .cancelItemOrderDialogBox(
-                          //                                       context,
-                          //                                       id:
-                          //                                           o.id.toString(),
-                          //                                     ),
-                          //                             child: Container(
-                          //                               padding:
-                          //                                   EdgeInsets.symmetric(
-                          //                                     vertical: 4.w,
-                          //                                     horizontal: 8.w,
-                          //                                   ),
-                          //                               decoration: BoxDecoration(
-                          //                                 borderRadius:
-                          //                                     BorderRadius.circular(
-                          //                                       6,
-                          //                                     ),
-                          //                                 border: Border.all(
-                          //                                   color:
-                          //                                       AppColor.white,
-                          //                                 ),
-                          //                                 color: AppColor.red,
-                          //                               ),
-                          //                               child: TextView(
-                          //                                 text: 'Cancel',
-                          //                                 textStyle:
-                          //                                     GoogleFonts.gabarito(
-                          //                                       color:
-                          //                                           AppColor
-                          //                                               .white,
-                          //                                       fontSize: 14.sp,
-                          //                                       fontWeight:
-                          //                                           FontWeight
-                          //                                               .w500,
-                          //                                     ),
-                          //                               ),
-                          //                             ),
-                          //                           ),
-                          //                         ],
-                          //                       ),
-                          //                 ],
-                          //               ),
-                          //               if (!isLast) ...[
-                          //                 SizedBox(height: 3.0.h),
-                          //                 Divider(color: AppColor.greyIt),
-                          //                 SizedBox(height: 3.0.h),
-                          //               ],
-                          //             ],
-                          //           );
-                          //         }),
-                          //     ],
-                          //   ),
-                          // ),
-                          // SizedBox(height: 20.h),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Row(
-                          //       children: [
-                          //         TextView(
-                          //           text: 'Total:',
-                          //           textStyle: GoogleFonts.gabarito(
-                          //             color: AppColor.darkindgrey,
-                          //             fontSize: 16.20.sp,
-                          //             fontWeight: FontWeight.w500,
-                          //           ),
-                          //         ),
-                          //         SizedBox(width: 12.w),
-                          //         TextView(
-                          //           text:
-                          //               '${getCurrency()}${oCcy.format(double.parse(model.orderByIdResponseModel?.original?.orders?[0].totalSum.toString() ?? '0.0'))}',
-                          //           textStyle: TextStyle(
-                          //             color: AppColor.darkindgrey,
-                          //             fontSize: 18.20.sp,
-                          //             fontWeight: FontWeight.w500,
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //     GestureDetector(
-                          //       onTap:
-                          //           () => model.cancelItemOrderDialogBox(
-                          //             context,
-                          //             id:
-                          //                 model
-                          //                     .orderByIdResponseModel!
-                          //                     .original!
-                          //                     .orders![0]
-                          //                     .id
-                          //                     .toString(),
-                          //           ),
-                          //       child: Container(
-                          //         width: 100.w,
-                          //         padding: EdgeInsets.symmetric(
-                          //           vertical: 4.w,
-                          //           horizontal: 8.w,
-                          //         ),
-                          //         decoration: BoxDecoration(
-                          //           borderRadius: BorderRadius.circular(6),
-                          //           border: Border.all(color: AppColor.white),
-                          //           color: AppColor.fineRed,
-                          //         ),
-                          //         child: Center(
-                          //           child: TextView(
-                          //             text: 'Cancel',
-                          //             textStyle: GoogleFonts.gabarito(
-                          //               color: AppColor.white,
-                          //               fontSize: 16.sp,
-                          //               fontWeight: FontWeight.w600,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                           SizedBox(height: 30.h),
+                          if (model.getDoctorsNoteModel != null &&
+                              model.getDoctorsNoteModel!.notes!.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextView(
+                                  text: 'Doctor\'s Overview',
+                                  textStyle: GoogleFonts.gabarito(
+                                    color: const Color.fromARGB(255, 8, 27, 31),
+                                    fontSize: 22.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 20.h),
+                                ...model.getDoctorsNoteModel!.notes!.map(
+                                  (n) => Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextView(
+                                        text:
+                                            'Dr. ${n.author?.firstName?.capitalize()} ${n.author?.lastName?.capitalize()}',
+                                        textStyle: GoogleFonts.gabarito(
+                                          color: AppColor.darkindgrey,
+                                          fontSize: 18.8.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(height: 16.0.h),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 8.w),
+                                        child: TextView(
+                                          text: model.getAllDoctorsNotes(n),
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.black,
+                                            fontSize: 15.4.sp,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 12.0.h),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 6.0.h),
+                              ],
+                            ),
                         ],
                       ),
                     ),
@@ -688,14 +338,4 @@ class _PatientDetailDoctorScreenState extends State<PatientDetailDoctorScreen> {
       },
     );
   }
-
-  // Future<void> getId() async {
-  //   if (widget.order != null) {
-  //     id = widget.order!.id.toString();
-  //     setState(() {});
-  //   } else {
-  //     id = widget.item!.orderId.toString();
-  //     setState(() {});
-  //   }
-  // }
 }

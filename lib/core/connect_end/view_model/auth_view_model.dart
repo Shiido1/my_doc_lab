@@ -64,6 +64,7 @@ import '../model/get_medicine_detail_response_model/get_medicine_detail_response
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../model/get_report_response_model/get_report_response_model.dart';
+import '../model/get_specialization_response_model/get_specialization_response_model.dart';
 import '../model/get_user_order_history_model/get_user_order_history_model.dart';
 import '../model/get_users_appointment_model/get_users_appointment_model.dart';
 import '../model/pay_stack_payment_model/pay_stack_payment_model.dart';
@@ -86,6 +87,8 @@ class AuthViewModel extends BaseViewModel {
 
   final repositoryImply = AuthRepoImpl();
   final session = locator<SharedPreferencesService>();
+  bool _isLoadingSpecial = false;
+  bool get isLoadingSpecial => _isLoadingSpecial;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   bool _isLoadingOrder = false;
@@ -239,6 +242,9 @@ class AuthViewModel extends BaseViewModel {
   GetUserNotificationModelList? _getUserNotificationModel;
   GetUserNotificationModelList? get getUserNotificationModel =>
       _getUserNotificationModel;
+  GetSpecializationResponseModel? get specializationListModel =>
+      _specializationListModel;
+  GetSpecializationResponseModel? _specializationListModel;
 
   dynamic remoteUidGlobal;
   dynamic remoteUidGlobalLocal;
@@ -752,6 +758,21 @@ class AuthViewModel extends BaseViewModel {
       _isLoadingAllDoctors = false;
       logger.d(e);
       // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  void specializationList() async {
+    try {
+      _isLoadingSpecial = true;
+      _specializationListModel = await runBusyFuture(
+        repositoryImply.specializationList(),
+        throwException: true,
+      );
+      _isLoadingSpecial = false;
+    } catch (e) {
+      _isLoadingSpecial = false;
+      logger.d(e);
     }
     notifyListeners();
   }

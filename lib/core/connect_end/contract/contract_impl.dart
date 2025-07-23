@@ -27,6 +27,7 @@ import '../model/get_medicine_detail_response_model/get_medicine_detail_response
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
 import '../model/get_pharmacy_detail_response_model/get_pharmacy_detail_response_model.dart';
 import '../model/get_report_response_model/get_report_response_model.dart';
+import '../model/get_specialization_response_model/get_specialization_response_model.dart';
 import '../model/get_user_notification_model/get_user_notification_model.dart';
 import '../model/get_user_order_history_model/get_user_order_history_model.dart';
 import '../model/get_users_appointment_model/get_users_appointment_model.dart';
@@ -169,6 +170,9 @@ class AuthContractsImpl {
       await _api.getDiagnosisList(id);
   Future<GetAllLabTechResponseModelList> getAllLabTech() async =>
       await _api.getAllLabTech();
+
+  Future<GetSpecializationResponseModel> specializationList() async =>
+      await _api.specializationList();
   Future<GetReportResponseModel> getReport() async => await _api.getReport();
   Future<GetUserOrderHistoryModelList> orderHistory() async =>
       await _api.orderHistory();

@@ -39,6 +39,8 @@ import '../core_folder/app/app.logger.dart';
 import '../core_folder/network/cloudinary_network_service.dart';
 import '../core_folder/network/network_service.dart';
 import '../core_folder/network/url_path.dart';
+import 'package:doc_lab_pharm/core/connect_end/model/get_doctors_note_model/get_doctors_note_model.dart';
+
 
 @lazySingleton
 class DocAuthApi {
@@ -359,6 +361,20 @@ class DocAuthApi {
       );
       logger.d(response.data);
       return PrescriptionViewResponse.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+   Future<GetDoctorsNoteModel> getDoctorsNote(String id) async {
+    try {
+      final response = await _service.call(
+        '${UrlConfig.get_doctors_note}$id',
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetDoctorsNoteModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

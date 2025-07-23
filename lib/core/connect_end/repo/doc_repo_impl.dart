@@ -35,6 +35,7 @@ import '../model/send_message_response_model/send_message_response_model.dart';
 import '../model/update_password_entity_model.dart';
 import '../model/update_status_reason_entity_model.dart';
 import '../model/user_search_response_model/user_search_response_model.dart';
+import '../model/get_doctors_note_model/get_doctors_note_model.dart';
 
 @lazySingleton
 class DocRepoImpl {
@@ -244,6 +245,11 @@ class DocRepoImpl {
 
   Future<dynamic> doctorsNote(DoctorsNoteEntityModel? doctorsNoteEntity) async {
     final response = await _contract.doctorsNote(doctorsNoteEntity);
+    return response;
+  }
+
+  Future<GetDoctorsNoteModel> getDoctorsNote(String id) async {
+    final response = await _contract.getDoctorsNote(id);
     return response;
   }
 

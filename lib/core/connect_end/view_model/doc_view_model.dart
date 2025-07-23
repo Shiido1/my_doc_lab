@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
-
+import '../model/get_doctors_note_model/get_doctors_note_model.dart';
 import 'package:audioplayers/audioplayers.dart';
 import "package:collection/collection.dart";
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
@@ -49,6 +49,7 @@ import '../model/doctor_availability_entity_model/doctor_availability_entity_mod
 import '../model/doctors_note_entity_model.dart';
 import '../model/get_doctor_statistic_model/get_doctor_statistic_model.dart';
 import '../model/get_doctors_analysis_model/get_doctors_analysis_model.dart';
+import '../model/get_doctors_note_model/note.dart';
 import '../model/get_doctors_wallet_response_model/get_doctors_wallet_response_model.dart';
 import '../model/get_list_of_doctors_appointment_model/get_list_of_doctors_appointment_model.dart';
 import '../model/get_message_index_response_model/get_message_index_response_model.dart';
@@ -135,6 +136,9 @@ class DocViewModel extends BaseViewModel {
       _prescriptionViewResponse;
   BankSaveResponseModel? get bankSaveResponseModel => _bankSaveResponseModel;
   BankSaveResponseModel? _bankSaveResponseModel;
+
+  GetDoctorsNoteModel? get getDoctorsNoteModel => _getDoctorsNoteModel;
+  GetDoctorsNoteModel? _getDoctorsNoteModel;
 
   RtcEngine? engine;
 
@@ -858,6 +862,43 @@ class DocViewModel extends BaseViewModel {
       logger.d(e);
     }
     notifyListeners();
+  }
+
+  void getDoctorsNote(context, {String? id}) async {
+    try {
+      _isLoading = true;
+      _getDoctorsNoteModel = await runBusyFuture(
+        repositoryImply.getDoctorsNote(id!),
+        throwException: true,
+      );
+
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      // AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  String getAllDoctorsNotes(Note note) {
+    String? getNotes;
+    List<String> items = note.note!.split(',').map((e) => e.trim()).toList();
+
+    getNotes = items
+        .asMap()
+        .entries
+        .map((entry) {
+          int index = entry.key + 1;
+          String item = entry.value;
+
+          // Optional: Capitalize first letter
+          String capitalized = item[0].toUpperCase() + item.substring(1);
+
+          return "$index. $capitalized";
+        })
+        .join('\n');
+    return getNotes;
   }
 
   Future<void> doctorWalletReload() async {

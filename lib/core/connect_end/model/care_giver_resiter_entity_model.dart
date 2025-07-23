@@ -10,6 +10,7 @@ class CareGiverResiterEntityModel {
   String? state;
   String? address;
   String? role;
+  String? specializationId;
 
   CareGiverResiterEntityModel({
     this.firstName,
@@ -23,6 +24,7 @@ class CareGiverResiterEntityModel {
     this.state,
     this.address,
     this.role,
+    this.specializationId,
   });
 
   factory CareGiverResiterEntityModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class CareGiverResiterEntityModel {
       state: json['state']?.toString(),
       address: json['address']?.toString(),
       role: json['role']?.toString(),
+      specializationId: json['specialization_id']?.toString(),
     );
   }
 
@@ -53,5 +56,6 @@ class CareGiverResiterEntityModel {
     if (state != null) 'state': state,
     if (address != null) 'address': address,
     if (role != null) 'role': role,
+    if (specializationId != null) 'specialization_id': specializationId,
   };
 }

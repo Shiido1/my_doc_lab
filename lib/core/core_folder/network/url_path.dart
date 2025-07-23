@@ -105,5 +105,5 @@ class UrlConfig {
   static const String user_report = 'user/report';
   static const String specializations_list = 'specializations/list';
   static const String doctors_note = 'doctor/call/note';
-  static const String get_doctors_note = 'user/note/';
+  static const String get_doctors_note = 'user/notes/';
 }

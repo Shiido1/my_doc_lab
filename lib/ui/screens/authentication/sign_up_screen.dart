@@ -31,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController fnameTextController = TextEditingController();
   TextEditingController lnameTextController = TextEditingController();
   TextEditingController profTextController = TextEditingController();
-  TextEditingController specTextController = TextEditingController();
+  // TextEditingController specTextController = TextEditingController();
   TextEditingController emailTextController = TextEditingController();
   TextEditingController passwordTextController = TextEditingController();
   TextEditingController confirmPasswordTextController = TextEditingController();
@@ -39,15 +39,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController cityTextController = TextEditingController();
   TextEditingController stateTextController = TextEditingController();
   TextEditingController phoneTextController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   bool _onTap = false;
+  String? specializedId;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AuthViewModel>.reactive(
       viewModelBuilder: () => locator<AuthViewModel>(),
-      onViewModelReady: (model) {},
+      onViewModelReady: (model) {
+        model.specializationList();
+      },
       disposeViewModel: false,
       builder: (_, AuthViewModel model, __) {
         return Scaffold(
@@ -125,23 +129,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   widget.userType == 'care-giver'
                       ? Column(
                         children: [
-                          // TextFormWidget(
-                          //   label: 'Enter Area of Specialization',
-                          //   border: 10,
-                          //   isFilled: true,
-                          //   fillColor: AppColor.white,
-                          //   controller: specTextController,
-                          //   prefixWidget: Padding(
-                          //     padding: EdgeInsets.all(9.2.w),
-                          //     child: SvgPicture.asset(
-                          //       AppImage.prof,
-                          //       width: 20.w,
-                          //       height: 20.h,
-                          //     ),
-                          //   ),
-                          //   validator: AppValidator.validateString(),
-                          // ),
-                          // SizedBox(height: 20.h),
+                          TextFormWidget(
+                            hint: 'Specialization',
+                            border: 10,
+                            isFilled: true,
+                            fillColor: AppColor.oneKindgrey,
+                            borderColor: AppColor.transparent,
+                            controller: roleController,
+                            readOnly: true,
+                            suffixWidget: PopupMenuButton<String>(
+                              onSelected: (String item) {
+                                // Handle the selected menu item
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return [
+                                  if (model.specializationListModel != null &&
+                                      model
+                                          .specializationListModel!
+                                          .data!
+                                          .isNotEmpty)
+                                    ...model.specializationListModel!.data!.map(
+                                      (s) => PopupMenuItem<String>(
+                                        value: s.name,
+                                        child: TextView(
+                                          text: s.name ?? '',
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.darkindgrey,
+                                            fontSize: 15.40.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          roleController.text = s.name!;
+                                          specializedId = s.id.toString();
+                                          model.notifyListeners();
+                                        },
+                                      ),
+                                    ),
+                                ];
+                              },
+                              child: Icon(
+                                Icons.arrow_drop_down_sharp,
+                                size: 20.sp,
+                                color: AppColor.darkindgrey,
+                              ), // Optional: Customize the button's icon
+                            ),
+                            validator: AppValidator.validateString(),
+                          ),
+                          SizedBox(height: 20.h),
                           TextFormWidget(
                             label: 'Select your role',
                             border: 10,
@@ -401,7 +436,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 phoneNumber: phoneTextController.text.trim(),
                                 confirmPassword:
                                     confirmPasswordTextController.text.trim(),
-                                speciality: specTextController.text.trim(),
+                                specializationId: specializedId,
                                 city: cityTextController.text.trim(),
                                 state: stateTextController.text.trim(),
                                 address: addressTextController.text.trim(),
