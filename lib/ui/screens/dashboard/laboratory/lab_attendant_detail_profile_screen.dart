@@ -194,6 +194,7 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     padding: EdgeInsets.all(16.w),
@@ -212,17 +213,20 @@ class _LaboratoryDetailScreenState extends State<LaboratoryDetailScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      TextView(
-                                        text: o.name!.capitalize(),
-                                        textStyle: GoogleFonts.gabarito(
-                                          color: AppColor.black,
-                                          fontSize: 17.6.sp,
-                                          letterSpacing: 0,
-                                          fontWeight: FontWeight.w400,
+                                      SizedBox(
+                                        width: 220.w,
+                                        child: TextView(
+                                          text: o.name!.capitalize(),
+                                          textStyle: GoogleFonts.gabarito(
+                                            color: AppColor.black,
+                                            fontSize: 17.6.sp,
+                                            letterSpacing: 0,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 200.w,
+                                        width: 220.w,
                                         child: TextView(
                                           text: o.details!.capitalize(),
                                           textStyle: GoogleFonts.gabarito(

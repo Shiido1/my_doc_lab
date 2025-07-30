@@ -200,10 +200,8 @@ class PharmViewModel extends BaseViewModel {
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
-    if (pickedDate != null) {
-      String formattedDate = DateFormat('yyyy/MM/dd').format(pickedDate);
-      productExpiryDate = formattedDate;
-    } else {}
+    String formattedDate = DateFormat('yyyy/MM/dd').format(pickedDate!);
+    productExpiryDate = formattedDate;
     notifyListeners();
   }
 
