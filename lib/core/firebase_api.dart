@@ -46,6 +46,7 @@ class FirebaseApi {
           id: message.data['conversation_id'].toString(),
           messageModel: GetMessageIndexResponseModel(),
           sender: message.data,
+          isBlocked: 0,
         ),
       );
     }

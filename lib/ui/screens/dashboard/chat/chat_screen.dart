@@ -20,11 +20,13 @@ class ChatScreen extends StatefulWidget {
   ChatScreen({
     super.key,
     required this.id,
+    required this.isBlocked,
     required this.messageModel,
     required this.sender,
     this.getUsersAppointmentModel,
   });
   GetMessageIndexResponseModel? messageModel;
+  num isBlocked;
   String? id;
   dynamic sender;
   GetUsersAppointmentModel? getUsersAppointmentModel;
@@ -155,11 +157,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ),
                                   );
                                 },
-                                child: SvgPicture.asset(
-                                  AppImage.video,
-                                  width: 22.w,
-                                  height: 22.0.h,
-                                ),
+                                child:
+                                    widget.isBlocked == 0
+                                        ? SvgPicture.asset(
+                                          AppImage.video,
+                                          width: 22.w,
+                                          height: 22.0.h,
+                                        )
+                                        : SizedBox.shrink(),
                               ),
                             )
                             : SizedBox.shrink(),
@@ -329,7 +334,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                             ?.doctor
                                                             ?.id
                                                             .toString(),
-                                                  )
+                                                  ) ||
+                                          widget.isBlocked == 1
                                       ? SizedBox.shrink()
                                       : IconButton(
                                         icon: Icon(

@@ -450,6 +450,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         messageModel: null,
                         sender: null,
                         getUsersAppointmentModel: getUsersAppointmentModel,
+                        isBlocked: 0,
                       ),
                     ),
                 child: Column(

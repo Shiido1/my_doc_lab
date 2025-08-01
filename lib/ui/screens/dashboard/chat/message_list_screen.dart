@@ -158,6 +158,7 @@ class MessageListScreen extends StatelessWidget {
                   arguments: ChatScreenArguments(
                     id: o.conversationId.toString(),
                     messageModel: o,
+                    isBlocked: o.isBlocked,
                     sender: null,
                   ),
                 ),

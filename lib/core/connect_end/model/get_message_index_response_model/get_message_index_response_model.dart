@@ -36,6 +36,8 @@ class GetMessageIndexResponseModel {
   String? lastMessageTime;
   @JsonKey(name: 'unread_count')
   num? unreadCount;
+  @JsonKey(name: 'is_blocked')
+  num? isBlocked;
 
   GetMessageIndexResponseModel({
     this.conversationId,
@@ -46,6 +48,7 @@ class GetMessageIndexResponseModel {
     this.lastMessage,
     this.lastMessageTime,
     this.unreadCount,
+    this.isBlocked,
   });
 
   factory GetMessageIndexResponseModel.fromJson(Map<String, dynamic> json) {
